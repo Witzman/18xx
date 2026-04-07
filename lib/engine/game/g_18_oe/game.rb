@@ -119,13 +119,38 @@ module Engine
         ].freeze
 
         CORPORATIONS_TRACK_RIGHTS = {
+          # United Kingdom
           'LNWR' => 'UK',
-          'GWR' => 'UK',
+          'GWR'  => 'UK',
           'GSWR' => 'UK',
-          'PLM' => 'FR',
+          # France / Belgium
+          'BEL'  => 'FR',
+          'OU'   => 'FR',
           'MIDI' => 'FR',
-          'OU' => 'FR',
-          'BEL' => 'FR',
+          'PLM'  => 'FR',
+          # Prussia / Holland / Switzerland
+          'BHB'  => 'PHS',
+          'KSS'  => 'PHS',
+          'POB'  => 'PHS',
+          'KBS'  => 'PHS',
+          # Austria-Hungary
+          'SB'   => 'AH',
+          'MAV'  => 'AH',
+          # Italy
+          'SFAI' => 'IT',
+          'SFR'  => 'IT',
+          # Spain / Portugal
+          'CHN'  => 'SP',
+          'MZA'  => 'SP',
+          'RCP'  => 'SP',
+          # Russia
+          'MSP'  => 'RU',
+          'MKV'  => 'RU',
+          'LRZD' => 'RU',
+          'WW'   => 'RU',
+          # Scandinavia (Denmark / Sweden / Norway)
+          'DSJ'  => 'SC',
+          'BJV'  => 'SC',
         }.freeze
 
         NATIONAL_REGION_HEXES = {
@@ -138,8 +163,14 @@ module Engine
         }.freeze
 
         TRACK_RIGHTS_COST = {
-          'UK' => 40,
-          'FR' => 20,
+          'UK'  => 40,
+          'PHS' => 40,
+          'FR'  => 20,
+          'AH'  => 20,
+          'IT'  => 10,
+          'SP'  => 10,
+          'RU'  => 10,
+          'SC'  => 10,
         }.freeze
 
         MAX_FLOATED_REGIONALS = 18
