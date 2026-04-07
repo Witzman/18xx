@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'meta'
+require_relative 'entities'
 require_relative 'step/convert_to_national'
 require_relative '../base'
 
@@ -9,6 +10,8 @@ module Engine
     module G18OE
       class Game < Game::Base
         include_meta(G18OE::Meta)
+        include G18OE::Entities
+        attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
                       :nationals_can_form, :nationals_formation_queue
 
