@@ -157,15 +157,15 @@ module Engine
               C46 C48 C54 C56 C58 C64 C66 C74 C78 C80
               D45 D47 D49 D55 D67 D69 D71 D73 D75 D77 D79 D83 D85
               E42 E44 E48 E56 E58 E66 E68 E70 E74 E76 E80 E84 E86
-              F25 F27 F29 F49 F51 F53 F55 F69 F71 F73 F75 F81 F83 F85
-              G26 G28 G46 G50 G52 G54 G56 G68 G70 G72 G76 G78 G80 G82 G84 G86
+              F25 F49 F51 F53 F55 F69 F71 F73 F75 F81 F83 F85
+              G46 G50 G52 G54 G56 G68 G70 G72 G76 G78 G80 G82 G84 G86
               H17 H19 H21 H27 H29 H43 H45 H47 H51 H53 H55 H63 H65 H67 H69 H71 H75 H77 H79 H81 H85 H87
               I18 I20 I28 I44 I46 I64 I66 I68 I74 I76 I78 I80 I82
               J15 J17 J25 J27 J29 J45 J67 J69 J73 J75 J77 J79 J81 J83 J85 J87
               K26 K28 K30 K46 K48 K50 K54 K56 K58 K60 K62 K68 K70 K74 K76 K78 K80 K82 K84 K86
-              L25 L27 L29 L31 L41 L43 L45 L47 L49 L51 L53 L55 L57 L59 L61 L63 L65 L67 L73 L79 L81 L83 L85 L87
+              L25 L27 L29 L41 L43 L45 L47 L49 L51 L53 L55 L57 L59 L61 L63 L65 L67 L73 L79 L81 L83 L85 L87
               M24 M26 M40 M42 M44 M46 M48 M50 M52 M54 M56 M58 M60 M62 M64 M66 M68 M70 M82 M84 M86
-              N31 N33 N35 N37 N41 N43 N47 N49 N51 N53 N55 N57 N59 N61 N63 N65 N67 N83 N85
+              N33 N35 N37 N41 N43 N47 N49 N51 N53 N55 N57 N59 N61 N63 N65 N67 N83 N85
               O24 O28 O30 O32 O34 O36 O38 O48 O56 O58 O60 O64 O66 O70 O72 O74 O76 O78 O80 O84 O86
               P19 P21 P23 P25 P27 P29 P31 P33 P35 P37 P39 P43 P47 P49 P51 P53 P59 P61 P63 P65 P67 P69 P71 P73 P75 P77 P79 P81
               Q22 Q24 Q26 Q28 Q30 Q32 Q34 Q36 Q38 Q42 Q44 Q46 Q48 Q54 Q56 Q58 Q66 Q72 Q74 Q76 Q78 Q80 Q82 Q84 Q86
@@ -173,7 +173,7 @@ module Engine
               S24 S26 S28 S30 S32 S34 S36 S40 S56 S58 S60 S64 S66 S68 S74 S76 S78 S80 S82
               T25 T27 T29 T31 T35 T53 T55 T57 T59 T61 T63 T65 T81
               U6 U8 U22 U24 U26 U28 U34 U48 U50 U54 U56 U58 U60 U62 U64
-              V5 V7 V17 V21 V23 V25 V27 V39 V41 V43 V45 V47 V51 V53 V55 V57 V59 V61 V63 V71 V73 V75
+              V5 V7 V17 V23 V25 V27 V39 V41 V43 V45 V47 V51 V53 V55 V57 V59 V61 V63 V71 V73 V75
               W6 W10 W12 W14 W16 W18 W26 W28 W30 W32 W34 W40 W46 W48 W56 W58 W60 W62 W64 W70 W72 W78
               X5 X9 X11 X13 X17 X21 X29 X33 X35 X37 X43 X49 X55 X75 X77
               Y2 Y4 Y16 Y18 Y20 Y22 Y24 Y28 Y44 Y46 Y50 Y56 Y58 Y70 Y72 Y74 Y76
@@ -369,6 +369,25 @@ module Engine
             # -------------------------------------------------------------------------
             %w[B81 C82 F23 J47 J49 K40 M34 T23 BB77 CC76 DD71 GG70] =>
               'upgrade=cost:60,terrain:water',
+
+            # -------------------------------------------------------------------------
+            # Impassable borders (landtiles_with_borders.csv)
+            # -------------------------------------------------------------------------
+
+            # Scotland — Highlands barrier (north of Edinburgh/Dundee)
+            ['F27'] => 'town=revenue:0;border=edge:0,type:impassable;border=edge:5,type:impassable',          # Dundee
+            ['F29'] => 'border=edge:0,type:impassable',
+            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;border=edge:3,type:impassable', # Edinburgh
+            ['G28'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable',
+
+            # England — coastal/estuary barrier
+            ['L31'] => 'border=edge:0,type:impassable',
+
+            # Franco-Belgian border
+            ['N31'] => 'city=revenue:20;label=Y;path=a:1,b:_0;border=edge:2,type:impassable', # Lille
+
+            # Pyrenees
+            ['V21'] => 'town=revenue:0;border=edge:1,type:impassable',                                        # Bayonne
           },
           yellow: {
             # TODO: Pre-printed yellow tiles — path edges TBD from zoomed map images.
