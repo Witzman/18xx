@@ -118,6 +118,9 @@ module Engine
           'O80'  => 'Kiev',
           # Constantinople
           'AA82' => 'Constantinople',
+	  # Red Offboard Locations
+          'A40' => 'Norwegian Coast (to Narvik)',
+          'B41' => 'Bergen',
         }.freeze
 
         HEXES = {
