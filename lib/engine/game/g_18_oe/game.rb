@@ -737,6 +737,12 @@ module Engine
           ])
         end
 
+        def new_consolidation_round
+          Round::G18OE::Consolidation.new(self, [
+            G18OE::Step::Consolidate,
+          ])
+        end
+
         def upgrades_to_correct_label?(from, to)
           return true if from.label == to.label
           return false if from.label && !to.label
