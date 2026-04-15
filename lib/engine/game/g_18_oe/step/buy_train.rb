@@ -35,9 +35,14 @@ module Engine
           end
 
           def process_buy_train(action)
+            before_phase = @game.phase.name
             in_obligation_window = @game.phase.status.include?('train_obligation')
             super
             @game.fulfilled_train_obligation.add(action.entity.id) if in_obligation_window
+            after_phase = @game.phase.name
+            return unless before_phase != after_phase && %w[4 6 8].include?(after_phase)
+
+            @game.trigger_nationals_formation!(action.entity.owner)
           end
 
           # TODO: Nationals claiming rusted trains for free (openpoints §1.9, §3.7) — deferred
