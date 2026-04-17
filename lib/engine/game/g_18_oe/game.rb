@@ -55,6 +55,7 @@ module Engine
             train_limit: { minor: 2, regional: 2, major: 4 },
             tiles: [:yellow],
             operating_rounds: 2,
+            status: ['train_obligation'],
           },
           {
             name: '3',
@@ -62,6 +63,7 @@ module Engine
             train_limit: { minor: 2, regional: 2, major: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
+            status: ['train_obligation'],
           },
           {
             name: '4',
@@ -69,6 +71,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
+            status: ['can_buy_trains_from_others'],
           },
           {
             name: '5',
@@ -76,6 +79,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
+            status: ['can_buy_trains_from_others'],
           },
           {
             name: '6',
@@ -83,6 +87,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
+            status: ['can_buy_trains_from_others'],
           },
           {
             name: '7',
@@ -90,6 +95,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
+            status: ['can_buy_trains_from_others'],
           },
           {
             name: '8',
@@ -97,6 +103,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
+            status: ['can_buy_trains_from_others'],
           },
         ].freeze
 
@@ -153,6 +160,7 @@ module Engine
               price: 475,
             }],
             num: 8,
+            events: [{ 'type' => 'consolidation_triggered' }],
           },
           # Level 6 — express (6) triggers Phase 6; local variant (6+6)
           {
@@ -306,8 +314,6 @@ module Engine
                      P73 P75 P77 P79 P81 P83 P85 P87 Q74 Q76 Q78 Q80 Q82 Q84 Q86
                      R75 R77 R79 R81 R83 R85 R87 S76 S78 S80 S82 S84 S86 T79 T81 U80],
         }.freeze
-
-        NATIONAL_REGION_HEXES_COMPLETE = true
 
         # Cities that sit on a national-zone border hex (hex listed in two zones).
         # All other cities belong unambiguously to one zone; only these two need an explicit override.
@@ -806,38 +812,20 @@ module Engine
         end
 
         def hex_within_national_region?(entity, hex)
-          # TEMPORARY WORKAROUND: while NATIONAL_REGION_HEXES_COMPLETE is false,
-          # skip the zone filter and allow track placement anywhere on the map.
-          # Remove this branch once all 8 zone hex lists are defined and the
-          # constant is flipped to true (see home_token_locations for the same pattern).
-          return true unless self.class::NATIONAL_REGION_HEXES_COMPLETE
-
-          region = CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
-          hexes = NATIONAL_REGION_HEXES[region]
-          hexes&.include?(hex.name) || false
+          region = self.class::CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
+          hexes = self.class::NATIONAL_REGION_HEXES[region]
+          hexes&.include?(hex.coordinates) || false
         end
 
         def home_token_locations(corporation)
-          # if minor, choose non-metropolis hex
-          # if regional, starts on reserved hex
-
-          # TEMPORARY WORKAROUND: while NATIONAL_REGION_HEXES_COMPLETE is false, skip
-          # the zone filter and allow any non-metropolis tokenable city on the map.
-          # Remove this branch (and the constant) once all 8 zone hex lists are defined.
-          unless self.class::NATIONAL_REGION_HEXES_COMPLETE
-            return @hexes
-              .select { |hex| hex.tile.cities.any? { |city| city.tokenable?(corporation, free: true) } }
-              .reject { |hex| metropolis_hex?(hex) }
-          end
-
-          available_regions = NATIONAL_REGION_HEXES.select { |key, _value| @minor_available_regions.include?(key) }
+          available_regions = self.class::NATIONAL_REGION_HEXES.select { |key, _| @minor_available_regions.include?(key) }
           region_hexes = available_regions.values.flatten
 
           @hexes
-            .select { |hex| region_hexes.include?(hex.name.to_s) }
+            .select { |hex| region_hexes.include?(hex.coordinates) }
             .select { |hex| hex.tile.cities.any? { |city| city.tokenable?(corporation, free: true) } }
             .reject { |hex| metropolis_hex?(hex) }
-            .reject { |hex| self.class::MINOR_EXCLUDED_HOME_CITIES.include?(hex.name.to_s) }
+            .reject { |hex| self.class::MINOR_EXCLUDED_HOME_CITIES.include?(hex.coordinates) }
         end
 
         def metropolis_hex?(hex)
@@ -851,16 +839,14 @@ module Engine
 
         def must_buy_train?(entity)
           return false unless entity.corporation?
-          return false if entity.trains.any?
-          # 2+2 obligation waived once Phase 4 starts
-          return false if @phase.name.to_i >= 4
+          return false unless entity.trains.empty?
+          return false unless @phase.status.include?('train_obligation')
 
           entity.floated?
         end
 
-        # Inter-corp train sales only allowed in Major Phase (Phase 4+)
         def can_buy_train_from_others?
-          @phase.name.to_i >= 4
+          @phase.status.include?('can_buy_trains_from_others')
         end
 
         # UP movement at end of SR: only for majors and nationals that are fully player-held
@@ -868,10 +854,8 @@ module Engine
           %i[major national].include?(corporation.type)
         end
 
-        # Set consolidation trigger at the end of the first OR set played under Phase 5+
-        def or_set_finished
-          super
-          @consolidation_triggered ||= (@phase.name.to_i >= 5)
+        def event_consolidation_triggered!
+          @consolidation_triggered = true
         end
 
         def next_round!
