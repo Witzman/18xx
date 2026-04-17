@@ -894,44 +894,7 @@ module Engine
             return
           end
 
-        # UP movement at end of SR: only for majors and nationals that are fully player-held
-        def sold_out_increase?(corporation)
-          %i[major national].include?(corporation.type)
-        end
-
-        # Set consolidation trigger at the end of the first OR set played under Phase 5+
-        def or_set_finished
           super
-          @consolidation_triggered ||= (@phase.name.to_i >= 5)
-        end
-
-        def next_round!
-          # Insert consolidation round between OR set end and next SR (once only)
-          if @round.is_a?(Round::Operating) &&
-             @round.round_num >= @operating_rounds &&
-             @consolidation_triggered &&
-             !@consolidation_done
-            @log << '-- Consolidation Phase --'
-            @round = new_consolidation_round
-            return
-          end
-
-          # After consolidation round, proceed to SR
-          if @round.is_a?(Round::G18OE::Consolidation)
-            @consolidation_done = true
-            @turn += 1
-            or_set_finished
-            @round = new_stock_round
-            return
-          end
-
-          super
-        end
-
-        def new_consolidation_round
-          Round::G18OE::Consolidation.new(self, [
-            G18OE::Step::Consolidate,
-          ])
         end
 
         def new_consolidation_round
@@ -1016,7 +979,6 @@ module Engine
             Engine::Step::Route,
             G18OE::Step::Dividend,
             G18OE::Step::BuyTrain,
-            G18OE::Step::ConvertToNational,
             Engine::Step::IssueShares,
           ], round_num: round_num)
         end
