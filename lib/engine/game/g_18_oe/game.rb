@@ -4,6 +4,8 @@ require_relative 'meta'
 require_relative 'entities'
 require_relative 'map'
 require_relative '../base'
+require_relative 'round/consolidation'
+require_relative 'step/consolidate'
 
 module Engine
   module Game
@@ -12,7 +14,8 @@ module Engine
         include_meta(G18OE::Meta)
         include G18OE::Entities
         include G18OE::Map
-        attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated
+        attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
+                      :consolidation_triggered, :consolidation_done
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -237,7 +240,15 @@ module Engine
                      Q32 Q34 Q36 Q38 R23 R25 R27 R29 R31 R33 R35 R37 R39 S24 S26 S28 S30 S32 S34 S36 S38 T23 T25 T27 T29 T31 T33
                      T35 T37 U22 U24 U26 U28 U30 U32 U34 U36 U38 V21 V23 V25 V27 V29 V31 V33 V35 V37 W22 W24 W26 W28 W30 W32 W34
                      W36 W38 X25 X27 X29 X33 X35 X37 Y28 Z41], # plus Alger
+          # TODO: PHS, AH, IT, SP, RU, SC hex lists missing — blocked on physical map data (mapquest.txt §7)
         }.freeze
+
+        # TEMPORARY WORKAROUND (openpoints §2.5 / mapquest §7):
+        # Set to false while NATIONAL_REGION_HEXES is incomplete (only UK + FR defined).
+        # When false, minor home-token placement is unrestricted — any non-metropolis
+        # tokenable city on the map is eligible. Flip to true once all 8 zone hex lists
+        # are filled in and the regional token/revenue rules should be enforced.
+        NATIONAL_REGION_HEXES_COMPLETE = false
 
         TRACK_RIGHTS_COST = {
           'UK' => 40,
@@ -550,11 +561,25 @@ module Engine
           'Treasury'
         end
 
+        # True once MAX_FLOATED_REGIONALS have been floated and the 6 remaining
+        # unfloated regionals have been closed. This is the correct trigger for
+        # "Major Railroad Phase" entry: conversions and secondary-share purchases
+        # become available from this point on.
+        def major_phase?
+          @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+        end
+
         def operating_order
           @minor_regional_order + (@corporations.select(&:floated?) - @minor_regional_order).sort
         end
 
         def hex_within_national_region?(entity, hex)
+          # TEMPORARY WORKAROUND: while NATIONAL_REGION_HEXES_COMPLETE is false,
+          # skip the zone filter and allow track placement anywhere on the map.
+          # Remove this branch once all 8 zone hex lists are defined and the
+          # constant is flipped to true (see home_token_locations for the same pattern).
+          return true unless self.class::NATIONAL_REGION_HEXES_COMPLETE
+
           region = CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           hexes = NATIONAL_REGION_HEXES[region]
           hexes&.include?(hex.name) || false
@@ -563,6 +588,15 @@ module Engine
         def home_token_locations(corporation)
           # if minor, choose non-metropolis hex
           # if regional, starts on reserved hex
+
+          # TEMPORARY WORKAROUND: while NATIONAL_REGION_HEXES_COMPLETE is false, skip
+          # the zone filter and allow any non-metropolis tokenable city on the map.
+          # Remove this branch (and the constant) once all 8 zone hex lists are defined.
+          unless self.class::NATIONAL_REGION_HEXES_COMPLETE
+            return @hexes
+              .select { |hex| hex.tile.cities.any? { |city| city.tokenable?(corporation, free: true) } }
+              .reject { |hex| metropolis_hex?(hex) }
+          end
 
           available_regions = NATIONAL_REGION_HEXES.select { |key, _value| @minor_available_regions.include?(key) }
           region_hexes = available_regions.values.flatten
@@ -583,11 +617,57 @@ module Engine
         end
 
         def must_buy_train?(entity)
-          # must buy the reserved 2+2, otherwise only majors must buy trains
-          # return unless entity.type == 'major'
-          return false if depot.depot_trains.first&.name != '2+2' && entity.type != :major
+          return false unless entity.corporation?
+          return false if entity.trains.any?
+          # 2+2 obligation waived once Phase 4 starts
+          return false if @phase.name.to_i >= 4
+
+          entity.floated?
+        end
+
+        # Inter-corp train sales only allowed in Major Phase (Phase 4+)
+        def can_buy_train_from_others?
+          @phase.name.to_i >= 4
+        end
+
+        # UP movement at end of SR: only for majors and nationals that are fully player-held
+        def sold_out_increase?(corporation)
+          %i[major national].include?(corporation.type)
+        end
+
+        # Set consolidation trigger at the end of the first OR set played under Phase 5+
+        def or_set_finished
+          super
+          @consolidation_triggered ||= (@phase.name.to_i >= 5)
+        end
+
+        def next_round!
+          # Insert consolidation round between OR set end and next SR (once only)
+          if @round.is_a?(Round::Operating) &&
+             @round.round_num >= @operating_rounds &&
+             @consolidation_triggered &&
+             !@consolidation_done
+            @log << '-- Consolidation Phase --'
+            @round = new_consolidation_round
+            return
+          end
+
+          # After consolidation round, proceed to SR
+          if @round.is_a?(Round::G18OE::Consolidation)
+            @consolidation_done = true
+            @turn += 1
+            or_set_finished
+            @round = new_stock_round
+            return
+          end
 
           super
+        end
+
+        def new_consolidation_round
+          Round::G18OE::Consolidation.new(self, [
+            G18OE::Step::Consolidate,
+          ])
         end
 
         def upgrades_to_correct_label?(from, to)
