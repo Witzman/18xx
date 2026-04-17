@@ -9,7 +9,12 @@ module Engine
         class HomeToken < Engine::Step::HomeToken
           def process_place_token(action)
             hex = action.city.hex
-            region = G18OE::Game::NATIONAL_REGION_HEXES.select { |_key, value| value.include?(hex.name.to_s) }.keys.first
+            # Use explicit zone override for cities on border hexes (listed in two zones),
+            # fall back to zone lookup for all unambiguous cities.
+            region = G18OE::Game::CITY_NATIONAL_ZONE[hex.name.to_s] ||
+                     G18OE::Game::NATIONAL_REGION_HEXES
+                       .select { |_key, value| value.include?(hex.name.to_s) }
+                       .keys.first
 
             token.price = G18OE::Game::TRACK_RIGHTS_COST[region] || 0
 
