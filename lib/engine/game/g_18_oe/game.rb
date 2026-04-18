@@ -161,7 +161,7 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 5, 'visit' => 5 }],
               price: 475,
             }],
-            num: 11,
+            num: 8,
             events: [{ 'type' => 'consolidation_triggered' }],
           },
           # Level 6 — brown double-sided (6 / 6+6); permanent
@@ -729,12 +729,6 @@ module Engine
             else
               super
             end
-        end
-
-        def new_consolidation_round
-          Round::G18OE::Consolidation.new(self, [
-            G18OE::Step::Consolidate,
-          ])
         end
 
         def new_consolidation_round
