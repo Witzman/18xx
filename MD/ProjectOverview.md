@@ -1,4 +1,4 @@
-# 18OE — Claude Code Project Context
+# 18OE — Project Context
 
 ## Project Overview
 
