@@ -1,4 +1,4 @@
-# 18OE — Implementation Status
+# 18OE — Implementation Status (minor Rule errors in this document to be fixed)
 
 Combined status tracker: implemented items (`[x]`), partially done (`[~]`), and open
 points (`[ ]`). Based on `18oe_fullmap` branch (checked 2026-04-23) against rulebook v1.0.
