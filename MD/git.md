@@ -12,7 +12,7 @@ type: reference
     18xx/                        ← main git repo (fork of tobymao/18xx)
     18xx-docs/                   ← git worktree, Documentation branch
     MD  →  symlink               ← points to /home/witzman/18xx-docs/MD/
-    CLAUDE.md
+    CLAUDE.md  →  symlink        ← points to /home/witzman/18xx-docs/CLAUDE.md
     rules/
 ```
 
@@ -55,18 +55,18 @@ the main repo is on.
 
 ## Working with Documentation Files
 
-**Edit** any file via `~/18xx/MD/` as normal — the symlink is transparent.
+**Edit** any file via `~/18xx/MD/` or `~/18xx/CLAUDE.md` as normal — symlinks are transparent.
 
 **Commit** changes from the worktree directory:
 
 ```bash
 cd ~/18xx-docs
-git add MD/filename.md
+git add MD/filename.md        # or CLAUDE.md
 git commit -m "describe change"
 git push
 ```
 
-Never commit MD/ changes from `~/18xx/18xx/` or any other branch.
+Never commit these files from `~/18xx/18xx/` or any other branch.
 
 ## SSH Authentication
 
@@ -88,8 +88,9 @@ If the worktree or symlink needs to be rebuilt from scratch:
 # 1. Add the worktree
 git -C ~/18xx/18xx worktree add ~/18xx-docs Documentation
 
-# 2. Create the symlink
+# 2. Create the symlinks
 ln -s /home/witzman/18xx-docs/MD /home/witzman/18xx/MD
+ln -s /home/witzman/18xx-docs/CLAUDE.md /home/witzman/18xx/CLAUDE.md
 ```
 
 No `.gitignore` entries needed — the symlink is outside all git repos.
