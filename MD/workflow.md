@@ -188,6 +188,25 @@ code branch is active.
 
 ---
 
+### Intent
+
+The sections form a deliberate reading order:
+
+1. *Overview* — what am I working on?
+2. *File locations* — where do I look?
+3. *Physical setup* — how is the project organised?
+4. *Implementation status* — what state am I in?
+5. *Architecture summary* — which layer does my next task belong to?
+6. *Domain rules* — what are the correct facts to reason from?
+7. *Milestones* — what is the next task?
+
+A session starts by reading `CLAUDE.md`. After that, Claude has enough context to
+pick the right files, apply the right patterns, and stay within scope — without
+asking orientation questions or reading the full source tree.
+
+---
+
+
 ### Layout
 
 #### 1. Project Overview
@@ -215,13 +234,13 @@ A lookup table: concept → path. Claude uses this instead of searching the tree
 Include every file that Claude might need to open in a typical session.
 
 ```markdown
-## Key File Locations
+## Key File & Path Locations
 
 | What | Path |
 |---|---|
-| Core module | `acme/lib/widgetflow/engine.py` |
-| Entity definitions | `acme/lib/widgetflow/entities.py` |
-| Step classes | `acme/lib/widgetflow/step/*.py` |
+| Backend | `acme/backend/` |
+| Frontend | `acme/frontend` |
+| Assets | `acme/Assets/` |
 | Spec PDF + TXT | `specs/` |
 | Open points list | `MD/openpoints.md` |
 | Engine mechanics ref | `MD/ENGINE_MECHANICS.md` |
@@ -253,7 +272,7 @@ setup documented in `MD/git.md`.
 
 | File | Purpose |
 |---|---|
-| `MD/ENGINE_MECHANICS.md` | Layer taxonomy, base class override patterns, step sequence |
+| `MD/ENGINE_MECHANICS.md` | Backend, Frontend, etc |
 | `MD/API_REFERENCE.md` | All 20 hook types, field reference, frequency table |
 | `MD/openpoints.md` | Pending use cases with layer annotations |
 | `MD/git.md` | Worktree/symlink setup, how to commit docs |
@@ -269,7 +288,7 @@ missing. The *missing* list points to the relevant `openpoints.md` section so Cl
 can drill down without reading the whole backlog.
 
 ```markdown
-## Implementation Status: ~40% Complete (Pre-Alpha)
+## Implementation Status: ~40% Complete (Alpha)
 
 - Core engine starts without errors
 - Basic widget CRUD operations work
@@ -281,7 +300,6 @@ can drill down without reading the whole backlog.
 - Role-based access control (admin + editor)
 
 ### What Is Missing
-- **Approval routing** — rules parsed but no action dispatch (see §3 openpoints.md)
 - **Notification hooks** — stub only, no delivery
 - **Tests** — zero coverage for WidgetFlow module
 ```
@@ -297,16 +315,10 @@ reference document first.
 ```markdown
 ## Engine Architecture
 
-**Layer 1** — Constants only (entity definitions, phase configs, scalar flags).
-No custom methods needed.
-
-**Layer 2** — Named base-class method overrides. Predictable template.
-Covers: revenue calculation, validation hooks, ordering, event handlers.
-
-**Layer 3** — New step or round class. Covers: custom approval flows,
-multi-party actions, formation sequences.
-
-**Layer 4** — Structural engine divergence. Avoid; none planned for this module.
+**Layer 1** — constants only
+**Layer 2** — named Project::Base methods or overrides
+**Layer 3** — new concepts to be added
+**Layer 4** — structural engine divergence (rare; avoid if possible)
 ```
 
 ---
@@ -360,24 +372,6 @@ read of `openpoints.md`.
 2. **Notification hooks** — wire `on_approve` / `on_reject` events
 3. **Revenue calculation** — override `calculate_revenue` for Widget B rules
 ```
-
----
-
-### Intent
-
-The sections form a deliberate reading order:
-
-1. *Overview* — what am I working on?
-2. *File locations* — where do I look?
-3. *Physical setup* — how is the project organised?
-4. *Implementation status* — what state am I in?
-5. *Architecture summary* — which layer does my next task belong to?
-6. *Domain rules* — what are the correct facts to reason from?
-7. *Milestones* — what is the next task?
-
-A session starts by reading `CLAUDE.md`. After that, Claude has enough context to
-pick the right files, apply the right patterns, and stay within scope — without
-asking orientation questions or reading the full source tree.
 
 ---
 
