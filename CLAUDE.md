@@ -19,7 +19,7 @@ Best practices are in `coding_guidelines.txt` in the main directory.
 
 ## Key File Locations
 
-| What | Path | Branch |
+| What | Path |
 |---|---|
 | Base game | `18xx/lib/engine/game/g_18_oe/game.rb` |
 | Base game entities | `18xx/lib/engine/game/g_18_oe/entities.rb` |
@@ -27,11 +27,12 @@ Best practices are in `coding_guidelines.txt` in the main directory.
 | Base game stub | `18xx/lib/engine/game/g_18_oe.rb` |
 | Step classes | `18xx/lib/engine/game/g_18_oe/step/*.rb` |
 | Operating round | `18xx/lib/engine/game/g_18_oe/round/operating.rb` |
-| Rules PDFs + TXT | `rules/` | 
+| Rules PDFs + TXT | `rules/` |
 | Open points list | `MD/openpoints.md` |
-| Full map requirements | `MD/mapquest.md` (enhanced) |
+| Full map requirements | `MD/mapquest.md` |
 | Engine mechanics ref | `MD/ENGINE_MECHANICS.md` |
 | Abilities reference | `MD/ABILITIES_REFERENCE.md` |
+| Git/docs setup | `MD/git.md` |
 
 
 
@@ -45,20 +46,22 @@ implementing mechanics.
 ### Physical Setup
 
 ```
-/home/witzman/18xx/          ← project root (not a git repo)
-    18xx/                    ← main git repo (current branch: varies)
+/home/witzman/
+    18xx/                    ← project root (not a git repo)
+        18xx/                ← main git repo (current branch: varies)
+        MD  →  symlink       ← points to /home/witzman/18xx-docs/MD/
+        CLAUDE.md  →  symlink ← points to /home/witzman/18xx-docs/CLAUDE.md
     18xx-docs/               ← git worktree, locked to Documentation branch
-    MD  →  symlink           ← points to /home/witzman/18xx-docs/MD/
 ```
 
 `MD/` is a symlink into the `Documentation`-branch worktree. It is always accessible
 regardless of which branch `18xx/` is on, and is invisible to git on all other branches.
 
-**Never edit or commit MD/ files from `~/18xx/18xx/`.** To commit documentation changes:
+**Never edit or commit MD/ or CLAUDE.md from `~/18xx/18xx/`.** To commit documentation changes:
 
 ```bash
 cd ~/18xx-docs
-git add MD/filename.md
+git add MD/filename.md        # or CLAUDE.md
 git commit -m "describe change"
 git push
 ```
@@ -72,6 +75,7 @@ See `MD/git.md` for full setup details and how to recreate the worktree/symlink 
 | `~/18xx/18xx/` | `origin` | `git@github.com:Witzman/18xx.git` |
 | `~/18xx/18xx/` | `upstream` | `https://github.com/tobymao/18xx.git` |
 | `~/18xx-docs/` | `origin` | `git@github.com:Witzman/18xx.git` |
+| `~/18xx-docs/` | `upstream` | `https://github.com/tobymao/18xx.git` |
 
 ### MD/ File Index
 
@@ -81,6 +85,8 @@ See `MD/git.md` for full setup details and how to recreate the worktree/symlink 
 | `MD/ABILITIES_REFERENCE.md` | All 31 ability types, `when:` vocabulary, 18OE-specific notes |
 | `MD/openpoints.md` | Enhanced open points tracker with engine layer annotations |
 | `MD/mapquest.md` | Enhanced map implementation questions |
+| `MD/git.md` | Git setup — worktree/symlink structure, how to commit docs, recreate instructions |
+| `CLAUDE.md` | This file — project context for Claude Code (symlink to `~/18xx-docs/CLAUDE.md`) |
 
 ---
 
