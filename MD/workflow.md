@@ -172,6 +172,215 @@ branch, without any branch-switching or stash operations.
 
 ---
 
+## CLAUDE.md — The Session Briefing Document
+
+`CLAUDE.md` is the single file Claude reads at the start of every session. Its job is
+to eliminate re-orientation cost: Claude should know what the project is, where to
+look, how the engine works, and what the current state is — before the first prompt
+is typed.
+
+It is not a README for humans. It is a **context bootstrap for Claude**, written at
+the level of detail an experienced contributor would need after a two-week absence.
+
+Because `CLAUDE.md` is a symlink into the `Documentation` worktree (see *Documentation
+Always Available* above), it is always present and always current, regardless of which
+code branch is active.
+
+---
+
+### Layout
+
+#### 1. Project Overview
+
+One paragraph: what is this system, what technology does it run on, and what is the
+scope of the current work. Includes pointers to the authoritative requirements source
+and any out-of-scope variants.
+
+```markdown
+## Project Overview
+
+This repo contains the **Acme** engine (a Python/FastAPI service) with an in-progress
+implementation of **WidgetFlow**, a workflow automation module.
+
+- **Engine source**: `acme/` — the main application codebase
+- **Spec document**: `specs/widgetflow_spec_v2.pdf` and extracted `specs/widgetflow_spec_v2.txt`
+- **Focus on WidgetFlow full module — no changes to WidgetFlow Lite**
+```
+
+---
+
+#### 2. Key File Locations
+
+A lookup table: concept → path. Claude uses this instead of searching the tree.
+Include every file that Claude might need to open in a typical session.
+
+```markdown
+## Key File Locations
+
+| What | Path |
+|---|---|
+| Core module | `acme/lib/widgetflow/engine.py` |
+| Entity definitions | `acme/lib/widgetflow/entities.py` |
+| Step classes | `acme/lib/widgetflow/step/*.py` |
+| Spec PDF + TXT | `specs/` |
+| Open points list | `MD/openpoints.md` |
+| Engine mechanics ref | `MD/ENGINE_MECHANICS.md` |
+| API reference | `MD/API_REFERENCE.md` |
+| Git/docs setup | `MD/git.md` |
+```
+
+---
+
+#### 3. Physical Setup and Documentation Index
+
+Explains the directory structure, the git remotes, and what each `MD/` file is for.
+This section is the bridge between the file-location table and the worktree/symlink
+setup documented in `MD/git.md`.
+
+```markdown
+## Reference Documents in MD/
+
+### Physical Setup
+
+~/projects/
+    myproject/           ← project root (not a git repo)
+        myproject/       ← main git repo
+        MD  →  symlink   ← always points to myproject-docs/MD/
+        CLAUDE.md →      ← always points to myproject-docs/CLAUDE.md
+    myproject-docs/      ← git worktree, Documentation branch
+
+### MD/ File Index
+
+| File | Purpose |
+|---|---|
+| `MD/ENGINE_MECHANICS.md` | Layer taxonomy, base class override patterns, step sequence |
+| `MD/API_REFERENCE.md` | All 20 hook types, field reference, frequency table |
+| `MD/openpoints.md` | Pending use cases with layer annotations |
+| `MD/git.md` | Worktree/symlink setup, how to commit docs |
+| `CLAUDE.md` | This file |
+```
+
+---
+
+#### 4. Implementation Status
+
+A high-level percentage, a bullet list of what works, and a bullet list of what is
+missing. The *missing* list points to the relevant `openpoints.md` section so Claude
+can drill down without reading the whole backlog.
+
+```markdown
+## Implementation Status: ~40% Complete (Pre-Alpha)
+
+- Core engine starts without errors
+- Basic widget CRUD operations work
+- Approval workflow scaffold in place
+
+### What Is Implemented
+- Entity definitions for all 12 widget types
+- REST endpoints for create/read/update/delete
+- Role-based access control (admin + editor)
+
+### What Is Missing
+- **Approval routing** — rules parsed but no action dispatch (see §3 openpoints.md)
+- **Notification hooks** — stub only, no delivery
+- **Tests** — zero coverage for WidgetFlow module
+```
+
+---
+
+#### 5. Architecture Summary
+
+A condensed version of the layer taxonomy from `ENGINE_MECHANICS.md`. Just enough
+for Claude to place a new mechanic in the right layer without reading the full
+reference document first.
+
+```markdown
+## Engine Architecture
+
+**Layer 1** — Constants only (entity definitions, phase configs, scalar flags).
+No custom methods needed.
+
+**Layer 2** — Named base-class method overrides. Predictable template.
+Covers: revenue calculation, validation hooks, ordering, event handlers.
+
+**Layer 3** — New step or round class. Covers: custom approval flows,
+multi-party actions, formation sequences.
+
+**Layer 4** — Structural engine divergence. Avoid; none planned for this module.
+```
+
+---
+
+#### 6. Domain Rules Summary
+
+Distilled facts from the requirements catalogue — only what Claude needs to reason
+correctly about the domain. Not a copy of the spec; a curated cheat sheet.
+
+Tables work well here: entity types and their properties, phase transitions, cost
+tables, movement rules. Each table replaces several pages of prose.
+
+```markdown
+## Domain Rules Summary
+
+### Entity Types
+
+| Type | Max instances | Lifecycle | Conversion |
+|---|---|---|---|
+| Widget A | 12 | Created → Active → Archived | Can become Widget B at Phase 3 |
+| Widget B | 6 | Created → Active | Terminal |
+
+### Approval Phases
+
+| Phase | Approvers required | Timeout |
+|---|---|---|
+| Draft | 1 (author) | None |
+| Review | 2 (any editor) | 48h |
+| Publish | 1 (admin) | 24h |
+```
+
+---
+
+#### 7. Development Notes and Next Milestones
+
+Engine conventions that don't fit the layer taxonomy, variant inheritance notes,
+test location, and the next 3–5 priority items. The milestone list is a quick
+decision aid: it tells Claude what is most foundational without requiring a full
+read of `openpoints.md`.
+
+```markdown
+## Development Notes
+
+- Engine follows the Acme plugin pattern; see `acme/DEVELOPMENT.md`
+- Lite variant extends base via inheritance — do not modify base for Lite-only fixes
+- Tests live in `acme/spec/`; WidgetFlow currently has none
+
+### Next Milestones (priority order)
+
+1. **Approval routing** — implement dispatch logic in `step/approve.py`
+2. **Notification hooks** — wire `on_approve` / `on_reject` events
+3. **Revenue calculation** — override `calculate_revenue` for Widget B rules
+```
+
+---
+
+### Intent
+
+The sections form a deliberate reading order:
+
+1. *Overview* — what am I working on?
+2. *File locations* — where do I look?
+3. *Physical setup* — how is the project organised?
+4. *Implementation status* — what state am I in?
+5. *Architecture summary* — which layer does my next task belong to?
+6. *Domain rules* — what are the correct facts to reason from?
+7. *Milestones* — what is the next task?
+
+A session starts by reading `CLAUDE.md`. After that, Claude has enough context to
+pick the right files, apply the right patterns, and stay within scope — without
+asking orientation questions or reading the full source tree.
+
+---
+
 ## Future Ideas to Try
 
 ### Context and prompting
