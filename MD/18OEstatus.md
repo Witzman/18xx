@@ -209,7 +209,7 @@ share issuance) is complete.
 The full train roster and all phase transitions are implemented. Train limits per
 company type are defined for every phase.
 
-### 7a. Train Data
+### 7a. Train Data (errors - rusting wrong)
 
 **Confirmed train roster:**
 
