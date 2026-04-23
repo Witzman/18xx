@@ -1,4 +1,4 @@
-# Use Case Driven Development with Claude Code
+# Document supported Development with Claude Code
 
 A description of a workflow for implementing a complex, rule-governed system
 collaboratively with an AI coding assistant. The workflow is built around three
