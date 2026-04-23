@@ -2,7 +2,7 @@
 
 A description of a workflow for implementing a complex, rule-governed system
 collaboratively with an AI coding assistant. The workflow is built around three
-principles: **treat the rules as requirements**, **keep Claude's context sharp**,
+principles: **retrieving and tracking requirements from UseCases**, **keep Claude's context sharp**,
 and **never let documentation go stale**.
 
 ---
@@ -35,14 +35,14 @@ Windows 11 (host)
 
 ## The Requirements Catalogue
 
-The game rulebook (a PDF) is the authoritative source of truth. It is treated as
-an **Anforderungskatalog** — a requirements catalogue — not as background reading.
+The Use-case description is the authoritative source of truth. It is treated as
+an **Requirements Catalogue** not as background reading.
 
-The workflow starts by extracting the rulebook into plain text and then decomposing
-it into discrete, implementable **use cases**. Each use case is:
+The workflow starts by extracting the usecases into plain text and then decomposing
+it into discrete, implementable **subtasks**. Each use case is:
 
 - **Atomic** — it can be implemented and verified independently.
-- **Rule-referenced** — it cites the section of the rulebook it covers.
+- **Requirements-referenced** — it cites the section of the Usecases it covers.
 - **Layer-annotated** — it is tagged with the complexity tier it belongs to in the
   engine (see *Codebase Knowledge* below).
 
@@ -59,11 +59,11 @@ Three files form a three-tier tracking system. All live in `MD/`.
 All **pending** use cases, grouped by feature area. Each item is a checkbox:
 
 ```markdown
-## 3. Revenue Calculation
+## 1. example
 
-- [ ] **3.1** Basic city revenue — sum of visited city values per train **[L2]**
-- [ ] **3.2** D-train doubling rule — linked cities counted at 2× face value **[L2]**
-- [ ] **3.3** Bonus route detection — route must visit city A and one of B/C/D **[L2/L3]**
+- [ ] **1.1** Description1 **[L2]**
+- [ ] **1.2** Description2 **[L1]**
+- [ ] **1.3** Description3 **[L2/L3]**
 ```
 
 Layer annotations (`[L1]`, `[L2]`, `[L3]`) tell Claude (and you) how much new code
@@ -75,15 +75,14 @@ Completed use cases, copied from `openpoints.md` when finished. Each item gets a
 plain-language description of *what was implemented* — written for rules, not code:
 
 ```markdown
-- [x] **3.1** Basic city revenue — the engine sums the revenue printed on each
-  city tile that a train visits; no custom code needed, standard engine behaviour **[L2]**
+- [x] **1.1** Description1 — Details **[L2]**
 ```
 
 ### `MD/status.md` — the merged view
 
 A **combined, read-only** view that merges `openpoints.md` and `done.md` into a
-single document using `[x]` / `[~]` / `[ ]` checkboxes. It is the first file
-Claude reads in a session.
+single document using `[x]` / `[~]` / `[ ]` checkboxes. It is the 2nd file
+Claude reads in a session after CLAUDE.md.
 
 The split-then-merge pattern matters: `openpoints.md` stays short and actionable;
 `done.md` provides the implementation history; `status.md` provides the complete
@@ -103,22 +102,20 @@ Documents the engine's implementation layer taxonomy and method-override pattern
 A new mechanic can be placed in the right layer immediately:
 
 ```
-Layer 1 — constants only (TRAINS, PHASES, CORPORATIONS, scalar flags)
-Layer 2 — named Game::Base method overrides (tile_lays, revenue_for, …)
-Layer 3 — new Step or Round Ruby class required
+Layer 1 — constants only
+Layer 2 — named Project::Base methods or overrides
+Layer 3 — new concepts to be added
 Layer 4 — structural engine divergence (rare; avoid if possible)
 ```
 
-Also documents: the operating-round step sequence, event handler naming conventions,
-how graphs work, how tile lay permissions are specified, and other non-obvious
-engine invariants.
+Also documents:  step sequence for concepts, event handler naming conventions,
+how FE works, edge cases, and other non-obvious engine invariants.
 
 ### `MD/ABILITIES_REFERENCE.md`
 
-A frequency table and field reference for all ability types in the engine, extracted
-by analysing the existing game library. Before implementing a company special ability,
-this file shows which ability type to use, which fields are required, and how other
-games have used the same type.
+A frequency table and field reference for all methods in the engine. Before 
+implementing a new method, this file shows which methods can be used, which 
+fields are required, etc.
 
 **The payoff**: Claude can plan and implement a mechanic without reading hundreds of
 engine source files. The reference docs carry the "what does the engine support"
