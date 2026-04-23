@@ -1,8 +1,7 @@
 # 18xx Ruby Engine — Mechanics Reference for 18OE
 
-Extracted from 18xx engine analysis (EVAN_MECHANICS_BRIEF). Covers only Ruby engine
-mechanics relevant to the 18OE implementation. All JavaScript / rendering content
-has been removed.
+Extracted from 18xx engine analysis. Covers only Ruby engine mechanics relevant to the
+18OE implementation. All JavaScript / rendering content has been removed.
 
 ---
 
@@ -13,8 +12,8 @@ in tells you how hard it is to implement and where the code goes.
 
 ### Layer 1 — Pure Configuration (constants only)
 
-A mechanic at this layer requires no custom Ruby methods — only values in
-`TRAINS`, `PHASES`, `COMPANIES`, `CORPORATIONS`, `MINORS`, or scalar game constants.
+No custom Ruby methods needed — only values in `TRAINS`, `PHASES`, `COMPANIES`,
+`CORPORATIONS`, `MINORS`, or scalar game constants.
 
 **TRAINS entries capture:**
 - Train roster: name, distance, price, count
@@ -28,7 +27,7 @@ A mechanic at this layer requires no custom Ruby methods — only values in
 
 **PHASES entries capture:**
 - Train limit per phase (scalar or `{minor: N, major: N, national: N}` hash)
-- Available tile colors
+- Available tile colours
 - Operating rounds per phase
 - Status flags: string array mapping to `STATUS_TEXT`
 - Phase-trigger events: same `events:` key as trains
@@ -61,7 +60,7 @@ A mechanic at this layer requires no custom Ruby methods — only values in
 ### Layer 2 — Hook Overrides (named `Game::Base` method overrides)
 
 These require Ruby code but follow a clear template: override a named method, replace
-its return value or behaviour. Predictable enough that the pattern is reusable.
+its return value or behaviour.
 
 | Hook method | What it controls | 18OE relevance |
 |---|---|---|
@@ -113,7 +112,7 @@ are available inside a round, or the order in which entities take those actions.
 
 ### Layer 4 — Structural Divergence
 
-Mechanics that fundamentally rewire the engine. **18OE does not have Layer 4 mechanics.**
+Mechanics that fundamentally rewire the engine. **18OE has no Layer 4 mechanics.**
 
 The National Revenue system (virtual tokens via `Graph.new(home_as_token: true,
 no_blocking: true)`) is unusual but within Layer 3 — it overrides `national_revenue`
@@ -142,11 +141,12 @@ These are method names dispatched from `TRAINS` or `PHASES` `events:` arrays via
 | `full_capitalisation` | Full cap event | `1822, 1880` |
 | `trigger_endgame` | Signals game-end countdown | `1868_wy` |
 
-**18OE events needed (add to game.rb):**
-- National formation trigger fired from `Step::BuyTrain#process_buy_train` when phase
-  changes to 4, 6, or 8 — not a standard `event_xxx!` but a direct method call.
-- `event_close_companies!` — standard, inherited from base.rb; fires when Level 3 trains
-  start rusting (if wired via TRAINS events array).
+**18OE events wired:**
+- `event_consolidation_triggered!` — fires from PHASES at Phase 5; sets `@consolidation_triggered`
+
+**18OE events still needed:**
+- National formation is not a standard `event_xxx!` — it is called directly from
+  `Step::BuyTrain#process_buy_train` when the phase changes to 4/6/8.
 
 ---
 
@@ -173,28 +173,25 @@ available lay action, consumed in sequence as `@round.num_laid_track` is increme
 | Major | 6 pts | Same tile point costs |
 | National | 9 pts | Same tile point costs; exempt from terrain costs |
 
-The base engine's `tile_lays` returns a single slot. 18OE needs a custom `tile_lays`
-override returning a slot array with enough slots to expend the point budget. The
-simplest approach: return N slots where each slot consumes 1 pt (and the step
-accumulates points from the `tiles_laid` array's costs). See 1822 `MAJOR_TILE_LAYS`
-for a two-slot pattern.
+Note: 18OE's `Step::Track` implements its own `@points_used` counter directly rather
+than using the base `tile_lays` slot array. This works but bypasses the standard
+`lay_tile_action` slot mechanism. The `get_tile_lay` method returns a point budget
+integer rather than a slot array.
 
 ---
 
 ## 4. How Abilities Work in Ruby
 
 ### `when:` field taxonomy
-(Complete reference in ABILITIES_REFERENCE.md §2)
+(Complete reference in ABILITIES_REFERENCE.md §4)
 
-The `when:` field on an ability specifies when it may be used. Three contexts:
-
-- **OR step-scoped** (e.g. `'track'`, `'token'`, `'buy_train'`): active during that specific step
-- **OR turn-scoped** (e.g. `'owning_corp_or_turn'`): active any time the owning corp operates
-- **Event-triggered** (e.g. `'bought_train'`, `'ran_train'`): used only on `close` abilities
+- **OR step-scoped** (`'track'`, `'token'`, `'buy_train'`): active during that specific step
+- **OR turn-scoped** (`'owning_corp_or_turn'`): active any time the owning corp operates
+- **Event-triggered** (`'bought_train'`, `'ran_train'`): used only on `close` abilities
 
 ### `count:` enforcement (`lib/engine/ability/base.rb`)
 
-`ability.use!` decrements `@count`. When `count` reaches zero and `@remove_when_used_up`
+`ability.use!` decrements `@count`. When count reaches zero and `@remove_when_used_up`
 is true (default), the ability is removed. `TileLay#use!` tracks `lay_count` and
 `upgrade_count` separately.
 
@@ -217,24 +214,19 @@ The base engine uses these steps in this order for each operating entity:
 4. `Step::Route` (run trains, calculate revenue)
 5. `Step::Dividend` (pay / withhold / split)
 6. `Step::BuyTrain` (buy trains)
-7. `Step::BuySellParShares` (buy/sell shares — majors only)
+7. `Step::BuySellParShares` (buy/sell shares — majors only in 18OE)
 
-18OE adds:
+18OE adds / will add:
 - After `Step::Token`: a Transfer Tokens step (majors only — not yet implemented)
 - `Step::Consolidate` (during Consolidation round)
-- `Step::ConvertToNational` (when national formation triggered)
+- `Step::ConvertToNational` (when national formation triggered — not yet created)
 
 ---
 
 ## 6. Share Ownership and Float
 
 **Float condition**: `float_percent` determines when `float_corporation!` is called.
-For regionals: 2× par to treasury = 50% of two-share structure = `float_percent: 50`.
-For majors: need to verify — standard is 60%.
-
-**Incremental capitalisation** vs **full**: In 18OE, regionals receive IPO cash
-incrementally as shares are sold (each share sold → treasury += par). Full cap would
-give the entire IPO value on float. Check `CAPITALIZATION` setting.
+For regionals: 50% president share sold = float. Treasury receives 2× par.
 
 **Stock market movement in base engine:**
 - RIGHT on dividend ≥ share value: `share_price_change` returns `{share_direction: :right}`
@@ -254,15 +246,15 @@ mechanism:
 Graph.new(game, home_as_token: true, no_blocking: true)
 ```
 
-This treats each home zone hex as if the national has a token there. The revenue
-calculation must then:
+This treats each home zone hex as if the national has a token there, without placing
+physical tokens. The revenue calculation must then:
 1. Identify all linked cities/towns in zone via graph connectivity
 2. Count linked stops at face value
-3. Fill remaining capacity with £60/city or £10/town (no linkage required)
+3. Fill remaining capacity at £60/city or £10/town (no linkage required)
 
-The `home_as_token: true` flag in the graph makes all zone hexes reachable for the
-national without placing physical tokens. This requires `NATIONAL_REGION_HEXES` to
-enumerate exactly which hexes are in each zone.
+This requires `NATIONAL_REGION_HEXES` to enumerate exactly which hexes are in each zone —
+which is now complete (`NATIONAL_REGION_HEXES_COMPLETE = true`). The blocker is that all
+city revenues are currently 0, so the graph would compute £0 revenue regardless.
 
 ---
 
