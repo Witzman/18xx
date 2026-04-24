@@ -14,8 +14,7 @@ area and roughly prioritized. Earlier items are more foundational.
 
 **Status 2026-04-22**: Data structures in place. No implementation code — `convert_to_national`,
 `national_revenue`, `trigger_nationals_formation!` absent from game.rb; no
-`step/convert_to_national.rb`. Two stale NATIONAL_REGION_HEXES entries (SC/A40, RU/E88)
-must be fixed before nationals implementation.
+`step/convert_to_national.rb`.
 
 - [x] **1.1** National corp type `:national` data — PHASES train limits, NATIONAL_REGION_HEXES
   all 8 zones, `NATIONAL_REGION_HEXES_COMPLETE = true` **[L1]**
