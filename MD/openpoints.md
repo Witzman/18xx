@@ -77,13 +77,9 @@ must be fixed before nationals implementation.
     **[HIGH PRIORITY — routes produce £0 until filled]**
   - [ ] **Pre-printed path edges missing** (8 cities in white section):
     - M28 London, AA82 Constantinople, N31 Lille, I20 Dublin, O28 Le Havre,
-      X33 Marseille, U24 Bordeaux — both edges each; AB51 Napoli — second edge
+      X33 Marseille, U24 Bordeaux — both edges each
   - [~] Off-board revenues: 19 red hexes have best-guess revenues — need verification
   - [ ] Sea zone borders, ferry paths, distance numbers not encoded
-  - [ ] **Bug**: AB51 Napoli `path=a:1,b:_0` — edge 1 hits blue sea hex; permanently
-    unupgradeable via `all_new_exits_valid`. Fix: correct edge or sea-crossing support
-  - [ ] **Bug**: `game.rb#metropolis_hex?` lists `BB51` — must be `AB51` (Napoli)
-  - [ ] **Bug**: `game.rb#upgrades_to_correct_label?` missing case for `AB51` (label=N)
   - [ ] **Bug**: `NATIONAL_REGION_HEXES['SC']` contains `A40` — remove (now blue)
   - [ ] **Bug**: `NATIONAL_REGION_HEXES['RU']` contains `E88` — remove (removed from map)
 

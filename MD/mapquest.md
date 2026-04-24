@@ -26,7 +26,6 @@ Coordinate system: rows A–Z then AA–AH (34 rows); columns 2–88.
 - All standard track tile quantities
 - Constantinople: on-map pre-printed yellow at **AA82**; OE eastern terminus
 - **Metropolis hexes**: A56, B41, C74, F87, K26, M28, M50, Q30, R55, Y14, AA82, **AB51**
-  - ⚠️ Bug: `game.rb#metropolis_hex?` still uses `BB51` — must be `AB51`
 - Blue hex coverage: 651 hexes
 - **Terrain**: UK/Ireland/France/Spain/Portugal/Scandinavia/Alps/Italy/Adriatic/
   Carpathians/Balkans/Caucasus/major river crossings all implemented
@@ -107,7 +106,7 @@ for each city: actual starting revenue and label letter (if any unconfirmed).
 | O80 | Kiev | city | ✓ | revenue 0; label=Y |
 | J73 | Minsk | city | ✓ | revenue 0; label unknown |
 | M62 | Warszawa | city | ✓ | revenue 0; label=Y |
-| AB51 | Napoli | city | ✓ | revenue 0; label=N (old refs used BB51 — wrong) |
+| AB51 | Napoli | city | ✓ | revenue 0; label=N |
 | AA82 | Constantinople | 2-slot city | ~ | revenue 20/slot; path edges missing |
 
 **Remaining work**: Starting revenues for all named cities. Confirm Venezia V47 type.
@@ -125,7 +124,7 @@ for each city: actual starting revenue and label letter (if any unconfirmed).
 | AE72 | Athinai | ✓ yellow | `city=revenue:20;path=a:1,b:_0;path=a:5,b:_0` |
 | M28 | London | ~ white | `city=revenue:30;label=L;upgrade=cost:30,terrain:water` — both edges missing |
 | AA82 | Constantinople | ~ white | `city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;label=C` — both edges |
-| AB51 | Napoli | ~ white | `city=revenue:20;label=N;path=a:1,b:_0` — second edge missing |
+
 | N31 | Lille | ~ white | `city=revenue:20;label=Y;border=edge:2,type:impassable` — both edges |
 | I20 | Dublin | ~ white | `city=revenue:10` — both edges |
 | O28 | Le Havre | ~ white | `city=revenue:10` — both edges |
@@ -259,11 +258,8 @@ All best-guess — verify against physical map.
 
 | Bug | Location | Fix |
 |---|---|---|
-| `BB51` should be `AB51` | `game.rb#metropolis_hex?` | Correct coordinate string |
-| `AB51` missing from label check | `game.rb#upgrades_to_correct_label?` | Add `when 'AB51' then to.label.to_s.include?('N')` |
 | Constantinople AA82 no path edges | `map.rb white:` section | Add edges, move to `yellow:` |
 | London M28 no path edges | `map.rb white:` section | Add edges, move to `yellow:` |
-| AB51 Napoli path edge 1 hits sea | `map.rb white:` section | Confirm correct non-sea edge |
 | SC zone contains A40 | `game.rb NATIONAL_REGION_HEXES` | Remove A40 |
 | RU zone contains E88 | `game.rb NATIONAL_REGION_HEXES` | Remove E88 |
 
@@ -274,9 +270,9 @@ All best-guess — verify against physical map.
 | Priority | Item | Needed |
 |---|---|---|
 | **High** | §2 Revenue values | Starting revenues for all named cities |
-| **High** | §3 Pre-printed edges | Edges for M28, AA82, N31, I20, O28, X33, U24; second edge for AB51 |
+| **High** | §3 Pre-printed edges | Edges for M28, AA82, N31, I20, O28, X33, U24 |
 | **High** | §12 Verify off-board | Confirm all 19 red hex revenues and edges vs physical map |
-| **High** | Bugs | Fix BB51→AB51; add AB51 label case; remove A40/E88 from national zones |
+| **High** | Bugs | Remove A40/E88 from national zones |
 | **Medium** | §6 Sea zones | Ferry paths, impassable borders, distance numbers |
 | **Medium** | §8 Ports/ferries | Port markers, ferry routes, distances |
 | **Medium** | §5 Verify terrain | Caucasus; river routing accuracy |
