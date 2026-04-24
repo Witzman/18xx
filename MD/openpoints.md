@@ -69,19 +69,33 @@ must be fixed before nationals implementation.
   - [x] All terrain: UK/FR/Spain/Portugal/Scandinavia/Alps/Italy/Adriatic/Carpathians/
     Balkans/Caucasus/river crossings
   - [x] LOCATION_NAMES: 255 entries
-  - [x] Pre-printed yellows (yellow section): Liverpool J25, Manchester J27, Athinai AE72
+  - [x] Pre-printed yellows (yellow section): Liverpool J25, Manchester J27, Athinai AE72,
+    Amsterdam L37, Kobenhavn I50; I48 (Kattegat crossing) yellow track
   - [x] Station markers: all 255 named locations have `city=revenue:0` or `town=revenue:0`
   - [x] NATIONAL_REGION_HEXES all 8 zones; CITY_NATIONAL_ZONE overrides
-  - [~] Constantinople AA82: white section, two city slots, revenue 20/slot — path edges needed
-  - [ ] City revenues: all hexes have placeholder `revenue:0` — actual starting revenues needed
-    **[HIGH PRIORITY — routes produce £0 until filled]**
-  - [ ] **Pre-printed path edges missing** (8 cities in white section):
-    - M28 London, AA82 Constantinople, N31 Lille, I20 Dublin, O28 Le Havre,
-      X33 Marseille, U24 Bordeaux — both edges each
+  - [x] All on-board city revenues set to 0 — only ports will carry pre-printed revenues
+    (ports not yet implemented)
+  - [x] Pre-printed ferry paths added to white cities: N31 Lille (→1), M28 London (←5),
+    AA82 Constantinople (→2), I20 Dublin (→4), O28 Le Havre (→1), X33 Marseille (→5)
+  - [~] Ferry sea hexes — map data partially done (more routes outstanding):
+    - N29 (English Channel, 4↔2), G22 (Irish Sea, 0↔4), N25 (0↔3)
+    - I22 (1↔5 + 1↔4 branching), I24 (1↔5 + 1↔4 branching)
+    - AE12 (3↔0), AF13 (2↔1)
+    - AB21 (2↔4), AB23 (1↔4), AB25 (1↔4)
+  - [~] Port hexes — partially done: AE6 (`town=revenue:20`, path 0↔3); more ports outstanding
+  - [~] Lille↔London ferry (N31→N29→M28): open for playtesting (forced upgrade edges
+    on both cities make tile placement work); all other ferry routes have map data but
+    tiles cannot yet be placed to connect — blocked on engine override below
+  - [ ] **Ferry route engine override** — tile placement validator rejects exits toward blue
+    hexes by default. Need a Layer 2 override in `game.rb` (likely `check_tile_edges` or
+    similar) to whitelist exits toward blue hexes that carry a matching pre-printed path.
+    Covers two cases: (1) forced upgrade — city has pre-printed path facing ferry hex;
+    (2) optional connection — player chooses to connect to ferry hex. Test with N31/M28
+    first before assuming it works. **[L2]**
   - [~] Off-board revenues: 19 red hexes have best-guess revenues — need verification
-  - [ ] Sea zone borders, ferry paths, distance numbers not encoded
-  - [ ] **Bug**: `NATIONAL_REGION_HEXES['SC']` contains `A40` — remove (now blue)
-  - [ ] **Bug**: `NATIONAL_REGION_HEXES['RU']` contains `E88` — remove (removed from map)
+  - [ ] Sea zone borders, distance numbers not encoded
+  - [x] **Bug**: `NATIONAL_REGION_HEXES['SC']` contains `A40` — remove (now blue)
+  - [x] **Bug**: `NATIONAL_REGION_HEXES['RU']` contains `E88` — remove (removed from map)
 
 ---
 
@@ -90,13 +104,14 @@ must be fixed before nationals implementation.
 Partially implemented (2026-04-12): depot level gating and inter-corp gate are in.
 Obligation logic partly buggy. Insolvency and nationals-claim-rusted deferred.
 
-- [~] **3.1** Reserved 2+2 train — `buyable_trains` restriction buggy **[L2]**:
-  - ✓ `must_buy_train?` correctly uses `phase.status.include?('train_obligation')`
-  - **Bug A**: `entity.trains.empty?` re-restricts after a buy-across (wrong)
-  - **Bug B**: `phase.name.to_i < 4` hard-coded integer (coding-guidelines violation)
-  - **Fix**: add `@fulfilled_train_obligation = Set.new` in `setup`; set on first train buy;
-    replace both checks with `!@game.fulfilled_train_obligation.include?(entity.id)` and
-    `@game.phase.status.include?('train_obligation')`
+- [x] **3.1** Reserved 2+2 obligation fully implemented **[L2]**:
+  - `@fulfilled_train_obligation = Set.new` in `setup`; `attr_reader` on `game.rb`
+  - `must_buy_train?` uses Set (not `entity.trains.empty?`) — one-time flag per entity
+  - `buyable_trains`: during Regional/Minor Phase all entities restricted to level 2 trains
+    (`!@game.major_phase?`); during Major Phase unfulfilled entities restricted to cheapest
+    depot train (2+2 while available)
+  - `process_buy_train`: snapshots phase status before `super`; marks entity fulfilled if
+    purchase occurred in obligation window
 - [ ] **3.2** Forced purchase — president covers shortfall; else national conversion (majors) or
   insolvency (minors/regionals) *(president contribution relies on base engine;
   national/insolvency deferred)* **[L3]**
@@ -203,7 +218,7 @@ See `MD/ABILITIES_REFERENCE.md §2` for ability types needed for each private.
 - [ ] **9.2** OE20–OE22: brown double-town tiles (qty 3/2/6) — orientations unknown **[L1]**
 - [x] **OE23–OE33**: brown special city tiles **[L1]**
 - [x] **OE34–OE44**: gray special city tiles **[L1]**
-- [ ] **9.4** Verify standard tile quantities against physical manifest **[L1]**
+- [ ] **9.4** Verify standard tile quantities against physical manifest — `csv/tilemanifest.csv` created as reference export (tile, qty, color, label, description) **[L1]**
 - [ ] **9.5** Audit all OE-specific tile upgrade paths against manifest **[L1]**
 
 ---
@@ -325,6 +340,4 @@ is empty. `process_pass` uses `current_entity` (queue head). Correct permanent b
 
 ---
 
-_Last updated: 2026-04-22 — Reconciled against actual codebase.
-Enhanced 2026-04-23: added engine layer [Ln] annotations and implementation notes
-from ENGINE_MECHANICS.md and ABILITIES_REFERENCE.md._
+_Last updated: 2026-04-25 — §9.4 notes `csv/tilemanifest.csv` created as verification reference._

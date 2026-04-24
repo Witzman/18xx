@@ -56,10 +56,24 @@ and all named locations, though city revenues remain placeholder.
   from the rulebook map **[L1]**
 - [x] All 255 named locations carry a station slot with placeholder revenue 0 — sufficient
   for game initialisation and track laying **[L1]**
-- [x] Pre-printed yellow tiles: Liverpool (J25) and Manchester (J27) start on yellow tiles
-  with their printed revenues; Athinai (AE72) placed in its yellow section **[L1]**
+- [x] Pre-printed yellow tiles: Liverpool J25, Manchester J27, Athinai AE72, Amsterdam L37,
+  Kobenhavn I50 placed in yellow section; I48 (Kattegat crossing) pre-printed yellow track **[L1]**
+- [x] All on-board city revenues set to `revenue:0` — no pre-printed revenues on land tiles;
+  ports will be the only source of pre-printed revenue (not yet implemented) **[L1]**
+- [x] Pre-printed ferry paths on white cities (forced upgrade edges): N31 Lille (→1),
+  M28 London (←5), AA82 Constantinople (→2), I20 Dublin (→4), O28 Le Havre (→1),
+  X33 Marseille (→5); U24 Bordeaux has no forced ferry edge **[L1]**
+- [~] Ferry sea hexes — partial (more routes outstanding, see openpoints.md):
+  N29 (4↔2), G22 (0↔4), N25 (0↔3), I22 (1↔5 + 1↔4), I24 (1↔5 + 1↔4),
+  AE12 (3↔0), AF13 (2↔1), AB21 (2↔4), AB23 (1↔4), AB25 (1↔4) **[L1]**
+- [~] Port hexes — partial: AE6 (`town=revenue:20`, path 0↔3); more outstanding **[L1]**
+- [~] Lille↔London ferry (N31→N29→M28): open for playtesting — forced upgrade edges
+  on both cities mean tiles connect correctly; other ferry routes blocked pending
+  engine override (see openpoints.md) **[L2 outstanding]**
 - [x] All 8 national zone hex lists embedded in `NATIONAL_REGION_HEXES` — used for token
   zone restrictions and (eventually) national revenue **[L1]**
+- [x] Two stale entries removed from `NATIONAL_REGION_HEXES`: `A40` from `SC` (hex is now
+  a blue sea zone) and `E88` from `RU` (hex removed from map entirely) **[L1]**
 - [x] `SEA_ZONES` constant — 19 named sea zones each with their hex lists defined, ready for
   cross-water cost calculations **[L1]**
 
@@ -84,6 +98,15 @@ forced purchase logic have partial implementation; insolvency is not yet done.
 
 ### 3b. Purchase Rules
 
+- [x] **3.1** Reserved 2+2 obligation fully implemented **[L2]**:
+  - Obligation tracked per entity via `@fulfilled_train_obligation` (`Set`) in `game.rb` —
+    a one-time flag; never re-triggers if a train rusts or is lost
+  - `must_buy_train?` uses the Set; `process_buy_train` snapshots phase status before
+    calling `super` so a phase change during purchase cannot cause a missed fulfillment
+  - `buyable_trains` enforces two independent restrictions: (1) during the Regional/Minor
+    Phase all entities are restricted to level 2 trains only (per §8.2 "No RR may purchase
+    a level 3 train"); (2) during Major Phase, an entity with an outstanding obligation is
+    restricted to the cheapest depot train (the 2+2, while any remain)
 - [x] **3.4** Reserved 2+2 obligation is automatically waived if Phase 4 arrives before a
   company has had its first Operating Round — checked via phase status flag, not a
   hard-coded phase number **[L2]**
@@ -160,6 +183,7 @@ OE20–22) and OE19 are still missing.
 - [x] **OE12–OE18** — green special-city tiles **[L1]**
 - [x] **OE23–OE33** — brown special-city tiles **[L1]**
 - [x] **OE34–OE44** — gray special-city tiles **[L1]**
+- [x] `csv/tilemanifest.csv` created — full tile manifest exported to CSV (columns: tile, qty, color, label, description); covers all 33 standard tiles and 34 custom OE tiles; reference document for §9.4/9.5 physical-manifest verification **[non-code]**
 - [x] Tile point cost rules encoded — yellow lay costs 1 point; an upgrade costs 2 points;
   a metropolis upgrade costs 4 points **[L2]**
 - [x] Point budgets enforced per company type — minors and regionals have 3 points per OR;
@@ -282,4 +306,4 @@ foundational for play.
 
 ---
 
-_Last updated: 2026-04-23 — Checked against `18oe_fullmap` branch._
+_Last updated: 2026-04-25 — `csv/tilemanifest.csv` added as tile manifest reference export._

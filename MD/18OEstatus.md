@@ -290,7 +290,7 @@ nationals = 9 pt.
 - [ ] **9.1** OE9–OE11: green double-town path edge orientations needed **[L1]**
 - [ ] **9.2** OE20–OE22: brown double-town path edge orientations needed **[L1]**
 - [ ] **9.3** OE19: tile type unknown — must be identified and defined **[L1]**
-- [ ] **9.4** Verify standard tile quantities against the physical tile manifest **[L1]**
+- [ ] **9.4** Verify standard tile quantities against the physical tile manifest — `csv/tilemanifest.csv` created as reference export (tile, qty, color, label, description) **[L1]**
 - [ ] **9.5** Audit all OE-specific tile upgrade paths against the physical manifest **[L1]**
 
 ### 8c. Token Placement
@@ -628,5 +628,4 @@ for a conditional blocker step — do not remove.
 
 ---
 
-_Last updated: 2026-04-23 — Combined from `MD/openpoints.md` and `MD/done.md`;
-verified against `18oe_fullmap` branch._
+_Last updated: 2026-04-25 — §9.4 notes `csv/tilemanifest.csv` created as verification reference._
