@@ -23,7 +23,7 @@ module Engine
           end
 
           def blocks?
-            !pending_corps(current_entity).empty?
+            actions(current_entity).any?
           end
 
           def can_convert?(entity)
@@ -36,6 +36,12 @@ module Engine
 
           def process_convert(action)
             super
+            pass!
+          end
+
+          def process_pass(_action)
+            corps = pending_corps(current_entity).map(&:name).join(', ')
+            @log << "#{current_entity.name} passes consolidation — pending: #{corps} (merge/abandon TBD)"
             pass!
           end
 
