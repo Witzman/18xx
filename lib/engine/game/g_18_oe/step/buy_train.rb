@@ -34,6 +34,9 @@ module Engine
 
             return trains.select { |t| t.name == '2+2' } if entity.trains.empty? && @game.phase.name.to_i < 4
 
+            # Level 3+ blocked in the first OR of the game (§11.6)
+            return trains.select { |t| t.name == '2+2' } if @game.turn == 1 && @game.round.round_num == 1
+
             depot_trains = trains.select(&:from_depot?)
             unless depot_trains.empty?
               min_price = depot_trains.map(&:price).min
