@@ -40,7 +40,11 @@ area and roughly prioritized. Earlier items are more foundational.
 - [ ] **1.6** Nationals cannot place tokens — `Token#actions` returns `[]` for nationals **[L2]**
 - [ ] **1.7** Nationals exempt from terrain costs — `tile_cost_with_discount` returns 0 **[L2]**
 - [ ] **1.8** `convert_to_national` must discard cheapest excess trains on formation **[L2]**
-- [ ] **1.9** Nationals can claim rusted trains for free *(deferred)* **[L3]**
+- [~] **1.9** Nationals and rusted trains (§11.6.6) **[L3]**
+  - [x] Claim unclaimed rusted trains from depot for free, up to train limit
+  - [ ] Exchange owned rusted train for any higher-level unclaimed rusted train for free
+  - [ ] Flip owned rusted train from express side to local side for free
+  - [ ] Upgrade rusted → non-rusted by purchasing from same-owner major; bank pays major ½ face value
 - [x] **1.10** `NATIONAL_REGION_HEXES` all 8 zones; `NATIONAL_REGION_HEXES_COMPLETE = true`;
   `CITY_NATIONAL_ZONE` overrides; `MINOR_EXCLUDED_HOME_CITIES` defined **[L1]**
 - [x] **1.11** `@minor_available_regions` derived dynamically from regionals **[L2]**
@@ -339,4 +343,37 @@ is empty. `process_pass` uses `current_entity` (queue head). Correct permanent b
 
 ---
 
-_Last updated: 2026-04-25 — §9.4 notes `csv/tilemanifest.csv` created as verification reference._
+---
+
+## 19. Upstream Engine Requests
+
+Changes needed in tobymao/18xx base files that cannot be worked around from within the
+18OE game directory alone.
+
+### 19.1 — Partition color/visibility hook *(PENDING UPSTREAM)*
+
+**Affects**: drawing province-style (orange dashed) corner-to-corner zone boundary lines
+inside hexes — needed for national border markings that cross a hex rather than run
+along an edge.
+
+**Problem**: `assets/app/view/game/part/partitions.rb` hard-codes color and visibility
+rules. Only `type:divider` renders unconditionally (black). No per-game override hook exists.
+
+**Proposed fix** (ready to PR — 2 lines in `partitions.rb`):
+```ruby
+# color(): before case block
+return setting_for(@game.partition_color(partition)) if @game&.respond_to?(:partition_color) && @game.partition_color(partition)
+
+# render_part(): extend skip condition
+next if partition.type != :divider &&
+        !(@game&.respond_to?(:partition_color) && @game.partition_color(partition)) &&
+        partition.blockers.none? { ... }
+```
+Game-side implementation already written in `game.rb` (`partition_color` returns `:orange`
+for `type:province`). Zero behaviour change for any other game.
+
+**Current workaround**: use `type:divider` (black solid line) until upstream accepts PR.
+
+---
+
+_Last updated: 2026-04-25 — §19.1 upstream partition hook request added; §9.4 notes `csv/tilemanifest.csv` created as verification reference._
