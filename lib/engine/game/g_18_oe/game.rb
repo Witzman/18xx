@@ -875,34 +875,6 @@ module Engine
 
         def event_consolidation_triggered!
           @consolidation_triggered = true
-        end
-
-        def next_round!
-          # Insert consolidation round between OR set end and next SR (once only)
-          if @round.is_a?(Round::Operating) &&
-             @round.round_num >= @operating_rounds &&
-             @consolidation_triggered &&
-             !@consolidation_done
-            @log << '-- Consolidation Phase --'
-            @round = new_consolidation_round
-            return
-          end
-
-          # After consolidation round, proceed to SR
-          if @round.is_a?(Round::G18OE::Consolidation)
-            @consolidation_done = true
-            @turn += 1
-            @round = new_stock_round
-            return
-          end
-
-        # UP movement at end of SR: only for majors and nationals that are fully player-held
-        def sold_out_increase?(corporation)
-          %i[major national].include?(corporation.type)
-        end
-
-        def event_consolidation_triggered!
-          @consolidation_triggered = true
           @log << '-- Event: Consolidation phase triggered --'
         end
 
@@ -923,12 +895,6 @@ module Engine
             else
               super
             end
-        end
-
-        def new_consolidation_round
-          Round::G18OE::Consolidation.new(self, [
-            G18OE::Step::Consolidate,
-          ])
         end
 
         def new_consolidation_round
