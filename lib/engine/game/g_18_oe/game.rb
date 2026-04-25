@@ -737,10 +737,8 @@ module Engine
         # ── Nationals: revenue ──────────────────────────────────────────────────
 
         # Zone-based virtual-token revenue formula (openpoints §1.4).
-        # WORKAROUND WA-1: all zone cities/towns treated as linked (graph
-        # connectivity bypassed). To remove: build a national-aware graph with
-        # home_as_token: true, no_blocking: true, call connected_nodes, split
-        # linked vs unlinked, and apply the £0-penalty for unlinked capacity.
+        # All zone cities/towns are always linked (no track connection required).
+        # Excess capacity beyond zone stops fills at £60/city or £10/town.
         def national_revenue(entity)
           region = CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           zone_hexes = NATIONAL_REGION_HEXES[region] || []
@@ -753,7 +751,6 @@ module Engine
             t.distance.find { |d| d['nodes'] == ['town'] }&.dig('pay') || 0
           end
 
-          # WA-1: treat every zone city/town as linked
           linked_cities = []
           linked_towns  = []
 
