@@ -38,9 +38,9 @@ module Engine
             before_phase = @game.phase.name
             in_obligation_window = @game.phase.status.include?('train_obligation')
             super
-            @game.fulfilled_train_obligation.add(action.entity.id) if in_obligation_window
             after_phase = @game.phase.name
-            return unless before_phase != after_phase && %w[4 6 8].include?(after_phase)
+            @game.fulfilled_train_obligation.add(action.entity.id) if in_obligation_window
+            return if before_phase == after_phase || !%w[4 6 8].include?(after_phase)
 
             @game.trigger_nationals_formation!(action.entity.owner)
           end
