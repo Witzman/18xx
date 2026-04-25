@@ -41,7 +41,7 @@ module Engine
           end
 
           def blocks?
-            !pending_corps(current_entity).empty?
+            actions(current_entity).any?
           end
 
           def process_pass(_action)
