@@ -768,11 +768,14 @@ module Engine
           linked_cities.sort!.reverse!
           linked_towns.sort!.reverse!
 
+          has_d_train = entity.trains.any? { |t| t.name.end_with?('D') }
           revenue = 0
 
-          # Fill city capacity: linked cities best-first, then £60 each for remainder
+          # Fill city capacity: linked cities best-first (doubled with D-train), then £60 each for remainder
           taken_cities = [city_capacity, linked_cities.size].min
-          revenue += linked_cities.first(taken_cities).sum
+          linked_city_revenue = linked_cities.first(taken_cities).sum
+          linked_city_revenue *= 2 if has_d_train
+          revenue += linked_city_revenue
           city_capacity -= taken_cities
           revenue += city_capacity * 60 if city_capacity.positive?
 
