@@ -60,11 +60,13 @@ module Engine
           end
 
           def skip!
-            # WA-5: suppress auto-skip log when no formation is pending.
-            # This step is conditionally blocking — silence the skip when idle.
             return if @game.nationals_formation_queue.empty?
 
-            super
+            # Player has no eligible majors left (all converted) — auto-advance.
+            player = current_entity
+            @game.nationals_formation_queue.shift
+            @log << "#{player.name} has no more majors to convert" if player
+            pass! if @game.nationals_formation_queue.empty?
           end
 
           private

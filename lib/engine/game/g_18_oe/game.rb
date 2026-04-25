@@ -666,9 +666,8 @@ module Engine
         # Builds the formation queue starting with buyer_player, then all other
         # players in seat order who own at least one major.
         def trigger_nationals_formation!(buyer_player)
-          ordered = [@players.find { |p| p == buyer_player }] +
-                    @players.reject { |p| p == buyer_player }
-          eligible = ordered.select do |p|
+          buyer_idx = @players.index(buyer_player) || 0
+          eligible = @players.rotate(buyer_idx).select do |p|
             corporations.any? { |c| c.type == :major && c.president?(p) }
           end
           return if eligible.empty?
@@ -981,6 +980,7 @@ module Engine
             Engine::Step::Route,
             G18OE::Step::Dividend,
             G18OE::Step::BuyTrain,
+            G18OE::Step::ConvertToNational,
             Engine::Step::IssueShares,
           ], round_num: round_num)
         end
