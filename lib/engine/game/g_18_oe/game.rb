@@ -15,7 +15,7 @@ module Engine
         include G18OE::Entities
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
-                      :consolidation_triggered, :consolidation_done, :minor_asterisked_selected
+                      :consolidation_triggered, :consolidation_done
         attr_reader :fulfilled_train_obligation
 
         MARKET = [
@@ -206,22 +206,6 @@ module Engine
             num: 8,
           },
         ].freeze
-
-        # 2 chits per zone; 16 total for 12 minors.
-        # Asterisked zones (UK/PHS/FR): 6 chits combined but capped at 4 selections —
-        # when the 4th is taken the remaining chits for those zones are removed from play.
-        MINOR_TRACK_RIGHTS_CHITS = {
-          'UK' => 2,
-          'PHS' => 2,
-          'FR' => 2,
-          'AH' => 2,
-          'IT' => 2,
-          'SP' => 2,
-          'SC' => 2,
-          'RU' => 2,
-        }.freeze
-        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
-        ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -640,8 +624,10 @@ module Engine
         def setup
           super
           @minor_regional_order = []
-          @minor_available_regions = self.class::MINOR_TRACK_RIGHTS_CHITS.transform_values(&:itself)
-          @minor_asterisked_selected = 0
+          @minor_available_regions = corporations
+            .select { |c| c.type == :regional }
+            .map { |c| CORPORATIONS_TRACK_RIGHTS[c.id] }
+            .compact
           @minor_floated_regions = {}
           @regional_corps_floated = 0
           @fulfilled_train_obligation = Set.new
@@ -660,10 +646,7 @@ module Engine
         # "Major Railroad Phase" entry: conversions and secondary-share purchases
         # become available from this point on.
         def major_phase?
-          return false unless @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
-
-          total_minors = corporations.count { |c| c.type == :minor }
-          @minor_floated_regions.size >= total_minors
+          @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
         end
 
         def operating_order
