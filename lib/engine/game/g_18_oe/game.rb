@@ -16,6 +16,7 @@ module Engine
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
                       :consolidation_triggered, :consolidation_done
+        attr_reader :fulfilled_train_obligation
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -107,16 +108,16 @@ module Engine
         ].freeze
 
         TRAINS = [
-          # Level 2 — local only; rusts when first Level 4 train is bought
+          # Level 2 — yellow; rusts when first Level 4 train is bought
           {
             name: '2+2',
             distance: [{ 'nodes' => ['town'], 'pay' => 2, 'visit' => 99 },
                        { 'nodes' => %w[city offboard town], 'pay' => 2, 'visit' => 2 }],
             price: 100,
             rusts_on: '4',
-            num: 30,
+            num: 35,
           },
-          # Level 3 — express (3) triggers Phase 3; local variant (3+3); rust at Level 6
+          # Level 3 — green double-sided (3 / 3+3); rust at Level 6
           {
             name: '3',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -130,23 +131,25 @@ module Engine
               price: 225,
               rusts_on: '6',
             }],
-            num: 20,
+            num: 24,
           },
-          # Level 4 — express (4) triggers Phase 4; local variant (4+4)
+          # Level 4 — green double-sided (4 / 4+4); rust at Level 8
           {
             name: '4',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
                        { 'nodes' => %w[city offboard town], 'pay' => 4, 'visit' => 4 }],
             price: 300,
+            rusts_on: '8+8',
             variants: [{
               name: '4+4',
               distance: [{ 'nodes' => ['town'], 'pay' => 4, 'visit' => 99 },
                          { 'nodes' => %w[city offboard town], 'pay' => 4, 'visit' => 4 }],
               price: 350,
+              rusts_on: '8+8',
             }],
-            num: 10,
+            num: 14,
           },
-          # Level 5 — express (5) triggers Phase 5; local variant (5+5)
+          # Level 5 — brown double-sided (5 / 5+5); permanent
           {
             name: '5',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -158,10 +161,10 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 5, 'visit' => 5 }],
               price: 475,
             }],
-            num: 8,
+            num: 11,
             events: [{ 'type' => 'consolidation_triggered' }],
           },
-          # Level 6 — express (6) triggers Phase 6; local variant (6+6)
+          # Level 6 — brown double-sided (6 / 6+6); permanent
           {
             name: '6',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -173,9 +176,9 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 6, 'visit' => 6 }],
               price: 600,
             }],
-            num: 6,
+            num: 9,
           },
-          # Level 7 — local (7+7) triggers Phase 7; diesel variant (4D)
+          # Level 7 — gray double-sided (7+7 / 4D); permanent
           # NOTE: Level 8 trains become available only after the 4th Level 7 purchase
           {
             name: '7+7',
@@ -188,9 +191,9 @@ module Engine
                          { 'nodes' => %w[city offboard], 'pay' => 4, 'visit' => 99 }],
               price: 850,
             }],
-            num: 14,
+            num: 17,
           },
-          # Level 8 — local (8+8) triggers Phase 8; diesel variant (5D)
+          # Level 8 — gray double-sided (8+8 / 5D); permanent
           {
             name: '8+8',
             distance: [{ 'nodes' => ['town'], 'pay' => 8, 'visit' => 99 },
@@ -202,9 +205,25 @@ module Engine
                          { 'nodes' => %w[city offboard], 'pay' => 5, 'visit' => 99 }],
               price: 1000,
             }],
-            num: 8,
+            num: 11,
           },
         ].freeze
+
+        # 2 chits per zone; 16 total for 12 minors.
+        # Asterisked zones (UK/PHS/FR): 6 chits combined but capped at 4 selections —
+        # when the 4th is taken the remaining chits for those zones are removed from play.
+        MINOR_TRACK_RIGHTS_CHITS = {
+          'UK' => 2,
+          'PHS' => 2,
+          'FR' => 2,
+          'AH' => 2,
+          'IT' => 2,
+          'SP' => 2,
+          'SC' => 2,
+          'RU' => 2,
+        }.freeze
+        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
+        ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -629,6 +648,7 @@ module Engine
             .compact
           @minor_floated_regions = {}
           @regional_corps_floated = 0
+          @fulfilled_train_obligation = Set.new
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -644,7 +664,10 @@ module Engine
         # "Major Railroad Phase" entry: conversions and secondary-share purchases
         # become available from this point on.
         def major_phase?
-          @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+          return false unless @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+
+          total_minors = corporations.count { |c| c.type == :minor }
+          @minor_floated_regions.size >= total_minors
         end
 
         def operating_order
