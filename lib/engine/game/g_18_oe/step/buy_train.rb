@@ -30,6 +30,7 @@ module Engine
           def buyable_trains(entity)
             return unclaimed_rusted_trains if entity.type == :national
 
+
             trains = super
 
             # Regional/Minor Phase: level 3+ trains blocked for all entities

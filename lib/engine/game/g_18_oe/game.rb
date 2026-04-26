@@ -649,7 +649,10 @@ module Engine
           @minor_floated_regions = {}
           @regional_corps_floated = 0
           @fulfilled_train_obligation = Set.new
+<<<<<<< HEAD
           @nationals_formation_queue = []
+=======
+>>>>>>> 077d9534a (18OE: reserved 2+2 obligation and train purchase gating)
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
