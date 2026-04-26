@@ -108,16 +108,16 @@ module Engine
         ].freeze
 
         TRAINS = [
-          # Level 2 — yellow; rusts when first Level 4 train is bought
+          # Level 2 — local only; rusts when first Level 4 train is bought
           {
             name: '2+2',
             distance: [{ 'nodes' => ['town'], 'pay' => 2, 'visit' => 99 },
                        { 'nodes' => %w[city offboard town], 'pay' => 2, 'visit' => 2 }],
             price: 100,
             rusts_on: '4',
-            num: 35,
+            num: 30,
           },
-          # Level 3 — green double-sided (3 / 3+3); rust at Level 6
+          # Level 3 — express (3) triggers Phase 3; local variant (3+3); rust at Level 6
           {
             name: '3',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -131,25 +131,23 @@ module Engine
               price: 225,
               rusts_on: '6',
             }],
-            num: 24,
+            num: 20,
           },
-          # Level 4 — green double-sided (4 / 4+4); rust at Level 8
+          # Level 4 — express (4) triggers Phase 4; local variant (4+4)
           {
             name: '4',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
                        { 'nodes' => %w[city offboard town], 'pay' => 4, 'visit' => 4 }],
             price: 300,
-            rusts_on: '8+8',
             variants: [{
               name: '4+4',
               distance: [{ 'nodes' => ['town'], 'pay' => 4, 'visit' => 99 },
                          { 'nodes' => %w[city offboard town], 'pay' => 4, 'visit' => 4 }],
               price: 350,
-              rusts_on: '8+8',
             }],
-            num: 14,
+            num: 10,
           },
-          # Level 5 — brown double-sided (5 / 5+5); permanent
+          # Level 5 — express (5) triggers Phase 5; local variant (5+5)
           {
             name: '5',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -161,10 +159,10 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 5, 'visit' => 5 }],
               price: 475,
             }],
-            num: 11,
+            num: 8,
             events: [{ 'type' => 'consolidation_triggered' }],
           },
-          # Level 6 — brown double-sided (6 / 6+6); permanent
+          # Level 6 — express (6) triggers Phase 6; local variant (6+6)
           {
             name: '6',
             distance: [{ 'nodes' => ['town'], 'pay' => 0, 'visit' => 99 },
@@ -176,9 +174,9 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 6, 'visit' => 6 }],
               price: 600,
             }],
-            num: 9,
+            num: 6,
           },
-          # Level 7 — gray double-sided (7+7 / 4D); permanent
+          # Level 7 — local (7+7) triggers Phase 7; diesel variant (4D)
           # NOTE: Level 8 trains become available only after the 4th Level 7 purchase
           {
             name: '7+7',
@@ -191,9 +189,9 @@ module Engine
                          { 'nodes' => %w[city offboard], 'pay' => 4, 'visit' => 99 }],
               price: 850,
             }],
-            num: 17,
+            num: 14,
           },
-          # Level 8 — gray double-sided (8+8 / 5D); permanent
+          # Level 8 — local (8+8) triggers Phase 8; diesel variant (5D)
           {
             name: '8+8',
             distance: [{ 'nodes' => ['town'], 'pay' => 8, 'visit' => 99 },
@@ -205,7 +203,7 @@ module Engine
                          { 'nodes' => %w[city offboard], 'pay' => 5, 'visit' => 99 }],
               price: 1000,
             }],
-            num: 11,
+            num: 8,
           },
         ].freeze
 
