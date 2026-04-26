@@ -16,9 +16,8 @@ module Engine
         include G18OE::Entities
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
-                      :consolidation_triggered, :consolidation_done,
+                      :consolidation_triggered, :consolidation_done, :minor_asterisked_selected,
                       :nationals_formation_queue
-        attr_accessor :minor_asterisked_selected
         attr_reader :fulfilled_train_obligation
 
         MARKET = [
