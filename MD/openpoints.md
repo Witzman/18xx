@@ -350,30 +350,29 @@ is empty. `process_pass` uses `current_entity` (queue head). Correct permanent b
 Changes needed in tobymao/18xx base files that cannot be worked around from within the
 18OE game directory alone.
 
-### 19.1 — Partition color/visibility hook *(PENDING UPSTREAM)*
+### 19.1 — Province partition rendering *(PENDING UPSTREAM)*
 
 **Affects**: drawing province-style (orange dashed) corner-to-corner zone boundary lines
 inside hexes — needed for national border markings that cross a hex rather than run
 along an edge.
 
-**Problem**: `assets/app/view/game/part/partitions.rb` hard-codes color and visibility
-rules. Only `type:divider` renders unconditionally (black). No per-game override hook exists.
+**Problem**: `assets/app/view/game/part/partitions.rb` does not handle `type:province`
+partitions. Only `type:divider` renders unconditionally (black, no dash).
 
-**Proposed fix** (ready to PR — 2 lines in `partitions.rb`):
-```ruby
-# color(): before case block
-return setting_for(@game.partition_color(partition)) if @game&.respond_to?(:partition_color) && @game.partition_color(partition)
+**Reviewer feedback** (2026-04-26): Do not add a `partition_color` game-side hook.
+Instead extend `Partitions` itself:
+1. Add `:province` branch to the `color` case statement (return `:orange`, matching `Borders#color`).
+2. Add a `partition_dash` helper (mirrors `Borders#border_dash`) returning `'20 20'` for
+   `:province`, `'none'` otherwise.
+3. Apply `'stroke-dasharray': partition_dash(partition)` to the rendered `<path>` attrs.
+4. In `render_part`, change the skip guard from `partition.type != :divider` to
+   `!%i[divider province].include?(partition.type)` so province partitions render unconditionally
+   without a game callback.
 
-# render_part(): extend skip condition
-next if partition.type != :divider &&
-        !(@game&.respond_to?(:partition_color) && @game.partition_color(partition)) &&
-        partition.blockers.none? { ... }
-```
-Game-side implementation already written in `game.rb` (`partition_color` returns `:orange`
-for `type:province`). Zero behaviour change for any other game.
+No game-side override needed. Zero behaviour change for any other game.
 
 **Current workaround**: use `type:divider` (black solid line) until upstream accepts PR.
 
 ---
 
-_Last updated: 2026-04-25 — §19.1 upstream partition hook request added; §9.4 notes `csv/tilemanifest.csv` created as verification reference._
+_Last updated: 2026-04-26 — §19.1 revised: partition_color hook rejected upstream; new approach is to extend Partitions#color case + add stroke-dasharray (no game-side override needed)._
