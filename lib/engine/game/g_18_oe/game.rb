@@ -16,6 +16,7 @@ module Engine
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
                       :consolidation_triggered, :consolidation_done
+
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
           %w[90p 100 110C 120 135 150 165 180 200 225 250 280 310 350 390 440 490],
