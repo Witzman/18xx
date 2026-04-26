@@ -46,6 +46,14 @@ module Engine
           def can_buy?(entity, bundle)
             return false if @converted && bundle.corporation != @converted
 
+            # §9.3 pre-conversion optional buy: only the regional's president may buy
+            # one treasury share before converting; non-presidents may not do this.
+            if !@converted && bundle.corporation.type == :regional &&
+               bundle.corporation.ipoed && bundle.owner == bundle.corporation
+              return false unless bundle.corporation.president?(entity)
+              return false if @bought == bundle.corporation
+            end
+
             super
           end
 
@@ -126,7 +134,8 @@ module Engine
             company = find_minor_company(corporation)
 
             @log << "#{entity.name} floats #{company.sym}"
-            @log << "Available track rights zones: #{@game.minor_available_regions}"
+            zones_display = @game.minor_available_regions.map { |zone, count| "#{zone}(#{count})" }.join(', ')
+            @log << "Available track rights zones: #{zones_display}"
 
             @game.stock_market.set_par(corporation, share_price)
             share = corporation.ipo_shares.first
