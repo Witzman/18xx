@@ -163,7 +163,7 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 5, 'visit' => 5 }],
               price: 475,
             }],
-            num: 8,
+            num: 11,
             events: [{ 'type' => 'consolidation_triggered' }],
           },
           # Level 6 — brown double-sided (6 / 6+6); permanent
