@@ -47,7 +47,9 @@ area and roughly prioritized. Earlier items are more foundational.
   - [ ] Upgrade rusted → non-rusted by purchasing from same-owner major; bank pays major ½ face value
 - [x] **1.10** `NATIONAL_REGION_HEXES` all 8 zones; `NATIONAL_REGION_HEXES_COMPLETE = true`;
   `CITY_NATIONAL_ZONE` overrides; `MINOR_EXCLUDED_HOME_CITIES` defined **[L1]**
-- [x] **1.11** `@minor_available_regions` derived dynamically from regionals **[L2]**
+- [x] **1.11** `@minor_available_regions` — chit hash `{zone => count}` from `MINOR_TRACK_RIGHTS_CHITS`
+  (2 chits per zone, 16 total); `@minor_asterisked_selected` counter; `claim_region!` decrements
+  on home-token placement; asterisked-zone cap (UK/PHS/FR ≤ 4 combined) enforced **[L1/L2]**
 
 ---
 
@@ -135,6 +137,11 @@ Obligation logic partly buggy. Insolvency and nationals-claim-rusted deferred.
 - [x] **4.3** UP — `sold_out_increase?` gates UP to `:major`/`:national` only;
   base engine `finish_round` → `sold_out_stock_movement` at SR end
 - [ ] **4.4** +3 RIGHT — on first Orient Express run (in addition to dividend movement) **[L2]**
+- [ ] **4.5** §9.3 post-conversion sell window — after conversion completes but before the
+  mandatory president buy, the active player may sell shares of other RRs they own
+  (§9.3 step 4; they may not sell shares of the newly floated major). Currently the
+  `@converted` state in `BuySellParShares` goes directly to the president-buy check with
+  no sell opportunity. **[L2]**
 
 ---
 
@@ -262,13 +269,85 @@ See `MD/ABILITIES_REFERENCE.md §2` for ability types needed for each private.
 
 ---
 
-## 13. Minor Merger Rules — [L3]
+## 13. Minor Track Rights & Merger (§10.5) — [L2/L3]
 
-- [ ] **13.1** Merge into national: national cannot inherit minor's special ability (except stock-type)
-- [ ] **13.2** Cash transfer: minor's cash → major only if treasury stock available; else forfeited
-- [ ] **13.3** Stock exchange: minor owner gets 1 share from treasury (or Open Market); if neither,
-  can only merge if track connects minor's token to major's (or national's zone)
-- [ ] **13.4** One merger per major/national per SR
+**Status 2026-04-27**: Track-rights chit system implemented on `18oe_minorzones`.
+Merger SR action not yet implemented (branch `18oe_mergers`).
+
+### Track-rights chit system — DONE (`18oe_minorzones`)
+
+- [x] **13.1** `MINOR_TRACK_RIGHTS_CHITS`: 2 chits per zone, 8 zones = 16 total for 12 minors **[L1]**
+- [x] **13.2** `ASTERISKED_ZONES = [UK, PHS, FR]` with `ASTERISKED_ZONES_CAP = 4`: when the 4th
+  asterisked chit is taken, all remaining UK/PHS/FR chits are removed from the pool **[L1]**
+- [x] **13.3** `@minor_available_regions` (chit hash), `@minor_asterisked_selected` (counter)
+  initialised in `setup`; `region_available?`, `track_rights_cost`, `claim_region!` in `game.rb` **[L2]**
+- [x] **13.4** `HomeToken` step: when a minor places its home token, determines zone via
+  `CITY_NATIONAL_ZONE` override then `NATIONAL_REGION_HEXES` lookup, validates availability,
+  pays zone fee via `track_rights_cost`, calls `claim_region!`, records
+  `@minor_floated_regions[minor.id] = zone` **[L3]**
+- [x] **13.5** `major_phase?` additionally requires all 12 minors to have placed home tokens
+  (`@minor_floated_regions.size >= total_minors`) before Major Railroad Phase begins **[L2]**
+
+### §10.5 Merger SR action — NOT YET IMPLEMENTED
+
+Available from Train Phase 3; one minor merger per major/national per SR (player may do
+multiple in one SR but each into a different target); no track connection required (unless
+no stock is available anywhere — rare).
+
+**Engine plumbing prerequisites**:
+
+- [ ] **13.6** `minor_by_id` override in `game.rb`: look up type-`:minor` corps in `@corporations`
+  (18OE minors are not `Minor` objects; `@minors` is empty) so `Action::Merge` deserialises
+  the `minor:` field correctly **[L2]**
+- [ ] **13.7** `'can_merge_minors'` phase status on phases 3–8 **[L1]**
+- [ ] **13.8** `round_state` in `BuySellParShares` adds `minors_merged_into: []` to track which
+  majors/nationals have already received a minor this SR **[L2]**
+
+**`BuySellParShares` additions**:
+
+- [ ] **13.9** `'merge'` added to `actions(entity)` when `can_merge_minors` phase status active and
+  player has at least one floated minor with an eligible target **[L3]**
+- [ ] **13.10** `mergeable_entity` → first floated minor of current player that has eligible targets;
+  `mergeable_entities` → floated majors/nationals not yet in `minors_merged_into` this SR (same
+  player only for v1; cross-player deferred to 13.19); `mergeable_type` / `merge_name` /
+  `merge_action` for UI labels **[L3]**
+- [ ] **13.11** `process_merge(action)`: validate, call `game.merge_minor!(minor, major)`, add
+  major to `@round.minors_merged_into`, `track_action`, `pass!` **[L3]**
+
+**`game.merge_minor!(minor, major)` sub-steps**:
+
+- [ ] **13.12** Share exchange + cash:
+  - Major has treasury stock → minor owner gets 1 treasury share; major receives minor's cash
+  - No treasury stock but OM stock → minor owner gets 1 OM share; minor's cash forfeited to bank
+  - No stock anywhere → log only; cash forfeited to bank (hypothetical connection check: 13.18) **[L2]**
+- [ ] **13.13** Token transfer (majors only): replace each minor token with an unused major token
+  (`token.swap!`); must decline tokens in hexes where major already has a token (`city.tokened_by?`
+  check); declined tokens removed from map; `@graph.clear` **[L2]**
+- [ ] **13.14** Train transfer (majors and nationals): accept all minor trains up to major's train
+  limit; excess unrusted trains → `depot.reclaim_train` (open market); rusted → Locomotive Works.
+  Major/national may also discard own trains to make room — auto-handling for v1 **[L2]**
+- [ ] **13.15** Track rights transfer (majors only, not nationals): add `@minor_floated_regions[minor.id]`
+  to `@minor_track_rights[major.id]`; expose all rights via `track_rights_for(corp)` for terrain
+  discount logic (§11.1.4); duplicate zones have no cumulative effect **[L2]**
+- [ ] **13.16** Special ability flag (majors only, not nationals): log transfer; major MUST accept.
+  No functional ability code until §7 is implemented; stub marks acquisition for future use **[L2 stub]**
+- [ ] **13.17** Close minor: remove from `@minor_regional_order`; delete `@minor_floated_regions[minor.id]`;
+  call `close_corporation(minor)` **[L2]**
+
+**Deferred**:
+
+- [ ] **13.18** Hypothetical connection check when no stock available: no-city-limit train from
+  minor's token to major's token (majors) or any city in national's home zone (nationals);
+  ferry crossings allowed, port-access sea crossings not **[L3]**
+- [ ] **13.19** Cross-player merger: eligible targets include other players' floated majors/nationals;
+  `check_consent` UI flow; optional personal-cash side payment (RR treasury cash never used) **[L3]**
+- [ ] **13.20** Solicit-offers rule: player with unmergeable minor must publicly request offers from
+  all eligible majors/nationals; if one offer → must accept; if multiple → player chooses;
+  if none → minor abandoned **[L3]**
+- [ ] **13.21** Nationals: minor abandoned (§9.5) after train + share transfer; no tokens, special
+  ability, track rights, or cash transferred to national **[L2]**
+- [ ] **13.22** Consolidation Round (§10.6) forced mergers: same §10.5 rules but mandatory;
+  all remaining minors/regionals must merge or be abandoned; hook into `Step::Consolidate` **[L3]**
 
 ---
 
@@ -375,4 +454,4 @@ No game-side override needed. Zero behaviour change for any other game.
 
 ---
 
-_Last updated: 2026-04-26 — §19.1 revised: partition_color hook rejected upstream; new approach is to extend Partitions#color case + add stroke-dasharray (no game-side override needed)._
+_Last updated: 2026-04-27 — §1.11 updated: minor_available_regions is now a chit hash from MINOR_TRACK_RIGHTS_CHITS. §13 expanded: track-rights chit system (done on 18oe_minorzones) documented; full §10.5 merger action broken into engine-plumbing, BuySellParShares additions, merge_minor! sub-steps, and deferred items._
