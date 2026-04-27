@@ -14,7 +14,7 @@ module Engine
           end
 
           def must_buy_train?(entity)
-            return false if @game.fulfilled_train_obligation.include?(entity.id)
+            return false if @game.fulfilled_train_obligation?(entity)
             return false unless @game.phase.status.include?('train_obligation')
 
             entity.floated?
@@ -32,18 +32,13 @@ module Engine
 
 
             trains = super
+            return trains unless @game.phase.status.include?('train_obligation')
 
-            # Regional/Minor Phase: level 3+ trains blocked for all entities
-            return trains.select { |t| t.name == '2+2' } unless @game.major_phase?
-
-            # Obligation window in Major Phase: unfulfilled entity restricted to 2+2
-            if @game.phase.status.include?('train_obligation') &&
-               !@game.fulfilled_train_obligation.include?(entity.id)
-              min = @game.depot.min_depot_train
-              return min ? trains.select { |t| t.price == min.price } : []
+            if !@game.fulfilled_train_obligation?(entity)
+              trains.select { |t| t.name == '2+2' }
+            else
+              trains.reject { |t| t.name == '2+2' }
             end
-
-            trains
           end
 
           def spend_minmax(entity, train)
@@ -65,10 +60,9 @@ module Engine
             end
 
             before_phase = @game.phase.name
-            in_obligation_window = @game.phase.status.include?('train_obligation')
             super
             after_phase = @game.phase.name
-            @game.fulfilled_train_obligation.add(entity.id) if in_obligation_window
+            @game.fulfill_train_obligation(entity) if train.name == '2+2' && train.from_depot?
             return if before_phase == after_phase || !%w[4 6 8].include?(after_phase)
 
             @game.trigger_nationals_formation!(entity.owner)

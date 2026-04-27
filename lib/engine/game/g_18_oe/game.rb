@@ -816,6 +816,14 @@ module Engine
           @minor_floated_regions.size >= total_minors
         end
 
+        def fulfilled_train_obligation?(entity)
+          @fulfilled_train_obligation.include?(entity.id)
+        end
+
+        def fulfill_train_obligation(entity)
+          @fulfilled_train_obligation.add(entity.id)
+        end
+
         def operating_order
           @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) }.sort
         end
