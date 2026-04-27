@@ -15,7 +15,7 @@ module Engine
         include G18OE::Entities
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
-                      :consolidation_triggered, :consolidation_done, :minor_asterisked_selected
+                      :consolidation_triggered, :consolidation_done
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -219,7 +219,7 @@ module Engine
           'SC' => 2,
           'RU' => 2,
         }.freeze
-        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
+        ASTERISKED_ZONES = %w[UK PHS FR].freeze
         ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
@@ -672,6 +672,26 @@ module Engine
           region = self.class::CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           hexes = self.class::NATIONAL_REGION_HEXES[region]
           hexes&.include?(hex.coordinates) || false
+        end
+
+        def region_available?(region)
+          @minor_available_regions.key?(region)
+        end
+
+        def track_rights_cost(region)
+          self.class::TRACK_RIGHTS_COST[region] || 0
+        end
+
+        def claim_region!(region)
+          @minor_available_regions[region] -= 1
+          @minor_available_regions.delete(region) if @minor_available_regions[region].zero?
+
+          return unless self.class::ASTERISKED_ZONES.include?(region)
+
+          @minor_asterisked_selected += 1
+          return unless @minor_asterisked_selected >= self.class::ASTERISKED_ZONES_CAP
+
+          self.class::ASTERISKED_ZONES.each { |z| @minor_available_regions.delete(z) }
         end
 
         def home_token_locations(corporation)
