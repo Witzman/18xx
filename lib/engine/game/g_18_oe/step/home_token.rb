@@ -13,20 +13,10 @@ module Engine
               region = @game.class::CITY_NATIONAL_ZONE[hex.coordinates] ||
                          @game.class::NATIONAL_REGION_HEXES.find { |_, hexes| hexes.include?(hex.coordinates) }&.first
 
-              raise GameError, "Region #{region} is not available" unless @game.minor_available_regions.key?(region)
+              raise GameError, "Region #{region} is not available" unless @game.region_available?(region)
 
-              token.price = @game.class::TRACK_RIGHTS_COST[region] || 0
-
-              @game.minor_available_regions[region] -= 1
-              @game.minor_available_regions.delete(region) if @game.minor_available_regions[region].zero?
-
-              if @game.class::ASTERISKED_ZONES.include?(region)
-                @game.minor_asterisked_selected += 1
-                if @game.minor_asterisked_selected >= @game.class::ASTERISKED_ZONES_CAP
-                  @game.class::ASTERISKED_ZONES.each { |z| @game.minor_available_regions.delete(z) }
-                end
-              end
-
+              token.price = @game.track_rights_cost(region)
+              @game.claim_region!(region)
               @game.minor_floated_regions[action.entity.id] = region
             end
 
