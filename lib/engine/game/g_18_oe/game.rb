@@ -16,7 +16,6 @@ module Engine
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
                       :consolidation_triggered, :consolidation_done
-        attr_reader :fulfilled_train_obligation
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -650,6 +649,14 @@ module Engine
         # become available from this point on.
         def major_phase?
           @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+        end
+
+        def fulfilled_train_obligation?(entity)
+          @fulfilled_train_obligation.include?(entity.id)
+        end
+
+        def fulfill_train_obligation(entity)
+          @fulfilled_train_obligation.add(entity.id)
         end
 
         def operating_order
