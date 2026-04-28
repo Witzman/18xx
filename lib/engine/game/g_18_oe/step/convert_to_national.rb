@@ -45,36 +45,31 @@ module Engine
           end
 
           def process_convert(action)
-            corporation = action.entity
-            @game.convert_to_national(corporation)
-            # Auto-advance if player has no remaining eligible majors
-            player = current_entity
-            return unless eligible_majors(player).empty?
-
-            @game.nationals_formation_queue.shift
-            pass! if @game.nationals_formation_queue.empty?
+            @game.convert_to_national(action.entity)
+            advance_queue! if eligible_majors(current_entity).empty?
           end
 
           def process_pass(_action)
             # WA-5: use current_entity (queue head), not action.entity which may
             # be routed to the wrong level by the engine's pass handling.
-            player = current_entity
-            @log << "#{player&.name || '?'} passes national conversion"
-            @game.nationals_formation_queue.shift
-            pass! if @game.nationals_formation_queue.empty?
+            @log << "#{current_entity&.name || '?'} passes national conversion"
+            advance_queue!
           end
 
           def skip!
             return if @game.nationals_formation_queue.empty?
 
-            # Player has no eligible majors left (all converted) — auto-advance.
             player = current_entity
-            @game.nationals_formation_queue.shift
             @log << "#{player.name} has no more majors to convert" if player
-            pass! if @game.nationals_formation_queue.empty?
+            advance_queue!
           end
 
           private
+
+          def advance_queue!
+            @game.nationals_formation_queue.shift
+            pass! if @game.nationals_formation_queue.empty?
+          end
 
           def eligible_majors(player)
             @game.corporations.select { |c| c.type == :major && c.president?(player) }
