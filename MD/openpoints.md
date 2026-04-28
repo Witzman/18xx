@@ -106,12 +106,16 @@ area and roughly prioritized. Earlier items are more foundational.
 
 ## 3. Train Mechanics (`step/buy_train.rb`) — [L2/L3]
 
-Partially implemented (2026-04-12): depot level gating and inter-corp gate are in.
-Obligation logic partly buggy. Insolvency and nationals-claim-rusted deferred.
+Partially implemented (2026-04-28): depot level gating and inter-corp gate are in.
+Obligation logic correct. Insolvency and nationals-claim-rusted deferred.
 
-- [x] **3.1** Reserved 2+2 obligation fully implemented **[L2]**:
+- [x] **3.1** Reserved 2+2 obligation + general must-buy rule implemented **[L2]**:
   - `@fulfilled_train_obligation = Set.new` in `setup`; `attr_reader` on `game.rb`
-  - `must_buy_train?` uses Set (not `entity.trains.empty?`) — one-time flag per entity
+  - `must_buy_train?` splits into two branches:
+    1. Obligation window (`train_obligation` phase status): uses Set flag (not `trains.empty?`),
+       returns true for any unfulfilled floated entity
+    2. Outside obligation window: `entity.type == :major && entity.trains.empty?` — only majors
+       are required to own a train (§11.6); minors/regionals are not (§11.6.5)
   - `buyable_trains`: during Regional/Minor Phase all entities restricted to level 2 trains
     (`!@game.major_phase?`); during Major Phase unfulfilled entities restricted to cheapest
     depot train (2+2 while available)
@@ -476,4 +480,4 @@ No game-side override needed. Zero behaviour change for any other game.
 
 ---
 
-_Last updated: 2026-04-27 — §13 rewritten after reading current codebase: chit system confirmed live in HEAD (13A all done); §10.5 merger action split into four groups — engine plumbing (13B), BuySellParShares additions (13C), merge_minor! sub-steps with exact method signatures (13D), and deferred items (13E)._
+_Last updated: 2026-04-28 — §13 rewritten after reading current codebase: chit system confirmed live in HEAD (13A all done); §10.5 merger action split into four groups — engine plumbing (13B), BuySellParShares additions (13C), merge_minor! sub-steps with exact method signatures (13D), and deferred items (13E). 2026-04-28: BuySellParShares code-quality pass on 18oe_fullmap branch (no open points closed): `any?` → `!empty?`; `pass` gated on `buy_shares` being present; `can_convert?`/`can_convert_any?` take explicit `player` param; `@bought` ivar removed in favour of `bought_corporation` helper reading `@round.current_actions`._
