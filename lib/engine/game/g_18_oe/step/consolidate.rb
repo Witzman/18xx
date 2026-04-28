@@ -18,8 +18,12 @@ module Engine
             'Consolidate or abandon minors/regionals'
           end
 
+          def pass_description
+            'Pass (Consolidation TBD)'
+          end
+
           def blocks?
-            !pending_corps(current_entity).empty?
+            actions(current_entity).any?
           end
 
           def can_convert?(entity)
@@ -35,10 +39,18 @@ module Engine
             pass!
           end
 
+          def process_pass(_action)
+            corps = pending_corps(current_entity).map(&:name).join(', ')
+            @log << "#{current_entity.name} passes consolidation — pending: #{corps} (merge/abandon TBD)"
+            pass!
+          end
+
           private
 
           def pending_corps(entity)
-            @game.corporations.select { |c| c.type == :regional && c.president?(entity) }
+            entity.shares.map(&:corporation)
+                  .select { |c| %i[minor regional].include?(c.type) }
+                  .uniq
           end
         end
       end
