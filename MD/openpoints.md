@@ -12,39 +12,41 @@ area and roughly prioritized. Earlier items are more foundational.
 
 ## 1. Nationals
 
-**Status 2026-04-22**: Data structures in place. No implementation code — `convert_to_national`,
-`national_revenue`, `trigger_nationals_formation!` absent from game.rb; no
-`step/convert_to_national.rb`.
+**Status 2026-04-29**: Core national formation fully implemented on branch `18oe_national`.
+`convert_to_national`, `national_revenue`, `trigger_nationals_formation!` all present in
+`game.rb`; `step/convert_to_national.rb` complete. WA-3 and WA-4 workarounds removed.
+Remaining open items: 1.3c/1.3d deferred (depend on 18oe_mergers); 1.9b–1.9d deferred.
 
 - [x] **1.1** National corp type `:national` data — PHASES train limits, NATIONAL_REGION_HEXES
   all 8 zones, `NATIONAL_REGION_HEXES_COMPLETE = true` **[L1]**
-- [ ] **1.2** National formation trigger — `Step::BuyTrain#process_buy_train` detects phase
+- [x] **1.2** National formation trigger — `Step::BuyTrain#process_buy_train` detects phase
   change to 4/6/8 and calls `game.trigger_nationals_formation!(buyer_player)`; players queued
   buyer-first **[L2]**
-- [ ] **1.3** National formation steps in `convert_to_national` (game.rb): **[L2/L3]**
-  - [ ] Major's cash → bank
-  - [ ] All major treasury certs → Open Market
-  - [ ] Remove all major tokens from map
-  - [ ] Abandon merged minors *(deferred)*
-  - [ ] Remove track rights, OE markers, private markers *(deferred)*
-  - [ ] National operates in share-value sort bucket (same as majors)
-  - [ ] National inherits all trains
-- [ ] **1.4** National revenue calculation — `national_revenue` in game.rb: **[L2]**
-  - [ ] Virtual tokens: `Graph.new(home_as_token: true, no_blocking: true)`
-    (requires non-zero city revenues first)
-  - [ ] Linked cities/towns at face value, best-first up to capacity
-  - [ ] Remaining capacity: £60/city, £10/town
-  - [ ] D trains doubling linked cities *(deferred)*
-  - [ ] Must pay ALL revenue as dividends — `dividend_types` returns `[:payout]` only
-- [ ] **1.5** Inherent Pullman bonus: +£10 × level of highest non-rusted train **[L2]**
-- [ ] **1.6** Nationals cannot place tokens — `Token#actions` returns `[]` for nationals **[L2]**
-- [ ] **1.7** Nationals exempt from terrain costs — `tile_cost_with_discount` returns 0 **[L2]**
-- [ ] **1.8** `convert_to_national` must discard cheapest excess trains on formation **[L2]**
+- [~] **1.3** National formation steps in `convert_to_national` (game.rb): **[L2/L3]**
+  - [x] Major's cash → bank
+  - [x] All major treasury certs → Open Market (`transfer_shares` with `allow_president_change: false`)
+  - [x] Remove all major tokens from map
+  - [ ] Abandon merged minors *(DEFERRED — depends on 18oe_mergers `@minor_track_rights`)*
+  - [ ] Remove track rights, OE markers, private markers *(DEFERRED — same dependency)*
+  - [x] National operates in share-value sort bucket (same as majors) — `operating_order`
+  - [x] National inherits all trains
+- [x] **1.4** National revenue calculation — `national_revenue` in game.rb: **[L2]**
+  - [x] Zone hexes iterated; linked cities/towns at face value, best-first up to capacity
+  - [x] Remaining capacity: £60/city, £10/town
+  - [x] D trains double linked city revenue
+  - [x] Must pay ALL revenue as dividends — `dividend_types` returns `[:payout]` only;
+    `total_revenue` overridden in `Step::Dividend` to inject `national_revenue`
+- [x] **1.5** Inherent Pullman bonus: +£10 × level of highest non-rusted train, calculated
+  inside `national_revenue` **[L2]**
+- [x] **1.6** Nationals cannot place tokens — `Step::Token#actions` returns `[]` for nationals **[L2]**
+- [x] **1.7** Nationals exempt from terrain costs — `tile_cost_with_discount` returns 0 **[L2]**
+- [x] **1.8** `convert_to_national` discards cheapest excess trains via `@depot.reclaim_train` **[L2]**
 - [~] **1.9** Nationals and rusted trains (§11.6.6) **[L3]**
-  - [x] Claim unclaimed rusted trains from depot for free, up to train limit
-  - [ ] Exchange owned rusted train for any higher-level unclaimed rusted train for free
-  - [ ] Flip owned rusted train from express side to local side for free
-  - [ ] Upgrade rusted → non-rusted by purchasing from same-owner major; bank pays major ½ face value
+  - [x] Claim unclaimed rusted trains from depot for free, up to train limit (`BuyTrain#buyable_trains`,
+    `spend_minmax` returns `[0,0]`, `process_buy_train` fast-path)
+  - [ ] Exchange owned rusted train for any higher-level unclaimed rusted train for free *(DEFERRED)*
+  - [ ] Flip owned rusted train from express side to local side for free *(DEFERRED)*
+  - [ ] Upgrade rusted → non-rusted by purchasing from same-owner major; bank pays major ½ face value *(DEFERRED)*
 - [x] **1.10** `NATIONAL_REGION_HEXES` all 8 zones; `NATIONAL_REGION_HEXES_COMPLETE = true`;
   `CITY_NATIONAL_ZONE` overrides; `MINOR_EXCLUDED_HOME_CITIES` defined **[L1]**
 - [x] **1.11** `@minor_available_regions` — chit hash `{zone => count}` from `MINOR_TRACK_RIGHTS_CHITS`
