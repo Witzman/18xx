@@ -16,6 +16,12 @@ module Engine
             super
           end
 
+          def total_revenue
+            return @game.national_revenue(current_entity) if current_entity&.type == :national
+
+            super
+          end
+
           def skip!
             case current_entity.type
             when :minor
