@@ -275,8 +275,9 @@ See `MD/ABILITIES_REFERENCE.md §2` for ability types needed for each private.
 
 ## 13. Minor Track Rights & Merger (§10.5) — [L2/L3]
 
-**Status 2026-04-27**: Track-rights chit system is live in the current branch.
-§10.5 merger SR action not yet implemented (target branch: `18oe_mergers`).
+**Status 2026-04-28**: Track-rights chit system live. §10.5 merger SR action
+implemented in branch `18oe_mergers` (commit db11422cb): §13B–13D and §13.25–13.26
+done. §13E items (13.20–13.24, 13.27) remain deferred.
 
 ### 13A — Track-rights chit system (done)
 
@@ -292,9 +293,9 @@ See `MD/ABILITIES_REFERENCE.md §2` for ability types needed for each private.
 - [x] **13.6** `major_phase?`: gated on all minors having placed home tokens
   (`@minor_floated_regions.size >= total_minors`) in addition to floated-regionals count **[L2]**
 
-### 13B — §10.5 merger action: engine plumbing (todo)
+### 13B — §10.5 merger action: engine plumbing (done)
 
-- [ ] **13.7** `minor_by_id(id)` override in `game.rb`: return `corporation_by_id(id)` filtered to
+- [x] **13.7** `minor_by_id(id)` override in `game.rb`: return `corporation_by_id(id)` filtered to
   type `:minor`; needed because `Action::Merge` calls `game.minor_by_id` during JSON deserialization
   and 18OE minors live in `@corporations`, not `@minors` **[L2]**
   ```ruby
@@ -303,53 +304,53 @@ See `MD/ABILITIES_REFERENCE.md §2` for ability types needed for each private.
     corp if corp&.type == :minor
   end
   ```
-- [ ] **13.8** `'can_merge_minors'` status added to PHASES 3–8 **[L1]**
-- [ ] **13.9** `@minor_track_rights = {}` in `setup`; `attr_accessor :minor_track_rights`;
+- [x] **13.8** `'can_merge_minors'` status added to PHASES 3–8 **[L1]**
+- [x] **13.9** `@minor_track_rights = {}` in `setup`; `attr_accessor :minor_track_rights`;
   `track_rights_for(corp)` returns `[initial_zone] + @minor_track_rights[corp.id]` deduplicated **[L2]**
-- [ ] **13.10** `round_state` in `BuySellParShares` adds `minors_merged_into: []` via
+- [x] **13.10** `round_state` in `BuySellParShares` adds `minors_merged_into: []` via
   `super.merge(minors_merged_into: [])` — tracks which majors/nationals already received a minor
   this SR; reset automatically each new round **[L2]**
 
-### 13C — §10.5 merger action: BuySellParShares additions (todo)
+### 13C — §10.5 merger action: BuySellParShares additions (done)
 
 UI flow: `mergeable_entity` (the minor) is shown in the merge panel; player picks a target from
 `mergeable_entities` (eligible majors/nationals) and clicks "Merge Minor"; UI dispatches
 `Action::Merge.new(minor, corporation: major)` — entity = minor, corporation = major target.
 
-- [ ] **13.11** `'merge'` added to `actions(entity)` when: not `@converting`; phase status
+- [x] **13.11** `'merge'` added to `actions(entity)` when: not `@converting`; phase status
   includes `'can_merge_minors'`; player has ≥1 floated minor with eligible targets **[L2]**
-- [ ] **13.12** `mergeable_entity` → first floated minor of `current_entity` that has eligible
+- [x] **13.12** `mergeable_entity` → first floated minor of `current_entity` that has eligible
   targets; `mergeable_entities` → all floated majors/nationals not in `@round.minors_merged_into`
   (v1: all players shown; cross-player consent handled by UI's `check_consent`); `mergeable_type`,
   `merge_name`, `merge_action` for UI labels **[L2]**
-- [ ] **13.13** `process_merge(action)`: `minor = action.entity`; `major = action.corporation`;
+- [x] **13.13** `process_merge(action)`: `minor = action.entity`; `major = action.corporation`;
   validate minor belongs to `current_entity` and major not already merged this SR;
   call `@game.merge_minor!(minor, major)`; push major onto `@round.minors_merged_into`;
   `track_action(action, major)`; `pass!` **[L3]**
 
-### 13D — `game.merge_minor!(minor, major)` sub-steps (todo)
+### 13D — `game.merge_minor!(minor, major)` sub-steps (done)
 
-- [ ] **13.14** Share exchange (`minor_share_exchange!`):
+- [x] **13.14** Share exchange (`minor_share_exchange!`):
   - Major has treasury stock (`major.ipo_shares.reject(&:president).first`) →
     `@share_pool.transfer_shares(share.to_bundle, minor.owner, allow_president_change: false)`;
     return `true` (treasury share given)
   - No treasury; OM stock (`@share_pool.shares_of(major).first`) →
     same transfer from market; return `false`
   - No stock anywhere → log; return `false` (connection check deferred: 13.20) **[L2]**
-- [ ] **13.15** Cash transfer (`minor_cash_transfer!`): if treasury share given AND major →
+- [x] **13.15** Cash transfer (`minor_cash_transfer!`): if treasury share given AND major →
   `minor.spend(cash, major)`; else `minor.spend(cash, @bank)` **[L2]**
-- [ ] **13.16** Token transfer (`transfer_minor_tokens!`, majors only): for each `minor.tokens.select(&:used)`:
+- [x] **13.16** Token transfer (`transfer_minor_tokens!`, majors only): for each `minor.tokens.select(&:used)`:
   capture `hex_name` before swap; if `city.tokened_by?(major)` → `token.remove!` (must decline);
   else if unused major token available → `token.swap!(major_token, check_tokenable: false)`;
-  else → `token.remove!`; call `@graph.clear` if any change **[L2]**
-- [ ] **13.17** Train transfer (`transfer_minor_trains!`, majors and nationals):
+  else → `token.remove!`; call `@graph.clear` if any change; v1 auto-declines conflicts (13.21 deferred) **[L2]**
+- [x] **13.17** Train transfer (`transfer_minor_trains!`, majors and nationals):
   iterate `minor.trains.dup`; while `major.trains.size < train_limit(major)` move train
   (`train.owner = major; major.trains << train; minor.trains.delete(train)`);
-  excess → `depot.reclaim_train(train)` **[L2]**
-- [ ] **13.18** Track rights + special ability (majors only):
+  excess → `depot.reclaim_train(train)`; v1 auto-accepts within limit (13.22 deferred) **[L2]**
+- [x] **13.18** Track rights + special ability (majors only):
   `zone = @minor_floated_regions[minor.id]`;
   `@minor_track_rights[major.id] |= [zone]` if zone present; log both transfers **[L2]**
-- [ ] **13.19** Close minor: `@minor_regional_order.delete(minor)`;
+- [x] **13.19** Close minor: `@minor_regional_order.delete(minor)`;
   `@minor_floated_regions.delete(minor.id)`;
   `close_corporation(minor, quiet: true)`; log **[L2]**
 
@@ -367,10 +368,10 @@ UI flow: `mergeable_entity` (the minor) is shown in the merge panel; player pick
   RR treasury cash may never be used; needs UI input field **[L3]**
 - [ ] **13.24** Solicit-offers rule: player with unmergeable minor must publicly request offers;
   if one offer → must accept; multiple → player chooses; none → minor abandoned **[L3]**
-- [ ] **13.25** Nationals: no tokens, no special ability, no track rights; cash always forfeited
+- [x] **13.25** Nationals: no tokens, no special ability, no track rights; cash always forfeited
   to bank; minor abandoned per §9.5 after train + share transfer **[L2]**
-- [ ] **13.26** Track rights terrain discount: `tile_cost_with_discount` (or equivalent) reads
-  `track_rights_for(corp)` to apply 20% discount for IT/SP/RU/SC zones;
+- [x] **13.26** Track rights terrain discount: `tile_cost_with_discount` reads
+  `track_rights_for(corp)` to apply 20% discount for IT/SP/RU/SC zones (`DISCOUNTED_ZONES`);
   duplicate rights have no cumulative effect **[L2]**
 - [ ] **13.27** Consolidation Round (§10.6) forced mergers: same §10.5 rules but mandatory;
   hook into `Step::Consolidate`; unmerged minors/regionals abandoned at round end **[L3]**
