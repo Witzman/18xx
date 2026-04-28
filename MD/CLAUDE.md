@@ -13,7 +13,10 @@ game set on a map of 19th-century Europe.
 
 ## Coding Guidelines
 
-Best practices are in `coding_guidelines.txt` in the main directory.
+There are some tests in the `18xx/spec/` directory that demonstrate how methods are actually used. 
+`lib/engine/action/*` describes the allowed player actions.
+`MD/dev_guide.md` Cheat Sheet for Core Architecture and Game Extensions
+Check other games for similar functionalitly before implementing new feature
 
 ---
 
@@ -28,8 +31,7 @@ Best practices are in `coding_guidelines.txt` in the main directory.
 | Step classes | `18xx/lib/engine/game/g_18_oe/step/*.rb` |
 | Operating round | `18xx/lib/engine/game/g_18_oe/round/operating.rb` |
 | Rules PDFs + TXT | `rules/` |
-| Open points list | `openpoints.md` (root) · `MD/openpoints.md` (enhanced) |
-| Full map requirements | `mapquest.txt` (root) · `MD/mapquest.md` (enhanced) |
+| Open points list | `MD/openpoints.md` |
 | Implemented mechanics | `MD/working.md` |
 | Engine mechanics ref | `MD/ENGINE_MECHANICS.md` |
 | Abilities reference | `MD/ABILITIES_REFERENCE.md` |
@@ -49,47 +51,6 @@ Best practices are in `coding_guidelines.txt` in the main directory.
 
 ---
 
-## Implementation Status: ~55–60% Complete (Pre-Alpha)
-
-- Full base game (`g_18_oe`) starts cleanly
-- Phase 2, all 36 corporations (12 minors + 24 regionals) initialise without errors
-- Waterfall auction working (`step/waterfall_auction.rb`)
-- Map implemented — not complete, see `MD/mapquest.md`
-
-### What Is Implemented
-
-See `MD/working.md` for full detail. Summary:
-
-- Three-tier company hierarchy: minors → regionals → majors (conversion mechanics in place)
-- **Player count**: PLAYER_RANGE [2, 7]; STARTING_CASH £5,400/n (3–7p); £2,600 (2p)
-- **Base game map** — `g_18_oe/map.rb` loadable: 651 blue hexes, 19 red offboards, full terrain
-  (Carpathians/Balkans/Caucasus/rivers), 255 LOCATION_NAMES, pre-printed yellows for
-  Liverpool/Manchester/Athinai, SEA_ZONES 19 zones defined
-- **Track rights zones** — data complete; fee charged on par; zone restriction in Track/Token steps
-- **Full train set** — 7 levels with correct quantities and rusting; Level 8 gated behind 4th Level 7
-- **Waterfall auction** — tiered rows, bidding, minor company funding on purchase
-- **Stock market** — LEFT/RIGHT/no-move dividend movement; UP for sold-out majors/nationals
-- **Stock round** — buy shares, sell shares, par regional, float minor, convert regional→major
-- **Operating round** — tile points system (3/6/9), zone restriction, dividend step, BuyTrain
-- **8 game phases** with train limits, tile colours, status flags
-- **NATIONAL_REGION_HEXES** all 8 zones complete; `NATIONAL_REGION_HEXES_COMPLETE = true`
-- **Consolidation round** — trigger wired; round scaffold exists; no merge/abandon actions yet
-
-### What Is Missing
-
-See `MD/openpoints.md` for full detail. Summary:
-
-- **City revenues** — all placeholder 0; routes produce £0 revenue until filled
-- **National formation** — data structures complete; no `convert_to_national`, `national_revenue`,
-  or `trigger_nationals_formation!` methods
-- **Orient Express mechanic** — not implemented
-- **Pullman cars** — not implemented
-- **Minor/private special abilities** — descriptions only; zero functional implementation
-- **Consolidation merge/abandon** — scaffold only
-- **BuyTrain obligation bug** — `buyable_trains` checks wrong (§3.1 openpoints.md)
-- **Concession Railroad Phase** — explicitly deferred
-- **Token transfer between majors**, forced purchase, insolvency, ferry costs — not implemented
-- **Tests** — zero test coverage
 
 ---
 
@@ -157,40 +118,6 @@ Level 8 available after 4th Level 7 purchase. Train limits by phase in `MD/openp
 6. Buy trains
 7. Buy or sell shares (majors only)
 
-### Track Rights Zones
-
-| Zone | Name | Home Token Cost | Terrain Discount |
-|---|---|---|---|
-| UK | United Kingdom | £40 | None |
-| PHS | Prussia/Holland/Switzerland | £40 | None |
-| FR | France/Belgium | £20 | None |
-| AH | Austria-Hungary | £20 | None |
-| IT | Italy | £10 | 20% |
-| SP | Spain/Portugal | £10 | 20% |
-| RU | Russia | £10 | 20% |
-| SC | Scandinavia | £10 | 20% |
-
-### Orient Express (not yet implemented)
-
-- Majors only; route must include Constantinople AA82 + one of Paris/London/Berlin/Madrid/
-  Sankt-Peterburg; must include some land track
-- First run bonus: £30 (Phase 2–4), £60 (Phase 5–6), £100 (Phase 7–8) + RIGHT×3
-- Trains level ≤4 can combine (combined level = sum); level 5+ cannot combine
-
-### National Revenue (not yet implemented)
-
-Nationals have virtual tokens in every city/town in their home zone:
-1. Linked cities/towns in zone → counted at face value (D trains double)
-2. Remaining capacity → filled at £60/city or £10/town (no linkage required)
-
-Implementation: `Graph.new(home_as_token: true, no_blocking: true)` — see
-`MD/ENGINE_MECHANICS.md §7`.
-
-### Cross-Water Costs (not yet implemented)
-
-- Track: Ferry = +£5 × distance; Sea = +£10 × number of sea zones
-- Tokens: Ferry = +£20 × distance; Sea = +£40 × number of sea zones
-
 ---
 
 ## Development Notes
@@ -201,13 +128,3 @@ Implementation: `Graph.new(home_as_token: true, no_blocking: true)` — see
 - `G18OEUKFR::Entities` fully overrides `COMPANIES` and `CORPORATIONS` for the UK-FR variant;
   the base game `G18OE::Entities` is not affected
 - Tests live in `18xx/spec/`; 18OE currently has none
-
-### Next Major Milestones (in priority order)
-
-1. **Map revenue data** — fill in starting revenues for all named cities; confirm path edges
-   for Constantinople/London/Lille/Dublin/Le Havre/Marseille/Bordeaux
-2. **BuyTrain step bug** — fix `buyable_trains` checks (§3.1 openpoints.md)
-3. **National formation** — implement `convert_to_national`, `national_revenue`,
-   `trigger_nationals_formation!`
-4. **Orient Express** — route detection, bonus calculation, RIGHT×3 stock move
-5. **Consolidation phase** — merge/abandon actions in `Step::Consolidate`
