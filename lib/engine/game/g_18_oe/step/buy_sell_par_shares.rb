@@ -184,12 +184,10 @@ module Engine
 
           def mergeable_entity
             return nil unless current_entity
+            return nil if eligible_merge_targets.empty?
 
             @game.corporations.find do |corp|
-              corp.type == :minor &&
-                corp.floated? &&
-                corp.president?(current_entity) &&
-                !eligible_merge_targets.empty?
+              corp.type == :minor && corp.floated? && corp.president?(current_entity)
             end
           end
 

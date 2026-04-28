@@ -770,12 +770,15 @@ module Engine
           @log << "#{minor.name} merges into #{major.name}"
           share_given = minor_share_exchange!(minor, major)
           minor_cash_transfer!(minor, major, share_given)
-          if major.type == :major
+          case major.type
+          when :major
             transfer_minor_tokens!(minor, major)
             transfer_minor_trains!(minor, major)
             transfer_minor_track_rights!(minor, major)
-          elsif major.type == :national
+          when :national
             transfer_minor_trains!(minor, major)
+          else
+            raise GameError, "Unexpected merge target type: #{major.type}"
           end
           close_minor!(minor)
         end
@@ -817,21 +820,19 @@ module Engine
         def transfer_minor_tokens!(minor, major)
           changed = false
           minor.tokens.select(&:used).each do |token|
+            changed = true
             city = token.city
             if city.tokened_by?(major)
               token.remove!
               @log << "#{minor.name} token removed from #{city.hex.name} (conflict with #{major.name})"
-              changed = true
             else
               major_token = major.tokens.find { |t| !t.used }
               if major_token
                 token.swap!(major_token, check_tokenable: false)
                 @log << "#{minor.name} token replaced by #{major.name} at #{city.hex.name}"
-                changed = true
               else
                 token.remove!
                 @log << "#{minor.name} token removed from #{city.hex.name} (no spare #{major.name} token)"
-                changed = true
               end
             end
           end
