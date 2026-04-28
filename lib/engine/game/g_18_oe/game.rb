@@ -6,6 +6,7 @@ require_relative 'map'
 require_relative '../base'
 require_relative 'round/consolidation'
 require_relative 'step/consolidate'
+require_relative 'step/convert_to_national'
 
 module Engine
   module Game
@@ -15,7 +16,9 @@ module Engine
         include G18OE::Entities
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
-                      :consolidation_triggered, :consolidation_done
+                      :consolidation_triggered, :consolidation_done, :minor_asterisked_selected,
+                      :nationals_formation_queue
+        attr_reader :fulfilled_train_obligation
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -160,7 +163,7 @@ module Engine
                          { 'nodes' => %w[city offboard town], 'pay' => 5, 'visit' => 5 }],
               price: 475,
             }],
-            num: 11,
+            num: 8,
             events: [{ 'type' => 'consolidation_triggered' }],
           },
           # Level 6 — brown double-sided (6 / 6+6); permanent
@@ -207,6 +210,22 @@ module Engine
             num: 11,
           },
         ].freeze
+
+        # 2 chits per zone; 16 total for 12 minors.
+        # Asterisked zones (UK/PHS/FR): 6 chits combined but capped at 4 selections —
+        # when the 4th is taken the remaining chits for those zones are removed from play.
+        MINOR_TRACK_RIGHTS_CHITS = {
+          'UK' => 2,
+          'PHS' => 2,
+          'FR' => 2,
+          'AH' => 2,
+          'IT' => 2,
+          'SP' => 2,
+          'SC' => 2,
+          'RU' => 2,
+        }.freeze
+        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
+        ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -625,15 +644,12 @@ module Engine
         def setup
           super
           @minor_regional_order = []
-          # Derive available regions from the regional corporations actually defined,
-          # using only zones present in CORPORATIONS_TRACK_RIGHTS. This is failsafe:
-          # zones not yet in NATIONAL_REGION_HEXES are simply skipped at token placement.
-          @minor_available_regions = corporations
-            .select { |c| c.type == :regional }
-            .map { |c| CORPORATIONS_TRACK_RIGHTS[c.id] }
-            .compact
+          @minor_available_regions = self.class::MINOR_TRACK_RIGHTS_CHITS.transform_values(&:itself)
+          @minor_asterisked_selected = 0
           @minor_floated_regions = {}
           @regional_corps_floated = 0
+          @fulfilled_train_obligation = Set.new
+          @nationals_formation_queue = []
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -644,12 +660,154 @@ module Engine
           'Treasury'
         end
 
+        # ── Nationals: formation trigger ────────────────────────────────────────
+
+        # Called from Step::BuyTrain when phase 4, 6, or 8 begins.
+        # Builds the formation queue starting with buyer_player, then all other
+        # players in seat order who own at least one major.
+        def trigger_nationals_formation!(buyer_player)
+          buyer_idx = @players.index(buyer_player) || 0
+          eligible = @players.rotate(buyer_idx).select do |p|
+            corporations.any? { |c| c.type == :major && c.president?(p) }
+          end
+          return if eligible.empty?
+
+          @nationals_formation_queue = eligible
+          @log << '-- Event: Nationals may now form --'
+        end
+
+        # ── Nationals: conversion ───────────────────────────────────────────────
+
+        def convert_to_national(corporation)
+          @log << "#{corporation.name} converts to a National Railroad"
+
+          # 1. Cash → bank
+          if corporation.cash.positive?
+            @log << "  #{corporation.name} returns £#{corporation.cash} to bank"
+            corporation.spend(corporation.cash, @bank)
+          end
+
+          # 2. Treasury certs → Open Market (50% limit temporarily waived per rules)
+          treasury_shares = (corporation.shares_by_corporation[corporation] || []).dup
+          treasury_shares.each do |share|
+            @share_pool.transfer_shares(share.to_bundle, @share_pool, allow_president_change: false)
+          end
+
+          # 3. Remove all tokens from map
+          corporation.tokens.each do |token|
+            next unless token.city
+
+            token.city.remove_token!(token)
+            token.city = nil
+          end
+
+          # 4. Flip to national type
+          corporation.type = :national
+          @log << "  #{corporation.name} is now a National Railroad"
+
+          # 5. Enforce train limit — discard cheapest excess trains
+          limit = @phase.train_limit(corporation)
+          while corporation.trains.length > limit
+            train = corporation.trains.min_by(&:price)
+            @log << "  #{corporation.name} discards #{train.name} (train limit #{limit})"
+            @depot.reclaim_train(train)
+          end
+
+          # DEFERRED stubs:
+          # 1.3c — abandon merged minors (openpoints §1.3c)
+          # 1.3d — remove track rights / OE / private markers (openpoints §1.3d)
+        end
+
+        # ── Nationals: revenue ──────────────────────────────────────────────────
+
+        # Zone-based virtual-token revenue formula (openpoints §1.4).
+        # All zone cities/towns are always linked (no track connection required).
+        # Excess capacity beyond zone stops fills at £60/city or £10/town.
+        def national_revenue(entity)
+          region = CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
+          zone_hexes = NATIONAL_REGION_HEXES[region] || []
+
+          # Capacity totals across all trains
+          city_capacity = entity.trains.sum do |t|
+            t.distance.find { |d| d['nodes'].include?('city') }&.dig('pay') || 0
+          end
+          town_capacity = entity.trains.sum do |t|
+            t.distance.find { |d| d['nodes'] == ['town'] }&.dig('pay') || 0
+          end
+
+          linked_cities = []
+          linked_towns  = []
+
+          zone_hexes.each do |hex_name|
+            hex = @hexes.find { |h| h.name == hex_name }
+            next unless hex
+
+            hex.tile.cities.each { |c| linked_cities << c.max_revenue }
+            hex.tile.towns.each  { |t| linked_towns  << t.max_revenue }
+          end
+
+          linked_cities.sort!.reverse!
+          linked_towns.sort!.reverse!
+
+          has_d_train = entity.trains.any? { |t| t.name.end_with?('D') }
+          revenue = 0
+
+          # Fill city capacity: linked cities best-first (doubled with D-train), then £60 each for remainder
+          taken_cities = [city_capacity, linked_cities.size].min
+          linked_city_revenue = linked_cities.first(taken_cities).sum
+          linked_city_revenue *= 2 if has_d_train
+          revenue += linked_city_revenue
+          city_capacity -= taken_cities
+          revenue += city_capacity * 60 if city_capacity.positive?
+
+          # Fill town capacity: linked towns best-first, then £10 each for remainder
+          taken_towns = [town_capacity, linked_towns.size].min
+          revenue += linked_towns.first(taken_towns).sum
+          town_capacity -= taken_towns
+          revenue += town_capacity * 10 if town_capacity.positive?
+
+          # Inherent Pullman bonus: +£10 × level of highest non-rusted train (§1.5)
+          highest_level = entity.trains.reject(&:obsolete?).map { |t| train_level(t) }.max || 0
+          revenue += highest_level * 10
+
+          revenue
+        end
+
+        # Returns the numeric level of a train name (e.g. '4+4'→4, '4D'→4, '2+2'→2, '4'→4)
+        def train_level(train)
+          name = train.name
+          return name.to_i if name.match?(/^\d+$/)
+          return Regexp.last_match(1).to_i if name.match?(/^(\d+)\+/)
+          return Regexp.last_match(1).to_i if name.match?(/^(\d+)D$/)
+
+          0
+        end
+
+        # ── Nationals: routing / terrain / token overrides ──────────────────────
+
+        # Nationals skip the Route step entirely; revenue is calculated in national_revenue.
+        def can_run_route?(entity)
+          return false if entity.respond_to?(:type) && entity.type == :national
+
+          super
+        end
+
+        # Nationals are exempt from all terrain costs (openpoints §1.7).
+        def tile_cost_with_discount(tile, hex, entity, spender, cost)
+          return 0 if entity.respond_to?(:type) && entity.type == :national
+
+          super
+        end
+
         # True once MAX_FLOATED_REGIONALS have been floated and the 6 remaining
         # unfloated regionals have been closed. This is the correct trigger for
         # "Major Railroad Phase" entry: conversions and secondary-share purchases
         # become available from this point on.
         def major_phase?
-          @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+          return false unless @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+
+          total_minors = corporations.count { |c| c.type == :minor }
+          @minor_floated_regions.size >= total_minors
         end
 
         def operating_order
@@ -768,6 +926,13 @@ module Engine
             .select { |bundle| @share_pool.fit_in_bank?(bundle) }
         end
 
+        def redeemable_shares(entity)
+          return [] if !entity.corporation? || entity.type != :major
+
+          bundles_for_corporation(@share_pool, entity)
+            .reject { |bundle| entity.cash < bundle.price }
+        end
+
         def value_for_dumpable(player, corporation)
           return 0 if corporation.type == :regional
 
@@ -799,7 +964,7 @@ module Engine
             Engine::Step::Route,
             G18OE::Step::Dividend,
             G18OE::Step::BuyTrain,
-            # Convert step to do national conversions at 4/6/8?
+            G18OE::Step::ConvertToNational,
             Engine::Step::IssueShares,
           ], round_num: round_num)
         end
