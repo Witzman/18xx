@@ -777,8 +777,7 @@ module Engine
         def train_level(train)
           name = train.name
           return name.to_i if name.match?(/^\d+$/)
-          return Regexp.last_match(1).to_i if name.match?(/^(\d+)\+/)
-          return Regexp.last_match(1).to_i if name.match?(/^(\d+)D$/)
+          return Regexp.last_match(1).to_i if name.match?(/^(\d+)[+D]/)
 
           0
         end
@@ -787,16 +786,20 @@ module Engine
 
         # Nationals skip the Route step entirely; revenue is calculated in national_revenue.
         def can_run_route?(entity)
-          return false if entity.respond_to?(:type) && entity.type == :national
+          return false if national?(entity)
 
           super
         end
 
         # Nationals are exempt from all terrain costs (openpoints §1.7).
         def tile_cost_with_discount(tile, hex, entity, spender, cost)
-          return 0 if entity.respond_to?(:type) && entity.type == :national
+          return 0 if national?(entity)
 
           super
+        end
+
+        def national?(entity)
+          entity.respond_to?(:type) && entity.type == :national
         end
 
         # True once MAX_FLOATED_REGIONALS have been floated and the 6 remaining
