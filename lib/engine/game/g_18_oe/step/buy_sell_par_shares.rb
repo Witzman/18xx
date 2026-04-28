@@ -11,7 +11,6 @@ module Engine
           def setup
             super
 
-            @bought = nil
             @converting = nil
             @converted = nil
             @sold = false
@@ -25,8 +24,9 @@ module Engine
             # Conversion triggered: president may buy one treasury share then must pass
             if @converting
               actions = []
-              actions << 'buy_shares' if @converting.president?(entity) && @converting.ipo_shares.any? && @bought != @converting
-              actions << 'pass'
+              ipo_bundle = @converting.ipo_shares.first&.to_bundle
+              actions << 'buy_shares' if ipo_bundle && can_buy?(entity, ipo_bundle)
+              actions << 'pass' unless actions.empty?
               return actions
             end
 
@@ -35,13 +35,13 @@ module Engine
             actions << 'par' if can_ipo_any?(entity) || can_float_minor?(entity)
             actions << 'buy_company' if !purchasable_companies(entity).empty? || !buyable_bank_owned_companies(entity).empty?
             actions << 'sell_shares' if can_sell_any?(entity)
-            actions << 'convert' if can_convert_any?
+            actions << 'convert' if can_convert_any?(entity)
             actions << 'pass' if !can_float_minor?(entity) && !actions.empty?
             actions
           end
 
-          def corporation_actions(entity)
-            return [] unless can_convert?(entity)
+          def corporation_actions(corporation)
+            return [] unless can_convert?(corporation, current_entity)
 
             %w[convert pass]
           end
@@ -62,7 +62,7 @@ module Engine
               return false unless bundle.corporation == @converting
               return false unless bundle.owner == bundle.corporation
               return false unless @converting.president?(entity)
-              return false if @bought == @converting
+              return false if bought_corporation == @converting
             end
 
             super
@@ -82,26 +82,26 @@ module Engine
             !bought? && entity.companies.any? { |company| @game.company_becomes_minor?(company) }
           end
 
-          def can_convert_any?
+          def can_convert_any?(player)
             return false if @converting
 
-            @game.corporations.any? { |corp| can_convert?(corp) }
+            @game.corporations.any? { |corp| can_convert?(corp, player) }
           end
 
-          def can_convert?(entity)
+          def can_convert?(corporation, player)
             return false if @converting
             return false unless @game.major_phase?
-            return false unless entity.type == :regional
+            return false unless corporation.type == :regional
             return false if @sold
             return false if @converted
-            return false if @bought && @bought != entity
+            return false if bought_corporation && bought_corporation != corporation
 
-            unless entity.president?(current_entity)
-              return false unless entity.share_holders[current_entity] >= 50
-              return false if @bought
+            unless corporation.president?(player)
+              return false unless corporation.share_holders[player] >= 50
+              return false if bought_corporation
 
-              new_share_price = @game.stock_market.find_share_price(entity, %i[right right up])
-              return false unless @game.liquidity(current_entity) >= new_share_price.price
+              new_share_price = @game.stock_market.find_share_price(corporation, %i[right right up])
+              return false unless @game.liquidity(player) >= new_share_price.price
             end
 
             true
@@ -163,11 +163,6 @@ module Engine
             @game.sorted_corporations.reject { |c| (c.type == :minor && c.ipoed) }
           end
 
-          def process_buy_shares(action)
-            super
-            @bought = action.bundle.corporation
-          end
-
           def process_sell_shares(action)
             super
             @sold = true
@@ -227,6 +222,10 @@ module Engine
           end
 
           private
+
+          def bought_corporation
+            @round.current_actions.find { |x| x.is_a?(Action::BuyShares) }&.bundle&.corporation
+          end
 
           def complete_conversion
             corporation = @converting
