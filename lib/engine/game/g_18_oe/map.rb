@@ -453,7 +453,7 @@ module Engine
             ['C48'] => 'city=revenue:10;icon=image:port,sticky:1',
             # Cities — no terrain (added station geometry)
             %w[
-              AA62 AB57 AB69 AC40 AD79 AF49 B67 D77 E56 G68 H47 H63
+              AA62 AB57 AB69 AC40 AF49 B67 D77 E56 G68 H47 H63
               H87 I76 J69 K78 K86 M44 M68 S78 T53 T81 V51
               V55 W64 Y70
             ] => 'city=revenue:0',
@@ -471,15 +471,18 @@ module Engine
             ['Y14'] => 'city=revenue:0;label=A;upgrade=cost:45,terrain:mountain',
             ['U32'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
             ['AD9'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water',
-            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;label=C;path=a:2,b:_0',
-            ['U24'] => 'city=revenue:10',
-            ['I20'] => 'city=revenue:10;path=a:4,b:_0',
-            ['O28'] => 'city=revenue:0;path=a:1,b:_0',
-            ['M28'] => 'city=revenue:30;label=L;upgrade=cost:30,terrain:water;path=a:5,b:_0',
-            ['X33'] => 'city=revenue:20;label=Y;path=a:5,b:_0',
-            ['Z27'] => 'city=revenue:20;label=Y',
-            ['K46'] => 'city=revenue:20;label=Y',
+            ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
+            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;' \
+                        'label=C;path=a:2,b:_0;icon=image:port,sticky:1',
+            ['U24'] => 'city=revenue:10;icon=image:port,sticky:1',
+            ['I20'] => 'city=revenue:10;path=a:4,b:_0;icon=image:port,sticky:1',
+            ['O28'] => 'city=revenue:0;path=a:1,b:_0;icon=image:port,sticky:1',
+            ['AD79'] => 'city=revenue:0;path=a:1,b:_0;icon=image:port,sticky:1',
+            ['M28'] => 'city=revenue:30;label=L;upgrade=cost:30,terrain:water;path=a:5,b:_0;icon=image:port,sticky:1',
+            ['X33'] => 'city=revenue:20;label=Y;path=a:5,b:_0;icon=image:port,sticky:1',
+
+            ['Z27'] => 'city=revenue:20;label=Y;path=a:0,b:_0;icon=image:port,sticky:1',
+            ['K46'] => 'city=revenue:20;label=Y;icon=image:port,sticky:1',
             ['M50'] => 'city=revenue:0;label=B',
             ['R47'] => 'city=revenue:0;label=Y',
             ['R55'] => 'city=revenue:0;label=A',
@@ -628,20 +631,20 @@ module Engine
           blue: {
             %w[
               A0 A2 A4 A6 A8 A10 A12 A14 A16 A22 A24 A26
-              A28 A30 A32 A34 A40 A58 A60 A62 B1 B3 B5 B7
-              B9 B11 B13 B15 B17 B23 B25 B27 B29 B31 B33 B39
+              A28 A30 A32 A34 A40 B1 B3 B5 B7
+              B9 B11 B13 B15 B17 B23 B25 B27 B29 B31 B33
               B59 B61 C0 C2 C4 C6 C8 C10 C12 C14 C16 C22
-              C24 C26 C28 C30 C32 C34 C40 C60 C62 C68 C70 D1
+              C24 C26 C28 C30 C32 C34 C40 C60 C68 C70 D1
               D3 D5 D7 D9 D11 D13 D15 D17 D23 D27 D29 D31
               D33 D39 D63 D65 E0 E2 E4 E6 E8 E10 E12 E14
               E16 E22 E30 E32 E34 E40 E46 E64 F1 F3 F5 F7
               F9 F11 F13 F15 F17 F31 F33 F39 F41 F43 F45 F47
               F57 F65 F67 G0 G2 G4 G6 G8 G10 G12 G14
-              G30 G32 G34 G48 G58 H1 H3 H5 H7 H9 H11 H13
-              H23 H31 H33 H49 H57 H59 H61 I0 I2 I4 I6 I8
-              I10 I12 I30 I32 I38 I40 I42 I54 I56 I58 I60 I62
+              G48 G58 H1 H3 H5 H7 H9 H11 H13
+              H23 H31 H33 H49 H59 H61 I0 I2 I4 I6 I8
+              I10 I12 I30 I32 I38 I40 I42 I54 I56 I60 I62
               J5 J7 J9 J11 J21 J31 J37 J39 J41 J43 J51 J53
-              J55 J57 J59 J61 K6 K8 K10 K12 K14 K16 K18 K20
+              J55 J57 J61 K6 K8 K10 K12 K14 K16 K18 K20
               K38 K52 L1 L7 L9 L11 L13 L15 L17 L19 L21 M0
               M2 M8 M10 M12 M14 M16 M32 N7 N9 N11 N13 N15
               N23 N27 O0 O2 O20 O22 O26 P1 Q0 Q8 Q10 Q12
@@ -649,21 +652,21 @@ module Engine
               S2 S8 S10 S12 S14 S16 S18 S20 S22 T1 T3 T9
               T11 T13 T15 T17 T19 T21 T83 T85 U0 U2 U4 U14
               U16 U18 U20 V1 V3 V49 W0 W2 W4 W50 W52 W80
-              W82 W84 W86 W88 X1 X3 X31 X39 X51 X53 X79 X81
-              X83 X85 X87 Y0 Y30 Y32 Y34 Y36 Y38 Y52 Y54 Y80
+              W82 W84 W86 W88 X1 X3 X31 X39 X51 X53 X81
+              X83 X85 X87 Y0 Y30 Y32 Y34 Y36 Y52 Y54
               Y82 Y84 Y86 Y88 Z29 Z31 Z33 Z35 Z37 Z39 Z43 Z53
-              Z55 Z57 Z59 Z81 Z83 Z85 Z87 AA0 AA24 AA30 AA32 AA34
-              AA36 AA38 AA44 AA46 AA56 AA58 AA60 AA88 AB29 AB31 AB33 AB35
-              AB37 AB43 AB45 AB47 AB49 AB59 AB61 AB73 AB75 AB79 AB81 AC0
+              Z55 Z57 Z59 Z83 Z85 Z87 AA0 AA24 AA30 AA32 AA34
+              AA36 AA38 AA56 AA58 AA60 AA88 AB29 AB31 AB33 AB35
+              AB37 AB43 AB45 AB47 AB49 AB73 AB75 AB79 AB81 AC0
               AC2 AC4 AC22 AC28 AC30 AC32 AC34 AC36 AC42 AC44 AC46 AC48
-              AC50 AC52 AC62 AC70 AC72 AC74 AD3 AD19 AD21 AD23 AD29 AD31
-              AD33 AD35 AD41 AD43 AD45 AD47 AD49 AD51 AD53 AD57 AD73 AD75
-              AD77 AE0 AE2 AE4 AE8 AE14 AE16 AE18 AE20 AE22 AE28 AE30
-              AE32 AE34 AE40 AE42 AE44 AE46 AE48 AE50 AE54 AE56 AE66
-              AE74 AE76 AF1 AF3 AF7 AF9 AF15 AF17 AF19 AF21 AF23 AF29
-              AF31 AF33 AF41 AF43 AF45 AF47 AF55 AF57 AF63 AF65 AF71 AF73
+              AC50 AC52 AC70 AC72 AC74 AD3 AD19 AD21 AD23 AD29 AD31
+              AD33 AD35 AD41 AD43 AD45 AD47 AD49 AD51 AD53 AD57 AD73
+              AE0 AE2 AE4 AE8 AE14 AE16 AE18 AE20 AE22 AE28 AE30
+              AE32 AE34 AE40 AE42 AE44 AE46 AE48 AE50 AE56
+              AE76 AF1 AF3 AF7 AF9 AF15 AF17 AF19 AF21 AF23 AF29
+              AF31 AF33 AF41 AF43 AF45 AF47 AF55 AF57 AF63 AF65 AF71
               AF75 AG0 AG2 AG4 AG6 AG8 AG14 AG16 AG18 AG20 AG22 AG28
-              AG30 AG32 AG34 AG42 AG44 AG46 AG48 AG54 AG56 AG62 AG64
+              AG30 AG32 AG34 AG54 AG56 AG62 AG64
               AG66 AG72 AG74 AG80 AG82 AG84 AG86 AH1 AH3 AH5 AH7 AH13
               AH15 AH17 AH19 AH21 AH23 AH29 AH31 AH33 AH35 AH37 AH43 AH45
               AH47 AH49 AH51 AH53 AH55 AH57 AH63 AH65 AH67 AH69 AH71 AH73
@@ -676,11 +679,41 @@ module Engine
             ['I24'] => 'path=a:1,b:5;path=a:1,b:4',
             ['N25'] => 'path=a:0,b:3',
             ['AE6'] => 'town=revenue:20;path=a:0,b:3',
-            ['AE12'] => 'path=a:3,b:0;border=edge:1,type:province',
+            ['AE12'] => 'path=a:3,b:5;border=edge:1,type:province',
             ['AF13'] => 'path=a:2,b:1',
             ['AB21'] => 'path=a:2,b:4',
             ['AB23'] => 'path=a:1,b:4',
             ['AB25'] => 'path=a:1,b:4;border=edge:5,type:province',
+            ['Y38'] => 'path=a:4,b:2',
+            ['AA44'] => 'path=a:1,b:4',
+            ['AA46'] => 'path=a:1,b:3',
+            ['AE54'] => 'path=a:3,b:0',
+            ['AG42'] => 'path=a:4,b:1',
+            ['AG44'] => 'path=a:4,b:1',
+            ['AG46'] => 'path=a:4,b:1',
+            ['AG48'] => 'path=a:4,b:1;path=a:3,b:1',
+            ['AB59'] => 'path=a:1,b:4',
+            ['AB61'] => 'path=a:1,b:5',
+            ['AC62'] => 'path=a:2,b:5',
+            ['AE66'] => 'path=a:1,b:4',
+            ['AF73'] => 'path=a:2,b:3',
+            ['AE74'] => 'town=revenue:20;path=a:0,b:_0;path=a:3,b:_0',
+            ['AD75'] => 'path=a:0,b:4',
+            ['AD77'] => 'path=a:1,b:4',
+            ['Z81'] => 'path=a:5,b:2',
+            ['Y80'] => 'path=a:5,b:2',
+            ['X79'] => 'town=revenue:20;path=a:5,b:_0;path=a:1,b:_0;icon=image:port,sticky:1',
+            ['G30'] => 'junction;path=a:4,b:_0',
+            ['G32'] => 'path=a:1,b:4',
+            ['G34'] => 'path=a:1,b:3',
+            ['B39'] => 'path=a:0,b:4',
+            ['J59'] => 'path=a:5,b:2',
+            ['I58'] => 'path=a:5,b:2',
+            ['H57'] => 'path=a:5,b:1',
+            ['A58'] => 'path=a:1,b:4',
+            ['A60'] => 'path=a:1,b:4',
+            ['A62'] => 'path=a:1,b:4',
+            ['C62'] => 'path=a:0,b:4',
             # Sea zone province borders
             ['AD25'] => 'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
             ['AE58'] => 'border=edge:4,type:province',
@@ -694,25 +727,25 @@ module Engine
             ['A20'] => 'border=edge:0,type:province;border=edge:1,type:province',
             ['A36'] => 'border=edge:4,type:province;border=edge:5,type:province',
             ['A38'] => 'border=edge:1,type:province',
-            ['AA26'] => 'border=edge:4,type:province',
+            ['AA26'] => 'path=a:3,b:5;border=edge:4,type:province',
             ['AA28'] => 'border=edge:1,type:province',
-            ['AA40'] => 'border=edge:4,type:province',
-            ['AA42'] => 'border=edge:1,type:province',
+            ['AA40'] => 'path=a:3,b:0;border=edge:4,type:province',
+            ['AA42'] => 'path=a:0,b:4;border=edge:1,type:province',
             ['AC24'] => 'border=edge:4,type:province',
-            ['AC26'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
+            ['AC26'] => 'path=a:3,b:5;border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
             ['AC60'] => 'border=edge:0,type:province',
-            ['AD27'] => 'border=edge:1,type:province',
+            ['AD27'] => 'path=a:0,b:2;border=edge:1,type:province',
             ['AD37'] => 'border=edge:5,type:province',
             ['AD59'] => 'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
             ['AD61'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:5,type:province',
-            ['AD63'] => 'border=edge:0,type:province;border=edge:5,type:province',
+            ['AD63'] => 'path=a:2,b:5;border=edge:0,type:province;border=edge:5,type:province',
             ['AE10'] => 'border=edge:4,type:province',
             ['AE24'] => 'border=edge:4,type:province',
-            ['AE26'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
+            ['AE26'] => 'path=a:3,b:0;border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
             ['AE36'] => 'border=edge:4,type:province;border=edge:5,type:province',
             ['AE38'] => 'border=edge:1,type:province;border=edge:2,type:province',
             ['AE62'] => 'border=edge:2,type:province;border=edge:3,type:province',
-            ['AE64'] => 'border=edge:2,type:province',
+            ['AE64'] => 'path=a:2,b:4;border=edge:2,type:province',
             ['AE78'] => 'border=edge:5,type:province',
             ['AF27'] => 'border=edge:1,type:province',
             ['AF35'] => 'border=edge:4,type:province',
@@ -748,23 +781,23 @@ module Engine
             ['C18'] => 'border=edge:4,type:province',
             ['C20'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
             ['C36'] => 'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
-            ['C38'] => 'border=edge:1,type:province',
+            ['C38'] => 'path=a:0,b:3;border=edge:1,type:province',
             ['D19'] => 'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
             ['D21'] => 'border=edge:1,type:province',
             ['D35'] => 'border=edge:4,type:province',
-            ['D37'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
-            ['D59'] => 'border=edge:5,type:province',
-            ['D61'] => 'border=edge:0,type:province',
+            ['D37'] => 'path=a:0,b:3;border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
+            ['D59'] => 'path=a:1,b:4;border=edge:5,type:province',
+            ['D61'] => 'path=a:1,b:3;border=edge:0,type:province',
             ['E18'] => 'border=edge:4,type:province',
             ['E20'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
-            ['E36'] => 'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
+            ['E36'] => 'path=a:0,b:3;border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province',
             ['E38'] => 'border=edge:1,type:province',
             ['E60'] => 'border=edge:2,type:province;border=edge:3,type:province;' \
                        'border=edge:4,type:province;border=edge:5,type:province',
             ['E62'] => 'border=edge:1,type:province',
             ['F19'] => 'border=edge:3,type:province;border=edge:4,type:province',
             ['F21'] => 'border=edge:1,type:province;border=edge:5,type:province',
-            ['F35'] => 'border=edge:4,type:province',
+            ['F35'] => 'path=a:0,b:3;border=edge:4,type:province',
             ['F37'] => 'border=edge:0,type:province;border=edge:1,type:province;border=edge:2,type:province',
             ['F59'] => 'border=edge:4,type:province',
             ['F61'] => 'border=edge:0,type:province;border=edge:1,type:province;' \
@@ -841,7 +874,7 @@ module Engine
             ['U88'] => 'border=edge:1,type:province;border=edge:2,type:province',
             ['V87'] => 'border=edge:2,type:province',
             ['X41'] => 'border=edge:5,type:province',
-            ['Y40'] => 'border=edge:4,type:province',
+            ['Y40'] => 'path=a:5,b:1;border=edge:4,type:province',
             ['Y42'] => 'border=edge:1,type:province;border=edge:2,type:province',
           },
         }.freeze
