@@ -368,7 +368,8 @@ module Engine
             # Scotland — Highlands barrier
             ['F27'] => 'town=revenue:0;border=edge:0,type:impassable;border=edge:5,type:impassable',
             ['F29'] => 'border=edge:0,type:impassable',
-            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;border=edge:3,type:impassable;icon=image:port,sticky:1',
+            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;' \
+                       'border=edge:3,type:impassable;icon=image:port,sticky:1',
             ['G28'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable',
             # England — coastal/estuary
             ['L31'] => 'border=edge:0,type:impassable',
@@ -471,7 +472,8 @@ module Engine
             ['U32'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
             ['AD9'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
             ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
-            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;label=C;path=a:2,b:_0;icon=image:port,sticky:1',
+            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;' \
+                        'label=C;path=a:2,b:_0;icon=image:port,sticky:1',
             ['U24'] => 'city=revenue:10;icon=image:port,sticky:1',
             ['I20'] => 'city=revenue:10;path=a:4,b:_0;icon=image:port,sticky:1',
             ['O28'] => 'city=revenue:0;path=a:1,b:_0;icon=image:port,sticky:1',
@@ -569,7 +571,8 @@ module Engine
             ] => 'upgrade=cost:120,terrain:mountain',
           },
           yellow: {
-            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:0,b:_0;path=a:_0,b:5;icon=image:port,sticky:1',
+            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:0,b:_0;' \
+                       'path=a:_0,b:5;icon=image:port,sticky:1',
             ['I48'] => 'border=edge:0,type:impassable;upgrade=cost:45,terrain:water;path=a:2,b:4;' \
                        'border=edge:5,type:province',
             ['I50'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:1,b:_0;' \
@@ -614,7 +617,8 @@ module Engine
                       'city=revenue:0,slots:2;path=a:3,b:_0;path=a:_0,b:4;' \
                       'icon=image:port,sticky:1',
             ['AB87'] => 'offboard=revenue:yellow_30|green_50|brown_80|gray_120;path=a:1,b:_0;path=a:2,b:_0', # Levant
-            ['AD1'] => 'offboard=revenue:green_40|brown_80|gray_120;path=a:4,b:_0;icon=image:port,sticky:1', # North Africa & The Americas
+            ['AD1'] => 'offboard=revenue:green_40|brown_80|gray_120;path=a:4,b:_0;' \
+                       'icon=image:port,sticky:1', # North Africa & The Americas
             ['AF5'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_80;path=a:3,b:_0', # Casablanca
             ['AF11'] => 'offboard=revenue:yellow_30|green_40|brown_40|gray_40;path=a:4,b:_0', # Melilla
             ['AF25'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_100;path=a:2,b:_0;path=a:3,b:_0;' \
