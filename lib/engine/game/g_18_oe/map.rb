@@ -368,7 +368,8 @@ module Engine
             # Scotland — Highlands barrier
             ['F27'] => 'town=revenue:0;border=edge:0,type:impassable;border=edge:5,type:impassable',
             ['F29'] => 'border=edge:0,type:impassable',
-            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;border=edge:3,type:impassable',
+            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;' \
+                       'border=edge:3,type:impassable;icon=image:port,sticky:1',
             ['G28'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable',
             # England — coastal/estuary
             ['L31'] => 'border=edge:0,type:impassable',
@@ -417,39 +418,47 @@ module Engine
 
             # Towns — no terrain
             %w[
-              E44 F53 H17 H29 J17 L29 O24 P19 P29 P33 R29 S34
-              T27 X35 X37 Z41 V5 W18 X11 Z3 Z13 Z25 AA4 AB3
-              AC10 AC12 AC20 AD15 K60 L43 M48 M56 P43 Q56 Q72 R53
-              R59 R67 S40 S68 T61 U56 U62 X55 V45 V47 Y44 AA52
-              AB39 AB55 C64 D69 D75 D83 E70 F73 G84 H71 H85 I80
+              E44 F53 H17 H29 J17 L29 O24 P29 P33 R29 S34
+              T27 Z41 V5 W18 X11 Z3 Z13 Z25 AA4 AB3
+              AC10 AC12 AC20 AD15 L43 M48 M56 P43 Q56 Q72 R53
+              R59 R67 S40 S68 T61 U56 U62 X55 V45 Y44 AA52
+              AB55 D69 D75 D83 E70 F73 G84 H71 H85 I80
               K68 L79 L87 N65 N83 Q84 V73 W70 AA84 AC68 AC84 AG68
-              AF87 G46 H51 H55
+              AF87 H51
             ] => 'town=revenue:0',
+            # Towns — port icon
+            %w[
+              AB39 C64 G46 H55 K60 P19 V47 X35 X37
+            ] => 'town=revenue:0;icon=image:port,sticky:1',
             # Towns — mountain terrain
-            %w[G24 I16 I26 U12 V15 AD13] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
-            %w[E26 E28 J23] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
+            %w[G24 I16 U12 V15 AD13] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
+            ['I26'] => 'town=revenue:0;upgrade=cost:30,terrain:mountain;icon=image:port,sticky:1',
+            %w[E26 E28] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
+            ['J23'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain;icon=image:port,sticky:1',
             ['X25'] => 'town=revenue:0;upgrade=cost:60,terrain:mountain',
             # Towns — water terrain
-            %w[L23 AD7] => 'town=revenue:0;upgrade=cost:45,terrain:water',
+            ['L23'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
+            ['AD7'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
             # Double towns
             %w[J29 M26 W32
-               C58
                N41 Q46 U64 W46 AF53
-               J77 P77
-               AC6 U6] => 'town=revenue:0;town=revenue:0',
+               J77 P77] => 'town=revenue:0;town=revenue:0',
+            %w[AC6 C58 U6] => 'town=revenue:0;town=revenue:0;icon=image:port,sticky:1',
             ['T37'] => 'town=revenue:0;town=revenue:0;upgrade=cost:45,terrain:mountain',
             # Cities — no label, no terrain
             %w[
-              F25 H21 J15 L25 Q26 Q38 R23 V27 F49 L53 N49
-              J73 AD17 V17 W6 X13 Y20 AA20 AC8 AC16 AB27
+              J15 Q26 Q38 V27 F49 L53 N49
+              J73 V17 W6 X13 Y20 AA20 AC8 AC16 AB27
             ] => 'city=revenue:0',
-            ['C48'] => 'city=revenue:10',
+            ['C48'] => 'city=revenue:10;icon=image:port,sticky:1',
             # Cities — no terrain (added station geometry)
             %w[
               AA62 AB57 AB69 AC40 AF49 B67 D77 E56 G68 H47 H63
               H87 I76 J69 K78 K86 M44 M68 S78 T53 T81 V51
-              V55 W40 W64 Y70
+              V55 W64 Y70
             ] => 'city=revenue:0',
+            # Cities — port icon
+            %w[AD17 F25 H21 L25 R23 W40] => 'city=revenue:0;icon=image:port,sticky:1',
             ['V39'] => 'city=revenue:30',
             # Cities — label Y
             ['U34'] => 'city=revenue:0;label=Y',
@@ -462,17 +471,18 @@ module Engine
             ['Y14'] => 'city=revenue:0;label=A;upgrade=cost:45,terrain:mountain',
             ['U32'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
             ['AD9'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water',
-            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;label=C;path=a:2,b:_0',
-            ['U24'] => 'city=revenue:10',
-            ['I20'] => 'city=revenue:10;path=a:4,b:_0',
-            ['O28'] => 'city=revenue:0;path=a:1,b:_0',
-            ['AD79'] => 'city=revenue:0;path=a:1,b:_0',
-            ['M28'] => 'city=revenue:30;label=L;upgrade=cost:30,terrain:water;path=a:5,b:_0',
-            ['X33'] => 'city=revenue:20;label=Y;path=a:5,b:_0',
+            ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
+            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;' \
+                        'label=C;path=a:2,b:_0;icon=image:port,sticky:1',
+            ['U24'] => 'city=revenue:10;icon=image:port,sticky:1',
+            ['I20'] => 'city=revenue:10;path=a:4,b:_0;icon=image:port,sticky:1',
+            ['O28'] => 'city=revenue:0;path=a:1,b:_0;icon=image:port,sticky:1',
+            ['AD79'] => 'city=revenue:0;path=a:1,b:_0;icon=image:port,sticky:1',
+            ['M28'] => 'city=revenue:30;label=L;upgrade=cost:30,terrain:water;path=a:5,b:_0;icon=image:port,sticky:1',
+            ['X33'] => 'city=revenue:20;label=Y;path=a:5,b:_0;icon=image:port,sticky:1',
 
-            ['Z27'] => 'city=revenue:20;label=Y;path=a:0,b:_0',
-            ['K46'] => 'city=revenue:20;label=Y',
+            ['Z27'] => 'city=revenue:20;label=Y;path=a:0,b:_0;icon=image:port,sticky:1',
+            ['K46'] => 'city=revenue:20;label=Y;icon=image:port,sticky:1',
             ['M50'] => 'city=revenue:0;label=B',
             ['R47'] => 'city=revenue:0;label=Y',
             ['R55'] => 'city=revenue:0;label=A',
@@ -481,15 +491,15 @@ module Engine
             ['V41'] => 'city=revenue:0;label=Y',
             ['Z47'] => 'city=revenue:0;label=Y',
             ['AB51'] => 'city=revenue:20;label=N',
-            ['C74'] => 'city=revenue:20;label=S',
+            ['C74'] => 'city=revenue:20;label=S;icon=image:port,sticky:1',
             ['M62'] => 'city=revenue:0;label=Y',
             ['O80'] => 'city=revenue:0;label=Y',
             # Cities — water terrain
-            ['AE68'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
-            ['D41'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
+            ['AE68'] => 'town=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
+            ['D41'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
             ['D81'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
             ['I52'] => 'city=revenue:0;upgrade=cost:45,terrain:water',
-            ['J63'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water',
+            ['J63'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
             ['L39'] => 'town=revenue:0;town=revenue:0;upgrade=cost:30,terrain:water',
             ['M36'] => 'city=revenue:0;upgrade=cost:30,terrain:water;border=edge:0,type:province',
             ['M38'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
@@ -497,7 +507,7 @@ module Engine
             ['O40'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water',
             ['P85'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
             ['Q40'] => 'city=revenue:0;upgrade=cost:30,terrain:water',
-            ['S84'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
+            ['S84'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
             ['S86'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
             ['U78'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
             ['U80'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
@@ -561,11 +571,12 @@ module Engine
             ] => 'upgrade=cost:120,terrain:mountain',
           },
           yellow: {
-            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:0,b:_0;path=a:_0,b:5',
+            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:0,b:_0;' \
+                       'path=a:_0,b:5;icon=image:port,sticky:1',
             ['I48'] => 'border=edge:0,type:impassable;upgrade=cost:45,terrain:water;path=a:2,b:4;' \
                        'border=edge:5,type:province',
             ['I50'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:1,b:_0;' \
-                       'path=a:_0,b:3;border=edge:0,type:province',
+                       'path=a:_0,b:3;border=edge:0,type:province;icon=image:port,sticky:1',
             ['J25'] => 'city=revenue:30;label=Y;path=a:2,b:_0;path=a:_0,b:4',
             ['J27'] => 'city=revenue:20;upgrade=cost:30,terrain:mountain;path=a:1,b:_0;path=a:_0,b:4',
             ['AE72'] => 'city=revenue:20;path=a:1,b:_0;path=a:5,b:_0',
@@ -588,12 +599,13 @@ module Engine
                        'city=revenue:0,slots:2;path=a:0,b:_0;path=a:_0,b:1;path=a:_0,b:4',
             # Bergen
             ['B41'] => 'offboard=revenue:yellow_30|green_60|brown_80|gray_120;' \
-                       'city=revenue:0,slots:2;path=a:1,b:_0;path=a:_0,b:3;path=a:_0,b:4',
+                       'city=revenue:0,slots:2;path=a:1,b:_0;path=a:_0,b:3;path=a:_0,b:4;' \
+                       'icon=image:port,sticky:1',
             ['B83'] => 'offboard=revenue:yellow_30|green_50|brown_60|gray_60', # Arkhangelsk — no path defined
             # Moskva
             ['F87'] => 'offboard=revenue:yellow_30|green_50|brown_80|gray_100;' \
                        'city=revenue:0,slots:3;path=a:0,b:_0;path=a:_0,b:1;path=a:_0,b:2;path=a:_0,b:5',
-            ['N1'] => 'offboard=revenue:green_60|brown_100|gray_160;path=a:5,b:_0', # New York
+            ['N1'] => 'offboard=revenue:green_60|brown_100|gray_160;path=a:5,b:_0;icon=image:port,sticky:1', # New York
             # Kharkov
             ['N87'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_80;' \
                        'city=revenue:0,slots:2;path=a:0,b:_0;path=a:_0,b:1;path=a:_0,b:2',
@@ -602,16 +614,19 @@ module Engine
                        'city=revenue:0,slots:2;path=a:0,b:_0;path=a:_0,b:3;border=edge:5,type:province',
             # Lisboa (2 station slots; RCP home)
             ['Z1'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_80;' \
-                      'city=revenue:0,slots:2;path=a:3,b:_0;path=a:_0,b:4',
+                      'city=revenue:0,slots:2;path=a:3,b:_0;path=a:_0,b:4;' \
+                      'icon=image:port,sticky:1',
             ['AB87'] => 'offboard=revenue:yellow_30|green_50|brown_80|gray_120;path=a:1,b:_0;path=a:2,b:_0', # Levant
-            ['AD1'] => 'offboard=revenue:green_40|brown_80|gray_120;path=a:4,b:_0', # North Africa & The Americas
+            ['AD1'] => 'offboard=revenue:green_40|brown_80|gray_120;path=a:4,b:_0;' \
+                       'icon=image:port,sticky:1', # North Africa & The Americas
             ['AF5'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_80;path=a:3,b:_0', # Casablanca
             ['AF11'] => 'offboard=revenue:yellow_30|green_40|brown_40|gray_40;path=a:4,b:_0', # Melilla
             ['AF25'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_100;path=a:2,b:_0;path=a:3,b:_0;' \
-                        'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province', # Alger
+                        'border=edge:3,type:province;border=edge:4,type:province;border=edge:5,type:province;' \
+                        'icon=image:port,sticky:1', # Alger
             ['AG40'] => 'offboard=revenue:yellow_30|green_40|brown_50|gray_80;path=a:3,b:_0;path=a:4,b:_0;' \
-                        'border=edge:0,type:province;border=edge:1,type:province', # Tunis
-            ['AG88'] => 'offboard=revenue:green_50|brown_80|gray_120;path=a:1,b:_0', # Alexandria & Suez
+                        'border=edge:0,type:province;border=edge:1,type:province;icon=image:port,sticky:1', # Tunis
+            ['AG88'] => 'offboard=revenue:green_50|brown_80|gray_120;path=a:1,b:_0;icon=image:port,sticky:1', # Alexandria & Suez
           },
           blue: {
             %w[
@@ -656,7 +671,6 @@ module Engine
               AH15 AH17 AH19 AH21 AH23 AH29 AH31 AH33 AH35 AH37 AH43 AH45
               AH47 AH49 AH51 AH53 AH55 AH57 AH63 AH65 AH67 AH69 AH71 AH73
               AH79 AH81 AH83 AH85 AH87
-
               ] => '',
             # Ferry routes (pre-printed track through sea hexes)
             ['N29'] => 'path=a:4,b:2',
@@ -688,7 +702,7 @@ module Engine
             ['AD77'] => 'path=a:1,b:4',
             ['Z81'] => 'path=a:5,b:2',
             ['Y80'] => 'path=a:5,b:2',
-            ['X79'] => 'town=revenue:20;path=a:5,b:_0;path=a:1,b:_0',
+            ['X79'] => 'town=revenue:20;path=a:5,b:_0;path=a:1,b:_0;icon=image:port,sticky:1',
             ['G30'] => 'junction;path=a:4,b:_0',
             ['G32'] => 'path=a:1,b:4',
             ['G34'] => 'path=a:1,b:3',
