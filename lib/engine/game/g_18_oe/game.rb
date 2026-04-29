@@ -224,7 +224,7 @@ module Engine
           'SC' => 2,
           'RU' => 2,
         }.freeze
-        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
+        ASTERISKED_ZONES = %w[UK PHS FR].freeze
         ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
@@ -821,6 +821,31 @@ module Engine
           region = self.class::CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           hexes = self.class::NATIONAL_REGION_HEXES[region]
           hexes&.include?(hex.coordinates) || false
+        end
+
+        def region_for_hex(hex)
+          self.class::CITY_NATIONAL_ZONE[hex.coordinates] ||
+            self.class::NATIONAL_REGION_HEXES.find { |_, hexes| hexes.include?(hex.coordinates) }&.first
+        end
+
+        def region_available?(region)
+          @minor_available_regions.key?(region)
+        end
+
+        def track_rights_cost(region)
+          self.class::TRACK_RIGHTS_COST[region] || 0
+        end
+
+        def claim_region!(region)
+          @minor_available_regions[region] -= 1
+          @minor_available_regions.delete(region) if @minor_available_regions[region].zero?
+
+          return unless self.class::ASTERISKED_ZONES.include?(region)
+
+          @minor_asterisked_selected += 1
+          return unless @minor_asterisked_selected >= self.class::ASTERISKED_ZONES_CAP
+
+          self.class::ASTERISKED_ZONES.each { |z| @minor_available_regions.delete(z) }
         end
 
         def home_token_locations(corporation)
