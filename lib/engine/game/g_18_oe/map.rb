@@ -673,7 +673,7 @@ module Engine
               AH79 AH81 AH83 AH85 AH87
               ] => '',
             # Port to Sea Connections (pre-printed track entering)
-            ['AE8'] => 'path=a:3,b:_0;path=a:4,b:_0;,
+            ['AE8'] => 'path=a:3,b:_0;path=a:4,b:_0;',
             # Ferry routes (pre-printed track through sea hexes)
             ['N29'] => 'path=a:4,b:2',
             ['G22'] => 'path=a:0,b:4;border=edge:2,type:province',
