@@ -634,6 +634,7 @@ module Engine
             .compact
           @minor_floated_regions = {}
           @regional_corps_floated = 0
+          @fulfilled_train_obligation = Set.new
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -650,6 +651,14 @@ module Engine
         # become available from this point on.
         def major_phase?
           @regional_corps_floated >= self.class::MAX_FLOATED_REGIONALS
+        end
+
+        def fulfilled_train_obligation?(entity)
+          @fulfilled_train_obligation.include?(entity.id)
+        end
+
+        def fulfill_train_obligation(entity)
+          @fulfilled_train_obligation.add(entity.id)
         end
 
         def operating_order
