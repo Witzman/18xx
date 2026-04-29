@@ -661,7 +661,7 @@ module Engine
               AC2 AC4 AC22 AC28 AC30 AC32 AC34 AC36 AC42 AC44 AC46 AC48
               AC50 AC52 AC70 AC72 AC74 AD3 AD19 AD21 AD23 AD29 AD31
               AD33 AD35 AD41 AD43 AD45 AD47 AD49 AD51 AD53 AD57 AD73
-              AE0 AE2 AE4 AE8 AE14 AE16 AE18 AE20 AE22 AE28 AE30
+              AE0 AE2 AE4 AE14 AE16 AE18 AE20 AE22 AE28 AE30
               AE32 AE34 AE40 AE42 AE44 AE46 AE48 AE50 AE56
               AE76 AF1 AF3 AF7 AF9 AF15 AF17 AF19 AF21 AF23 AF29
               AF31 AF33 AF41 AF43 AF45 AF47 AF55 AF57 AF63 AF65 AF71
@@ -671,8 +671,9 @@ module Engine
               AH15 AH17 AH19 AH21 AH23 AH29 AH31 AH33 AH35 AH37 AH43 AH45
               AH47 AH49 AH51 AH53 AH55 AH57 AH63 AH65 AH67 AH69 AH71 AH73
               AH79 AH81 AH83 AH85 AH87
-
               ] => '',
+            # Port to Sea Connections (pre-printed track entering)
+            ['AE8'] => 'path=a:3,b:_0;path=a:4,b:_0;,
             # Ferry routes (pre-printed track through sea hexes)
             ['N29'] => 'path=a:4,b:2',
             ['G22'] => 'path=a:0,b:4;border=edge:2,type:province',
