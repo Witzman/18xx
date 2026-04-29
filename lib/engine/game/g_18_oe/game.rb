@@ -65,7 +65,7 @@ module Engine
             train_limit: { minor: 2, regional: 2, major: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['train_obligation'],
+            status: ['train_obligation', 'can_merge_minors'],
           },
           {
             name: '4',
@@ -73,7 +73,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others'],
+            status: ['can_buy_trains_from_others', 'can_merge_minors'],
           },
           {
             name: '5',
@@ -81,7 +81,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others'],
+            status: ['can_buy_trains_from_others', 'can_merge_minors'],
           },
           {
             name: '6',
@@ -89,7 +89,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others'],
+            status: ['can_buy_trains_from_others', 'can_merge_minors'],
           },
           {
             name: '7',
@@ -97,7 +97,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others'],
+            status: ['can_buy_trains_from_others', 'can_merge_minors'],
           },
           {
             name: '8',
@@ -105,7 +105,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others'],
+            status: ['can_buy_trains_from_others', 'can_merge_minors'],
           },
         ].freeze
 
@@ -224,7 +224,7 @@ module Engine
           'SC' => 2,
           'RU' => 2,
         }.freeze
-        ASTERISKED_ZONES     = %w[UK PHS FR].freeze
+        ASTERISKED_ZONES = %w[UK PHS FR].freeze
         ASTERISKED_ZONES_CAP = 4
 
         CORPORATIONS_TRACK_RIGHTS = {
@@ -364,6 +364,7 @@ module Engine
         }.freeze
 
         MAX_FLOATED_REGIONALS = 18
+        DISCOUNTED_ZONES = %w[IT SP RU SC].freeze
 
         # still need green+ OE specific track tiles
         TILES = {
@@ -647,6 +648,7 @@ module Engine
           @minor_available_regions = self.class::MINOR_TRACK_RIGHTS_CHITS.transform_values(&:itself)
           @minor_asterisked_selected = 0
           @minor_floated_regions = {}
+          @minor_track_rights = {}
           @regional_corps_floated = 0
           @fulfilled_train_obligation = Set.new
           @nationals_formation_queue = []
@@ -813,6 +815,14 @@ module Engine
           @minor_floated_regions.size >= total_minors
         end
 
+        def fulfilled_train_obligation?(entity)
+          @fulfilled_train_obligation.include?(entity.id)
+        end
+
+        def fulfill_train_obligation(entity)
+          @fulfilled_train_obligation.add(entity.id)
+        end
+
         def operating_order
           @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) }.sort
         end
@@ -821,6 +831,31 @@ module Engine
           region = self.class::CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           hexes = self.class::NATIONAL_REGION_HEXES[region]
           hexes&.include?(hex.coordinates) || false
+        end
+
+        def region_for_hex(hex)
+          self.class::CITY_NATIONAL_ZONE[hex.coordinates] ||
+            self.class::NATIONAL_REGION_HEXES.find { |_, hexes| hexes.include?(hex.coordinates) }&.first
+        end
+
+        def region_available?(region)
+          @minor_available_regions.key?(region)
+        end
+
+        def track_rights_cost(region)
+          self.class::TRACK_RIGHTS_COST[region] || 0
+        end
+
+        def claim_region!(region)
+          @minor_available_regions[region] -= 1
+          @minor_available_regions.delete(region) if @minor_available_regions[region].zero?
+
+          return unless self.class::ASTERISKED_ZONES.include?(region)
+
+          @minor_asterisked_selected += 1
+          return unless @minor_asterisked_selected >= self.class::ASTERISKED_ZONES_CAP
+
+          self.class::ASTERISKED_ZONES.each { |z| @minor_available_regions.delete(z) }
         end
 
         def home_token_locations(corporation)
@@ -845,6 +880,140 @@ module Engine
 
         def can_buy_train_from_others?
           @phase.status.include?('can_buy_trains_from_others')
+        end
+
+        # Action::Merge deserialises via game.minor_by_id; 18OE minors live in
+        # @corporations, not the engine's @minors array.
+        def minor_by_id(id)
+          corp = corporation_by_id(id)
+          corp if corp&.type == :minor
+        end
+
+        # Deduplicated zone list for any corporation. Covers initial zone
+        # (from CORPORATIONS_TRACK_RIGHTS or @minor_floated_regions) plus any
+        # zones acquired by merging minors into a major.
+        def track_rights_for(corp)
+          initial_zone = self.class::CORPORATIONS_TRACK_RIGHTS[corp.id] ||
+                         @minor_floated_regions[corp.id]
+          zones = Array(initial_zone) + Array(@minor_track_rights[corp.id])
+          zones.compact.uniq
+        end
+
+        def tile_cost_with_discount(tile, hex, entity, spender, cost)
+          cost = super
+          return cost if cost.zero?
+
+          zone = region_for_hex(hex)
+          return cost unless zone && self.class::DISCOUNTED_ZONES.include?(zone)
+          return cost unless track_rights_for(entity).include?(zone)
+
+          (cost * 0.8).to_i
+        end
+
+        # §10.5 merger: transfer trains, tokens, cash, and track rights from a
+        # floated minor into a floated major or national, then close the minor.
+        def merge_minor!(minor, major)
+          @log << "#{minor.name} merges into #{major.name}"
+          share_given = minor_share_exchange!(minor, major)
+          minor_cash_transfer!(minor, major, share_given)
+          case major.type
+          when :major
+            transfer_minor_tokens!(minor, major)
+            transfer_minor_trains!(minor, major)
+            transfer_minor_track_rights!(minor, major)
+          when :national
+            transfer_minor_trains!(minor, major)
+          else
+            raise GameError, "Unexpected merge target type: #{major.type}"
+          end
+          close_minor!(minor)
+        end
+
+        def minor_share_exchange!(minor, major)
+          treasury_share = major.ipo_shares.reject(&:president).first
+          if treasury_share
+            @share_pool.transfer_shares(treasury_share.to_bundle, minor.owner,
+                                        allow_president_change: false)
+            @log << "#{minor.owner.name} receives treasury share of #{major.name}"
+            return true
+          end
+
+          market_share = @share_pool.shares_of(major).first
+          if market_share
+            @share_pool.transfer_shares(market_share.to_bundle, minor.owner,
+                                        allow_president_change: false)
+            @log << "#{minor.owner.name} receives market share of #{major.name}"
+            return false
+          end
+
+          @log << "No shares of #{major.name} available; no share exchange"
+          false
+        end
+
+        def minor_cash_transfer!(minor, major, treasury_share_given)
+          cash = minor.cash
+          return if cash.zero?
+
+          if treasury_share_given && major.type == :major
+            minor.spend(cash, major)
+            @log << "#{minor.name} transfers #{format_currency(cash)} to #{major.name}"
+          else
+            minor.spend(cash, @bank)
+            @log << "#{minor.name} forfeits #{format_currency(cash)} to bank"
+          end
+        end
+
+        def transfer_minor_tokens!(minor, major)
+          changed = false
+          minor.tokens.select(&:used).each do |token|
+            changed = true
+            city = token.city
+            if city.tokened_by?(major)
+              token.remove!
+              @log << "#{minor.name} token removed from #{city.hex.name} (conflict with #{major.name})"
+            else
+              major_token = major.tokens.find { |t| !t.used }
+              if major_token
+                token.swap!(major_token, check_tokenable: false)
+                @log << "#{minor.name} token replaced by #{major.name} at #{city.hex.name}"
+              else
+                token.remove!
+                @log << "#{minor.name} token removed from #{city.hex.name} (no spare #{major.name} token)"
+              end
+            end
+          end
+          @graph.clear if changed
+        end
+
+        def transfer_minor_trains!(minor, major)
+          limit = train_limit(major)
+          minor.trains.dup.each do |train|
+            if major.trains.size < limit
+              train.owner = major
+              major.trains << train
+              minor.trains.delete(train)
+              @log << "#{minor.name} transfers #{train.name} to #{major.name}"
+            else
+              depot.reclaim_train(train)
+              @log << "#{minor.name} #{train.name} returned to depot (#{major.name} at train limit)"
+            end
+          end
+        end
+
+        def transfer_minor_track_rights!(minor, major)
+          zone = @minor_floated_regions[minor.id]
+          return unless zone
+
+          @minor_track_rights[major.id] ||= []
+          @minor_track_rights[major.id] |= [zone]
+          @log << "#{major.name} gains track rights in #{zone} zone from #{minor.name}"
+        end
+
+        def close_minor!(minor)
+          @minor_regional_order.delete(minor)
+          @minor_floated_regions.delete(minor.id)
+          close_corporation(minor, quiet: true)
+          @log << "#{minor.name} closed"
         end
 
         # UP movement at end of SR: only for majors and nationals that are fully player-held
