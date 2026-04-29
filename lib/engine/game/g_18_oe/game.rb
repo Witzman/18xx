@@ -645,6 +645,7 @@ module Engine
           @minor_asterisked_selected = 0
           @minor_floated_regions = {}
           @regional_corps_floated = 0
+          @fulfilled_train_obligation = Set.new
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -664,6 +665,14 @@ module Engine
 
           total_minors = corporations.count { |c| c.type == :minor }
           @minor_floated_regions.size >= total_minors
+        end
+
+        def fulfilled_train_obligation?(entity)
+          @fulfilled_train_obligation.include?(entity.id)
+        end
+
+        def fulfill_train_obligation(entity)
+          @fulfilled_train_obligation.add(entity.id)
         end
 
         def operating_order
