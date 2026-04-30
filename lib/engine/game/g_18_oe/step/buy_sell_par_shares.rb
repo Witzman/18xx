@@ -75,7 +75,7 @@ module Engine
 
           def can_sell?(entity, bundle)
             return false unless bundle
-            return false if bundle.corporation.type == :regional && bundle.presidents_share?
+            return false if bundle.corporation.type == :regional && bundle.presidents_share
             return false if bundle.corporation == @converted
 
             super
