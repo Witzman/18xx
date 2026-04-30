@@ -30,7 +30,7 @@ module Engine
               actions = []
               ipo_bundle = @converting.ipo_shares.first&.to_bundle
               actions << 'buy_shares' if ipo_bundle && can_buy?(entity, ipo_bundle)
-              actions << 'pass' unless actions.empty?
+              actions << 'pass'
               return actions
             end
 
@@ -73,7 +73,7 @@ module Engine
 
           def can_sell?(entity, bundle)
             return false unless bundle
-            return false if bundle.corporation.type == :regional
+            return false if bundle.corporation.type == :regional && bundle.presidents_share?
             return false if bundle.corporation == @converted
 
             super
@@ -265,7 +265,14 @@ module Engine
           end
 
           def pass!
-            complete_conversion if @converting
+            if @converting
+              complete_conversion
+              raise GameError, "Must become president of newly floated major #{@converted&.name}" if
+                @converted && !@converted.president?(current_entity)
+
+              return
+            end
+
             raise GameError, "Must become president of newly floated major #{@converted&.name}" if
               @converted && !@converted.president?(current_entity)
 
