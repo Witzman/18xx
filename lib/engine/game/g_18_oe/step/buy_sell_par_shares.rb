@@ -30,7 +30,7 @@ module Engine
               actions = []
               ipo_bundle = @converting.ipo_shares.first&.to_bundle
               actions << 'buy_shares' if ipo_bundle && can_buy?(entity, ipo_bundle)
-              actions << 'pass' unless actions.empty?
+              actions << 'pass'
               return actions
             end
 
@@ -60,12 +60,10 @@ module Engine
           def can_buy?(entity, bundle)
             return false if @converted && bundle.corporation != @converted
 
-            # §9.3 pre-conversion optional buy: only the regional's president may buy
-            # one treasury share before converting; non-presidents may not do this.
-            if !@converted && bundle.corporation.type == :regional &&
-               bundle.corporation.ipoed && bundle.owner == bundle.corporation
+            # §9.3 step 1: pre-conversion buy is president-only, once per turn
+            if @converting == bundle.corporation
               return false unless bundle.corporation.president?(entity)
-              return false if @bought == bundle.corporation
+              return false if bought_corporation == bundle.corporation
             end
 
             super
@@ -73,7 +71,7 @@ module Engine
 
           def can_sell?(entity, bundle)
             return false unless bundle
-            return false if bundle.corporation.type == :regional
+            return false if bundle.corporation.type == :regional && bundle.presidents_share?
             return false if bundle.corporation == @converted
 
             super
@@ -265,7 +263,14 @@ module Engine
           end
 
           def pass!
-            complete_conversion if @converting
+            if @converting
+              complete_conversion
+              raise GameError, "Must become president of newly floated major #{@converted&.name}" if
+                @converted && !@converted.president?(current_entity)
+
+              return
+            end
+
             raise GameError, "Must become president of newly floated major #{@converted&.name}" if
               @converted && !@converted.president?(current_entity)
 
