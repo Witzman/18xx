@@ -68,7 +68,7 @@ module Engine
 
           def can_sell?(entity, bundle)
             return false unless bundle
-            return false if bundle.corporation.type == :regional
+            return false if bundle.corporation.type == :regional && bundle.presidents_share?
             return false if bundle.corporation == @converted
 
             super
@@ -285,8 +285,14 @@ module Engine
           def pass!
             if @converting
               complete_conversion
+              raise GameError, "Must become president of newly floated major #{@converted&.name}" if
+                @converted && !@converted.president?(current_entity)
+
               return
             end
+
+            raise GameError, "Must become president of newly floated major #{@converted&.name}" if
+              @converted && !@converted.president?(current_entity)
 
             if @converted
               # Clear current_actions before calling super so the base pass! logic
