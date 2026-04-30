@@ -143,11 +143,12 @@ Obligation logic correct. Insolvency and nationals-claim-rusted deferred.
 - [x] **4.3** UP — `sold_out_increase?` gates UP to `:major`/`:national` only;
   base engine `finish_round` → `sold_out_stock_movement` at SR end
 - [ ] **4.4** +3 RIGHT — on first Orient Express run (in addition to dividend movement) **[L2]**
-- [ ] **4.5** §9.3 post-conversion sell window — after conversion completes but before the
+- [x] **4.5** §9.3 post-conversion sell window — after conversion completes but before the
   mandatory president buy, the active player may sell shares of other RRs they own
-  (§9.3 step 4; they may not sell shares of the newly floated major). Currently the
-  `@converted` state in `BuySellParShares` goes directly to the president-buy check with
-  no sell opportunity. **[L2]**
+  (§9.3 step 4; they may not sell shares of the newly floated major). Fixed: `pass!`
+  now `return`s after `complete_conversion`; second pass ends the turn. Also fixed:
+  `can_sell?` blanket regional block replaced with president-cert-only guard so
+  secondary regional shares are sellable in Major Phase per §8.3. **[L2]**
 
 ---
 
@@ -398,6 +399,27 @@ Explicitly deferred. Current implementation skips from Auction Phase to Regional
 - [ ] **15.3** Float obligation: pays 2× par; obligation transfers if unable
 - [ ] **15.4** Round sequencing: Auction → Concession → Regional/Minor Phase
 - [ ] **15.5** 2-player without-concessions variant: skip concession phase
+
+---
+
+## 20. Regional/Minor Phase SR — Voluntary Regional Removal (`step/buy_sell_par_shares.rb`) — [L2/L3]
+
+During a SR in the Regional/Minor Phase a player may, as their stock action, voluntarily
+remove one of their own unfloated regionals from the game. At most 6 regionals total may
+be removed across all players combined (the same 6 that would otherwise be auto-closed
+when the 18th regional pars).
+
+- [ ] **20.1** Player action: remove one unfloated regional (§8.2) — available during
+  Regional/Minor Phase only; player must own the regional; `@regionals_removed` counter
+  in `game.rb`; `MAX_REMOVED_REGIONALS = 6` constant; `can_remove_regional?` guard in
+  `BuySellParShares`; calls `close_corporation` and increments counter **[L2/L3]**
+- [ ] **20.2** Action type — no existing engine action fits cleanly; options are a new
+  `Action::RemoveCorporation` class (requires touching view layer) or repurposing the
+  `corporation_actions` `'pass'` pathway (no new action file, semantically overloaded
+  with convert-decline) *(decision pending)* **[L3]**
+- [ ] **20.3** Auto-close at 18th regional par (`process_par`) already closes all
+  remaining unfloated regionals — verify it handles the case where some have already
+  been voluntarily removed (fewer than 6 left to close); no logic change expected **[L2]**
 
 ---
 
