@@ -794,12 +794,6 @@ module Engine
           super
         end
 
-        # Nationals are exempt from all terrain costs (openpoints §1.7).
-        def tile_cost_with_discount(tile, hex, entity, spender, cost)
-          return 0 if national?(entity)
-
-          super
-        end
 
         def national?(entity)
           entity.respond_to?(:type) && entity.type == :national
@@ -902,6 +896,7 @@ module Engine
 
         def tile_cost_with_discount(tile, hex, entity, spender, cost)
           cost = super
+          return 0 if national?(entity)
           return cost if cost.zero?
 
           zone = region_for_hex(hex)
