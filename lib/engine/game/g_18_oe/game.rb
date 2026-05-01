@@ -6,8 +6,6 @@ require_relative 'map'
 require_relative '../base'
 require_relative 'round/consolidation'
 require_relative 'step/consolidate'
-require_relative '../../../game'
-require_relative 'step/convert_to_national'
 
 module Engine
   module Game
