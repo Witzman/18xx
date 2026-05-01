@@ -358,6 +358,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :silver,
             abilities: [
               {
                 type: 'description',
@@ -376,6 +377,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :maroon,
             abilities: [
               {
                 type: 'description',
@@ -393,6 +395,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :teal,
             abilities: [
               {
                 type: 'description',
@@ -411,6 +414,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :white,
             abilities: [
               {
                 type: 'description',
@@ -431,6 +435,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :navy,
             abilities: [
               {
                 type: 'description',
@@ -449,6 +454,7 @@ module Engine
             type: 'minor',
             shares: [100],
             float_percent: 100,
+            color: :teal,
             max_ownership_percent: 100,
             abilities: [
               {
@@ -468,6 +474,7 @@ module Engine
             type: 'minor',
             shares: [100],
             float_percent: 100,
+            color: :white,
             max_ownership_percent: 100,
             abilities: [
               {
@@ -485,6 +492,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :navy,
             abilities: [
               {
                 type: 'description',
@@ -502,6 +510,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :gray,
             abilities: [
               {
                 type: 'description',
@@ -520,6 +529,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :teal,
             abilities: [
               {
                 type: 'description',
@@ -539,6 +549,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :olive,
             abilities: [
               {
                 type: 'description',
@@ -558,6 +569,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
+            color: :maroon,
             abilities: [
               {
                 type: 'description',
