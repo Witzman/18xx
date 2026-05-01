@@ -4,11 +4,7 @@ Combined status tracker: implemented items (`[x]`), partially done (`[~]`), and 
 points (`[ ]`).
 All descriptions are rules-based, not code-based.
 
-**Engine layer annotations** (see `MD/ENGINE_MECHANICS.md` for full explanation):
-- **L1** = Layer 1: pure constants, no custom Ruby methods needed
-- **L2** = Layer 2: named `Game::Base` method override
-- **L3** = Layer 3: new step or round Ruby class required
-- **L4** = Layer 4: structural engine divergence (none in 18OE)
+
 
 ---
 
@@ -628,4 +624,9 @@ for a conditional blocker step — do not remove.
 
 ---
 
-_Last updated: 2026-04-25 — §9.4 notes `csv/tilemanifest.csv` created as verification reference._
+**Engine layer annotations** (see `MD/ENGINE_MECHANICS.md` for full explanation):
+- **L1** = Layer 1: pure constants, no custom Ruby methods needed
+- **L2** = Layer 2: named `Game::Base` method override
+- **L3** = Layer 3: new step or round Ruby class required
+- **L4** = Layer 4: structural engine divergence (none in 18OE)
+
