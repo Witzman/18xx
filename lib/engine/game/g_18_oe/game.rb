@@ -894,15 +894,16 @@ module Engine
         end
 
         def tile_cost_with_discount(tile, hex, entity, spender, cost)
-          cost = super
+          base = super
           return 0 if national?(entity)
-          return cost if cost.zero?
+          return base if base.zero?
 
           zone = region_for_hex(hex)
-          return cost unless zone && self.class::DISCOUNTED_ZONES.include?(zone)
-          return cost unless track_rights_for(entity).include?(zone)
+          return base unless zone
+          return base unless self.class::DISCOUNTED_ZONES.include?(zone)
+          return base unless track_rights_for(entity).include?(zone)
 
-          (cost * 0.8).to_i
+          (base * 0.8).to_i
         end
 
         # §10.5 merger: transfer trains, tokens, cash, and track rights from a

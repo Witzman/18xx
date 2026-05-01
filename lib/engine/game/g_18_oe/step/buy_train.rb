@@ -25,11 +25,6 @@ module Engine
             entity.floated? && entity.trains.empty? && entity.type == :major
           end
 
-          def process_buy_train(action)
-            super
-            @game.fulfill_train_obligation(action.entity) if action.train.name == '2+2' && action.train.from_depot?
-          end
-
           def can_buy_train?(entity = nil, _shell = nil)
             entity ||= current_entity
             return can_claim_rusted_train?(entity) if entity.type == :national
