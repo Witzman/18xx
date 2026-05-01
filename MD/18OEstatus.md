@@ -1,8 +1,6 @@
 # 18OE — Implementation Status (minor Rule errors in this document to be fixed)
 
-Combined status tracker: implemented items (`[x]`), partially done (`[~]`), and open
-points (`[ ]`).
-All descriptions are rules-based, not code-based.
+Combined status tracker - All descriptions are rules-based, not code-based.
 
 
 
