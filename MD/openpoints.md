@@ -65,10 +65,13 @@ Remaining open items: 1.3c/1.3d deferred (depend on 18oe_mergers); 1.9b–1.9d d
 - [x] **2.3** Define all 10 privates with face values, revenues, `desc:` ability text **[L1]**
 - [x] **2.4** Minor-exchange auction cards for all 12 minors **[L1]**
 - [x] **2.5** Define 10 concession cards CON1–CON10 *(concession phase deferred — §15)* **[L1]**
-- [ ] **2.6** Logo artwork — grey circle stubs for 25 corporations:
-  - Minors (8): A, B, D, E, F, G, J, L
-  - Regionals (17): BHB, POB, KSS, KBS, SB; MAV, SFAI, SFR; CHN; MZA, RCP; MSP, MKV,
-    LRZD; WW, DSJ, BJV
+- [~] **2.6** Logo artwork — grey circle stubs for 25 corporations:
+  - Charter background `color:` now defined for all 12 minors (added 2026-04-30 on HEAD;
+    also in PR #12558 `18oe_ports` which includes the same change)
+  - Logo image files still missing for minors: A (silver), B (maroon), D (white), E (navy),
+    F (teal), G (white), J (gray), L (olive)
+  - Regionals still needing logo images (17): BHB, POB, KSS, KBS, SB; MAV, SFAI, SFR;
+    CHN; MZA, RCP; MSP, MKV, LRZD; WW, DSJ, BJV
   - Already have real logos: LNWR, GWR, GSWR (UK); PLM, MIDI, OU, BEL (FR); minors C/H/K/M
 - [~] **2.7** Base-game map `g_18_oe/map.rb`:
   - [x] Full grid coverage — 651 blue hexes
@@ -89,7 +92,12 @@ Remaining open items: 1.3c/1.3d deferred (depend on 18oe_mergers); 1.9b–1.9d d
     - I22 (1↔5 + 1↔4 branching), I24 (1↔5 + 1↔4 branching)
     - AE12 (3↔0), AF13 (2↔1)
     - AB21 (2↔4), AB23 (1↔4), AB25 (1↔4)
-  - [~] Port hexes — partially done: AE6 (`town=revenue:20`, path 0↔3); more ports outstanding
+  - [~] Port hexes — public port icons (`icon=image:port,sticky:1`) added to ~40 hexes in
+    PR #12558 (`18oe_ports`): 6 white cities, 9 white towns, 3 double towns extracted into
+    port groups; 14 cities + 6 towns + 10 red/yellow/blue hexes updated in-place; Bergen +
+    Lisboa also get port icon. NOT yet merged into `18oe_testgame`. Private ports remain unimplemented.
+  - Note: PR #12558 also renames terrain costs for map display clarity: mountain→hill
+    (cost 30/45), water→lake (cost 60), water→river (cost 45)
   - [~] Lille↔London ferry (N31→N29→M28): open for playtesting (forced upgrade edges
     on both cities make tile placement work); all other ferry routes have map data but
     tiles cannot yet be placed to connect — blocked on engine override below
@@ -149,6 +157,12 @@ Obligation logic correct. Insolvency and nationals-claim-rusted deferred.
   now `return`s after `complete_conversion`; second pass ends the turn. Also fixed:
   `can_sell?` blanket regional block replaced with president-cert-only guard so
   secondary regional shares are sellable in Major Phase per §8.3. **[L2]**
+- [x] **4.6** Dividend type options — `Step::Dividend#dividend_types`: minors `:half` only;
+  nationals `:payout` only; majors/regionals `[:withhold, :half, :payout]`; `HalfPay` mixin
+  included; `Step::Dividend#total_revenue` injects `national_revenue` for nationals (WA-2
+  permanent). `Game#change_share_price` custom override: minors/regionals no movement;
+  majors/nationals move right if revenue ≥ share price, left on zero dividend. (PR #12561
+  `18oe_rulechanges`) **[L2]**
 
 ---
 
@@ -505,4 +519,25 @@ No game-side override needed. Zero behaviour change for any other game.
 
 ---
 
-_Last updated: 2026-04-28 — §13 rewritten after reading current codebase: chit system confirmed live in HEAD (13A all done); §10.5 merger action split into four groups — engine plumbing (13B), BuySellParShares additions (13C), merge_minor! sub-steps with exact method signatures (13D), and deferred items (13E). 2026-04-28: BuySellParShares code-quality pass on 18oe_fullmap branch (no open points closed): `any?` → `!empty?`; `pass` gated on `buy_shares` being present; `can_convert?`/`can_convert_any?` take explicit `player` param; `@bought` ivar removed in favour of `bought_corporation` helper reading `@round.current_actions`._
+## 21. Outstanding Upstream Pull Requests
+
+Open PRs against [tobymao/18xx](https://github.com/tobymao/18xx) from Witzman.
+These represent work already implemented locally (on the named branch) awaiting upstream
+review and merge. Once merged upstream, the corresponding openpoints items are fully done
+for the upstream codebase; local `18oe_testgame` may already be ahead of these PRs.
+
+| PR | Branch | Title | Status | Covers |
+|---|---|---|---|---|
+| [#12542](https://github.com/tobymao/18xx/pull/12542) | `18oe_minorzones` | Minor track-rights chit system | Open | §13A (13.1–13.6): `MINOR_TRACK_RIGHTS_CHITS`, `claim_region!`, `home_token_locations`, zone cap |
+| [#12543](https://github.com/tobymao/18xx/pull/12543) | `18oe_buytrains` | Reserved 2+2 train obligation | Open | §3.1, 3.4–3.6: `must_buy_train?`, `buyable_trains`, depot gating |
+| [#12544](https://github.com/tobymao/18xx/pull/12544) | `18oe_fullmap` | Stock round — pre-conversion buy guard and major share redemption | Open | §4.5: `can_buy?` guard in `@converting` window; `issuable_shares`/`redeemable_shares` |
+| [#12558](https://github.com/tobymao/18xx/pull/12558) | `18oe_ports` | Mapupdate — Public ports + minor charter colors | Open | §2.6 charter colors; §2.7 port icons (~40 hexes); terrain rename (mountain→hill, water→lake/river); offboard hex fixes |
+| [#12561](https://github.com/tobymao/18xx/pull/12561) | `18oe_rulechanges` | Dividend options for minor/major/national | Open | §4.6: `dividend_types`, `HalfPay` mixin, `change_share_price` |
+
+**Note on branch relationship**: `18oe_testgame` (current working branch) is ahead of all
+these PR branches. Features in §1 (Nationals), §13B–D (mergers), and later SR fixes are in
+`18oe_testgame` but not yet submitted upstream as PRs.
+
+---
+
+_Last updated: 2026-05-01 — §2.6 updated: charter `color:` now defined for all 12 minors in HEAD (`18oe_testgame`); logo images still outstanding for 8 minors. §2.7 updated: public port icons (~40 hexes) and terrain renaming in PR #12558 (`18oe_ports`), not yet merged into testgame. §4.6 added: `dividend_types`/`HalfPay`/`change_share_price` implemented (PR #12561 `18oe_rulechanges`). §21 added: 5 outstanding upstream PRs tabulated (#12542 minor zones, #12543 buy trains, #12544 fullmap SR, #12558 ports, #12561 rulechanges). Previous update 2026-04-28: §13 rewritten; BuySellParShares code-quality pass._
