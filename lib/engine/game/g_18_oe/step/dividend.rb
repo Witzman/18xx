@@ -24,7 +24,7 @@ module Engine
             elsif entity&.respond_to?(:national?) && entity.national?
               [:payout]
             else
-              %i[payout half withhold]
+              %i[withhold half payout]
             end
           end
         end
