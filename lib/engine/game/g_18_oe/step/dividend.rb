@@ -28,6 +28,15 @@ module Engine
               %i[withhold half payout]
             end
           end
+
+          # Base skip! always uses 'withhold', which isn't in dividend_types for minors/nationals.
+          # Use the entity's first valid type so dividend_options lookup doesn't return nil.
+          def skip!
+            kind = dividend_types(current_entity).first.to_s
+            action = Action::Dividend.new(current_entity, kind: kind)
+            action.id = @game.actions.last.id if @game.actions.last
+            process_dividend(action)
+          end
         end
       end
     end
