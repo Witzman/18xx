@@ -16,7 +16,7 @@ game set on a map of 19th-century Europe.
 There are some tests in the `18xx/spec/` directory that demonstrate how methods are actually used. 
 `lib/engine/action/*` describes the allowed player actions.
 `MD/dev_guide.md` Cheat Sheet for Core Architecture and Game Extensions
-Check other games for similar functionalitly before implementing new feature
+Keep line limitation of 130 characters for all changes in .rb files.
 
 ---
 
