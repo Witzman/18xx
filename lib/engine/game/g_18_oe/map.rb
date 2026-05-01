@@ -614,7 +614,7 @@ module Engine
                        'city=revenue:0,slots:2;path=a:0,b:_0;path=a:_0,b:3;border=edge:5,type:province',
             # Lisboa (2 station slots; RCP home)
             ['Z1'] => 'offboard=revenue:yellow_30|green_40|brown_60|gray_80;' \
-                      'city=revenue:0,slots:2;path=a:3,b:_0;path=a:_0,b:4;' \
+                      'slots:1;path=a:3,b:_0;path=a:_0,b:4;' \
                       'icon=image:port,sticky:1',
             ['AB87'] => 'offboard=revenue:yellow_30|green_50|brown_80|gray_120;path=a:1,b:_0;path=a:2,b:_0', # Levant
             ['AD1'] => 'offboard=revenue:green_40|brown_80|gray_120;path=a:4,b:_0;' \
