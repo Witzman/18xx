@@ -414,7 +414,7 @@ module Engine
             shares: [100],
             float_percent: 100,
             max_ownership_percent: 100,
-            color: :white,
+            color: :lightblue,
             abilities: [
               {
                 type: 'description',
@@ -474,7 +474,7 @@ module Engine
             type: 'minor',
             shares: [100],
             float_percent: 100,
-            color: :white,
+            color: :grey
             max_ownership_percent: 100,
             abilities: [
               {
