@@ -587,7 +587,6 @@ module Engine
             ['S88'] => 'path=a:0,b:1',
           },
           red: {
-            # North Sweden
             ['D25'] => 'offboard=revenue:yellow_20|green_40|brown_50|gray_50;path=a:0,b:_0;path=a:5,b:_0', # Scottish Highlands
             # North Sweden
             ['A56'] => 'city=revenue:yellow_30|green_50|brown_80|gray_100,slots:2;' \
