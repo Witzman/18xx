@@ -474,7 +474,7 @@ module Engine
             type: 'minor',
             shares: [100],
             float_percent: 100,
-            color: :grey
+            color: :gray,
             max_ownership_percent: 100,
             abilities: [
               {
