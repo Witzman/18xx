@@ -173,7 +173,7 @@ module Engine
             @game.sorted_corporations.reject { |c| (c.type == :minor && c.ipoed) }
           end
 
-          def can_merge_any?(entity)
+          def can_merge_any?(_entity)
             return false if @converting
             return false unless @game.phase.status.include?('can_merge_minors')
 

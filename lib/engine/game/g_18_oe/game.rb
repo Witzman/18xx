@@ -65,7 +65,7 @@ module Engine
             train_limit: { minor: 2, regional: 2, major: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['train_obligation', 'can_merge_minors'],
+            status: %w[train_obligation can_merge_minors],
           },
           {
             name: '4',
@@ -73,7 +73,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others', 'can_merge_minors'],
+            status: %w[can_buy_trains_from_others can_merge_minors],
           },
           {
             name: '5',
@@ -81,7 +81,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others', 'can_merge_minors'],
+            status: %w[can_buy_trains_from_others can_merge_minors],
           },
           {
             name: '6',
@@ -89,7 +89,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others', 'can_merge_minors'],
+            status: %w[can_buy_trains_from_others can_merge_minors],
           },
           {
             name: '7',
@@ -97,7 +97,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others', 'can_merge_minors'],
+            status: %w[can_buy_trains_from_others can_merge_minors],
           },
           {
             name: '8',
@@ -105,7 +105,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_buy_trains_from_others', 'can_merge_minors'],
+            status: %w[can_buy_trains_from_others can_merge_minors],
           },
         ].freeze
 
