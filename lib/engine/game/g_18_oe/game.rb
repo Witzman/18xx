@@ -17,7 +17,7 @@ module Engine
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
                       :consolidation_triggered, :consolidation_done, :minor_asterisked_selected,
-                      :nationals_formation_queue
+                      :nationals_formation_queue, :first_or_done
         attr_reader :fulfilled_train_obligation
 
         MARKET = [
@@ -652,6 +652,7 @@ module Engine
           @regional_corps_floated = 0
           @fulfilled_train_obligation = Set.new
           @nationals_formation_queue = []
+          @first_or_done = false
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -1023,6 +1024,8 @@ module Engine
         end
 
         def next_round!
+          # Rule 8.3/11.6: level 3 trains are blocked in OR1; track when first OR ends
+          @first_or_done ||= @round.is_a?(Engine::Round::Operating)
           @round =
             case @round
             when Engine::Round::Operating

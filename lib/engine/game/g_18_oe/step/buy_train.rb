@@ -40,6 +40,9 @@ module Engine
             # Regional/Minor Phase: level 3+ trains blocked for all entities
             return trains.select { |t| t.name == '2+2' } unless @game.major_phase?
 
+            # Rule 8.3/11.6: level 3+ also blocked in OR1 even after Major Phase starts
+            return trains.select { |t| t.name == '2+2' } unless @game.first_or_done
+
             # Obligation window in Major Phase: unfulfilled entity restricted to 2+2
             if @game.phase.status.include?('train_obligation') &&
                !@game.fulfilled_train_obligation.include?(entity.id)
