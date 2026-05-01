@@ -25,17 +25,6 @@ module Engine
             entity.floated? && entity.trains.empty? && entity.type == :major
           end
 
-          def buyable_trains(entity)
-            trains = super
-            return trains unless @game.phase.status.include?('train_obligation')
-
-            if !@game.fulfilled_train_obligation?(entity)
-              trains.select { |t| t.name == '2+2' }
-            else
-              trains.reject { |t| t.name == '2+2' }
-            end
-          end
-
           def process_buy_train(action)
             super
             @game.fulfill_train_obligation(action.entity) if action.train.name == '2+2' && action.train.from_depot?
