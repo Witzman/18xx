@@ -8,9 +8,10 @@ module Engine
       module Step
         class Dividend < Engine::Step::Dividend
           def dividend_types(entity)
-            if entity.minor?
+            case
+            when entity.minor?
               [:half]
-            elsif entity.respond_to?(:national?) && entity.national?
+            when entity.respond_to?(:national?) && entity.national?
               [:payout]
             else
               [:payout, :half, :withhold]
