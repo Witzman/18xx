@@ -1093,7 +1093,7 @@ module Engine
         #   * revenue between 0 and share price -> no move
         #   * revenue = 0 -> move left
         def change_share_price(entity, revenue)
-          return if entity.minor? || entity.type == :regional
+          return if entity.type == :minor || entity.type == :regional
 
           share_price = entity.share_price.price
           if revenue >= share_price
