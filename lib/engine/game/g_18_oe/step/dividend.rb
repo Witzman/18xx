@@ -19,9 +19,9 @@ module Engine
           end
 
           def dividend_types(entity = current_entity)
-            if entity&.minor?
+            if entity&.type == :minor
               [:half]
-            elsif entity&.respond_to?(:national?) && entity.national?
+            elsif entity&.type == :national
               [:payout]
             else
               %i[withhold half payout]
