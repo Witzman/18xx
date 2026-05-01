@@ -319,26 +319,26 @@ module Engine
             ['K66'] => 'upgrade=cost:30,terrain:water;border=edge:2,type:province',
             ['L59'] => 'border=edge:5,type:province',
             ['L63'] => 'border=edge:2,type:province',
-            ['M34'] => 'upgrade=cost:60,terrain:water;border=edge:0,type:province;border=edge:5,type:province',
+            ['M34'] => 'upgrade=cost:60,terrain:lake;border=edge:0,type:province;border=edge:5,type:province',
             ['M60'] => 'border=edge:2,type:province',
             ['N33'] => 'town=revenue:0;border=edge:3,type:province',
             ['N57'] => 'border=edge:4,type:province',
             ['N59'] => 'town=revenue:0;border=edge:1,type:province',
-            ['O50'] => 'upgrade=cost:30,terrain:mountain;border=edge:5,type:province',
+            ['O50'] => 'upgrade=cost:30,terrain:hill;border=edge:5,type:province',
             ['O56'] => 'city=revenue:0;border=edge:0,type:province;border=edge:5,type:province',
             ['O60'] => 'border=edge:0,type:province;border=edge:5,type:province',
-            ['O62'] => 'upgrade=cost:45,terrain:mountain;border=edge:0,type:province;border=edge:5,type:province',
+            ['O62'] => 'upgrade=cost:45,terrain:hill;border=edge:0,type:province;border=edge:5,type:province',
             ['O64'] => 'border=edge:0,type:province;border=edge:5,type:province',
             ['O66'] => 'border=edge:0,type:province;border=edge:5,type:province',
-            ['O68'] => 'upgrade=cost:30,terrain:mountain;border=edge:0,type:province;border=edge:5,type:province',
+            ['O68'] => 'upgrade=cost:30,terrain:hill;border=edge:0,type:province;border=edge:5,type:province',
             ['O70'] => 'border=edge:0,type:province;border=edge:5,type:province',
             ['O72'] => 'border=edge:0,type:province',
 
             ['P37'] => 'town=revenue:0;border=edge:4,type:province',
             ['P39'] => 'border=edge:1,type:province',
             ['P51'] => 'border=edge:2,type:province',
-            ['P55'] => 'upgrade=cost:45,terrain:mountain;border=edge:3,type:province',
-            ['P57'] => 'upgrade=cost:30,terrain:mountain;border=edge:2,type:province',
+            ['P55'] => 'upgrade=cost:45,terrain:hill;border=edge:3,type:province',
+            ['P57'] => 'upgrade=cost:30,terrain:hill;border=edge:2,type:province',
             ['P59'] => 'border=edge:3,type:province',
             ['P61'] => 'town=revenue:0;border=edge:2,type:province;border=edge:3,type:province',
             ['P63'] => 'border=edge:2,type:province;border=edge:3,type:province',
@@ -356,37 +356,37 @@ module Engine
                        'border=edge:1,type:province;border=edge:5,type:province',
             ['T47'] => 'upgrade=cost:120,terrain:mountain;border=edge:0,type:province;border=edge:5,type:province',
             ['T49'] => 'upgrade=cost:60,terrain:mountain;border=edge:0,type:province',
-            ['T75'] => 'upgrade=cost:45,terrain:water;border=edge:3,type:province',
+            ['T75'] => 'upgrade=cost:45,terrain:river;border=edge:3,type:province',
             ['U44'] => 'upgrade=cost:120,terrain:mountain;border=edge:2,type:province;border=edge:3,type:province',
             ['U46'] => 'upgrade=cost:60,terrain:mountain;border=edge:2,type:province;border=edge:3,type:province',
             ['U48'] => 'border=edge:2,type:province;border=edge:3,type:province;border=edge:4,type:province',
             ['U50'] => 'border=edge:1,type:province',
-            ['W20'] => 'upgrade=cost:45,terrain:mountain;border=edge:3,type:province',
+            ['W20'] => 'upgrade=cost:45,terrain:hill;border=edge:3,type:province',
             ['X23'] => 'upgrade=cost:120,terrain:mountain;border=edge:3,type:province',
             ['Y26'] => 'border=edge:3,type:province',
             # Impassable borders (landtiles_with_borders.csv)
             # Scotland — Highlands barrier
             ['F27'] => 'town=revenue:0;border=edge:0,type:impassable;border=edge:5,type:impassable',
             ['F29'] => 'border=edge:0,type:impassable',
-            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:mountain;' \
+            ['G26'] => 'city=revenue:10;label=Y;upgrade=cost:30,terrain:hill;' \
                        'border=edge:3,type:impassable;icon=image:port,sticky:1',
             ['G28'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable',
             # England — coastal/estuary
             ['L31'] => 'border=edge:0,type:impassable',
             # Channel Islands
             ['M30'] => 'border=edge:3,type:impassable;border=edge:5,type:impassable;' \
-                       'upgrade=cost:45,terrain:water',
+                       'upgrade=cost:45,terrain:river',
             # Franco-Belgian border
             ['N31'] => 'city=revenue:0;label=Y;border=edge:2,type:impassable;path=a:1,b:_0',
             # Pyrenees
-            ['V19'] => 'border=edge:4,type:impassable;upgrade=cost:30,terrain:mountain',
+            ['V19'] => 'border=edge:4,type:impassable;upgrade=cost:30,terrain:hill',
             ['V21'] => 'town=revenue:0;border=edge:1,type:impassable;border=edge:0,type:province',
             ['W22'] => 'upgrade=cost:120,terrain:mountain',
             ['W24'] => 'upgrade=cost:60,terrain:mountain;border=edge:0,type:province',
             ['X27'] => 'upgrade=cost:60,terrain:mountain;border=edge:0,type:province',
-            ['Y28'] => 'upgrade=cost:45,terrain:mountain',
+            ['Y28'] => 'upgrade=cost:45,terrain:hill',
             # Kattegat / Danish straits
-            ['K40'] => 'border=edge:4,type:impassable;upgrade=cost:60,terrain:water',
+            ['K40'] => 'border=edge:4,type:impassable;upgrade=cost:60,terrain:lake',
             ['K42'] => 'border=edge:1,type:impassable;upgrade=cost:30,terrain:water',
             # Adriatic — northern entry
             ['AC56'] => 'border=edge:4,type:impassable',
@@ -394,10 +394,10 @@ module Engine
             # Skagerrak / Norwegian coast
             ['I46'] => 'town=revenue:0;border=edge:5,type:impassable;border=edge:0,type:province',
             ['J47'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable;' \
-                       'border=edge:4,type:impassable;border=edge:5,type:impassable;upgrade=cost:60,terrain:water',
+                       'border=edge:4,type:impassable;border=edge:5,type:impassable;upgrade=cost:60,terrain:lake',
             ['J49'] => 'border=edge:0,type:impassable;border=edge:1,type:impassable;' \
                        'border=edge:2,type:province;border=edge:3,type:province;' \
-                       'border=edge:5,type:impassable;upgrade=cost:60,terrain:water',
+                       'border=edge:5,type:impassable;upgrade=cost:60,terrain:lake',
             ['K48'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable',
             ['K50'] => 'border=edge:2,type:impassable',
             # North Sea — Danish coast
@@ -405,7 +405,7 @@ module Engine
             ['D49'] => 'border=edge:1,type:impassable',
             ['D51'] => 'town=revenue:0;border=edge:5,type:impassable;upgrade=cost:30,terrain:water',
             ['D53'] => 'town=revenue:0;border=edge:0,type:impassable;upgrade=cost:30,terrain:water',
-            ['E52'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable;upgrade=cost:45,terrain:water',
+            ['E52'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable;upgrade=cost:45,terrain:river',
             # Baltic — Gulf of Bothnia entry
             ['C66'] => 'border=edge:5,type:impassable',
             ['D67'] => 'border=edge:2,type:impassable',
@@ -413,7 +413,7 @@ module Engine
             ['B71'] => 'border=edge:5,type:impassable',
             ['B73'] => 'town=revenue:0;border=edge:0,type:impassable;upgrade=cost:30,terrain:water',
             ['B75'] => 'border=edge:4,type:impassable',
-            ['B77'] => 'border=edge:1,type:impassable;upgrade=cost:45,terrain:water',
+            ['B77'] => 'border=edge:1,type:impassable;upgrade=cost:45,terrain:river',
             ['C72'] => 'border=edge:2,type:impassable;border=edge:3,type:impassable;upgrade=cost:30,terrain:water',
 
             # Towns — no terrain
@@ -431,20 +431,20 @@ module Engine
               AB39 C64 G46 H55 K60 P19 V47 X35 X37
             ] => 'town=revenue:0;icon=image:port,sticky:1',
             # Towns — mountain terrain
-            %w[G24 I16 U12 V15 AD13] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['I26'] => 'town=revenue:0;upgrade=cost:30,terrain:mountain;icon=image:port,sticky:1',
-            %w[E26 E28] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['J23'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain;icon=image:port,sticky:1',
+            %w[G24 I16 U12 V15 AD13] => 'town=revenue:0;upgrade=cost:30,terrain:hill',
+            ['I26'] => 'town=revenue:0;upgrade=cost:30,terrain:hill;icon=image:port,sticky:1',
+            %w[E26 E28] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['J23'] => 'town=revenue:0;upgrade=cost:45,terrain:hill;icon=image:port,sticky:1',
             ['X25'] => 'town=revenue:0;upgrade=cost:60,terrain:mountain',
             # Towns — water terrain
-            ['L23'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
-            ['AD7'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
+            ['L23'] => 'town=revenue:0;upgrade=cost:45,terrain:river',
+            ['AD7'] => 'town=revenue:0;upgrade=cost:45,terrain:river;icon=image:port,sticky:1',
             # Double towns
             %w[J29 M26 W32
                N41 Q46 U64 W46 AF53
                J77 P77] => 'town=revenue:0;town=revenue:0',
             %w[AC6 C58 U6] => 'town=revenue:0;town=revenue:0;icon=image:port,sticky:1',
-            ['T37'] => 'town=revenue:0;town=revenue:0;upgrade=cost:45,terrain:mountain',
+            ['T37'] => 'town=revenue:0;town=revenue:0;upgrade=cost:45,terrain:hill',
             # Cities — no label, no terrain
             %w[
               J15 Q26 Q38 V27 F49 L53 N49
@@ -468,11 +468,11 @@ module Engine
             ['K26'] => 'city=revenue:0;label=A',
             ['Q30'] => 'city=revenue:0;label=P',
             # Cities — terrain
-            ['Y14'] => 'city=revenue:0;label=A;upgrade=cost:45,terrain:mountain',
-            ['U32'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['AD9'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
+            ['Y14'] => 'city=revenue:0;label=A;upgrade=cost:45,terrain:hill',
+            ['U32'] => 'city=revenue:0;upgrade=cost:30,terrain:hill',
+            ['AD9'] => 'city=revenue:0;upgrade=cost:30,terrain:hill',
             ['D57'] => 'city=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
-            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:water;' \
+            ['AA82'] => 'city=revenue:20;city=revenue:20;upgrade=cost:45,terrain:river;' \
                         'label=C;path=a:2,b:_0;icon=image:port,sticky:1',
             ['U24'] => 'city=revenue:10;icon=image:port,sticky:1',
             ['I20'] => 'city=revenue:10;path=a:4,b:_0;icon=image:port,sticky:1',
@@ -496,9 +496,9 @@ module Engine
             ['O80'] => 'city=revenue:0;label=Y',
             # Cities — water terrain
             ['AE68'] => 'town=revenue:0;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
-            ['D41'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
+            ['D41'] => 'town=revenue:0;upgrade=cost:45,terrain:river;icon=image:port,sticky:1',
             ['D81'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
-            ['I52'] => 'city=revenue:0;upgrade=cost:45,terrain:water',
+            ['I52'] => 'city=revenue:0;upgrade=cost:45,terrain:river',
             ['J63'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water;icon=image:port,sticky:1',
             ['L39'] => 'town=revenue:0;town=revenue:0;upgrade=cost:30,terrain:water',
             ['M36'] => 'city=revenue:0;upgrade=cost:30,terrain:water;border=edge:0,type:province',
@@ -507,29 +507,29 @@ module Engine
             ['O40'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water',
             ['P85'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
             ['Q40'] => 'city=revenue:0;upgrade=cost:30,terrain:water',
-            ['S84'] => 'town=revenue:0;upgrade=cost:45,terrain:water;icon=image:port,sticky:1',
+            ['S84'] => 'town=revenue:0;upgrade=cost:45,terrain:river;icon=image:port,sticky:1',
             ['S86'] => 'town=revenue:0;upgrade=cost:30,terrain:water',
-            ['U78'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
-            ['U80'] => 'town=revenue:0;upgrade=cost:45,terrain:water',
+            ['U78'] => 'town=revenue:0;upgrade=cost:45,terrain:river',
+            ['U80'] => 'town=revenue:0;upgrade=cost:45,terrain:river',
             ['W74'] => 'city=revenue:0;label=Y;upgrade=cost:30,terrain:water',
             # Cities — mountain terrain
-            ['AB83'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['AC64'] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
+            ['AB83'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['AC64'] => 'town=revenue:0;upgrade=cost:30,terrain:hill',
             ['B43'] => 'town=revenue:0;upgrade=cost:60,terrain:mountain',
-            ['O52'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['Q52'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['S42'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
+            ['O52'] => 'city=revenue:0;upgrade=cost:30,terrain:hill',
+            ['Q52'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['S42'] => 'city=revenue:0;upgrade=cost:30,terrain:hill',
             ['S46'] => 'town=revenue:0;upgrade=cost:60,terrain:mountain',
-            ['S50'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain;border=edge:2,type:province',
+            ['S50'] => 'city=revenue:0;upgrade=cost:30,terrain:hill;border=edge:2,type:province',
             ['T39'] => 'town=revenue:0;upgrade=cost:120,terrain:mountain',
-            ['T69'] => 'city=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['U52'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['U72'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['X45'] => 'city=revenue:0;label=Y;upgrade=cost:45,terrain:mountain',
-            ['X59'] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
-            ['Y64'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['Y66'] => 'town=revenue:0;upgrade=cost:45,terrain:mountain',
-            ['Z73'] => 'town=revenue:0;upgrade=cost:30,terrain:mountain',
+            ['T69'] => 'city=revenue:0;upgrade=cost:30,terrain:hill',
+            ['U52'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['U72'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['X45'] => 'city=revenue:0;label=Y;upgrade=cost:45,terrain:hill',
+            ['X59'] => 'town=revenue:0;upgrade=cost:30,terrain:hill',
+            ['Y64'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['Y66'] => 'town=revenue:0;upgrade=cost:45,terrain:hill',
+            ['Z73'] => 'town=revenue:0;upgrade=cost:30,terrain:hill',
 
             # Terrain — water
             ['E78'] => 'upgrade=cost:5,terrain:water',
@@ -542,17 +542,17 @@ module Engine
             %w[
               A72 A74 C42 C76 E50 E54 E72 G44 K44 N81 O82 Q20
               T77 T79 U76 V79 AB71 AE52
-            ] => 'upgrade=cost:45,terrain:water',
+            ] => 'upgrade=cost:45,terrain:river',
             %w[
               B81 C82 T23 AB77 AC76 AD71 AG70
-            ] => 'upgrade=cost:60,terrain:water',
+            ] => 'upgrade=cost:60,terrain:lake',
 
             # Terrain — mountain
             %w[
               B51 B53 H83 I84 I86 J71 K72 O46 P45 Q70 R39 S62
               S70 T33 U10 W54 X65 Z63 Z69 Z75 AA68 AB13 AB53 AC66
               AD65 AF69 AG50
-            ] => 'upgrade=cost:30,terrain:mountain',
+            ] => 'upgrade=cost:30,terrain:hill',
             %w[
               A48 A50 A52 N45 O42 O44 Q60 Q62 Q64 Q68 R51 R61
               R69 S38 S44 S48 T67 T71 T73 U30 U66 U74 V9 V13
@@ -560,7 +560,7 @@ module Engine
               X61 X63 X67 Y6 Y48 Y62 Y68 Z21 Z49 Z61 Z65 Z71
               AA10 AA12 AA18 AA50 AA64 AA72 AB7 AB9 AB19 AB65 AB67 AC14
               AC54 AD55 AD81 AD83 AE80 AF83
-            ] => 'upgrade=cost:45,terrain:mountain',
+            ] => 'upgrade=cost:45,terrain:hill',
             %w[
               A44 A46 C44 D43 O54 R71 S52 S54 S72 T51 U36 U40
               U42 U68 U70 V11 V31 V37 V67 W8 W38 W66 X19 Y8
@@ -571,14 +571,14 @@ module Engine
             ] => 'upgrade=cost:120,terrain:mountain',
           },
           yellow: {
-            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:0,b:_0;' \
+            ['L37'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:river;path=a:0,b:_0;' \
                        'path=a:_0,b:5;icon=image:port,sticky:1',
-            ['I48'] => 'border=edge:0,type:impassable;upgrade=cost:45,terrain:water;path=a:2,b:4;' \
+            ['I48'] => 'border=edge:0,type:impassable;upgrade=cost:45,terrain:river;path=a:2,b:4;' \
                        'border=edge:5,type:province',
-            ['I50'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:water;path=a:1,b:_0;' \
+            ['I50'] => 'city=revenue:30;label=Y;upgrade=cost:45,terrain:river;path=a:1,b:_0;' \
                        'path=a:_0,b:3;border=edge:0,type:province;icon=image:port,sticky:1',
             ['J25'] => 'city=revenue:30;label=Y;path=a:2,b:_0;path=a:_0,b:4',
-            ['J27'] => 'city=revenue:20;upgrade=cost:30,terrain:mountain;path=a:1,b:_0;path=a:_0,b:4',
+            ['J27'] => 'city=revenue:20;upgrade=cost:30,terrain:hill;path=a:1,b:_0;path=a:_0,b:4',
             ['AE72'] => 'city=revenue:20;path=a:1,b:_0;path=a:5,b:_0',
           },
           gray: {
