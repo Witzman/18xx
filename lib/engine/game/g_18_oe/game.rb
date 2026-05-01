@@ -1100,15 +1100,15 @@ module Engine
         #   * revenue = 0 -> move left
         def change_share_price(entity, revenue)
           return if entity.minor? || entity.type == :regional
+
           share_price = entity.share_price.price
-          case
-          when revenue >= share_price
+          if revenue >= share_price
             @stock_market.move_right(entity)
-          when revenue.zero?
+          elsif revenue.zero?
             @stock_market.move_left(entity)
           end
         end
-        
+
         def issuable_shares(entity)
           return [] if !entity.corporation? || entity.type != :major
 
