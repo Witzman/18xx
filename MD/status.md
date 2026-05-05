@@ -3,6 +3,11 @@
 Combined status tracker: implemented items (`[x]`), partially done (`[~]`), and open
 points (`[ ]`). Based on `18oe_testgame` branch (checked 2026-05-01) against rulebook v1.0.
 
+This is the **single source of truth** for what is and is not implemented. The previous
+split tracking files (`openpoints.md`, `done.md`, `working.md`, `18OEstatus.md`) have
+been collapsed into this one. See `MD/openpointsread.md` for the same open items
+annotated with rulebook quotes.
+
 **5 open upstream PRs** — see §19 for the table. These are feature slices submitted to
 tobymao/18xx; `18oe_testgame` is ahead of all of them.
 
@@ -98,7 +103,7 @@ functional.
   `18oe_testgame`.** Private ports remain unimplemented. **[L1]**
 - [~] Lille↔London ferry (N31→N29→M28): open for playtesting — forced upgrade edges on
   both cities mean tiles connect correctly; all other ferry routes blocked pending
-  engine override (see openpoints.md §2.7) **[L2 outstanding]**
+  engine override (see §2 below) **[L2 outstanding]**
 - [ ] City revenues: all named locations have placeholder `revenue:0` — actual starting
   revenues needed from physical map **[HIGH PRIORITY]**
 - [ ] Sea zone borders, ferry distance numbers not encoded **[L1]**
@@ -217,6 +222,10 @@ order, conversions, share issuance, post-conversion sell window) is complete.
   for full details **[L2/L3]**
 - [ ] Voluntary regional removal — player may remove one of their own unfloated regionals
   during Regional/Minor Phase (max 6 total across all players); action type TBD **[L2/L3]**
+
+> **Known bugs in this area:** see `MD/bugs.md` BUG-001 to BUG-004 — four defects in
+> `step/buy_sell_par_shares.rb` covering secondary share buys, the pre-conversion
+> double-buy guard, the post-conversion sell window, and `can_sell?` regional handling.
 
 ### 6d. Dividend Options Per Entity Type
 
@@ -640,8 +649,10 @@ Not implemented.
 
 ## 16. Tests
 
-No automated tests exist for 18OE yet.
+No automated tests exist for 18OE yet. See `MD/commands.md` for the suggested
+smoke-spec to add as a first step.
 
+- [ ] Smoke spec — `Engine::Game::G18OE.new(%w[A B C D])` does not raise (`spec/games/g_18_oe/smoke_spec.rb`)
 - [ ] Basic game flow test (auction → regional/minor phase → major phase)
 - [ ] Train phase transition tests (rusting, limit changes, national formation trigger)
 - [ ] Stock market movement tests (right/left/up/down triggers, edge cases)
@@ -683,7 +694,7 @@ run a national in a test game and confirm linked vs flat-rate split.
 
 `skip!` is a no-op when the national formation queue is empty. `process_pass` uses the
 queue head as `current_entity` rather than `action.entity`. This is correct behaviour
-for a conditional blocker step — do not remove.
+for a conditional blocker step — do not remove. See `MD/decisions.md` ADR-005.
 
 *(WA-3 and WA-4 were removed 2026-04-29 when `convert_to_national` and
 `step/convert_to_national.rb` were fully implemented.)*
@@ -717,8 +728,7 @@ Open PRs against tobymao/18xx from Witzman. `18oe_testgame` is ahead of all of t
 
 ---
 
-_Last updated: 2026-05-01 — Full rewrite based on `18oe_testgame` (HEAD) and updated
-`openpoints.md`. Major changes since 2026-04-25: §11 Nationals fully implemented
-(1.1–1.8, 1.10–1.11 done; 1.9 partial); §12 Minor Mergers A–D all done; §6 stock market
-complete (dividend types, RIGHT movement, post-conversion sell window); §8g train
-obligation fully done; WA-3/WA-4 removed; §20 Outstanding PRs added._
+_Last updated: 2026-05-05 — renamed from `18OEstatus.md` and adopted as single source of
+truth (was previously split across `openpoints.md` / `done.md` / `working.md`). Branch
+reference: `18oe_testgame` HEAD as of 2026-05-01. See `MD/optimization_audit.md` for
+the doc reorganisation that produced this file._
