@@ -1,137 +1,140 @@
-# 18xx Engine Developer Guide  
-*Cheat Sheet for Core Architecture and Game Extensions*
+# 18xx Engine Developer Cheat Sheet
+
+Quick reference for the four-class API of the `18xx` engine: `Game::Base`,
+`Round::Base`, `Step::*`, `Action::*`. For the deep reference (full layer taxonomy,
+event dispatch, OR step sequence, edge cases, invariants), see `MD/ENGINE_MECHANICS.md`.
+
+**Scope of this file.** Code patterns you'll reach for in a typical implementation
+session: which method to override, which extension hook to use, which test pattern
+to copy. **Not in scope:** the Layer 1–4 taxonomy, ability semantics, the FE.
+
+> If a section here disagrees with `ENGINE_MECHANICS.md`, the latter wins.
 
 ---
 
-## **1. Core Architecture Overview**
+## 1. Core Architecture (one paragraph)
 
-The 18xx engine uses an **object-oriented pattern** split into four main layers:
+The engine is split into four classes. `Game::Base` holds shared rules and is
+sub-classed per title (`G18OE`). `Round::Base` runs the steps for a phase
+(stock, operating). `Step::*` are atomic phases (lay track, buy train, place
+token). `Action::*` are the units the FE submits — they flow through the round
+and dispatch to the active step. Almost every 18xx variant is implemented by:
 
-### **Game::Base**
-- **Role:** Common logic for all games, extended by individual titles.
-- **Key Methods:**
-  ```ruby
-  setup                # Initializes bank, players, corporations
-  operating_round(num) # Starts an OR set
-  stock_round          # Initiates a stock round
-  route_trains(entity) # Resolves train runs and revenue
-  buy_train(entity, train, price) # Handles train purchase
-  merge(entities)      # Handles corporation mergers (overridden by games)
-  ```
-- **Usage Example:**
-  ```ruby
-  game = Engine::Game::G18OE.new(players)
-  round = game.operating_round(1)
-  action = Engine::Action::BuyTrain.new(entity, train, price: 300)
-  round.process_action(action)
-  ```
+1. New `CONSTANTS` (Layer 1).
+2. A handful of named method overrides on `Game::Base` (Layer 2).
+3. New `Step` or `Round` classes for novel mechanics (Layer 3).
 
 ---
 
-### **Round::Base**
-- **Responsible for:** Executing ordered game steps per round.
-- **Patterns:**
-  ```ruby
-  steps.each(&:actions)       # Collect allowed actions for entity
-  round.process_action(action) # Delegates to the active Step
-  ```
+## 2. Game::Base
+
+| Method | Role |
+|---|---|
+| `setup` | Initialise bank, players, corporations, custom hashes |
+| `operating_round(num)` | Start an OR set |
+| `stock_round` | Start a SR |
+| `route_trains(entity)` | Resolve train runs and revenue |
+| `buy_train(entity, train, price)` | Apply a train purchase |
+| `merge(entities)` | Corporation merge — usually overridden by titles |
+
+**Usage:**
+
+```ruby
+game = Engine::Game::G18OE.new(players)
+round = game.operating_round(1)
+action = Engine::Action::BuyTrain.new(entity, train, price: 300)
+round.process_action(action)
+```
 
 ---
 
-### **Step::* Modules**
-Defines **atomic phases** of gameplay like buying trains or issuing shares.
+## 3. Round::Base
 
-- **Examples:**
-  - `Step::BuyTrain`
-  - `Step::SellShares`
-  - `Step::Merge`
-  - `Step::Route`
-- **Common API:**
-  ```ruby
-  actions(entity)           # Returns allowed actions
-  process_buy_train(action) # Executes train purchase
-  process_merge(action)     # Executes merger logic
-  ```
+Rounds collect available actions per entity and dispatch incoming actions to the
+active step.
+
+```ruby
+steps.each(&:actions)        # collect allowed actions per entity
+round.process_action(action) # delegates to the active Step
+```
 
 ---
 
-### **Action::* Classes**
-Represent player actions flowing through rounds and steps.
+## 4. Step::*
 
-- **Common Patterns:**
-  ```ruby
-  Engine::Action::BuyTrain.new(entity, train, price)
-  Engine::Action::SellShares.new(entity, shares)
-  
-  action.to_h       # Serialize to hash
-  Action.from_h(h)  # Deserialize
-  ```
+Atomic phases of gameplay. Examples used in 18OE:
+
+- `Step::HomeToken`
+- `Step::Track`
+- `Step::Token`
+- `Step::Dividend`
+- `Step::BuyTrain`
+- `Step::BuySellParShares`
+- `Step::WaterfallAuction` (custom)
+- `Step::Consolidate` (custom, partial)
+- `Step::ConvertToNational` (custom)
+
+Common API every step implements:
+
+```ruby
+actions(entity)             # returns allowed actions for the entity
+process_buy_train(action)   # executes a specific action type
+process_merge(action)       # ditto
+```
 
 ---
 
-## **2. Call Sequence**
+## 5. Action::*
+
+Player actions, serialisable to/from a hash:
+
+```ruby
+Engine::Action::BuyTrain.new(entity, train, price)
+Engine::Action::SellShares.new(entity, shares)
+
+action.to_h          # serialise
+Action.from_h(h)     # deserialise
+```
+
+---
+
+## 6. Call Sequence
 
 ```text
 Game.new(players)
-  -> setup()
-  -> stock_round()
-  -> operating_round()
-       -> each step
-          actions(entity)
-          process_action(action)
+  → setup()
+  → stock_round()
+  → operating_round()
+       → each step:
+           actions(entity)
+           process_action(action)
 ```
 
 ---
 
-## **3. Advanced Mechanics from Other Titles**
+## 7. Patterns to Copy from Other Titles
 
-The following **special rules** exist in variants and serve as extension hooks:
+When implementing a 18OE mechanic, the fastest way is usually to find a similar
+mechanic elsewhere and adapt. Top picks:
 
-✔ **National Companies**  
-- Used in 1844/1854 for creating large “state-owned” systems later in play.
-- Implemented via:
-  - `Step::Merge` logic for token, train, share migration.
-  - Extended `Game#merge` for payout.
-
-✔ **Mergers (1828, 1841)**  
-- Complex stock conversions and asset transfers.
-- Engine Pattern:
-  ```ruby
-  process_merge(action)
-  merge_corporations(old_corp, new_corp)
-  ```
-
-✔ **Combining Trains (1862)**  
-- Mechanics allow two smaller trains → combined larger train.
-- Custom method:
-  ```ruby
-  combine_trains(entity, train_a, train_b)
-  ```
-
-✔ **Ferries & Ports (18MEX, 18Scandinavian)**  
-- Add tile or token bonuses connected to sea or port hexes.
-- Often realized via:
-  - `Step::Assign` for ferry tokens.
-  - `hex.assignments` for bonus handling.
-
-✔ **Sea Zones & Province Crossing (18OE / 18C2C)**  
-- Adds cost/barriers to routes:
-  - Track-laying and route validators check **zone crossing costs**.
-  - Example: `hex.province` or `hex.sea_zone` attributes.
+| You need… | Look at | Why |
+|---|---|---|
+| National companies (state-owned mid-game systems) | `g_1844`, `g_1854` | Same merge-into-national pattern; trigger via `Step::Merge` + extended `Game#merge` |
+| Mergers with stock conversion | `g_1828`, `g_1841` | Closest to 18OE minor→major and consolidation merge logic |
+| Combining trains (level ≤4) | `g_1862` | The combined-distance pattern 18OE needs for OE runs |
+| Ferries / ports | `g_18_mex`, `g_18_scan` | `Step::Assign`, `hex.assignments` for ferry tokens and port bonuses |
+| Sea zones / province crossing | `g_18_c2c`, `g_18_oe` (this game) | Track + route validators check `hex.province` / `hex.sea_zone` |
+| Waterfall auction | `g_1817` family, `g_18_oe` | 18OE's `step/waterfall_auction.rb` is a stable reference |
 
 ---
 
-## **4. Useful Test Patterns**
+## 8. Test Patterns
 
-Specs often demonstrate real usage patterns:
+Specs live in `18xx/spec/`. The most-copied patterns:
 
 ```ruby
 expect(game.round.active_step.actions(entity))
-```
 
-Typical sequence:
-
-```ruby
 round = game.operating_round(1)
 buy_action = Engine::Action::BuyTrain.new(corp, train, price: 200)
 round.process_action(buy_action)
@@ -140,28 +143,23 @@ merge_action = Engine::Action::Merge.new(corp_a, corp_b)
 round.process_action(merge_action)
 ```
 
----
-
-## **5. Developer Extension Hooks**
-
-When adding new features:
-- Add relevant `Step` for new phase/action.
-- Extend `Game::merge`, `Game::route_trains` if needed.
-- Wire allowed actions in `actions(entity)`.
+For a smoke spec you can drop in immediately, see `MD/commands.md`.
 
 ---
 
-## **6. Suggested Directory for This Guide**
-Create the file:
-```
-MD/dev_guide.md
-```
-and include this content. It will help all developers building variants like `18OE`.
+## 9. Extension Hooks (when adding a new mechanic)
 
----
+- Add a new `Step` if the mechanic is a discrete player action with its own
+  `actions(entity)` set.
+- Add or extend a `Round` if the mechanic introduces a new round type
+  (Concession, Consolidation).
+- Override `Game::merge` / `Game::route_trains` / `Game::operating_order` /
+  `Game::next_round!` for behaviour that's title-specific but doesn't need its
+  own step.
+- Wire the new action(s) into `actions(entity)` in the relevant step.
 
-> **Pro Tip:** Start by scanning `lib/engine/game/g_18_*` for similar mechanics.  
-Examples:
-- `g_1862` → train combination.
-- `g_18_mex` → ports & ferry logic.
-- `g_1828` → mergers and special stock handling.
+When in doubt, use the layer taxonomy in `ENGINE_MECHANICS.md` to decide between
+"override an existing method" (Layer 2) and "write a new step or round" (Layer 3).
+18OE has no Layer 4 mechanics — if you find yourself wanting to subclass
+`Game::Base` itself or fork the round dispatcher, you're going in the wrong
+direction.
