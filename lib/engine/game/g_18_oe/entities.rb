@@ -187,6 +187,7 @@ module Engine
             abilities: [
               {
                 type: 'tile_lay',
+                tiles: [],
                 free: true,
                 count: 4,
                 owner_type: 'corporation',
@@ -553,6 +554,7 @@ module Engine
               },
               {
                 type: 'tile_lay',
+                tiles: [],
                 when: 'track',
                 count_per_or: 1,
                 owner_type: 'corporation',
@@ -600,6 +602,7 @@ module Engine
               },
               {
                 type: 'tile_lay',
+                tiles: [],
                 when: 'track',
                 count_per_or: 1,
                 owner_type: 'corporation',
