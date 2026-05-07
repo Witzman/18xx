@@ -35,9 +35,7 @@ module Engine
             points_available = get_tile_lay(action.entity) - @points_used
             points_cost = if tile.color != :yellow && metropolis
                             4
-                          elsif tile.color != :yellow && @game.cheap_upgrade?(action.entity) && tile.cities.empty?
-                            1
-                          elsif tile.color != :yellow
+                          elsif tile.color != :yellow && !(@game.cheap_upgrade?(action.entity) && tile.cities.empty?)
                             2
                           else
                             1

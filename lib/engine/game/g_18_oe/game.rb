@@ -719,7 +719,7 @@ module Engine
         def operating_order
           base = @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) && c.floated? }.sort
           golden_bell = golden_bell_entity
-          return base unless golden_bell && base.include?(golden_bell)
+          return base if !golden_bell || !base.include?(golden_bell)
 
           case @golden_bell_position
           when :first then [golden_bell] + (base - [golden_bell])
