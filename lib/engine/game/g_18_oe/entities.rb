@@ -560,6 +560,20 @@ module Engine
                 owner_type: 'corporation',
                 consume_tile_lay: false,
               },
+              {
+                type: 'tile_discount',
+                terrain: 'water',
+                discount: 0, # actual discount computed via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
+                tiles: [],
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
+              },
             ],
           },
           {
@@ -584,6 +598,20 @@ module Engine
                 type: 'tile_discount',
                 terrain: 'mountain',
                 discount: 0, # augments zone discount to 50% when zone match; 0 prevents base engine applying its own discount
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
+                tiles: [],
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
+              },
+              {
+                type: 'tile_discount',
+                terrain: 'mountain',
+                discount: 0, # actual discount computed via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
                 owner_type: 'corporation',
               },
               {
