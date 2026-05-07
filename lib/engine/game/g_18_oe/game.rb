@@ -16,7 +16,7 @@ module Engine
         include G18OE::Entities
         include G18OE::Map
         attr_accessor :minor_regional_order, :minor_available_regions, :minor_floated_regions, :regional_corps_floated,
-                      :consolidation_triggered, :consolidation_complete
+                      :consolidation_triggered, :consolidation_complete, :golden_bell_position
 
         MARKET = [
           ['', '110', '120C', '135', '150', '165', '180', '200', '225', '250', '280', '310', '350', '390', '440', '490', '550'],
@@ -177,7 +177,7 @@ module Engine
               price: 475,
             }],
             num: 8,
-            events: [{ 'type' => 'consolidation_triggered' }],
+            events: [{ 'type' => 'consolidation_triggered' }, { 'type' => 'd_token_phase_change' }],
           },
           # Level 6 — brown double-sided (6 / 6+6); permanent
           {
@@ -249,6 +249,9 @@ module Engine
         TILE_POINT_BUDGET = { minor: 3, regional: 3, major: 6, national: 9 }.freeze
         MINOR_MAX_TREASURY = 180
         EF_TERRAIN_AUGMENT          = { 'E' => :water, 'F' => :mountain }.freeze
+        EXTRA_TILE_POINTS = { 'G' => 2 }.freeze
+        MAIL_CONTRACT_REVENUE = { '2' => 20, '3' => 40, '4' => 40, '5' => 50, '6' => 50, '7' => 60, '8' => 60 }.freeze
+        CHEAP_UPGRADE_CORPORATIONS = %w[B].freeze
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -667,6 +670,9 @@ module Engine
 
         def setup
           super
+          @golden_bell_position = :normal
+          @krasnaya_strela_train = nil
+          @krasnaya_strela_base_distance = nil
           @minor_regional_order = []
           @minor_available_regions = self.class::MINOR_TRACK_RIGHTS_CHITS.transform_values(&:itself)
           @minor_asterisked_selected = 0
@@ -708,7 +714,19 @@ module Engine
         end
 
         def operating_order
-          @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) && c.floated? }.sort
+          base = @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) && c.floated? }.sort
+          golden_bell = golden_bell_entity
+          return base unless golden_bell && base.include?(golden_bell)
+
+          case @golden_bell_position
+          when :first then [golden_bell] + (base - [golden_bell])
+          when :last  then (base - [golden_bell]) + [golden_bell]
+          else base
+          end
+        end
+
+        def golden_bell_entity
+          corporations.find { |c| c.id == 'C' && c.floated? && !c.closed? }
         end
 
         def hex_within_national_region?(entity, hex)
@@ -816,6 +834,73 @@ module Engine
           @bank.add_cash(remainder)
           @log << "-- Event: #{format_currency(remainder)} remainder cash added to bank;" \
                   ' game ends after one more full OR set (sooner if bank breaks) --'
+        end
+
+        def assign_krasnaya_strela!(train)
+          @krasnaya_strela_train = train
+          @krasnaya_strela_base_distance = train.distance.map(&:dup)
+          train.distance = train.distance.map do |h|
+            boosted = h.dup
+            if boosted['nodes'] == ['town']
+              boosted['pay'] += 1
+            elsif !(boosted['nodes'] & %w[city offboard]).empty?
+              boosted['pay'] += 1
+              boosted['visit'] = boosted['visit'] + 1 unless boosted['visit'] >= 99
+            end
+            boosted
+          end
+          @log << "#{train.name} train receives Krasnaya Strela +1+1 marker"
+        end
+
+        def restore_krasnaya_strela!
+          return unless @krasnaya_strela_train
+
+          @krasnaya_strela_train.distance = @krasnaya_strela_base_distance
+          @krasnaya_strela_train = nil
+          @krasnaya_strela_base_distance = nil
+        end
+
+        def after_end_of_operating_turn(operator)
+          restore_krasnaya_strela! if @krasnaya_strela_train&.owner == operator
+          super
+        end
+
+        def event_d_token_phase_change!
+          d_corp = corporations.find { |c| c.id == 'D' && !c.closed? }
+          return unless d_corp
+
+          bonus = d_corp.all_abilities.find { |a| a.type == :hex_bonus }
+          return unless bonus
+
+          bonus.hexes.clear
+          bonus.amount = 40
+          @log << "-- Event: Green Junction Mercantile +£20 marker removed; +£40 marker now available --"
+        end
+
+        def assign_d_token!(hex)
+          d_corp = corporations.find { |c| c.id == 'D' && !c.closed? }
+          return unless d_corp
+
+          bonus = d_corp.all_abilities.find { |a| a.type == :hex_bonus }
+          return unless bonus
+
+          bonus.hexes.replace([hex.coordinates])
+          @log << "Green Junction Mercantile places +#{format_currency(bonus.amount)} marker on #{hex.name}"
+        end
+
+        def cheap_upgrade?(entity)
+          self.class::CHEAP_UPGRADE_CORPORATIONS.include?(entity.id)
+        end
+
+        def pay_mail_contract!
+          k_corp = corporations.find { |c| c.id == 'K' && !c.closed? }
+          return unless k_corp
+
+          amount = self.class::MAIL_CONTRACT_REVENUE[@phase.name]
+          return unless amount&.positive?
+
+          @bank.spend(amount, k_corp)
+          @log << "#{k_corp.name} receives mail contract of #{format_currency(amount)}"
         end
 
         # UP movement at end of SR: only for majors and nationals that are fully player-held

@@ -36,6 +36,17 @@ module Engine
                   'controlled RR on the map for free (sea-zone crossing costs still apply). '\
                   'If also owning the White Cliffs Ferry, this private may pay for that token\'s placement cost.',
             auction_row: 2,
+            abilities: [
+              {
+                type: 'token',
+                price: 0,
+                teleport_price: 0,
+                owner_type: 'corporation',
+                count: 1,
+                extra_action: true,
+                when: 'token',
+              },
+            ],
           },
           {
             name: 'Barclay, Bevan, Barclay and Tritton',
@@ -68,6 +79,19 @@ module Engine
                   'nor be used to place further tokens. '\
                   'May be exercised at any time during a SR, including while another player is purchasing stock.',
             auction_row: 3,
+            abilities: [
+              {
+                type: 'token',
+                price: 0,
+                teleport_price: 0,
+                owner_type: 'corporation',
+                count: 1,
+                extra_slot: true,
+                extra_action: true,
+                special_only: true,
+                when: 'token',
+              },
+            ],
           },
           {
             name: 'Central Circle Transport Corporation',
@@ -81,6 +105,19 @@ module Engine
                   'Other RRs\' tokens in this city do not block the owning RR and collect no revenue there. '\
                   'May be exercised at any time during a SR, including while another player is purchasing stock.',
             auction_row: 3,
+            abilities: [
+              {
+                type: 'token',
+                price: 0,
+                teleport_price: 0,
+                owner_type: 'corporation',
+                count: 1,
+                extra_slot: true,
+                extra_action: true,
+                special_only: true,
+                when: 'token',
+              },
+            ],
           },
           {
             name: 'White Cliffs Ferry',
@@ -93,6 +130,19 @@ module Engine
                   'If the owner waits, the token may instead be placed during that RR\'s Place Token step (consuming it). '\
                   'The Ferry position functions as an open token slot in Lille until used. See §11.2.2.',
             auction_row: 3,
+            abilities: [
+              {
+                type: 'token',
+                price: 0,
+                owner_type: 'corporation',
+                count: 1,
+                extra_slot: true,
+                extra_action: true,
+                special_only: true,
+                when: 'token',
+                hexes: %w[N31],
+              },
+            ],
           },
           # -----------------------------------------------------------------------
           # Row 4 — £80 + £100 + £120 privates (HMLC, BBE, SML)
@@ -109,6 +159,15 @@ module Engine
                   'To remove the token, another RR must pay the original terrain cost and expend one tile point '\
                   '(two for a metropolis); nationals skip the terrain cost but still expend tile points.',
             auction_row: 4,
+            abilities: [
+              {
+                type: 'assign_hexes',
+                hexes: [],
+                owner_type: 'corporation',
+                when: 'track',
+                count: 1,
+              },
+            ],
           },
           {
             name: 'Brandt and Brandau, Engineers',
@@ -122,6 +181,17 @@ module Engine
                   'Turn the private face-down when the last token is placed; it is removed from the game '\
                   'when no tokens remain on the map.',
             auction_row: 4,
+            abilities: [
+              {
+                type: 'tile_lay',
+                free: true,
+                count: 4,
+                owner_type: 'corporation',
+                when: %w[track special_track],
+                closed_when_used_up: true,
+                consume_tile_lay: true,
+              },
+            ],
           },
           {
             name: 'Swift Metropolitan Line',
@@ -405,6 +475,11 @@ module Engine
                              'position: first, last, or normal order. The choice is announced before '\
                              'any other RR operates that OR.',
               },
+              {
+                type: 'choose_ability',
+                owner_type: 'corporation',
+                when: 'or_start',
+              },
             ],
           },
           {
@@ -426,6 +501,12 @@ module Engine
                              'that city earn a +£20 bonus (Phase 2–4). At Phase 5 start, the +£20 token '\
                              'is removed; the president may place a new token in the same or a different '\
                              'eligible city for a +£40 bonus (Phase 5+). Placed during the lay track step.',
+              },
+              {
+                type: 'hex_bonus',
+                owner_type: 'corporation',
+                hexes: [],
+                amount: 20,
               },
             ],
           },
@@ -461,6 +542,19 @@ module Engine
                 owner_type: 'corporation',
                 consume_tile_lay: false,
               },
+              {
+                type: 'tile_discount',
+                terrain: 'water',
+                discount: 0,
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
+              },
             ],
           },
           {
@@ -490,6 +584,19 @@ module Engine
               {
                 type: 'tile_lay',
                 tiles: [],
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
+              },
+              {
+                type: 'tile_discount',
+                terrain: 'mountain',
+                discount: 0,
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
                 when: 'track',
                 count_per_or: 1,
                 owner_type: 'corporation',
@@ -551,6 +658,13 @@ module Engine
                 description: '10% discount on the purchase price of all trains (including Pullman cars). '\
                              'Minor M still receives the full £15 royalty on Pullman purchases '\
                              'even when this discount applies.',
+              },
+              {
+                type: 'train_discount',
+                discount: 0.1,
+                trains: [],
+                owner_type: 'corporation',
+                when: 'buying_train',
               },
             ],
           },

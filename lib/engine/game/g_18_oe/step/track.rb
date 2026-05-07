@@ -20,7 +20,7 @@ module Engine
           end
 
           def get_tile_lay(entity)
-            @game.tile_point_budget(entity)
+            @game.tile_point_budget(entity) + (@game.class::EXTRA_TILE_POINTS[entity.id] || 0)
           end
 
           def description
@@ -35,7 +35,9 @@ module Engine
             points_available = get_tile_lay(action.entity) - @points_used
             points_cost = if tile.color != :yellow && metropolis
                             4
-                          elsif (tile.color == :yellow && metropolis) || tile.color != :yellow
+                          elsif tile.color != :yellow && @game.cheap_upgrade?(action.entity) && tile.cities.empty?
+                            1
+                          elsif tile.color != :yellow
                             2
                           else
                             1
@@ -66,11 +68,12 @@ module Engine
 
             metropolis = @game.metropolis_hex?(hex)
             color = hex.tile.color
+            min_upgrade_cost = @game.cheap_upgrade?(entity) ? 1 : 2
             return nil if color == :blue
             return nil if color == :white && metropolis && points_available < 2
             return nil if color == :white && points_available < 1
             return nil if color != :white && metropolis && points_available < 4
-            return nil if color != :white && points_available < 2
+            return nil if color != :white && points_available < min_upgrade_cost
 
             connected
           end
