@@ -549,7 +549,7 @@ module Engine
               {
                 type: 'tile_discount',
                 terrain: 'water',
-                discount: 0, # actual discount computed via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
+                discount: 0, # actual discount computed in game.rb#upgrade_cost via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
                 owner_type: 'corporation',
               },
               {
@@ -597,7 +597,7 @@ module Engine
               {
                 type: 'tile_discount',
                 terrain: 'mountain',
-                discount: 0, # actual discount computed via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
+                discount: 0, # actual discount computed in game.rb#upgrade_cost via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
                 owner_type: 'corporation',
               },
               {
