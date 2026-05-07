@@ -39,6 +39,7 @@ module Engine
             abilities: [
               {
                 type: 'token',
+                hexes: [],
                 price: 0,
                 teleport_price: 0,
                 owner_type: 'corporation',
@@ -82,6 +83,7 @@ module Engine
             abilities: [
               {
                 type: 'token',
+                hexes: [],
                 price: 0,
                 teleport_price: 0,
                 owner_type: 'corporation',
@@ -108,6 +110,7 @@ module Engine
             abilities: [
               {
                 type: 'token',
+                hexes: [],
                 price: 0,
                 teleport_price: 0,
                 owner_type: 'corporation',
