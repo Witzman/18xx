@@ -252,6 +252,9 @@ module Engine
         EXTRA_TILE_POINTS = { 'G' => 2 }.freeze
         MAIL_CONTRACT_REVENUE = { '2' => 20, '3' => 40, '4' => 40, '5' => 50, '6' => 50, '7' => 60, '8' => 60 }.freeze
         CHEAP_UPGRADE_CORPORATIONS = %w[B].freeze
+        GOLDEN_BELL_CORP_ID   = 'C'
+        D_TOKEN_CORP_ID       = 'D'
+        MAIL_CONTRACT_CORP_ID = 'K'
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -726,7 +729,7 @@ module Engine
         end
 
         def golden_bell_entity
-          corporations.find { |c| c.id == 'C' && c.floated? && !c.closed? }
+          corporations.find { |c| c.id == self.class::GOLDEN_BELL_CORP_ID && c.floated? && !c.closed? }
         end
 
         def hex_within_national_region?(entity, hex)
@@ -845,7 +848,7 @@ module Engine
               boosted['pay'] += 1
             elsif !(boosted['nodes'] & %w[city offboard]).empty?
               boosted['pay'] += 1
-              boosted['visit'] = boosted['visit'] + 1 unless boosted['visit'] >= 99
+              boosted['visit'] += 1 if boosted['visit'] < 99
             end
             boosted
           end
@@ -866,11 +869,7 @@ module Engine
         end
 
         def event_d_token_phase_change!
-          d_corp = corporations.find { |c| c.id == 'D' && !c.closed? }
-          return unless d_corp
-
-          bonus = d_corp.all_abilities.find { |a| a.type == :hex_bonus }
-          return unless bonus
+          return unless (bonus = d_corp_hex_bonus)
 
           bonus.hexes.clear
           bonus.amount = 40
@@ -878,11 +877,7 @@ module Engine
         end
 
         def assign_d_token!(hex)
-          d_corp = corporations.find { |c| c.id == 'D' && !c.closed? }
-          return unless d_corp
-
-          bonus = d_corp.all_abilities.find { |a| a.type == :hex_bonus }
-          return unless bonus
+          return unless (bonus = d_corp_hex_bonus)
 
           bonus.hexes.replace([hex.coordinates])
           @log << "Green Junction Mercantile places +#{format_currency(bonus.amount)} marker on #{hex.name}"
@@ -893,7 +888,7 @@ module Engine
         end
 
         def pay_mail_contract!
-          k_corp = corporations.find { |c| c.id == 'K' && !c.closed? }
+          k_corp = corporations.find { |c| c.id == self.class::MAIL_CONTRACT_CORP_ID && !c.closed? }
           return unless k_corp
 
           amount = self.class::MAIL_CONTRACT_REVENUE[@phase.name]
@@ -1047,6 +1042,13 @@ module Engine
         end
 
         private
+
+        def d_corp_hex_bonus
+          d_corp = corporations.find { |c| c.id == self.class::D_TOKEN_CORP_ID && !c.closed? }
+          return unless d_corp
+
+          d_corp.all_abilities.find { |a| a.type == :hex_bonus }
+        end
 
         def entity_track_rights_zone(entity)
           corp = owning_corporation(entity)

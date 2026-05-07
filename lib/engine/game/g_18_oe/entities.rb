@@ -162,7 +162,7 @@ module Engine
             abilities: [
               {
                 type: 'assign_hexes',
-                hexes: [],
+                hexes: [], # populated at runtime when the player places the token
                 owner_type: 'corporation',
                 when: 'track',
                 count: 1,
@@ -505,7 +505,7 @@ module Engine
               {
                 type: 'hex_bonus',
                 owner_type: 'corporation',
-                hexes: [],
+                hexes: [], # populated by assign_d_token! when player places the marker
                 amount: 20,
               },
             ],
@@ -545,7 +545,7 @@ module Engine
               {
                 type: 'tile_discount',
                 terrain: 'water',
-                discount: 0,
+                discount: 0, # actual discount computed in game.rb#upgrade_cost via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
                 owner_type: 'corporation',
               },
               {
@@ -592,7 +592,7 @@ module Engine
               {
                 type: 'tile_discount',
                 terrain: 'mountain',
-                discount: 0,
+                discount: 0, # actual discount computed in game.rb#upgrade_cost via TERRAIN_DISCOUNT_RATE; 0 prevents engine double-applying
                 owner_type: 'corporation',
               },
               {
@@ -662,7 +662,7 @@ module Engine
               {
                 type: 'train_discount',
                 discount: 0.1,
-                trains: [],
+                trains: [], # TODO: fill with all train names once final train roster is confirmed
                 owner_type: 'corporation',
                 when: 'buying_train',
               },
