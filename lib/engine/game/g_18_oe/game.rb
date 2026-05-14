@@ -762,6 +762,12 @@ module Engine
           phase.status.include?('train_obligation')
         end
 
+        def level8_train_available?
+          level7_remaining = depot.upcoming.count { |t| t.name == '7+7' }
+          level7_total = depot.trains.count { |t| %w[7+7 4D].include?(t.name) }
+          level7_total - level7_remaining >= 4
+        end
+
         def assign_krasnaya_strela!(train)
           @krasnaya_strela_train = train
           @krasnaya_strela_base_distance = train.distance.map(&:dup)
@@ -801,8 +807,7 @@ module Engine
           @level8_train_purchased = true
           remainder = self.class::REMAINDER_CASH
           @bank.instance_variable_set(:@cash, @bank.cash + remainder)
-          @log << "-- Event: First level 8 train purchased --"
-          @log << "#{format_currency(remainder)} remainder cash added to bank (§13)"
+          @log << "-- Event: First level 8 train purchased; #{format_currency(remainder)} remainder cash added to bank (§13) --"
         end
 
         def event_d_token_phase_change!
