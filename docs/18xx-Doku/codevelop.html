@@ -215,6 +215,11 @@ L1 — constants · L2 — Game::Base override · L3 — new Step/Round file
 
 - [ ] **OE bonus** — revenue_for override **[L2]**</code></pre>
 <p>Layer annotations (<code>[L1]</code>, <code>[L2]</code>, <code>[L3]</code>) tell Claude how much new code is needed before any session starts. Commit <code>todo.md</code> to the Documentation branch.</p>
+<p>Seed <code>done.md</code> with any mechanics you've already implemented, one <code>[x]</code> item per mechanic, grouped under section headers that match your backlog:</p>
+<pre><code class="language-markdown">## Trains &amp; Phases
+- [x] TRAINS constant — 5 train roster **[alpha]** **[L1]**
+- [x] PHASES constant — 5 phases **[alpha]** **[L1]**</code></pre>
+<p>The generator reads this file to populate the Done column and coverage grid — no separate data entry needed.</p>
 <h3 id="step-6--open-claude-code-and-start-your-first-session">Step 6 — Open Claude Code and start your first session</h3>
 <p>Install Claude Code if you haven't already:</p>
 <pre><code class="language-bash">npm install -g @anthropic-ai/claude-code</code></pre>
@@ -223,15 +228,23 @@ L1 — constants · L2 — Game::Base override · L3 — new Step/Round file
 claude</code></pre>
 <p>Claude reads <code>CLAUDE.md</code> automatically and orients on your project. Tell it which item from <code>MD/todo.md</code> to start with. The session workflow (<a href="#how-a-session-works">How a Session Works</a>) takes it from there.</p>
 <h3 id="using-the-html-generator">Using the HTML generator</h3>
-<p>The HTML generator at <code>~/18xx-docs/htmldoku/generate-html.py</code> converts your <code>.md</code> source files to rendered HTML pages. Run it after every documentation edit:</p>
+<p>The HTML generator at <code>~/18xx-docs/htmldoku/generate-html.py</code> converts your source files to rendered HTML pages. Run it after any edit to <code>htmldoku/*.md</code> <strong>or</strong> to <code>MD/done.md</code>, <code>MD/inwork.md</code>, <code>MD/todo.md</code>:</p>
 <pre><code class="language-bash">cd ~/18xx-docs
-# 1. Edit htmldoku/somepage.md
-python3 htmldoku/generate-html.py          # regenerates docs/18xx-Doku/*.html
+# After editing a doc page:
+python3 htmldoku/generate-html.py
 git add htmldoku/somepage.md docs/18xx-Doku/somepage.html
 git commit -m "docs: update somepage"
+
+# After moving an item to done.md (or adding [&gt;] items to inwork.md):
+python3 htmldoku/generate-html.py
+git add MD/done.md MD/inwork.md docs/18xx-Doku/
+git commit -m "docs: update coverage after PR merge"
+
 git push</code></pre>
-<p>The generator:</p>
-<ul><li>Converts all <code>htmldoku/<em>.md</code> files to <code>docs/18xx-Doku/</em>.html</code></li><li>Rebuilds the sidebar navigation from the <code>SIDEBAR</code> list at the top of the script</li><li>Rebuilds <code>search-index.json</code> for the in-page search</li></ul>
+<p>The generator reads two kinds of inputs:</p>
+<ul><li><code>htmldoku/*.md</code> — documentation source pages → individual HTML pages</li><li><code>MD/done.md</code> + <code>MD/inwork.md</code> + <code>MD/todo.md</code> — kanban status → <code>status.html</code>, <code>rulebook-coverage.html</code>, <code>alpha-gaps.html</code>, <code>18oe-map-status.html</code></li></ul>
+<p>It also:</p>
+<ul><li>Rebuilds the sidebar navigation from the <code>SIDEBAR</code> list at the top of the script</li><li>Rebuilds <code>search-index.json</code> for the in-page search</li></ul>
 <p>To add a new documentation page:</p>
 <ol><li>Create <code>htmldoku/mypage.md</code></li><li>Add an entry to <code>SIDEBAR</code> in <code>generate-html.py</code></li><li>Run the generator</li><li>Commit source <code>.md</code> <strong>and</strong> rendered <code>.html</code> together</li></ol>
 <hr>
@@ -266,15 +279,19 @@ git push</code></pre>
 <hr>
 <h2 id="the-context-files">The Context Files</h2>
 <p>Context is loaded in three tiers to keep token cost per session low.</p>
-<table><thead><tr><th>Tier</th><th>File</th><th>When loaded</th><th>What it contains</th></tr></thead><tbody><tr><td>Always</td><td><code>MD/CLAUDE.md</code></td><td>Session start (auto)</td><td>Project identity, file locations, layer taxonomy, doc lookup table, coding rules</td></tr><tr><td>Always</td><td><code>MD/inwork.md</code></td><td>Session start</td><td>Items currently in flight — <code>[~]</code> in dev · <code>[t]</code> testing in progress · <code>[&gt;]</code> needs PR</td></tr><tr><td>On demand</td><td><code>MD/sparring.md</code></td><td>Before first code task</td><td>Full sparring protocol and pre-code checklist</td></tr><tr><td>On demand</td><td><code>MD/todo.md</code></td><td>Planning sessions only</td><td>Full backlog — all <code>[ ]</code> items with layer annotations</td></tr><tr><td>On demand</td><td><code>MD/bugs.md</code>, <code>MD/decisions.md</code>, etc.</td><td>When relevant</td><td>Bugs, architecture decisions, rules summary</td></tr><tr><td>Never</td><td><code>MD/done.md</code></td><td>—</td><td>Completed items for record-keeping only</td></tr></tbody></table>
+<table><thead><tr><th>Tier</th><th>File</th><th>When loaded</th><th>What it contains</th></tr></thead><tbody><tr><td>Always</td><td><code>MD/CLAUDE.md</code></td><td>Session start (auto)</td><td>Project identity, file locations, layer taxonomy, doc lookup table, coding rules</td></tr><tr><td>Always</td><td><code>MD/inwork.md</code></td><td>Session start</td><td>Items currently in flight — <code>[~]</code> in dev · <code>[t]</code> testing in progress · <code>[&gt;]</code> needs PR · also drives coverage pages</td></tr><tr><td>On demand</td><td><code>MD/sparring.md</code></td><td>Before first code task</td><td>Full sparring protocol and pre-code checklist</td></tr><tr><td>On demand</td><td><code>MD/todo.md</code></td><td>Planning sessions only</td><td>Full backlog — all <code>[ ]</code> and <code>[/]</code> items with layer annotations · also drives coverage pages</td></tr><tr><td>On demand</td><td><code>MD/bugs.md</code>, <code>MD/decisions.md</code>, etc.</td><td>When relevant</td><td>Bugs, architecture decisions, rules summary</td></tr><tr><td>Generator only</td><td><code>MD/done.md</code></td><td>Never at session start</td><td>Completed <code>[x]</code> items with scope and layer tags — drives the Done column and coverage pages</td></tr></tbody></table>
 <p><strong><code>CLAUDE.md</code> is the file that makes sessions coherent.</strong> It tells Claude what the project is, where every file lives, which layer a new task belongs to, and where to look for documentation — before the first prompt is typed. It is the symlink target for <code>~/18xx/CLAUDE.md</code>, so Claude Code loads it automatically on every session.</p>
 <p><strong><code>inwork.md</code> is the sprint board.</strong> It contains only what is currently in flight. Each item carries a branch tag (backtick-wrapped name at the end of the line) so Claude always knows which branch to check out without asking:</p>
 <pre><code>- [~] **UP movement** — end-of-SR **[L2]** `18oe_testgame`
 - [t] **Minor C** — OR-start prompt wired **[L3]** `18oe_abilities`
 - [&gt;] **Nationals formation** — all tests passed **[L2]** `18oe_testgame`</code></pre>
 <p>Use <code>?</code> when a branch hasn't been recorded yet. The item lifecycle follows a fixed pipeline:</p>
-<pre><code>[ ] todo.md  →  [~] developing  →  [t] testing  →  [&gt;] needs PR  →  done.md</code></pre>
-<p>When you finish a task and merge the PR, move it to <code>done.md</code>. When you want to start something new, load <code>todo.md</code> and pick from the backlog.</p>
+<pre><code>[ ] todo.md  →  [~] developing  →  [t] testing  →  [&gt;] needs PR  →  [x] done.md</code></pre>
+<p>When you finish a task and merge the PR, move the item to <code>done.md</code> as a <code>[x]</code> checkbox with explicit scope and layer tags:</p>
+<pre><code class="language-markdown">## Stock Market Grid
+- [x] LEFT (zero dividend) **[alpha]** **[L2]**
+- [x] RIGHT (at/above par) **[alpha]** **[L2]**</code></pre>
+<p><strong><code>done.md</code> drives the coverage pages.</strong> <code>generate-html.py</code> reads all three files (<code>done.md</code>, <code>inwork.md</code>, <code>todo.md</code>) to build <code>rulebook-coverage.html</code>, <code>alpha-gaps.html</code>, <code>status.html</code>, and <code>18oe-map-status.html</code>. Running the generator after a move is the only step needed to update all status bars and progress grids.</p>
 <hr>
 <h2 id="the-documentation-first-habit">The Documentation-First Habit</h2>
 <p>Before writing any code, Claude reads the relevant <code>.md</code> source file from this documentation directly. The lookup table in <code>CLAUDE.md</code> maps every topic to the right file:</p>
@@ -317,7 +334,7 @@ IRB setup:    &lt;Ruby snippet — omitted for Browser-only scenarios&gt;</code>
 <p>When all browser scenarios pass the item is updated to <code>[&amp;gt;]</code>. If there are no Browser/Both scenarios, 6b is skipped entirely. No item moves to done until every scenario has a passing commit.</p>
 <p>A session interrupted after 6a leaves the item as <code>[t]</code> in <code>inwork.md</code> — at the next session start Claude sees <code>[t]</code>, re-runs 6a to confirm still green, then resumes browser testing.</p>
 <p><strong>7. Wrap up</strong> — all test commits in place:</p>
-<ul><li>Move item from <code>MD/inwork.md</code> to <code>MD/done.md</code></li><li>Update internal tracking: <code>MD/bugs.md</code> · <code>MD/decisions.md</code> as needed</li><li>Ask: <em>"Does the documentation need updating?"</em> → edit <code>htmldoku/*.md</code>, run <code>generate-html.py</code>, commit both source and rendered HTML</li><li>Commit all <code>~/18xx-docs/</code> changes separately from code commits</li></ul>
+<ul><li>Move item from <code>MD/inwork.md</code> to <code>MD/done.md</code> as a <code>[x]</code> checkbox with <code><strong>[scope]</strong></code> and <code><strong>[layer]</strong></code> tags, under the matching section header</li><li>Update internal tracking: <code>MD/bugs.md</code> · <code>MD/decisions.md</code> as needed</li><li>Ask: <em>"Does the documentation need updating?"</em> → edit <code>htmldoku/*.md</code>, run <code>generate-html.py</code>, commit both source and rendered HTML</li><li>Run <code>generate-html.py</code> even if no <code>htmldoku/</code> page changed — the move to <code>done.md</code> updates the coverage grid, status tracker, and alpha-gaps page automatically</li><li>Commit all <code>~/18xx-docs/</code> changes (MD/ + generated HTML) separately from code commits</li></ul>
 <hr>
 <h2 id="the-sparring-partner-protocol">The Sparring Partner Protocol</h2>
 <p>The full protocol lives in <code>MD/sparring.md</code> and is read at the start of any session that involves writing code. Key rules:</p>
@@ -326,7 +343,7 @@ IRB setup:    &lt;Ruby snippet — omitted for Browser-only scenarios&gt;</code>
 <hr>
 <h2 id="keeping-context-sharp">Keeping Context Sharp</h2>
 <p>The biggest risk in a long-running project is context drift — Claude accumulating stale assumptions. The secondary risk is token bloat — always-loaded files growing as the project matures.</p>
-<table><thead><tr><th>Risk</th><th>Mitigation</th></tr></thead><tbody><tr><td>Stale in-flight state</td><td><code>MD/inwork.md</code> is the only always-loaded state file; it contains only active items</td></tr><tr><td>Wrong branch checked out</td><td>Branch tag on every item in <code>inwork.md</code> — Claude reads it before touching git</td></tr><tr><td>Resuming half-tested work</td><td><code>[t]</code> status flags items where IRB passed but browser testing is incomplete</td></tr><tr><td>Backlog noise at session start</td><td><code>MD/todo.md</code> is never auto-loaded; consulted only during planning</td></tr><tr><td>Re-litigating architecture decisions</td><td><code>MD/decisions.md</code> records every non-obvious choice with the alternative rejected</td></tr><tr><td>Forgetting a rule fix</td><td><code>MD/bugs.md</code> logs every bug with the rule citation and fix</td></tr><tr><td>Claude re-deriving engine patterns</td><td><code>htmldoku/</code> pages are read before coding, not discovered mid-session</td></tr><tr><td>Drifting from upstream</td><td>Branch recommendation in step 2 checks upstream divergence + outstanding PRs</td></tr><tr><td>Documentation drifting from code</td><td>After-commit prompt: "does any MD/ or htmldoku/ page need updating?"</td></tr><tr><td>Token cost growing over time</td><td>Always-loaded files kept short; sparring protocol and backlog are on-demand</td></tr></tbody></table>
+<table><thead><tr><th>Risk</th><th>Mitigation</th></tr></thead><tbody><tr><td>Stale in-flight state</td><td><code>MD/inwork.md</code> is the only always-loaded state file; it contains only active items</td></tr><tr><td>Wrong branch checked out</td><td>Branch tag on every item in <code>inwork.md</code> — Claude reads it before touching git</td></tr><tr><td>Resuming half-tested work</td><td><code>[t]</code> status flags items where IRB passed but browser testing is incomplete</td></tr><tr><td>Backlog noise at session start</td><td><code>MD/todo.md</code> is never auto-loaded; consulted only during planning</td></tr><tr><td>Re-litigating architecture decisions</td><td><code>MD/decisions.md</code> records every non-obvious choice with the alternative rejected</td></tr><tr><td>Forgetting a rule fix</td><td><code>MD/bugs.md</code> logs every bug with the rule citation and fix</td></tr><tr><td>Claude re-deriving engine patterns</td><td><code>htmldoku/</code> pages are read before coding, not discovered mid-session</td></tr><tr><td>Drifting from upstream</td><td>Branch recommendation in step 2 checks upstream divergence + outstanding PRs</td></tr><tr><td>Coverage pages out of sync</td><td>Re-run <code>generate-html.py</code> after every item move — it reads <code>MD/done.md</code> + <code>inwork.md</code> + <code>todo.md</code> live</td></tr><tr><td>Documentation drifting from code</td><td>After-commit prompt: "does any MD/ or htmldoku/ page need updating?"</td></tr><tr><td>Token cost growing over time</td><td>Always-loaded files kept short; sparring protocol and backlog are on-demand</td></tr></tbody></table>
 <hr>
 <h2 id="reference">Reference</h2>
 <ul><li>Session context: <code>MD/CLAUDE.md</code></li><li>In-flight work: <code>MD/inwork.md</code></li><li>Backlog: <code>MD/todo.md</code></li><li>Sparring protocol: <code>MD/sparring.md</code></li><li>Completed features: <code>MD/done.md</code></li><li>Engine layer taxonomy: <a href="engine-concepts.html">Understanding the Engine</a></li><li>Code patterns from PR review: <a href="coding-guidelines.html">Coding Guidelines</a></li><li>Title readiness stages: <a href="title-checklist.html">Title Checklist</a></li></ul>

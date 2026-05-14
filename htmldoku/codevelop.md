@@ -198,6 +198,16 @@ Extend it as you learn more about your game's rules.
 
 Layer annotations (`[L1]`, `[L2]`, `[L3]`) tell Claude how much new code is needed before any session starts. Commit `todo.md` to the Documentation branch.
 
+Seed `done.md` with any mechanics you've already implemented, one `[x]` item per mechanic, grouped under section headers that match your backlog:
+
+```markdown
+## Trains & Phases
+- [x] TRAINS constant — 5 train roster **[alpha]** **[L1]**
+- [x] PHASES constant — 5 phases **[alpha]** **[L1]**
+```
+
+The generator reads this file to populate the Done column and coverage grid — no separate data entry needed.
+
 ### Step 6 — Open Claude Code and start your first session
 
 Install Claude Code if you haven't already:
@@ -217,19 +227,28 @@ Claude reads `CLAUDE.md` automatically and orients on your project. Tell it whic
 
 ### Using the HTML generator
 
-The HTML generator at `~/18xx-docs/htmldoku/generate-html.py` converts your `.md` source files to rendered HTML pages. Run it after every documentation edit:
+The HTML generator at `~/18xx-docs/htmldoku/generate-html.py` converts your source files to rendered HTML pages. Run it after any edit to `htmldoku/*.md` **or** to `MD/done.md`, `MD/inwork.md`, `MD/todo.md`:
 
 ```bash
 cd ~/18xx-docs
-# 1. Edit htmldoku/somepage.md
-python3 htmldoku/generate-html.py          # regenerates docs/18xx-Doku/*.html
+# After editing a doc page:
+python3 htmldoku/generate-html.py
 git add htmldoku/somepage.md docs/18xx-Doku/somepage.html
 git commit -m "docs: update somepage"
+
+# After moving an item to done.md (or adding [>] items to inwork.md):
+python3 htmldoku/generate-html.py
+git add MD/done.md MD/inwork.md docs/18xx-Doku/
+git commit -m "docs: update coverage after PR merge"
+
 git push
 ```
 
-The generator:
-- Converts all `htmldoku/*.md` files to `docs/18xx-Doku/*.html`
+The generator reads two kinds of inputs:
+- `htmldoku/*.md` — documentation source pages → individual HTML pages
+- `MD/done.md` + `MD/inwork.md` + `MD/todo.md` — kanban status → `status.html`, `rulebook-coverage.html`, `alpha-gaps.html`, `18oe-map-status.html`
+
+It also:
 - Rebuilds the sidebar navigation from the `SIDEBAR` list at the top of the script
 - Rebuilds `search-index.json` for the in-page search
 
@@ -291,11 +310,11 @@ Context is loaded in three tiers to keep token cost per session low.
 | Tier | File | When loaded | What it contains |
 |------|------|-------------|-----------------|
 | Always | `MD/CLAUDE.md` | Session start (auto) | Project identity, file locations, layer taxonomy, doc lookup table, coding rules |
-| Always | `MD/inwork.md` | Session start | Items currently in flight — `[~]` in dev · `[t]` testing in progress · `[>]` needs PR |
+| Always | `MD/inwork.md` | Session start | Items currently in flight — `[~]` in dev · `[t]` testing in progress · `[>]` needs PR · also drives coverage pages |
 | On demand | `MD/sparring.md` | Before first code task | Full sparring protocol and pre-code checklist |
-| On demand | `MD/todo.md` | Planning sessions only | Full backlog — all `[ ]` items with layer annotations |
+| On demand | `MD/todo.md` | Planning sessions only | Full backlog — all `[ ]` and `[/]` items with layer annotations · also drives coverage pages |
 | On demand | `MD/bugs.md`, `MD/decisions.md`, etc. | When relevant | Bugs, architecture decisions, rules summary |
-| Never | `MD/done.md` | — | Completed items for record-keeping only |
+| Generator only | `MD/done.md` | Never at session start | Completed `[x]` items with scope and layer tags — drives the Done column and coverage pages |
 
 **`CLAUDE.md` is the file that makes sessions coherent.** It tells Claude what the project is, where every file lives, which layer a new task belongs to, and where to look for documentation — before the first prompt is typed. It is the symlink target for `~/18xx/CLAUDE.md`, so Claude Code loads it automatically on every session.
 
@@ -310,10 +329,18 @@ Context is loaded in three tiers to keep token cost per session low.
 Use `?` when a branch hasn't been recorded yet. The item lifecycle follows a fixed pipeline:
 
 ```
-[ ] todo.md  →  [~] developing  →  [t] testing  →  [>] needs PR  →  done.md
+[ ] todo.md  →  [~] developing  →  [t] testing  →  [>] needs PR  →  [x] done.md
 ```
 
-When you finish a task and merge the PR, move it to `done.md`. When you want to start something new, load `todo.md` and pick from the backlog.
+When you finish a task and merge the PR, move the item to `done.md` as a `[x]` checkbox with explicit scope and layer tags:
+
+```markdown
+## Stock Market Grid
+- [x] LEFT (zero dividend) **[alpha]** **[L2]**
+- [x] RIGHT (at/above par) **[alpha]** **[L2]**
+```
+
+**`done.md` drives the coverage pages.** `generate-html.py` reads all three files (`done.md`, `inwork.md`, `todo.md`) to build `rulebook-coverage.html`, `alpha-gaps.html`, `status.html`, and `18oe-map-status.html`. Running the generator after a move is the only step needed to update all status bars and progress grids.
 
 ---
 
@@ -400,10 +427,11 @@ When all browser scenarios pass the item is updated to `[>]`. If there are no Br
 A session interrupted after 6a leaves the item as `[t]` in `inwork.md` — at the next session start Claude sees `[t]`, re-runs 6a to confirm still green, then resumes browser testing.
 
 **7. Wrap up** — all test commits in place:
-- Move item from `MD/inwork.md` to `MD/done.md`
+- Move item from `MD/inwork.md` to `MD/done.md` as a `[x]` checkbox with `**[scope]**` and `**[layer]**` tags, under the matching section header
 - Update internal tracking: `MD/bugs.md` · `MD/decisions.md` as needed
 - Ask: *"Does the documentation need updating?"* → edit `htmldoku/*.md`, run `generate-html.py`, commit both source and rendered HTML
-- Commit all `~/18xx-docs/` changes separately from code commits
+- Run `generate-html.py` even if no `htmldoku/` page changed — the move to `done.md` updates the coverage grid, status tracker, and alpha-gaps page automatically
+- Commit all `~/18xx-docs/` changes (MD/ + generated HTML) separately from code commits
 
 ---
 
@@ -435,6 +463,7 @@ The biggest risk in a long-running project is context drift — Claude accumulat
 | Forgetting a rule fix | `MD/bugs.md` logs every bug with the rule citation and fix |
 | Claude re-deriving engine patterns | `htmldoku/` pages are read before coding, not discovered mid-session |
 | Drifting from upstream | Branch recommendation in step 2 checks upstream divergence + outstanding PRs |
+| Coverage pages out of sync | Re-run `generate-html.py` after every item move — it reads `MD/done.md` + `inwork.md` + `todo.md` live |
 | Documentation drifting from code | After-commit prompt: "does any MD/ or htmldoku/ page need updating?" |
 | Token cost growing over time | Always-loaded files kept short; sparring protocol and backlog are on-demand |
 
