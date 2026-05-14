@@ -417,25 +417,6 @@ def parse_kanban_items(md_path):
     return sections
 
 
-def parse_done(md_path):
-    """Parse done.md section summaries → list of {title, summary}."""
-    text = md_path.read_text(encoding="utf-8")
-    sections = []
-    current = None
-    for line in text.splitlines():
-        h2 = re.match(r'^## (.+)', line)
-        if h2:
-            current = {'title': h2.group(1).strip(), 'summary': ''}
-            sections.append(current)
-            continue
-        if current is None:
-            continue
-        stripped = line.strip()
-        if not stripped or stripped.startswith('#') or re.match(r'^-{3,}$', stripped):
-            continue
-        current['summary'] = (current['summary'] + ' ' + stripped).strip()
-    return sections
-
 
 # ---------------------------------------------------------------------------
 # Rulebook coverage — loaded from MD/ kanban files at startup
