@@ -33,6 +33,17 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
+- [~] **C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step **[alpha]** **[L3]** `18oe_abilities`
+- [~] **D** (Green Junction) — `hex_bonus`/`event_d_token_phase_change!`/`assign_d_token!` wired; **still needed**: unreachable-city placement step (land cities only; sea/ferry variant → beta todo) **[alpha]** **[L3]** `18oe_abilities`
+- [~] **L** (Krasnaya Strela) — `assign_krasnaya_strela!`/`restore_krasnaya_strela!` wired; **still needed**: train-choice step + D-train exception **[alpha]** **[L3]** `18oe_abilities`
+
+## Private Abilities
+- [~] **Central Circle** — `token` (extra_slot, special_only) wired; **still needed**: town revenue scoring (£10/£20/£40/£60 by phase), SR window **[alpha]** **[L3]** `18oe_abilities`
+- [~] **Hochberg Mining** — `assign_hexes` wired; **still needed**: routing exclusion + placement eligibility (cost ≥ £45) **[alpha]** **[L3]** `18oe_abilities`
+- [~] **Brandt & Brandau** — `tile_lay` (free, count: 4) wired; **still needed**: per-OR cap (max 2/OR) **[alpha]** **[L3]** `18oe_abilities`
+- [~] **Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass + sea-zone crossing costs **[beta]** **[L2/L3]** `18oe_abilities`
+- [~] **Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[beta]** **[L3]** `18oe_abilities`
+- [~] **White Cliffs Ferry** — `token` (hexes: ['N31']) wired; **still needed**: Phase 5 start event hook + ferry routing **[beta]** **[L3]** `18oe_abilities`
 
 ## Nationals
 - [>] Rusted train claim **[beta]** **[L2/L3]** `18oe_mergers`

@@ -88,31 +88,31 @@
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:32.1%"></div>
-<div class="pb-pr"      style="width:8.4%"></div>
-<div class="pb-partial" style="width:2.3%"></div>
-<div class="pb-todo"    style="width:57.3%"></div>
+<div class="pb-done"    style="width:32.4%"></div>
+<div class="pb-pr"      style="width:8.5%"></div>
+<div class="pb-partial" style="width:3.2%"></div>
+<div class="pb-todo"    style="width:55.9%"></div>
 </div>
-<span class="bar-label-right">111&thinsp;/&thinsp;228 items</span>
+<span class="bar-label-right">111&thinsp;/&thinsp;225 items</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:49.2%"></div>
+<div class="pb-done"    style="width:49.4%"></div>
 <div class="pb-pr"      style="width:9.2%"></div>
-<div class="pb-partial" style="width:2.1%"></div>
-<div class="pb-todo"    style="width:39.6%"></div>
+<div class="pb-partial" style="width:3.3%"></div>
+<div class="pb-todo"    style="width:38.1%"></div>
 </div>
-<span class="bar-label-right">58%<span class="bar-aside"> · 55 remaining · <span class="bar-beta">66 beta deferred</span></span></span>
+<span class="bar-label-right">59%<span class="bar-aside"> · 54 remaining · <span class="bar-beta">64 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>94</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>17</span></div>
-<div class="stat-chip stat-partial">Partial <span>0</span></div>
-<div class="stat-chip stat-partial">Started <span>12</span></div>
+<div class="stat-chip stat-partial">Partial <span>9</span></div>
+<div class="stat-chip stat-partial">Started <span>0</span></div>
 <div class="stat-chip stat-todo">To do <span>105</span></div>
-<div class="stat-chip stat-beta">Beta deferred <span>66</span></div>
+<div class="stat-chip stat-beta">Beta deferred <span>64</span></div>
 </div>
 <div class="status-filters">
 <span class="filter-label">Milestone:</span>
@@ -196,7 +196,7 @@
 </div>
 </div></div>
 <div class="sb-col">
-<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">17</span></div>
+<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">26</span></div>
 <div class="sb-col-body view-rules">
 <div class="sb-section">
 <div class="sb-section-title">Track Rights</div>
@@ -225,6 +225,18 @@
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
 <div class="sb-item sb-needs-pr" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">J – Grey Locomotive</span><span class="layer-tag">L1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — <code>choose_ability</code>/<code>@golden_bell_position</code>/<code>operating_order</code> wired; <strong>still needed</strong>: OR-start choice-prompt step</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — <code>hex_bonus</code>/<code>event_d_token_phase_change!</code>/<code>assign_d_token!</code> wired; <strong>still needed</strong>: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — <code>assign_krasnaya_strela!</code>/<code>restore_krasnaya_strela!</code> wired; <strong>still needed</strong>: train-choice step + D-train exception</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title">Private Abilities</div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: town revenue scoring (£10/£20/£40/£60 by phase), SR window</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — <code>assign_hexes</code> wired; <strong>still needed</strong>: routing exclusion + placement eligibility (cost ≥ £45)</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Nationals</div>
@@ -263,10 +275,22 @@
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Minor SR merge action</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Plumbing / can_merge</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">merge_minor!</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title">L3</div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — <code>choose_ability</code>/<code>@golden_bell_position</code>/<code>operating_order</code> wired; <strong>still needed</strong>: OR-start choice-prompt step</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — <code>hex_bonus</code>/<code>event_d_token_phase_change!</code>/<code>assign_d_token!</code> wired; <strong>still needed</strong>: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — <code>assign_krasnaya_strela!</code>/<code>restore_krasnaya_strela!</code> wired; <strong>still needed</strong>: train-choice step + D-train exception</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: town revenue scoring (£10/£20/£40/£60 by phase), SR window</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — <code>assign_hexes</code> wired; <strong>still needed</strong>: routing exclusion + placement eligibility (cost ≥ £45)</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span></div>
 </div>
 </div></div>
 <div class="sb-col">
-<div class="sb-col-header todo-col">To Do<span class="sb-col-count">117</span></div>
+<div class="sb-col-header todo-col">To Do<span class="sb-col-count">105</span></div>
 <div class="sb-col-body view-rules">
 <div class="sb-section">
 <div class="sb-section-title">Map &amp; Components</div>
@@ -319,18 +343,11 @@
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.13</strong> Minor M (CIWL) — holds 10 Pullman cars (see §8f)</span><span class="layer-tag">L3</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — <code>choose_ability</code>/<code>@golden_bell_position</code>/<code>operating_order</code> wired; <strong>still needed</strong>: OR-start choice-prompt step</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — <code>hex_bonus</code>/<code>event_d_token_phase_change!</code>/<code>assign_d_token!</code> wired; <strong>still needed</strong>: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>J</strong> (Grey Locomotive Works) — <code>train_discount</code> (0.1) wired; removed <code>owner_type</code>/TODO; ability-transfer to major → beta; <strong>needs PR</strong></span><span class="layer-tag">L1</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — <code>assign_krasnaya_strela!</code>/<code>restore_krasnaya_strela!</code> wired; <strong>still needed</strong>: train-choice step + D-train exception</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Private Abilities</div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>8.2</strong> Barclay, Bevan, Barclay & Tritton — owner selects one of three abilities at time of use</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>8.8</strong> Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</span><span class="layer-tag">L3</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: town revenue scoring (£10/£20/£40/£60 by phase), SR window</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — <code>assign_hexes</code> wired; <strong>still needed</strong>: routing exclusion + placement eligibility (cost ≥ £45)</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Token Transfer Between Majors</div>
@@ -400,12 +417,6 @@
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D (Green Junction)</strong> — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
-<div class="sb-section-title">Private Abilities</div>
-<div class="sb-item sb-started" data-layer="L2→L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> <code>[BETA]</code> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass for free placement anywhere + sea-zone crossing costs</span><span class="layer-tag">L2→L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> <code>[BETA]</code> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> <code>[BETA]</code> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span><span class="started-badge">started</span></div>
-</div>
-<div class="sb-section">
 <div class="sb-section-title">Railroad Formation</div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Forming a national (trigger): phase 4/6/8 purchase → <code>trigger_nationals_formation!</code> → ordered queue</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-todo" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Forming a national (steps): <code>Step::ConvertToNational</code> — cash→bank, treasury certs→OM, tokens removed, national placed, trains inherited</span><span class="layer-tag">L2/L3</span></div>
@@ -415,7 +426,6 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Nationals</div>
-<div class="sb-item sb-started" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Nationals claim rusted trains</strong> <code>[BETA]</code> — <code>spend_minmax [0,0]</code>, fast-path in <code>process_buy_train</code>, <code>trigger_nationals_formation!</code> implemented; <strong>needs PR</strong></span><span class="layer-tag">L2/L3</span><span class="started-badge">started</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><code>national_revenue</code>: linked/unlinked split, best-first, D-train double, flat-rate fill; <code>[:payout]</code> only</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Inherent Pullman: <code>+£10 × highest non-rusted train level</code></span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">No tokens / no terrain costs — <code>return 0 if entity.type == :national</code> in <code>upgrade_cost</code> (BUG-011); skip token step already done</span><span class="layer-tag">L2</span></div>
@@ -428,7 +438,6 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Minor Mergers</div>
-<div class="sb-item sb-started" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Minor SR merge action</strong> <code>[BETA]</code> — <code>can_merge_minors?</code> / <code>minor_by_id</code> / <code>mergeable_entity/entities</code> / <code>process_merge</code> / <code>merge_minor!</code> / <code>transfer_minor_track_rights!</code> implemented; <strong>needs PR</strong></span><span class="layer-tag">L2/L3</span><span class="started-badge">started</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.1</strong> Ability transfer — minor merges into regional/major; ability inherited; nationals cannot inherit</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.2</strong> Minor A (Silver Banner) — bank pays major current share price at moment of merger</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">No-stock connection check: merge only if unlimited-city train can reach minor's token to major's network</span><span class="layer-tag">L3</span></div>
@@ -490,7 +499,6 @@
 <div class="sb-item sb-todo" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">UK-FR variant entities (4 minors: C/H/K/M; 7 regionals: BEL/GSWR/GWR/LNWR/MIDI/OU/PLM)</span></div>
 <div class="sb-item sb-todo" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">UK-FR train rusting rules</span></div>
 <div class="sb-item sb-todo" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">UK-FR map hex definitions</span></div>
-<div class="sb-item sb-started" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>J</strong> (Grey Locomotive Works) — <code>train_discount</code> (0.1) wired; removed <code>owner_type</code>/TODO; ability-transfer to major → beta; <strong>needs PR</strong></span><span class="started-badge">started</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L1/L2</div>
@@ -555,8 +563,6 @@
 <div class="sb-item sb-todo" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Exchange owned rusted train for higher-level unclaimed rusted train</span></div>
 <div class="sb-item sb-todo" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Flip owned rusted train from express to local side</span></div>
 <div class="sb-item sb-todo" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Upgrade rusted → non-rusted by purchasing from same-owner major</span></div>
-<div class="sb-item sb-started" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Nationals claim rusted trains</strong> <code>[BETA]</code> — <code>spend_minmax [0,0]</code>, fast-path in <code>process_buy_train</code>, <code>trigger_nationals_formation!</code> implemented; <strong>needs PR</strong></span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Minor SR merge action</strong> <code>[BETA]</code> — <code>can_merge_minors?</code> / <code>minor_by_id</code> / <code>mergeable_entity/entities</code> / <code>process_merge</code> / <code>merge_minor!</code> / <code>transfer_minor_track_rights!</code> implemented; <strong>needs PR</strong></span><span class="started-badge">started</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L3</div>
@@ -585,18 +591,6 @@
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Second final OR: each company pays same revenue as first final OR; no track/token/train actions (BUG-026)</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Define Concession round with ordered float actions (CON1–CON10)</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Float obligation: holder pays 2× par; obligation transfers if holder cannot pay</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — <code>choose_ability</code>/<code>@golden_bell_position</code>/<code>operating_order</code> wired; <strong>still needed</strong>: OR-start choice-prompt step</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — <code>hex_bonus</code>/<code>event_d_token_phase_change!</code>/<code>assign_d_token!</code> wired; <strong>still needed</strong>: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — <code>assign_krasnaya_strela!</code>/<code>restore_krasnaya_strela!</code> wired; <strong>still needed</strong>: train-choice step + D-train exception</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: town revenue scoring (£10/£20/£40/£60 by phase), SR window</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — <code>assign_hexes</code> wired; <strong>still needed</strong>: routing exclusion + placement eligibility (cost ≥ £45)</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> <code>[BETA]</code> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="started-badge">started</span></div>
-<div class="sb-item sb-started" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> <code>[BETA]</code> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="started-badge">started</span></div>
-</div>
-<div class="sb-section">
-<div class="sb-section-title">L2→L3</div>
-<div class="sb-item sb-started" data-layer="L2→L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> <code>[BETA]</code> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass for free placement anywhere + sea-zone crossing costs</span><span class="started-badge">started</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">untagged</div>

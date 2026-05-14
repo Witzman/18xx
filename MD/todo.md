@@ -94,10 +94,6 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 ## Minor Abilities
 
 - [ ] **7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f) **[L3]**
-- [/] **C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step **[L3]** `18oe_abilities`
-- [/] **D** (Green Junction) — `hex_bonus`/`event_d_token_phase_change!`/`assign_d_token!` wired; **still needed**: unreachable-city placement step (land cities only; sea/ferry variant → beta todo) **[L3]** `18oe_abilities`
-- [/] **J** (Grey Locomotive Works) — `train_discount` (0.1) wired; removed `owner_type`/TODO; ability-transfer to major → beta; **needs PR** **[L1]** `18oe_abilities`
-- [/] **L** (Krasnaya Strela) — `assign_krasnaya_strela!`/`restore_krasnaya_strela!` wired; **still needed**: train-choice step + D-train exception **[L3]** `18oe_abilities`
 
 *Ability transfer on merge → beta. Minor A (Silver Banner) → beta. Shifted 2026-05-14.*
 
@@ -107,9 +103,6 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 - [ ] **8.2** Barclay, Bevan, Barclay & Tritton — owner selects one of three abilities at time of use **[L3]**
 - [ ] **8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit **[L3]**
-- [/] **Central Circle** — `token` (extra_slot, special_only) wired; **still needed**: town revenue scoring (£10/£20/£40/£60 by phase), SR window **[L3]** `18oe_abilities`
-- [/] **Hochberg Mining** — `assign_hexes` wired; **still needed**: routing exclusion + placement eligibility (cost ≥ £45) **[L3]** `18oe_abilities`
-- [/] **Brandt & Brandau** — `tile_lay` (free, count: 4) wired; **still needed**: per-OR cap (max 2/OR) **[L3]** `18oe_abilities`
 
 ---
 
@@ -223,9 +216,6 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ## Private Abilities
 
-- [/] **Wien Südbahnhof** `[BETA]` — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass for free placement anywhere + sea-zone crossing costs **[L2→L3]** `18oe_abilities`
-- [/] **Star Harbor** `[BETA]` — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[L3]** `18oe_abilities`
-- [/] **White Cliffs Ferry** `[BETA]` — `token` (hexes: ['N31']) wired; **still needed**: Phase 5 start event hook + ferry routing **[L3]** `18oe_abilities`
 
 ---
 
@@ -241,7 +231,6 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ## Nationals
 
-- [/] **Nationals claim rusted trains** `[BETA]` — `spend_minmax [0,0]`, fast-path in `process_buy_train`, `trigger_nationals_formation!` implemented; **needs PR** **[L2/L3]** `18oe_mergers`
 - [ ] `national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only **[L2]**
 - [ ] Inherent Pullman: `+£10 × highest non-rusted train level` **[L2]**
 - [ ] No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done **[L2]**
@@ -256,7 +245,6 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ## Minor Mergers
 
-- [/] **Minor SR merge action** `[BETA]` — `can_merge_minors?` / `minor_by_id` / `mergeable_entity/entities` / `process_merge` / `merge_minor!` / `transfer_minor_track_rights!` implemented; **needs PR** **[L2/L3]** `18oe_mergers`
 - [ ] **7.1** Ability transfer — minor merges into regional/major; ability inherited; nationals cannot inherit **[L3]**
 - [ ] **7.2** Minor A (Silver Banner) — bank pays major current share price at moment of merger **[L3]**
 - [ ] No-stock connection check: merge only if unlimited-city train can reach minor's token to major's network **[L3]**
