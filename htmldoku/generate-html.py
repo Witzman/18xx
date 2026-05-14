@@ -19,6 +19,10 @@ OUT_DIR = REPO_ROOT / "docs" / "18xx-Doku"
 MD_DIR  = REPO_ROOT / "MD"
 
 SIDEBAR = [
+    ("18OE Player Guide", [
+        ("Player Overview", "18oe-player-guide.html"),
+        ("Operating Rounds", "18oe-or-guide.html"),
+    ]),
     ("18OE Status", [
         ("Game Rules Summary", "rules-summary.html"),
         ("Map Implementation Status", "18oe-map-status.html"),

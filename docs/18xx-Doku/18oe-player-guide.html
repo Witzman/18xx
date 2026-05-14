@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>18OE — Player Guide — 18OE Dev Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+  primaryColor: '#0d1f38', primaryTextColor: '#faf6ec',
+  primaryBorderColor: '#c9a843', lineColor: '#c9a843',
+  secondaryColor: '#1a3a6a', tertiaryColor: '#2a4a80',
+  actorBkg: '#0d1f38', actorTextColor: '#faf6ec',
+  actorBorder: '#c9a843', actorLineColor: '#c9a843',
+  activationBkgColor: '#2a4ab0', activationBorderColor: '#c9a843',
+  signalColor: '#c9a843', signalTextColor: '#2a1a0a',
+  labelBoxBkgColor: '#0d1f38', labelBoxBorderColor: '#c9a843', labelTextColor: '#faf6ec',
+  loopTextColor: '#2a1a0a',
+  edgeLabelBackground: '#f0ead8',
+  noteBkgColor: '#f0e8d4', noteTextColor: '#2a1a0a', noteBorderColor: '#c9a843',
+  titleColor: '#2a1a0a',
+  clusterBkg: '#1a3a6a', clusterBorder: '#c9a843', clusterTextColor: '#faf6ec',
+  fillType0: '#0d1f38', fillType1: '#1a3a6a', fillType2: '#2a4a80',
+  fillType3: '#1a3a6a', fillType4: '#0d1f38', fillType5: '#2a4a80',
+  fillType6: '#1a3a6a', fillType7: '#0d1f38'
+} });</script>
+</head>
+<body>
+<header id="site-header">
+  <a href="index.html">18OE</a> &mdash; Developer Documentation
+</header>
+<div id="layout">
+<nav id="sidebar" aria-label="Navigation">
+<input id="nav-search" type="search" placeholder="Search…" aria-label="Search documentation" autocomplete="off">
+<div id="search-results" style="display:none">
+<p id="search-no-results" style="display:none">No results found.</p>
+<ul id="search-results-list"></ul>
+</div>
+<div class="track"><h3>18OE Player Guide</h3><ul>
+<li><a href="18oe-player-guide.html" aria-current="page"><strong>Player Overview</strong></a></li>
+<li><a href="18oe-or-guide.html">Operating Rounds</a></li>
+</ul></div>
+<div class="track"><h3>18OE Status</h3><ul>
+<li><a href="rules-summary.html">Game Rules Summary</a></li>
+<li><a href="18oe-map-status.html">Map Implementation Status</a></li>
+<li><a href="status.html">Implementation Tracker</a></li>
+<li><a href="rulebook-coverage.html">Rulebook Coverage</a></li>
+<li><a href="alpha-gaps.html">Open for Alpha</a></li>
+</ul></div>
+<div class="track"><h3>Getting Involved</h3><ul>
+<li><a href="first-contribution.html">Your First Contribution</a></li>
+</ul></div>
+<div class="track"><h3>Building a New Game</h3><ul>
+<li><a href="engine-concepts.html">Understanding the Engine</a></li>
+<li><a href="getting-started.html">Development Setup</a></li>
+<li><a href="game-implementation.html">Game Structure</a></li>
+<li><a href="map.html">Map Configuration</a></li>
+<li><a href="entities.html">Corporations & Companies</a></li>
+<li><a href="trains-phases.html">Trains, Phases & Market</a></li>
+<li><a href="round-step-system.html">Rounds & Steps</a></li>
+<li><a href="auction-round.html">Auction Round</a></li>
+<li><a href="revenue-routing.html">Revenue & Routing</a></li>
+<li><a href="abilities.html">Abilities</a></li>
+<li><a href="tiles.html">Tile Reference</a></li>
+<li><a href="common-patterns.html">Common Patterns</a></li>
+<li><a href="testing.html">Testing Your Game</a></li>
+<li><a href="title-checklist.html">Title Checklist</a></li>
+<li><a href="coding-guidelines.html">Coding Guidelines</a></li>
+</ul></div>
+<div class="track"><h3>Reference</h3><ul>
+<li><a href="game-engine.html">Game Engine Reference</a></li>
+<li><a href="adrs.html">Architecture Decision Records</a></li>
+</ul></div>
+<div class="track"><h3>Platform & Testing Setup</h3><ul>
+<li><a href="architecture.html">Architecture Overview</a></li>
+<li><a href="konfiguration-betrieb.html">Configuration & Operations</a></li>
+<li><a href="systemgrenzen.html">System Boundaries</a></li>
+</ul></div>
+<div class="track"><h3>Working with Claude</h3><ul>
+<li><a href="codevelop.html">Co-developing with Claude</a></li>
+</ul></div>
+</nav>
+<main>
+<article>
+<h1 id="18oe--player-guide">18OE — Player Guide</h1>
+<p>Quick reference for experienced 18xx players new to 18OE. Assumes familiarity with 18xx mechanics. Rules references: <code>18OE_Rulebook_v_1.0.txt</code>.</p>
+<hr>
+<h2 id="what-makes-18oe-different">What Makes 18OE Different</h2>
+<ul><li><strong>Four company types</strong> — Minors and regionals run in parallel; regionals <em>convert</em> to majors; minors <em>merge into</em> majors; nationals form automatically from groups at phase triggers</li><li><strong>Track rights zones</strong> — regionals/majors can only token inside their home zone (cost paid at par)</li><li><strong>Incremental capitalisation</strong> — companies receive only the cash from shares sold so far</li><li><strong>7-row waterfall auction</strong> — privates + minor auction cards sold before a single OR runs</li><li><strong>Orient Express</strong> — special multi-bonus run linking Constantinople to a western terminus</li><li><strong>Cross-water routing</strong> — ferry and sea crossings with distance costs (§8d)</li><li><strong>Nationals</strong> — form automatically at Phase 4/6/8; unique flat-rate revenue; no tokens</li></ul>
+<hr>
+<h2 id="setup">Setup</h2>
+<table><thead><tr><th>Players</th><th>Starting Cash</th><th>Cert Limit</th><th>Bank</th></tr></thead><tbody><tr><td>2</td><td>£2,600</td><td>99</td><td>£54,000</td></tr><tr><td>3</td><td>£1,800</td><td>48</td><td>£54,000</td></tr><tr><td>4</td><td>£1,350</td><td>36</td><td>£54,000</td></tr><tr><td>5</td><td>£1,080</td><td>29</td><td>£54,000</td></tr><tr><td>6</td><td>£900</td><td>24</td><td>£54,000</td></tr><tr><td>7</td><td>£775</td><td>20</td><td>£54,000</td></tr></tbody></table>
+<p>2-player uses a without-concessions variant (starting cash already reflects this).</p>
+<hr>
+<h2 id="company-types">Company Types</h2>
+<table><thead><tr><th>Type</th><th>Shares</th><th>Par range</th><th>Float</th><th>Dividends</th><th>Tokens</th><th>Zone</th></tr></thead><tbody><tr><td>Minor</td><td>1 × 100%</td><td>£120 fixed</td><td>Via auction card</td><td>Half-pay only</td><td>1</td><td>Home zone only</td></tr><tr><td>Regional</td><td>50%+25%+25%</td><td>£60–£90</td><td>Pay 2× par to treasury</td><td>Any</td><td>2–3</td><td>Home zone only</td></tr><tr><td>Major</td><td>20%+8×10%</td><td>£75–£120</td><td>Regional <em>converts</em> into major</td><td>Any</td><td>Varies</td><td>Anywhere (cost)</td></tr><tr><td>National</td><td>20%+8×10%</td><td>Inherits major</td><td>Phase 4/6/8 trigger</td><td>Full-pay only</td><td>None</td><td>Entire zone (virtual)</td></tr></tbody></table>
+<p><strong>Minors and regionals run in parallel</strong> during the Regional/Minor Phase — they are not a progression. A regional <em>converts</em> to a major in a SR (president pays 2× par). A minor <em>merges into</em> an existing major (absorbed, not converted). Both relationships are independent.</p>
+<p><strong>Incremental capitalisation</strong> — treasury receives only the proceeds of shares actually sold. Unsold shares in treasury pay no revenue to the bank; they dilute the dividend per share.</p>
+<hr>
+<h2 id="game-flow">Game Flow</h2>
+<pre><code>Auction Phase
+  └── Regional/Minor Phase  (SRs + ORs, 2 ORs per set)
+  │     Minors and regionals float and run in parallel
+  │     Regionals may convert to majors during any SR
+  │     Minors may merge into majors during any SR
+  │     Phase ends: 18 regionals floated AND all 12 minors floated
+  └── Major Phase  (SRs + ORs, 2 ORs per set)
+        Remaining minors/regionals still in play
+        First Level 5 purchase → Consolidation Round (once)
+        Continue until bank break OR Level 8 purchase
+          Bank break → finish current OR set
+          Level 8 → one more full OR set (+ £100,000 remainder cash injected)</code></pre>
+<p><strong>Train phases 1–8</strong> triggered by highest level train purchased. Phase determines tile colours, train limits, and which events fire.</p>
+<hr>
+<h2 id="auction-phase-4">Auction Phase §4</h2>
+<p>Items sold in a <strong>7-row waterfall</strong>. Rows open sequentially; each row is cleared before the next opens. Within a row items sell left-to-right. Players buy one item per turn or pass; unpurchased items drop £5 per full pass cycle.</p>
+<table><thead><tr><th>Row</th><th>Items</th><th>Face value</th></tr></thead><tbody><tr><td>1</td><td>Robert Stephenson · Ponts et Chaussées (no abilities)</td><td>£20</td></tr><tr><td>2</td><td>Wien Südbahnhof · Barclay, Bevan & Tritton</td><td>£40</td></tr><tr><td>3</td><td>Star Harbor · Central Circle · White Cliffs Ferry</td><td>£60</td></tr><tr><td>4</td><td>Hochberg Mining · Brandt & Brandau · Swift Metropolitan</td><td>£80</td></tr><tr><td>5</td><td>Minor cards A · B · C</td><td>£120 par</td></tr><tr><td>6</td><td>Minor cards D · E · F · G</td><td>£120 par</td></tr><tr><td>7</td><td>Minor cards H · J · K · L · M</td><td>£120 par</td></tr></tbody></table>
+<p><strong>Minor auction card</strong> — buying one immediately floats that minor at £120 par. The player places its home token during the Regional/Minor Phase (before its first OR).</p>
+<p><strong>All-pass price reduction</strong> <em>(§4.3, not yet implemented in digital)</em> — if all players consecutively pass on the opening row, items pay their printed dividend then all drop £5. Repeats until a purchase is made; items at £0 must be taken.</p>
+<hr>
+<h2 id="privates-10">Privates §10</h2>
+<p>Privates pay printed revenue at the start of every OR. Held by players; cannot be sold. Relevant to train purchase: owning a private does not count toward the cert limit.</p>
+<table><thead><tr><th>Sym</th><th>Name</th><th>Row</th><th>Rev</th><th>Ability</th></tr></thead><tbody><tr><td>RSC</td><td>Robert Stephenson</td><td>1</td><td>£5</td><td>None</td></tr><tr><td>PeC</td><td>Ponts et Chaussées</td><td>1</td><td>£5</td><td>None</td></tr><tr><td>WS</td><td>Wien Südbahnhof</td><td>2</td><td>£10</td><td>Free token placement anywhere (sea costs still apply)</td></tr><tr><td>BBBT</td><td>Barclay, Bevan & Tritton</td><td>2</td><td>£10</td><td>Choose one: reset par · custodianship share · block DOWN</td></tr><tr><td>SHTC</td><td>Star Harbor</td><td>3</td><td>£15</td><td>Extra free token slot at any port city</td></tr><tr><td>CCTC</td><td>Central Circle</td><td>3</td><td>£15</td><td>Extra free token slot at non-port city; revenue £10/£20/£40/£60</td></tr><tr><td>WCF</td><td>White Cliffs Ferry</td><td>3</td><td>£15</td><td>Phase 5: place one token on White Cliffs Ferry slot at Lille</td></tr><tr><td>HMG</td><td>Hochberg Mining</td><td>4</td><td>£20</td><td>Mining token on ≥£45 terrain hex; only owner's RRs use that track</td></tr><tr><td>BB</td><td>Brandt & Brandau</td><td>4</td><td>£20</td><td>4 free tile lays total (max 2/OR); no terrain cost</td></tr><tr><td>SML</td><td>Swift Metropolitan</td><td>4</td><td>£20</td><td>From Phase 4: one controlled RR keeps a preserved 2+2 outside limit</td></tr></tbody></table>
+<hr>
+<h2 id="minor-abilities-9">Minor Abilities §9</h2>
+<p>Each minor has a unique permanent ability. All transfer to the absorbing major on merger (§10.4 — beta scope in digital).</p>
+<table><thead><tr><th>Sym</th><th>Name</th><th>Ability</th></tr></thead><tbody><tr><td>A</td><td>Silver Banner Line</td><td>Bank pays major the minor's current share price when merged</td></tr><tr><td>B</td><td>Orange Scroll</td><td>All track upgrades cost 1 tile point (including town tiles)</td></tr><tr><td>C</td><td>Golden Bell</td><td>President chooses operating position (first or last) at each OR start</td></tr><tr><td>D</td><td>Green Junction</td><td>Place bonus token on any unreachable non-metropolis land city</td></tr><tr><td>E</td><td>Blue Coast</td><td>33% water/coast terrain discount; one extra tile lay per OR</td></tr><tr><td>F</td><td>White Peak</td><td>33% mountain terrain discount; one extra tile lay per OR</td></tr><tr><td>G</td><td>Indigo Foundry</td><td>+2 tile points every OR</td></tr><tr><td>H</td><td>Great Western Steamship</td><td>Reduces sea-zone city-limit count by 1 (Ph1–6) or 2 (Ph7–8)</td></tr><tr><td>J</td><td>Grey Loco Works</td><td>10% discount on all train purchases (including Pullman cars)</td></tr><tr><td>K</td><td>Vermilion Seal</td><td>Mail contract: bank pays treasury £20/£40/£40/£50/£50/£60/£60 (Ph2–8) at OR start</td></tr><tr><td>L</td><td>Krasnaya Strela</td><td>+1+1 marker assigned to one train each OR (train runs one further city each end)</td></tr><tr><td>M</td><td>CIWL</td><td>Holds 10 Pullman cars; receives one free Pullman at Phase 4 start</td></tr></tbody></table>
+<hr>
+<h2 id="stock-round-6">Stock Round §6</h2>
+<ul><li><strong>Order</strong>: sell then buy (standard 18xx sell-buy)</li><li><strong>One buy per turn</strong> — one share or par action only; unlimited sells before the buy</li><li><strong>Minors and regionals</strong> — exempt from share price movement (price fixed until conversion)</li><li><strong>No blocking</strong> — players may buy any available share regardless of ownership percentage</li><li><strong>Holding limit</strong> — a single player may not hold >60% of any regional or major (except the president's 20% cert); buying above 60% from the bank pool costs 2× share price (§10.2)</li><li><strong>Reserved secondary shares</strong> — in the Initial SR only, one 25% share per regional may be reserved by a player; no one else may buy it until the second SR (§6.3) <em>(not yet implemented)</em></li></ul>
+<p><strong>Par values:</strong></p>
+<ul><li>Regional: £60 / £65 / £70 / £75 / £80 / £90 (blue band)</li><li>Major: £75 / £80 / £90 / £100 / £110 / £120 (red band — only when converting from regional)</li></ul>
+<p><strong>Incremental float</strong> — a regional floats when cash paid in by shareholders ≥ 2× par. Cash in treasury = total shares sold × par.</p>
+<hr>
+<h2 id="share-price-movement-6b">Share Price Movement §6b</h2>
+<table><thead><tr><th>Trigger</th><th>Movement</th></tr></thead><tbody><tr><td>Dividend ≥ share price</td><td>RIGHT (one step)</td></tr><tr><td>Dividend > 0 but < share price</td><td>No movement</td></tr><tr><td>Zero dividend</td><td>LEFT (one step)</td></tr><tr><td>All shares in player hands at SR end</td><td>UP (one step)</td></tr><tr><td>Each share sold in SR</td><td>DOWN (one step)</td></tr><tr><td>First Orient Express run</td><td>+3 RIGHT (in addition to normal dividend move)</td></tr></tbody></table>
+<ul><li><strong>£550</strong> — maximum price; no movement possible</li><li><strong>Minors and regionals</strong> — no share price movement until converted to major</li><li><strong>Nationals</strong> — move normally</li></ul>
+<hr>
+<h2 id="regional--major-conversion-85">Regional → Major Conversion §8.5</h2>
+<p>A regional converts to a major during a SR on the president's turn (instead of a buy/sell action):</p>
+<ol><li>President pays 2× par value into treasury (from personal cash)</li><li>Six new 10% shares issued (3 more later at president's discretion)</li><li>Post-conversion sell window: all players may sell then buy (before mandatory president purchase)</li><li>President must buy the 20% president certificate if not already holding it</li><li>All regional share price movement rules now apply</li></ol>
+<p>The <strong>converted major may not run trains</strong> until its first OR. Track rights zone for the major = zone of origin regional.</p>
+<hr>
+<h2 id="minor-sr-merger-104-beta-scope--not-fully-implemented">Minor SR Merger §10.4 <em>(beta scope — not fully implemented)</em></h2>
+<p>During the SR, a major may absorb a compatible minor:</p>
+<ul><li>Minor must be reachable by an unlimited-city train from the major's network</li><li>Minor's trains, track rights chit, and tokens transfer to the major</li><li>Player receives negotiated cash or shares from the major's president</li><li>Minors with ability A pay the bank (not the minor owner) at current share price</li></ul>
+</article>
+</main>
+</div>
+<script src="search.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

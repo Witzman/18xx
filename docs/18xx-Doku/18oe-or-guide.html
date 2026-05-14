@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>18OE — Operating Rounds — 18OE Dev Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: {
+  primaryColor: '#0d1f38', primaryTextColor: '#faf6ec',
+  primaryBorderColor: '#c9a843', lineColor: '#c9a843',
+  secondaryColor: '#1a3a6a', tertiaryColor: '#2a4a80',
+  actorBkg: '#0d1f38', actorTextColor: '#faf6ec',
+  actorBorder: '#c9a843', actorLineColor: '#c9a843',
+  activationBkgColor: '#2a4ab0', activationBorderColor: '#c9a843',
+  signalColor: '#c9a843', signalTextColor: '#2a1a0a',
+  labelBoxBkgColor: '#0d1f38', labelBoxBorderColor: '#c9a843', labelTextColor: '#faf6ec',
+  loopTextColor: '#2a1a0a',
+  edgeLabelBackground: '#f0ead8',
+  noteBkgColor: '#f0e8d4', noteTextColor: '#2a1a0a', noteBorderColor: '#c9a843',
+  titleColor: '#2a1a0a',
+  clusterBkg: '#1a3a6a', clusterBorder: '#c9a843', clusterTextColor: '#faf6ec',
+  fillType0: '#0d1f38', fillType1: '#1a3a6a', fillType2: '#2a4a80',
+  fillType3: '#1a3a6a', fillType4: '#0d1f38', fillType5: '#2a4a80',
+  fillType6: '#1a3a6a', fillType7: '#0d1f38'
+} });</script>
+</head>
+<body>
+<header id="site-header">
+  <a href="index.html">18OE</a> &mdash; Developer Documentation
+</header>
+<div id="layout">
+<nav id="sidebar" aria-label="Navigation">
+<input id="nav-search" type="search" placeholder="Search…" aria-label="Search documentation" autocomplete="off">
+<div id="search-results" style="display:none">
+<p id="search-no-results" style="display:none">No results found.</p>
+<ul id="search-results-list"></ul>
+</div>
+<div class="track"><h3>18OE Player Guide</h3><ul>
+<li><a href="18oe-player-guide.html">Player Overview</a></li>
+<li><a href="18oe-or-guide.html" aria-current="page"><strong>Operating Rounds</strong></a></li>
+</ul></div>
+<div class="track"><h3>18OE Status</h3><ul>
+<li><a href="rules-summary.html">Game Rules Summary</a></li>
+<li><a href="18oe-map-status.html">Map Implementation Status</a></li>
+<li><a href="status.html">Implementation Tracker</a></li>
+<li><a href="rulebook-coverage.html">Rulebook Coverage</a></li>
+<li><a href="alpha-gaps.html">Open for Alpha</a></li>
+</ul></div>
+<div class="track"><h3>Getting Involved</h3><ul>
+<li><a href="first-contribution.html">Your First Contribution</a></li>
+</ul></div>
+<div class="track"><h3>Building a New Game</h3><ul>
+<li><a href="engine-concepts.html">Understanding the Engine</a></li>
+<li><a href="getting-started.html">Development Setup</a></li>
+<li><a href="game-implementation.html">Game Structure</a></li>
+<li><a href="map.html">Map Configuration</a></li>
+<li><a href="entities.html">Corporations & Companies</a></li>
+<li><a href="trains-phases.html">Trains, Phases & Market</a></li>
+<li><a href="round-step-system.html">Rounds & Steps</a></li>
+<li><a href="auction-round.html">Auction Round</a></li>
+<li><a href="revenue-routing.html">Revenue & Routing</a></li>
+<li><a href="abilities.html">Abilities</a></li>
+<li><a href="tiles.html">Tile Reference</a></li>
+<li><a href="common-patterns.html">Common Patterns</a></li>
+<li><a href="testing.html">Testing Your Game</a></li>
+<li><a href="title-checklist.html">Title Checklist</a></li>
+<li><a href="coding-guidelines.html">Coding Guidelines</a></li>
+</ul></div>
+<div class="track"><h3>Reference</h3><ul>
+<li><a href="game-engine.html">Game Engine Reference</a></li>
+<li><a href="adrs.html">Architecture Decision Records</a></li>
+</ul></div>
+<div class="track"><h3>Platform & Testing Setup</h3><ul>
+<li><a href="architecture.html">Architecture Overview</a></li>
+<li><a href="konfiguration-betrieb.html">Configuration & Operations</a></li>
+<li><a href="systemgrenzen.html">System Boundaries</a></li>
+</ul></div>
+<div class="track"><h3>Working with Claude</h3><ul>
+<li><a href="codevelop.html">Co-developing with Claude</a></li>
+</ul></div>
+</nav>
+<main>
+<article>
+<h1 id="18oe--operating-rounds">18OE — Operating Rounds</h1>
+<p>OR reference for experienced 18xx players. Covers step sequence, track rights, tile laying, trains, revenue, cross-water, and the Orient Express. Rules: <code>18OE_Rulebook_v_1.0.txt</code>.</p>
+<hr>
+<h2 id="or-step-sequence-8">OR Step Sequence §8</h2>
+<p>Companies operate in order: <strong>minors and regionals first</strong> (home-token placement order), then <strong>majors and nationals</strong> by share price descending.</p>
+<table><thead><tr><th>Step</th><th>Minor</th><th>Regional</th><th>Major</th><th>National</th></tr></thead><tbody><tr><td>1 Lay Track</td><td>✓ (3 pts)</td><td>✓ (3 pts)</td><td>✓ (6 pts)</td><td>✓ (9 pts, no terrain cost)</td></tr><tr><td>2 Place Token</td><td>✓</td><td>✓</td><td>✓</td><td>— (skipped)</td></tr><tr><td>3 Run Trains</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>4 Pay Dividend</td><td>Half-pay only</td><td>Any</td><td>Any</td><td>Full-pay only</td></tr><tr><td>5 Transfer Tokens</td><td>—</td><td>—</td><td>✓ (between own majors)</td><td>—</td></tr><tr><td>6 Buy Trains</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>7 Buy/Sell Shares</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr></tbody></table>
+<hr>
+<h2 id="track-rights-zones-3--12">Track Rights Zones §3 + §12</h2>
+<p>Every regional and major belongs to exactly one zone. The zone determines:</p>
+<ul><li>Where it may place tokens (home zone only for regionals; anywhere for majors)</li><li>The <strong>zone fee</strong> paid from treasury at par time (not a cash purchase)</li><li>Any terrain discount on track construction in the zone</li></ul>
+<table><thead><tr><th>Zone</th><th>Countries</th><th>Zone fee</th><th>Terrain discount</th><th>Cap</th></tr></thead><tbody><tr><td>UK</td><td>United Kingdom</td><td>£40</td><td>—</td><td>4*</td></tr><tr><td>PHS</td><td>Prussia/Holland/Switzerland</td><td>£40</td><td>—</td><td>4*</td></tr><tr><td>FR</td><td>France/Belgium</td><td>£20</td><td>—</td><td>4*</td></tr><tr><td>AH</td><td>Austria-Hungary</td><td>£20</td><td>—</td><td>—</td></tr><tr><td>IT</td><td>Italy</td><td>£10</td><td>20% on IT terrain</td><td>—</td></tr><tr><td>SP</td><td>Spain/Portugal</td><td>£10</td><td>20% on SP terrain</td><td>—</td></tr><tr><td>RU</td><td>Russia</td><td>£10</td><td>20% on RU terrain</td><td>—</td></tr><tr><td>SC</td><td>Scandinavia</td><td>£10</td><td>20% on SC terrain</td><td>—</td></tr></tbody></table>
+<p>*UK/PHS/FR combined cap: max 4 regionals/majors may hold chits across these three zones total.</p>
+<p><strong>Track rights chit</strong> — each minor receives one chit for its home zone at float time; the chit stays with the minor (or transfers to a major on merger). No chit = cannot place tokens or use terrain discount in that zone. §12A.</p>
+<hr>
+<h2 id="tile-laying-8b">Tile Laying §8b</h2>
+<p><strong>Tile points</strong> — spent to lay or upgrade tiles.</p>
+<table><thead><tr><th>Company type</th><th>Points per OR</th></tr></thead><tbody><tr><td>Minor / Regional</td><td>3</td></tr><tr><td>Major</td><td>6</td></tr><tr><td>National</td><td>9</td></tr></tbody></table>
+<p><strong>Point costs:</strong></p>
+<ul><li>Yellow (new) city: 2 pts · Yellow town: 1 pt · Green/Brown/Gray upgrade: 2 pts · Metropolis (London, Paris, Berlin, Madrid, Sankt-Peterburg, Constantinople): 3 pts</li></ul>
+<p><strong>First-OR exception</strong> (Phase 2 only) — if a newly-floated company cannot connect its home token to any city/town by land or ferry without a sea crossing, it may lay one non-city green tile consuming all remaining tile points (requires ≥1 pt). <em>(§11.1.9, not yet implemented)</em></p>
+<p><strong>Custom tile codes</strong> (18OE-specific):</p>
+<ul><li>OE1–OE3: yellow double-town · OE4–OE8: yellow city</li><li>OE12–OE18: green city · OE23–OE33: brown city · OE34–OE44: gray city</li></ul>
+<p><strong>TILE_UPGRADES_MUST_USE_MAX_EXITS</strong> — when upgrading a city tile, all available exits on the upgraded tile must be used. You cannot leave exits unconnected.</p>
+<hr>
+<h2 id="token-placement-8c">Token Placement §8c</h2>
+<ul><li>One token per OR per company; placed during the Place Token step</li><li><strong>Regionals and minors</strong> — may only token in their home zone</li><li><strong>Majors</strong> — may token anywhere; zone cost paid from treasury (£10–£40 depending on zone)</li><li><strong>Nationals</strong> — skip the token step entirely (virtual tokens in all home-zone cities)</li><li>Token slots are limited; standard city-slot rules apply</li></ul>
+<hr>
+<h2 id="trains-7--8g">Trains §7 + §8g</h2>
+<table><thead><tr><th>Level</th><th>Express type</th><th>Local type</th><th>Qty</th><th>Face value</th><th>Rusts at</th></tr></thead><tbody><tr><td>2</td><td>2+2</td><td>—</td><td>30</td><td>£100</td><td>Phase 4</td></tr><tr><td>3</td><td>3+3</td><td>3</td><td>20</td><td>£225 / £200</td><td>Phase 6</td></tr><tr><td>4</td><td>4+4</td><td>4</td><td>10</td><td>£350 / £300</td><td>Phase 8</td></tr><tr><td>5</td><td>5+5</td><td>5</td><td>8</td><td>£475 / £400</td><td>—</td></tr><tr><td>6</td><td>6+6</td><td>6</td><td>6</td><td>£600 / £525</td><td>—</td></tr><tr><td>7</td><td>7+7</td><td>4D</td><td>14</td><td>£750 / £850</td><td>—</td></tr><tr><td>8</td><td>8+8</td><td>5D</td><td>8</td><td>£900 / £1,000</td><td>—</td></tr></tbody></table>
+<p>Level 8 trains only available after the 4th Level 7 purchase (§11.6).</p>
+<p><strong>D-trains</strong> (4D, 5D) — count cities twice (each city counts at double revenue).</p>
+<p><strong>Train limits by phase:</strong></p>
+<table><thead><tr><th>Phase</th><th>Minor / Regional</th><th>Major</th><th>National</th></tr></thead><tbody><tr><td>1–3</td><td>2</td><td>4</td><td>—</td></tr><tr><td>4</td><td>1</td><td>3</td><td>4</td></tr><tr><td>5–6</td><td>— (must merge)</td><td>2</td><td>3</td></tr><tr><td>7–8</td><td>—</td><td>3</td><td>4</td></tr></tbody></table>
+<p><strong>Reserved 2+2 obligation</strong> (§8g) — each regional/major/national must buy a reserved 2+2 from the depot as its very first train purchase (£100). Obligation waived if Phase 4 is reached before the company's first OR. A reserved 2+2 is not the same as a standard train buy; it is gated separately and cannot be deferred if the company has no train.</p>
+<p><strong>Inter-company purchases</strong> — only after Phase 4; minors from minors, regionals from regionals, majors from majors.</p>
+<hr>
+<h2 id="dividends-6d">Dividends §6d</h2>
+<table><thead><tr><th>Company</th><th>Half-pay</th><th>Withhold</th><th>Full-pay</th></tr></thead><tbody><tr><td>Minor</td><td>✓ only</td><td>—</td><td>—</td></tr><tr><td>Regional</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>Major</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>National</td><td>—</td><td>—</td><td>✓ only</td></tr></tbody></table>
+<ul><li><strong>Half-pay</strong> — half to shareholders (rounded down to share); half to treasury. No price movement.</li><li><strong>Withhold</strong> — all to treasury. Price moves LEFT.</li><li><strong>Full-pay</strong> — all to shareholders. Price moves RIGHT if ≥ share price; else no move.</li><li><strong>Nationals always full-pay</strong> — all revenue distributed; nothing retained in treasury. Price moves normally.</li></ul>
+<hr>
+<h2 id="cross-water-routing-8d-beta--costs-not-yet-implemented">Cross-Water Routing §8d <em>(beta — costs not yet implemented)</em></h2>
+<p>The map has two types of water crossings. Both increase effective distance for city-limit purposes.</p>
+<h3 id="ferry-routes">Ferry routes</h3>
+<table><thead><tr><th>Route</th><th>Connects</th></tr></thead><tbody><tr><td>White Cliffs</td><td>Lille (N31) ↔ London (M28)</td></tr><tr><td>Irish Sea</td><td>Dublin (I20) ↔ various</td></tr><tr><td>Adriatic</td><td>Ancona/Brindisi area</td></tr><tr><td>Aegean</td><td>Constantinople (AA82) approaches</td></tr></tbody></table>
+<p>Ferry distance counts against a train's city limit. Cost per crossing:</p>
+<ul><li><strong>Track</strong>: +£5 per ferry distance unit</li><li><strong>Token</strong>: +£20 per ferry distance unit</li></ul>
+<h3 id="sea-zones">Sea zones</h3>
+<p>19 named zones (North Sea, Baltic, Western Med, Adriatic, Aegean, Black Sea, and more). Sea crossings cost more than ferry crossings.</p>
+<ul><li><strong>Track</strong>: +£10 per sea zone crossed</li><li><strong>Token</strong>: +£40 per sea zone crossed</li></ul>
+<p><strong>Public vs private ports</strong> — a port marked public may be used by any RR. A private port (SHTC or Central Circle private ability) may only be used by the owning company.</p>
+<p><strong>Port authority markers</strong> (§8d.4 — beta) — a major may purchase one PA marker for £125 during its OR (at any point before Buy Trains). North Sea PA covers light-blue zones; Mediterranean PA covers sea-green zones. Each PA marker reduces sea-zone count and ferry distance by 2 for the owning company.</p>
+<hr>
+<h2 id="orient-express-8e-not-yet-implemented">Orient Express §8e <em>(not yet implemented)</em></h2>
+<p>The Orient Express is a special bonus run available to <strong>majors only</strong>.</p>
+<p><strong>Valid OE route</strong> — must include:</p>
+<ol><li>Constantinople (AA82, eastern terminus)</li><li>At least one of: Paris · London · Berlin · Madrid · Sankt-Peterburg</li><li>Some land track connecting them (may include ferry routes)</li></ol>
+<p><strong>First-run bonus</strong> (added to normal route revenue):</p>
+<table><thead><tr><th>Phase</th><th>Bonus</th></tr></thead><tbody><tr><td>2–4</td><td>+£30</td></tr><tr><td>5–6</td><td>+£60</td></tr><tr><td>7–8</td><td>+£100</td></tr></tbody></table>
+<p>On the first OE run: +3 RIGHT share price movement (in addition to normal dividend movement).</p>
+<p><strong>Train combining for OE</strong> — Level ≤4 trains may combine; combined level = sum; city limit = combined level. Level 5+, 4D, 5D cannot combine.</p>
+<p><strong>Subsequent runs</strong> — no first-run bonus; no extra share movement. Normal revenue only.</p>
+<p><strong>Mandatory</strong> — if the OE route is the best possible route for the company, the president must run it. <strong>Nationals may not run the OE.</strong></p>
+<hr>
+<h2 id="national-revenue-11-partially-implemented">National Revenue §11 <em>(partially implemented)</em></h2>
+<p>Nationals have virtual tokens in every city and town in their home zone — no physical tokens needed, no blocking. Revenue calculated in two parts:</p>
+<ol><li><strong>Linked</strong> — cities/towns reachable from any national home-zone city via connected track, counted at printed face value. D-trains double linked revenue.</li><li><strong>Unlinked</strong> — remaining capacity filled at flat rates: <strong>£60 per city</strong> or <strong>£10 per town</strong>.</li></ol>
+<p>Best-first fill: highest-revenue cities assigned to trains first.</p>
+<hr>
+<h2 id="consolidation-phase-13">Consolidation Phase §13</h2>
+<p>Triggered by the <strong>first Level 5 purchase</strong>. Occurs once, as a special round between the triggering OR set and the next SR.</p>
+<ul><li>All remaining minors and unfloated regionals <strong>must</strong> merge into a major or be abandoned</li><li>A major may offer merger terms; if no offer, the company is abandoned</li><li>Abandoned company: charter + trains → Open Market; cash → bank; tokens removed; track rights chit stays</li></ul>
+<hr>
+<h2 id="end-game-15">End Game §15</h2>
+<p><strong>Two triggers — whichever comes first:</strong></p>
+<table><thead><tr><th>Trigger</th><th>When game ends</th></tr></thead><tbody><tr><td>Bank breaks (cash ≤ 0)</td><td>End of current OR set</td></tr><tr><td>First Level 8 train purchased</td><td>End of one more complete OR set</td></tr></tbody></table>
+<p><strong>Level 8 trigger</strong> — when the first 8+8 is bought, £100,000 remainder cash (20 × £5,000 notes) is injected into the bank. This prevents the bank breaking mid-game from the high train prices. One full OR set then completes.</p>
+<p><strong>Scoring</strong> — players sum: personal cash + share value of all holdings (at current share price) + value of privates held.</p>
+</article>
+</main>
+</div>
+<script src="search.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
