@@ -6,13 +6,13 @@ Quick reference for experienced 18xx players new to 18OE. Assumes familiarity wi
 
 ## What Makes 18OE Different
 
-- **Four company types** — Minors and regionals run in parallel; regionals *convert* to majors; minors *merge into* majors; nationals form automatically from groups at phase triggers
-- **Track rights zones** — regionals/majors can only token inside their home zone (cost paid at par)
+- **Four company types** — Minors and regionals run in parallel; regionals *convert* to majors; minors *merge into* majors; nationals form by presidential choice or are forced (never automatic)
+- **Track rights zones** — regionals and minors can only token inside their home zone; majors can token anywhere but pay the token cost from treasury
 - **Incremental capitalisation** — companies receive only the cash from shares sold so far
 - **7-row waterfall auction** — privates + minor auction cards sold before a single OR runs
 - **Orient Express** — special multi-bonus run linking Constantinople to a western terminus
 - **Cross-water routing** — ferry and sea crossings with distance costs (§8d)
-- **Nationals** — form automatically at Phase 4/6/8; unique flat-rate revenue; no tokens
+- **Nationals** — formed by presidential choice at Phase 4/6/8 trigger, or forced; unique flat-rate revenue; no tokens
 
 ---
 
@@ -114,7 +114,7 @@ Each minor has a unique permanent ability. All transfer to the absorbing major o
 
 | Sym | Name | Ability |
 |-----|------|---------|
-| A | Silver Banner Line | Bank pays major the minor's current share price when merged |
+| A | Silver Banner Line | Bank pays the major's current share price into the major's treasury when the minor merges |
 | B | Orange Scroll | All track upgrades cost 1 tile point (including town tiles) |
 | C | Golden Bell | President chooses operating position (first or last) at each OR start |
 | D | Green Junction | Place bonus token on any unreachable non-metropolis land city |
@@ -134,8 +134,8 @@ Each minor has a unique permanent ability. All transfer to the absorbing major o
 - **Order**: sell then buy (standard 18xx sell-buy)
 - **One buy per turn** — one share or par action only; unlimited sells before the buy
 - **Minors and regionals** — exempt from share price movement (price fixed until conversion)
-- **No blocking** — players may buy any available share regardless of ownership percentage
-- **Holding limit** — a single player may not hold >60% of any regional or major (except the president's 20% cert); buying above 60% from the bank pool costs 2× share price (§10.2)
+- **Holding limit** — buying a share from the bank pool that would push your holding above 60% of that company costs 2× share price (§10.2); you may still buy it, just at double cost
+- **Multiple sells** — you may sell shares of different companies in one turn (`MUST_SELL_IN_BLOCKS = false`); no need to sell all shares of one company at once
 - **Reserved secondary shares** — in the Initial SR only, one 25% share per regional may be reserved by a player; no one else may buy it until the second SR (§6.3) *(not yet implemented)*
 
 **Par values:**
@@ -165,15 +165,28 @@ Each minor has a unique permanent ability. All transfer to the absorbing major o
 
 ## Regional → Major Conversion §8.5
 
-A regional converts to a major during a SR on the president's turn (instead of a buy/sell action):
+Conversion is triggered during a SR by **any player holding ≥50%** of the regional (the president, or a player holding both 25% certs). It is its own action — you cannot convert and buy/sell in the same turn.
 
-1. President pays 2× par value into treasury (from personal cash)
-2. Six new 10% shares issued (3 more later at president's discretion)
-3. Post-conversion sell window: all players may sell then buy (before mandatory president purchase)
-4. President must buy the 20% president certificate if not already holding it
-5. All regional share price movement rules now apply
+**What happens:**
+1. Existing shares resize: 50% president cert → 20%; each 25% cert → 10%
+2. Share price moves right×2, up×1 from original regional par (sets the major par)
+3. 6 new 10% IPO shares issued — forming the full 9-cert major structure (1×20% + 8×10%)
+4. New major tokens added to charter (₤40, ₤60, ₤60, ₤80, ₤80, ₤80)
+5. Post-conversion sell window: all players may sell, then buy shares of the new major
+6. The player who triggered conversion must hold the 20% president cert at window close
 
-The **converted major may not run trains** until its first OR. Track rights zone for the major = zone of origin regional.
+**Major par values** (by original regional par):
+
+| Regional par | Major par |
+|-------------|-----------|
+| £60 | £75 |
+| £65 | £80 |
+| £70 | £90 |
+| £75 | £100 |
+| £80 | £110 |
+| £90 | £120 |
+
+Track rights zone for the major = zone of the original regional. The converted major operates in the Major Phase from its next OR.
 
 ---
 

@@ -70,8 +70,8 @@ Every regional and major belongs to exactly one zone. The zone determines:
 ## Token Placement §8c
 
 - One token per OR per company; placed during the Place Token step
-- **Regionals and minors** — may only token in their home zone
-- **Majors** — may token anywhere; zone cost paid from treasury (£10–£40 depending on zone)
+- **Regionals and minors** — may only token in their home zone (track rights zone restriction)
+- **Majors** — may token anywhere reachable; token cost paid from treasury — first token £40, then £60, £60, £80, £80, £80
 - **Nationals** — skip the token step entirely (virtual tokens in all home-zone cities)
 - Token slots are limited; standard city-slot rules apply
 
