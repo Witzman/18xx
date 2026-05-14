@@ -2992,7 +2992,7 @@ _RULES_SECTION_MAP = {
     'Minor Abilities':          ['Minor Abilities'],
     'Private Abilities':        ['Private Abilities'],
     'Auction Phase':            ['Auction Phase'],
-    'Dividend Options':         ['OR Steps (Major)'],
+    'Dividend Options':         ['OR Steps (Major)', 'Train Data & Phases'],
     'Consolidation Phase':      ['Consolidation Phase'],
     'End Game':                 ['End Game'],
 }

@@ -25,6 +25,26 @@ Quick reference for the core rules of 18OE. Intended as a developer cheat-sheet 
 
 ---
 
+## Auction Phase
+
+Items sold in a **7-row waterfall**. Each row is fully sold before the next opens. Within a row, items sell left-to-right. On their turn a player may buy the leftmost unsold item of any open row, or pass.
+
+| Rows | Contents | Value |
+|------|----------|-------|
+| 1 | RSC · PeC (£20 privates, no abilities) | £20 |
+| 2 | Wien Südbahnhof · Barclay, Bevan (£40 privates) | £40 |
+| 3 | Star Harbor · Central Circle · White Cliffs Ferry (£60) | £60 |
+| 4 | Hochberg Mining · Brandt & Brandau · Swift Metropolitan (£80) | £80 |
+| 5 | Minor auction cards A · B · C | £120 par |
+| 6 | Minor auction cards D · E · F · G | £120 par |
+| 7 | Minor auction cards H · J · K · L · M | £120 par |
+
+**Minor auction card** — purchasing one immediately floats that minor at £120 par; home token placed in the Regional/Minor Phase.
+
+**All-pass price reduction** *(not yet implemented)* — if all players consecutively pass before the opening packet is sold, each item in the topmost open row pays its printed dividend, then every item in that row drops £5. Repeats; any item reaching £0 must be taken by the next player.
+
+---
+
 ## Train Phases & Rusting
 
 | Level | Type | Qty | Face Value | Rusts At |
@@ -74,6 +94,22 @@ Level 8 becomes available after the 4th Level 7 purchase (not at a fixed phase).
 
 ---
 
+## Dividend Options
+
+| Company | Half-pay | Withhold | Full-pay |
+|---------|----------|----------|----------|
+| Minor | ✓ only | — | — |
+| Regional | ✓ | ✓ | ✓ |
+| Major | ✓ | ✓ | ✓ |
+| National | — | — | ✓ only |
+
+- **Full-pay** — all revenue paid to shareholders pro-rata; share price moves RIGHT if revenue ≥ share price, else no move
+- **Half-pay** — half to shareholders, half to treasury; share price never moves (minors/regionals exempt from movement entirely)
+- **Withhold** — all revenue to treasury; share price moves LEFT
+- **Nationals** — always full-pay; all revenue distributed, nothing retained; share price moves RIGHT/no-move as normal
+
+---
+
 ## Track Rights Zones
 
 | Zone Code | Zone Name | Home Token Cost | Terrain Discount |
@@ -114,3 +150,43 @@ Implementation: `Graph.new(home_as_token: true, no_blocking: true)` — see [Eng
 - Track: Ferry = +£5 × distance; Sea = +£10 × number of sea zones
 - Tokens: Ferry = +£20 × distance; Sea = +£40 × number of sea zones
 - 6 sea zones: North Sea, Baltic, Western Mediterranean, Adriatic, Aegean, Black Sea
+
+---
+
+## Minor Abilities
+
+Each minor has a unique special ability. Ability transfers to the major on merger (→ beta).
+
+| Minor | Name | Ability summary |
+|-------|------|-----------------|
+| A | Silver Banner Line | Bank pays major current share price when minor merges |
+| B | Orange Scroll Surveyors | All track upgrades cost 1 tile point (including towns) |
+| C | Golden Bell Marketplace | President chooses operating order position (first/last) at OR start |
+| D | Green Junction Mercantile | Place bonus token on unreachable non-metropolis land city |
+| E | Blue Coast Bridge | 33% discount on water/coast terrain costs; extra tile lay |
+| F | White Peak Mountain Railway | 33% discount on mountain/rough terrain costs; extra tile lay |
+| G | Indigo Foundry | +2 tile points every OR |
+| H | Great Western Steamship | Reduces sea-zone count for city limit by 1 (Ph1–6) or 2 (Ph7–8) |
+| J | Grey Locomotive Works | 10% discount on all train purchases (including Pullman cars) |
+| K | Vermilion Seal Couriers | Mail contract: bank pays £20 to treasury at OR start |
+| L | Krasnaya Strela | +1+1 marker on one assigned train each OR run |
+| M | CIWL | Holds 10 Pullman cars; free Pullman granted at Phase 4 start |
+
+---
+
+## Private Abilities
+
+Privates are auctioned in rows 1–4; minor auction cards in rows 5–7.
+
+| Sym | Name | Ability summary |
+|-----|------|-----------------|
+| RSC | Robert Stephenson and Company | No special ability |
+| PeC | Ponts et Chaussées | No special ability |
+| WS | Wien Südbahnhof | Free station token placement anywhere; sea-zone costs still apply |
+| BBBT | Barclay, Bevan, Barclay and Tritton | Choose one of: reset par value · custodianship share · block DOWN movement |
+| SHTC | Star Harbor Trading Company | Extra token slot at any port city; private/public port access for owning RR |
+| CCTC | Central Circle Transport Corporation | Extra token slot at any non-port city; revenue £10/£20/£40/£60 by phase |
+| WCF | White Cliffs Ferry | At Phase 5 start, place one token on White Cliffs Ferry position next to Lille |
+| HMG | Hochberg Mining and Lumber Company | Place mining token on ≥£45 terrain hex; only owner's RRs may use that track |
+| BB | Brandt and Brandau, Engineers | 4 free tile lays (max 2/OR); no terrain cost; owner's RRs only |
+| SML | Swift Metropolitan Line | From Phase 4, one controlled RR keeps a preserved 2+2 outside train limit |
