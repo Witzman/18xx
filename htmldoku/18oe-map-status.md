@@ -211,20 +211,3 @@ All 8 zones defined. `NATIONAL_REGION_HEXES_COMPLETE = true`.
 | White Cliffs Ferry token slot near Lille N31 | ? |
 | Patronage tiles — fixed city list or game logic only? | ? |
 
----
-
-## Open Issues Summary
-
-| Priority | Item | Ref |
-|----------|------|-----|
-| **High** | U24 Bordeaux: no path edges | BUG-028 |
-| **High** | N31 Lille: edge 0 missing | BUG-029 |
-| **High** | Verify M28/AA82/I20/O28/X33 are in `yellow:` section | map.rb |
-| **High** | Verify all 19 red hex revenues and edges against physical map | §3 |
-| **Medium** | Ferry route paths and sea zone distance numbers | §8d |
-| **Medium** | Port authority positions (North Sea ×8, Mediterranean ×8) | §8d |
-| **Medium** | Verify Caucasus terrain; river routing accuracy | §3 |
-| **Low** | White Cliffs Ferry token slot near N31 | §10 |
-| **Low** | OE9–11, OE20–22 edge pairs; OE19 tile type | §5 |
-| **Low** | Confirm Venezia V47 town vs city | §3 |
-| **Low** | Patronage tiles — fixed city list or game logic only? | §14 |

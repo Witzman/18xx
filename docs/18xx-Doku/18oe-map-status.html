@@ -180,6 +180,34 @@
 </div></div>
 </div>
 <hr>
+<h2 id="open-issues">Open Issues</h2>
+<table class="gap-table" style="margin-bottom:1.2rem">
+<thead><tr><th>ID</th><th>Issue</th><th>Severity</th></tr></thead><tbody>
+<tr class="gap-row-high"><td class="gap-id">BUG-028</td><td class="gap-title">U24 Bordeaux: no path edges (city unroutable)</td><td class="gap-id"><span class="sev-high">HIGH</span></td></tr>
+<tr class="gap-row-medium"><td class="gap-id">BUG-029</td><td class="gap-title">N31 Lille: second path edge missing</td><td class="gap-id"><span class="sev-med">MEDIUM</span></td></tr>
+</tbody></table>
+<table class="gap-table">
+<thead><tr><th>Section</th><th>Missing / Partial</th><th>Scope</th></tr></thead><tbody>
+<tr class="gap-section-row"><td colspan="3" class="gap-section-label">Map &amp; Components</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE9–OE11 — green double-town path edge orientations needed</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE20–OE22 — brown double-town path edge orientations needed</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE19 — tile type unknown; must be identified and defined</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify standard tile quantities against physical tile manifest</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Audit OE-specific tile upgrade paths against physical manifest</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Ferry route engine override — `game.rb` override to whitelist exits toward blue hexes that carry a matching pre-printed path</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**Lille↔London ferry** — tiles connect correctly; all other ferry routes blocked pending L2 engine override</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**Port sea stubs** `[BETA]` — blue tiles at port entry points use `junction;path=a:X,b:_0,terminal:1` as connectors between land port paths and sea ferry routes; model: land port → stub → sea ferry hexes → stub → land port; implement per port once ferry routing engine override is in place; public vs private port access distinction applies here (see §8d)</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work</td><td class="gap-id"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="gap-section-row"><td colspan="3" class="gap-section-label">Track Laying</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+</tbody></table>
+<hr>
 <p>Current state of <code>lib/engine/game/g_18_oe/map.rb</code>. Tracks what is implemented, what is verified against the physical map, and what is still outstanding.</p>
 <p>Map orientation: <code>LAYOUT = :pointy</code>, <code>AXES = { x: :number, y: :letter }</code> Coordinate system: rows A–Z then AA–AH (34 rows); columns 2–88.</p>
 <hr>
@@ -255,9 +283,6 @@ AG:40 AG:88  Tunis, Alexandria &amp; Suez</code></pre>
 <hr>
 <h2 id="ports-and-ferry-routes">Ports and Ferry Routes</h2>
 <table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody><tr><td>Port city hexes (public light-blue / private red anchor)</td><td>✓ 33 <code>icon=image:port,sticky:1</code> instances in map.rb</td></tr><tr><td>Ferry path stubs (14+ <code>junction;path=...,terminal:1</code> hexes)</td><td>✓ Stubs present</td></tr><tr><td>Ferry route paths (start hex+edge → end hex+edge, distance)</td><td>? Numbers not yet defined</td></tr><tr><td>Sea zone distance numbers for cost calculation</td><td>? Outstanding</td></tr><tr><td>North Sea port authority positions (8)</td><td>?</td></tr><tr><td>Mediterranean port authority positions (8)</td><td>?</td></tr><tr><td>White Cliffs Ferry token slot near Lille N31</td><td>?</td></tr><tr><td>Patronage tiles — fixed city list or game logic only?</td><td>?</td></tr></tbody></table>
-<hr>
-<h2 id="open-issues-summary">Open Issues Summary</h2>
-<table><thead><tr><th>Priority</th><th>Item</th><th>Ref</th></tr></thead><tbody><tr><td><strong>High</strong></td><td>U24 Bordeaux: no path edges</td><td>BUG-028</td></tr><tr><td><strong>High</strong></td><td>N31 Lille: edge 0 missing</td><td>BUG-029</td></tr><tr><td><strong>High</strong></td><td>Verify M28/AA82/I20/O28/X33 are in <code>yellow:</code> section</td><td>map.rb</td></tr><tr><td><strong>High</strong></td><td>Verify all 19 red hex revenues and edges against physical map</td><td>§3</td></tr><tr><td><strong>Medium</strong></td><td>Ferry route paths and sea zone distance numbers</td><td>§8d</td></tr><tr><td><strong>Medium</strong></td><td>Port authority positions (North Sea ×8, Mediterranean ×8)</td><td>§8d</td></tr><tr><td><strong>Medium</strong></td><td>Verify Caucasus terrain; river routing accuracy</td><td>§3</td></tr><tr><td><strong>Low</strong></td><td>White Cliffs Ferry token slot near N31</td><td>§10</td></tr><tr><td><strong>Low</strong></td><td>OE9–11, OE20–22 edge pairs; OE19 tile type</td><td>§5</td></tr><tr><td><strong>Low</strong></td><td>Confirm Venezia V47 town vs city</td><td>§3</td></tr><tr><td><strong>Low</strong></td><td>Patronage tiles — fixed city list or game logic only?</td><td>§14</td></tr></tbody></table>
 </article>
 </main>
 </div>

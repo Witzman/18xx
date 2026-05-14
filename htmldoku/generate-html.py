@@ -2628,6 +2628,7 @@ def parse_bugs_md(path):
         status_m  = re.search(r'\*\*Status:\*\*\s*([A-Z]+)', block)
         sev_m     = re.search(r'\*\*Severity:\*\*\s*(HIGH|MEDIUM|LOW)', block)
         sym_m     = re.search(r'\*\*Symptom\.\*\*\s*(.+?)(?=\n\n|\*\*|$)', block, re.DOTALL)
+        file_m    = re.search(r'\*\*File:\*\*\s*`([^`]+)`', block)
         if not status_m:
             continue
         status = status_m.group(1)
@@ -2638,7 +2639,9 @@ def parse_bugs_md(path):
         symptom = ''
         if sym_m:
             symptom = re.sub(r'\s+', ' ', sym_m.group(1)).strip()[:160]
-        bugs.append({'id': bug_id, 'title': title, 'severity': severity, 'symptom': symptom})
+        file_path = file_m.group(1) if file_m else ''
+        bugs.append({'id': bug_id, 'title': title, 'severity': severity,
+                     'symptom': symptom, 'file': file_path})
     return bugs
 
 
@@ -2910,8 +2913,10 @@ def build_map_status_html():
     lines_in = raw.splitlines(keepends=True)
     skip = False
     cleaned_lines = []
+    _STRIP_SECTIONS = {'Overall Status', 'Open Issues Summary'}
     for line in lines_in:
-        if re.match(r'^## Overall Status\s*$', line):
+        h2 = re.match(r'^## (.+?)\s*$', line)
+        if h2 and h2.group(1) in _STRIP_SECTIONS:
             skip = True
             continue
         if skip and re.match(r'^## \w', line):
@@ -2947,6 +2952,65 @@ def build_map_status_html():
         )
     table_lines += ['</tbody></table>']
 
+    # ── Auto-generated Open Issues section ─────────────────────────────────
+    bugs_path = MD_DIR / "bugs.md"
+    MAP_SECTIONS = {'Map & Components', 'Track Laying', 'Token Placement'}
+    MAP_FILE_PATTERNS = ('map.rb', 'map/', 'g_18_oe/map')
+
+    map_bugs = []
+    if bugs_path.exists():
+        for b in parse_bugs_md(bugs_path):
+            if any(p in b.get('file', '') for p in MAP_FILE_PATTERNS):
+                map_bugs.append(b)
+
+    map_todo = []
+    for chapter, items in COVERAGE_DATA:
+        if chapter not in MAP_SECTIONS:
+            continue
+        for label, status, scope in items:
+            if status in ('todo', 'partial'):
+                map_todo.append((chapter, label, status, scope))
+
+    sev_cls_map = {'HIGH': 'sev-high', 'MEDIUM': 'sev-med', 'LOW': 'sev-low'}
+    iss_lines = ['<h2 id="open-issues">Open Issues</h2>']
+    if map_bugs:
+        iss_lines.append('<table class="gap-table" style="margin-bottom:1.2rem">')
+        iss_lines.append('<thead><tr><th>ID</th><th>Issue</th><th>Severity</th></tr></thead><tbody>')
+        for b in sorted(map_bugs, key=lambda x: {'HIGH': 0, 'MEDIUM': 1, 'LOW': 2}.get(x['severity'], 1)):
+            cls = sev_cls_map.get(b['severity'], 'sev-med')
+            iss_lines.append(
+                f'<tr class="gap-row-{b["severity"].lower()}">'
+                f'<td class="gap-id">{_html.escape(b["id"])}</td>'
+                f'<td class="gap-title">{_html.escape(b["title"])}</td>'
+                f'<td class="gap-id"><span class="{cls}">{_html.escape(b["severity"])}</span></td>'
+                f'</tr>'
+            )
+        iss_lines.append('</tbody></table>')
+    else:
+        iss_lines.append('<p class="gap-none">No open map bugs.</p>')
+
+    if map_todo:
+        iss_lines.append('<table class="gap-table">')
+        iss_lines.append('<thead><tr><th>Section</th><th>Missing / Partial</th><th>Scope</th></tr></thead><tbody>')
+        cur_ch = None
+        for chapter, label, status, scope in map_todo:
+            if chapter != cur_ch:
+                cur_ch = chapter
+                iss_lines.append(
+                    f'<tr class="gap-section-row">'
+                    f'<td colspan="3" class="gap-section-label">{_html.escape(chapter)}</td>'
+                    f'</tr>'
+                )
+            st_cls = 'gap-row-partial' if status == 'partial' else 'gap-row-feat'
+            iss_lines.append(
+                f'<tr class="{st_cls}">'
+                f'<td class="gap-area"></td>'
+                f'<td class="gap-feat">{_html.escape(label)}</td>'
+                f'<td class="gap-id"><span class="scope-pill scope-pill-{scope}">{scope}</span></td>'
+                f'</tr>'
+            )
+        iss_lines.append('</tbody></table>')
+
     p = []
     p.append('<h1>18OE — Map Implementation Status</h1>')
     p.append('<p class="page-crosslink">For full rulebook picture → '
@@ -2956,6 +3020,8 @@ def build_map_status_html():
     p.append(bar_html)
     p.append('\n'.join(table_lines))
     p.append('\n'.join(cov_lines))
+    p.append('<hr>')
+    p.append('\n'.join(iss_lines))
     p.append('<hr>')
     p.append(body_html)
 
