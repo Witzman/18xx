@@ -599,6 +599,23 @@ article:has(.status-board) { max-width: 1400px; }
   color: #8a7050;
   padding: 0 0.85rem 0.3rem;
 }
+.sb-branch-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 0.62rem;
+}
+.branch-name { font-family: 'Courier New', monospace; color: #2a4ab0; }
+.branch-count {
+  margin-left: auto;
+  background: rgba(13,31,56,0.07);
+  color: #5a4a38;
+  font-size: 0.55rem;
+  padding: 0.05em 0.4em;
+  border-radius: 2px;
+}
 
 /* done cards */
 .sb-done-card { padding: 0.6rem 0.85rem; border-bottom: 1px solid rgba(201,168,67,0.08); }
@@ -645,6 +662,41 @@ article:has(.status-board) { max-width: 1400px; }
 .sb-todo      .sb-status-dot { background: transparent; border: 1.5px solid rgba(13,31,56,0.28); }
 
 .sb-item-text { flex: 1; min-width: 0; color: #1a0f08; }
+.pr-badge {
+  flex-shrink: 0;
+  font-size: 0.6rem;
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: 0.04em;
+  padding: 0.1em 0.45em;
+  border-radius: 3px;
+  background: rgba(42,74,176,0.10);
+  color: #2a4ab0;
+  text-decoration: none;
+  border: 1px solid rgba(42,74,176,0.25);
+  margin-right: 0.25em;
+}
+.pr-badge:hover { background: rgba(42,74,176,0.18); }
+/* rules-summary implementation status pills */
+.impl-pill {
+  display: inline-block;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.12em 0.55em;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 0.5em;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.impl-done    { background: rgba(45,122,45,0.15);  color: #1a5c1a; border: 1px solid rgba(45,122,45,0.3); }
+.impl-pr      { background: rgba(42,74,176,0.12);  color: #1a2e80; border: 1px solid rgba(42,74,176,0.3); }
+.impl-partial { background: rgba(184,120,0,0.12);  color: #7a4e00; border: 1px solid rgba(184,120,0,0.3); }
+.impl-todo    { background: rgba(140,30,30,0.10);  color: #8c1e1e; border: 1px solid rgba(140,30,30,0.25); }
+.impl-def     { background: rgba(100,80,60,0.08);  color: #6a5040; border: 1px solid rgba(100,80,60,0.2); }
+.impl-beta    { font-style: italic; opacity: 0.75; }
+
 .layer-tag {
   flex-shrink: 0;
   font-family: 'Cinzel', Georgia, serif;
@@ -708,6 +760,90 @@ article:has(.coverage-map) { max-width: 1200px; }
   padding-bottom: 0.3rem;
   border-bottom: 1px solid rgba(201,168,67,0.3);
 }
+.cov-expand-bar {
+  display: flex; gap: 0.5rem; margin-bottom: 0.8rem;
+}
+.cov-expand-btn {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.25em 0.8em; border-radius: 3px; cursor: pointer;
+  background: rgba(201,168,67,0.08); color: #5a4a38;
+  border: 1px solid rgba(201,168,67,0.28);
+}
+.cov-expand-btn:hover { background: rgba(201,168,67,0.18); color: #0d1f38; }
+
+.cov-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.cov-toggle::before {
+  content: '▶';
+  font-size: 0.5rem;
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+.cov-chapter.open .cov-toggle::before { content: '▼'; }
+.cov-chapter.open .cov-toggle { color: #1a3a24; }
+.cov-ch-name { flex: 0 0 auto; }
+.cov-sec-bar-wrap {
+  flex: 1;
+  min-width: 40px; max-width: 100px;
+  display: flex; align-items: center;
+}
+.cov-sec-bar {
+  width: 100%; height: 4px; border-radius: 2px;
+  background: rgba(13,31,56,0.08);
+  display: flex; overflow: hidden;
+}
+.csb-seg { height: 100%; }
+.csb-done    { background: #2d7a2d; }
+.csb-pr      { background: #2a4ab0; }
+.csb-partial { background: #b87800; }
+.cov-sec-count {
+  flex-shrink: 0;
+  font-size: 0.55rem;
+  color: #8a7050;
+  font-family: 'Cinzel', Georgia, serif;
+  white-space: nowrap;
+}
+.cov-rules-link {
+  color: inherit; text-decoration: none;
+  border-bottom: 1px dotted rgba(13,31,56,0.25);
+}
+.cov-rules-link:hover { color: #2a4ab0; border-bottom-color: #2a4ab0; }
+
+.cov-detail { display: none; margin: 0.5rem 0 0.8rem; }
+.cov-chapter.open .cov-detail { display: block; }
+.cov-detail-summary {
+  font-size: 0.7rem; padding: 0.25rem 0.2rem 0.5rem;
+  display: flex; gap: 0.6em; flex-wrap: wrap;
+}
+.cov-detail-summary .cov-dr-done    { color: #2d7a2d; font-weight: 600; }
+.cov-detail-summary .cov-dr-pr      { color: #2a4ab0; font-weight: 600; }
+.cov-detail-summary .cov-dr-partial { color: #b87800; font-weight: 600; }
+.cov-detail-summary .cov-dr-todo    { color: rgba(13,31,56,0.45); font-weight: 600; }
+.cov-detail-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.cov-dr td { padding: 0.18rem 0.4rem; }
+.cov-dr-icon { width: 1.4em; text-align: center; font-weight: bold; opacity: 0.85; }
+.cov-dr-label { color: #1a0f08; }
+.cov-dr-done   .cov-dr-icon { color: #2d7a2d; }
+.cov-dr-pr     .cov-dr-icon { color: #2a4ab0; }
+.cov-dr-partial .cov-dr-icon { color: #b87800; }
+.cov-dr-todo   .cov-dr-icon { color: rgba(13,31,56,0.35); }
+.cov-dr-def    .cov-dr-icon { color: rgba(100,80,60,0.5); }
+.cov-dr:hover td { background: rgba(201,168,67,0.07); }
+.scope-pill {
+  font-size: 0.6rem;
+  padding: 0.05em 0.45em;
+  border-radius: 3px;
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: 0.05em;
+}
+.scope-pill-alpha { background: rgba(29,80,29,0.12); color: #1d501d; }
+.scope-pill-beta  { background: rgba(42,74,176,0.10); color: #2a4ab0; }
 
 .cov-items {
   display: flex;
@@ -764,6 +900,42 @@ article:has(.coverage-map) { max-width: 1200px; }
 }
 
 /* ── Alpha Gaps page ─────────────────────────────────────────────────── */
+/* Alpha summary banner */
+.alpha-banner {
+  background: linear-gradient(135deg, rgba(13,31,56,0.06) 0%, rgba(201,168,67,0.08) 100%);
+  border: 1px solid rgba(201,168,67,0.3);
+  border-radius: 6px;
+  padding: 1.1rem 1.3rem 0.9rem;
+  margin: 1.2rem 0 1.6rem;
+}
+.alpha-banner-header {
+  display: flex; align-items: baseline; gap: 0.8rem;
+  margin-bottom: 0.85rem;
+}
+.alpha-banner-title {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #5a4a38;
+}
+.alpha-banner-date {
+  margin-left: auto;
+  font-size: 0.68rem; color: #8a7050; font-style: italic;
+}
+.readiness-red   { font-size: 0.72rem; font-weight: 700; color: #c03030; letter-spacing: 0.05em; }
+.readiness-amber { font-size: 0.72rem; font-weight: 700; color: #b87800; letter-spacing: 0.05em; }
+.readiness-green { font-size: 0.72rem; font-weight: 700; color: #2d7a2d; letter-spacing: 0.05em; }
+.alpha-banner-stats {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.alpha-banner-stat {
+  padding: 0.3rem 0.75rem; border-radius: 3px;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #faf6ec;
+}
+.alpha-banner-bar .bar-rows { margin: 0; }
+.alpha-banner-bar .bar-row  { margin-bottom: 0; }
+
 .gap-stats {
   display: flex; flex-wrap: wrap; gap: 0.6rem;
   margin: 1.4rem 0 2rem;

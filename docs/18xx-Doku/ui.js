@@ -165,6 +165,31 @@
     });
   }
 
+  function initCoverageToggle() {
+    document.querySelectorAll('.cov-toggle').forEach(function (title) {
+      title.addEventListener('click', function (e) {
+        if (e.target.closest('.cov-rules-link')) return; // let link through
+        title.closest('.cov-chapter').classList.toggle('open');
+      });
+    });
+    var expandAll   = document.getElementById('cov-expand-all');
+    var collapseAll = document.getElementById('cov-collapse-all');
+    if (expandAll) {
+      expandAll.addEventListener('click', function () {
+        document.querySelectorAll('.cov-chapter').forEach(function (ch) {
+          ch.classList.add('open');
+        });
+      });
+    }
+    if (collapseAll) {
+      collapseAll.addEventListener('click', function () {
+        document.querySelectorAll('.cov-chapter').forEach(function (ch) {
+          ch.classList.remove('open');
+        });
+      });
+    }
+  }
+
   function initStatusBoard() {
     var board = document.querySelector('.status-board');
     if (!board) return;
@@ -189,7 +214,7 @@
 
     /* group-by toggle */
     var groupBtns = document.querySelectorAll('.group-btn');
-    var viewBodies = board.querySelectorAll('.view-rules, .view-layer');
+    var viewBodies = board.querySelectorAll('.view-rules, .view-layer, .view-branch');
     groupBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         groupBtns.forEach(function (b) { b.classList.remove('active'); });
@@ -207,6 +232,7 @@
     initAnchorLinks();
     initCopyButtons();
     initMilestoneFilter();
+    initCoverageToggle();
     initStatusBoard();
   });
 }());
