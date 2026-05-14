@@ -372,9 +372,11 @@ def parse_kanban_items(md_path):
             continue
         status_char = m.group(1)
         original = m.group(2)
-        # extract upstream PR reference before any stripping
-        pr_m = re.search(r'tobymao#(\d+)', original)
-        pr = pr_m.group(1) if pr_m else ''
+        # extract upstream PR reference and branch tag before any stripping
+        pr_m     = re.search(r'tobymao#(\d+)', original)
+        pr       = pr_m.group(1) if pr_m else ''
+        branch_m = re.search(r'`([^`]+)`', original)
+        branch   = branch_m.group(1) if branch_m else ''
         raw = original
         # strip "→ needs PR" suffix, trailing branch tag, and PR reference
         raw = re.sub(r'\s*→\s*needs PR\s*$', '', raw).strip()
@@ -405,6 +407,7 @@ def parse_kanban_items(md_path):
             'scope':    scope,
             'deferred': is_deferred,
             'pr':       pr,
+            'branch':   branch,
         })
     return sections
 
@@ -640,6 +643,32 @@ def build_shared_bar(rows, chips):
     return '\n'.join(p)
 
 
+def _branch_grouped_items(sections, valid_statuses):
+    """Collect items from sections, grouped by branch tag.
+
+    Sort order: groups containing [~] items first (active dev), then [>] groups
+    (needs PR), each sub-sorted alphabetically by branch name.
+    """
+    groups = {}   # branch → list of items
+    order  = []   # insertion order
+    for sec in sections:
+        for it in sec['items']:
+            if it['status'] not in valid_statuses:
+                continue
+            key = it.get('branch') or '(no branch)'
+            if key not in groups:
+                groups[key] = []
+                order.append(key)
+            groups[key].append(it)
+
+    def _group_sort_key(branch):
+        items = groups[branch]
+        has_partial = any(it['status'] in ('partial', 'testing') for it in items)
+        return (0 if has_partial else 1, branch)
+
+    return sorted(((b, groups[b]) for b in order), key=lambda kv: _group_sort_key(kv[0]))
+
+
 def _layer_grouped_items(sections, valid_statuses):
     """Collect items from sections, grouped by layer tag, sorted L1→L2→L3→compound→other."""
     LAYER_RANK  = {'L1': 0, 'L2': 1, 'L3': 2, 'non-code': 4}
@@ -779,6 +808,7 @@ def build_status_html():
     p.append('<span class="filter-label">Group by:</span>')
     p.append('<button class="group-btn active" data-group="rules">Rules</button>')
     p.append('<button class="group-btn" data-group="layer">Layer</button>')
+    p.append('<button class="group-btn" data-group="branch">Branch</button>')
     p.append('</div>')
 
     # Board
@@ -846,6 +876,36 @@ def build_status_html():
                 f'<div class="sb-status-dot"></div>'
                 f'<span class="sb-item-text">{text}</span>'
                 f'{pr_badge}'
+                f'</div>'
+            )
+        p.append('</div>')
+    p.append('</div>')
+    # branch view (hidden until toggled)
+    p.append('<div class="sb-col-body view-branch" style="display:none">')
+    for branch_name, items in _branch_grouped_items(inwork_sections, ('needs-pr', 'partial', 'testing')):
+        # derive a PR link if all items in this group share the same PR
+        prs = {it['pr'] for it in items if it.get('pr')}
+        pr_link = ''
+        if len(prs) == 1:
+            pn = next(iter(prs))
+            pr_link = (f' <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/{pn}"'
+                       f' target="_blank" rel="noopener">#{pn}</a>')
+        p.append('<div class="sb-section">')
+        p.append(f'<div class="sb-section-title sb-branch-title">'
+                 f'<span class="branch-name">{_html.escape(branch_name)}</span>'
+                 f'{pr_link}'
+                 f'<span class="branch-count">{len(items)}</span>'
+                 f'</div>')
+        for it in items:
+            layer = _html.escape(it['layer'])
+            text  = apply_inline(it['text'])
+            cls   = 'sb-needs-pr' if it['status'] == 'needs-pr' else 'sb-partial'
+            scope = 'beta' if it.get('beta') else 'alpha'
+            p.append(
+                f'<div class="sb-item {cls}" data-layer="{layer}" data-scope="{scope}">'
+                f'<div class="sb-status-dot"></div>'
+                f'<span class="sb-item-text">{text}</span>'
+                f'<span class="layer-tag">{layer}</span>'
                 f'</div>'
             )
         p.append('</div>')
@@ -1729,6 +1789,23 @@ article:has(.status-board) { max-width: 1400px; }
   color: #8a7050;
   padding: 0 0.85rem 0.3rem;
 }
+.sb-branch-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 0.62rem;
+}
+.branch-name { font-family: 'Courier New', monospace; color: #2a4ab0; }
+.branch-count {
+  margin-left: auto;
+  background: rgba(13,31,56,0.07);
+  color: #5a4a38;
+  font-size: 0.55rem;
+  padding: 0.05em 0.4em;
+  border-radius: 2px;
+}
 
 /* done cards */
 .sb-done-card { padding: 0.6rem 0.85rem; border-bottom: 1px solid rgba(201,168,67,0.08); }
@@ -2348,7 +2425,7 @@ UI_JS = """\
 
     /* group-by toggle */
     var groupBtns = document.querySelectorAll('.group-btn');
-    var viewBodies = board.querySelectorAll('.view-rules, .view-layer');
+    var viewBodies = board.querySelectorAll('.view-rules, .view-layer, .view-branch');
     groupBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         groupBtns.forEach(function (b) { b.classList.remove('active'); });

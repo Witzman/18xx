@@ -129,6 +129,7 @@
 <span class="filter-label">Group by:</span>
 <button class="group-btn active" data-group="rules">Rules</button>
 <button class="group-btn" data-group="layer">Layer</button>
+<button class="group-btn" data-group="branch">Branch</button>
 </div>
 <div class="status-board">
 <div class="sb-col">
@@ -200,27 +201,27 @@
 <div class="sb-col-body view-rules">
 <div class="sb-section">
 <div class="sb-section-title">Track Rights</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">20% terrain discount zones</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">20% terrain discount zones <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Stock Market Grid</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">LEFT (zero dividend)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">No movement (below par)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">RIGHT (at/above par)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Sold-out order (hi→lo price)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">>60% president pool buy at 2×</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12603" target="_blank" rel="noopener">#12603</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">§11.7 issuance DOWN movement</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">LEFT (zero dividend) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">No movement (below par) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">RIGHT (at/above par) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Sold-out order (hi→lo price) <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">>60% president pool buy at 2× <code>18oe_fix_president_overcap</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12603" target="_blank" rel="noopener">#12603</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">§11.7 issuance DOWN movement <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Train Data &amp; Phases</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 unlock after 4th L7</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 unlock after 4th L7 <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">End Game</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bank break pre-L8 timing</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bank break pre-L8 timing <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
@@ -256,18 +257,18 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L2</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">20% terrain discount zones</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">LEFT (zero dividend)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">No movement (below par)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">RIGHT (at/above par)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Sold-out order (hi→lo price)</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">>60% president pool buy at 2×</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12603" target="_blank" rel="noopener">#12603</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">§11.7 issuance DOWN movement</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 unlock after 4th L7</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bank break pre-L8 timing</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed</span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">20% terrain discount zones <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">LEFT (zero dividend) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">No movement (below par) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">RIGHT (at/above par) <code>18oe_fix_share_price_movement</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Sold-out order (hi→lo price) <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">>60% president pool buy at 2× <code>18oe_fix_president_overcap</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12603" target="_blank" rel="noopener">#12603</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">§11.7 issuance DOWN movement <code>18oe_fix_stock_terrain</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 unlock after 4th L7 <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bank break pre-L8 timing <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L2/L3</div>
@@ -287,6 +288,70 @@
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span></div>
+</div>
+</div>
+<div class="sb-col-body view-branch" style="display:none">
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">assign_hexes</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — <code>assign_hexes</code> wired; <strong>still needed</strong>: routing exclusion + placement eligibility (cost ≥ £45)</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">assign_krasnaya_strela!</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — <code>assign_krasnaya_strela!</code>/<code>restore_krasnaya_strela!</code> wired; <strong>still needed</strong>: train-choice step + D-train exception</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">choose_ability</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — <code>choose_ability</code>/<code>@golden_bell_position</code>/<code>operating_order</code> wired; <strong>still needed</strong>: OR-start choice-prompt step</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">hex_bonus</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — <code>hex_bonus</code>/<code>event_d_token_phase_change!</code>/<code>assign_d_token!</code> wired; <strong>still needed</strong>: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">tile_lay</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>tile_lay</code> (free, count: 4) wired; <strong>still needed</strong>: per-OR cap (max 2/OR)</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">token</span><span class="branch-count">4</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: town revenue scoring (£10/£20/£40/£60 by phase), SR window</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_abilities</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">J – Grey Locomotive</span><span class="layer-tag">L1</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_fix_level8_gameend</span> <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a><span class="branch-count">5</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 unlock after 4th L7 <code>18oe_fix_level8_gameend</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bank break pre-L8 timing <code>18oe_fix_level8_gameend</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger <code>18oe_fix_level8_gameend</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection <code>18oe_fix_level8_gameend</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed <code>18oe_fix_level8_gameend</code></span><span class="layer-tag">L2</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_fix_president_overcap</span> <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12603" target="_blank" rel="noopener">#12603</a><span class="branch-count">1</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">>60% president pool buy at 2× <code>18oe_fix_president_overcap</code></span><span class="layer-tag">L2</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_fix_share_price_movement</span> <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12602" target="_blank" rel="noopener">#12602</a><span class="branch-count">3</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">LEFT (zero dividend) <code>18oe_fix_share_price_movement</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">No movement (below par) <code>18oe_fix_share_price_movement</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">RIGHT (at/above par) <code>18oe_fix_share_price_movement</code></span><span class="layer-tag">L2</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_fix_stock_terrain</span> <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12604" target="_blank" rel="noopener">#12604</a><span class="branch-count">3</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">20% terrain discount zones <code>18oe_fix_stock_terrain</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Sold-out order (hi→lo price) <code>18oe_fix_stock_terrain</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">§11.7 issuance DOWN movement <code>18oe_fix_stock_terrain</code></span><span class="layer-tag">L2</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_mergers</span><span class="branch-count">4</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Rusted train claim</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Minor SR merge action</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Plumbing / can_merge</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">merge_minor!</span><span class="layer-tag">L2/L3</span></div>
 </div>
 </div></div>
 <div class="sb-col">
