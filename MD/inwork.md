@@ -12,24 +12,24 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 ---
 
 ## Track Rights
-- [>] 20% terrain discount zones **[alpha]** **[L2]** `18oe_fix_stock_terrain`
+- [>] 20% terrain discount zones **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
 
 ## Stock Market Grid
-- [>] LEFT (zero dividend) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
-- [>] No movement (below par) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
-- [>] RIGHT (at/above par) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
-- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** `18oe_fix_stock_terrain`
-- [>] >60% president pool buy at 2× **[alpha]** **[L2]** `18oe_fix_president_overcap`
-- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** `18oe_fix_stock_terrain`
+- [>] LEFT (zero dividend) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
+- [>] No movement (below par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
+- [>] RIGHT (at/above par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
+- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
+- [>] >60% president pool buy at 2× **[alpha]** **[L2]** `18oe_fix_president_overcap` tobymao#12603
+- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
 
 ## Train Data & Phases
-- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
 
 ## End Game
-- [>] Bank break pre-L8 timing **[alpha]** **[L2]** `18oe_fix_level8_gameend`
-- [>] L8 purchase end trigger **[alpha]** **[L2]** `18oe_fix_level8_gameend`
-- [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend`
-- [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+- [>] Bank break pre-L8 timing **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
+- [>] L8 purchase end trigger **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
+- [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
+- [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
 
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
@@ -60,20 +60,6 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 **WA-1** *(BETA SCOPE)* — `national_revenue` linked/unlinked split unverified. To remove: confirm `Graph.new(home_as_token: true, no_blocking: true)` correctly identifies linked nodes in a test game. Not relevant until nationalization is implemented.
 
 **WA-5** *(PERMANENT)* — Silent `skip!` in `ConvertToNational` when queue empty. Correct behaviour — do not remove. See `MD/decisions.md` ADR-005.
-
----
-
-## Outstanding Fork PRs *(Witzman/18xx — staging for upstream)*
-
-| Fork PR | Upstream PR | Title | Branch | Bugs |
-|---------|-------------|-------|--------|------|
-| #52 | tobymao#12601 | `[18OE] fix get_par_prices for regional companies` | `18oe_fix_par_prices` | par prices |
-| #53 | tobymao#12602 | `[18OE] implement §4.4 three-way OR share price movement` | `18oe_fix_share_price_movement` | BUG-013/014 |
-| #54 | tobymao#12603 | `[18OE] president pool purchase above 60% at 2× price` | `18oe_fix_president_overcap` | BUG-021 |
-| #55 | tobymao#12604 | `[18OE] stock round fixes + zone-based terrain discount` | `18oe_fix_stock_terrain` | BUG-008/009/010/015/022 |
-| #56 | tobymao#12605 | `[18OE] level-8 train gate + game-end timing` | `18oe_fix_level8_gameend` | BUG-018/024/025/027 |
-
-**Note:** Ability stubs (`assign_krasnaya_strela!`, `event_d_token_phase_change!`, `assign_d_token!`, `cheap_upgrade?`, `pay_mail_contract!`, `d_corp_hex_bonus` + their constants) were stripped from #50 — they belong in `18oe_abilities` PR. Verify these are all present in `18oe_abilities` before submitting that PR upstream. `[TODO]`
 
 ---
 

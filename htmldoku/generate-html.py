@@ -371,10 +371,15 @@ def parse_kanban_items(md_path):
         if not m:
             continue
         status_char = m.group(1)
-        raw = m.group(2)
-        # strip "→ needs PR" suffix and trailing branch tag before extracting fields
+        original = m.group(2)
+        # extract upstream PR reference before any stripping
+        pr_m = re.search(r'tobymao#(\d+)', original)
+        pr = pr_m.group(1) if pr_m else ''
+        raw = original
+        # strip "→ needs PR" suffix, trailing branch tag, and PR reference
         raw = re.sub(r'\s*→\s*needs PR\s*$', '', raw).strip()
         raw = re.sub(r'\s*`[^`]+`\s*$', '', raw).strip()
+        raw = re.sub(r'\s*tobymao#\d+\s*$', '', raw).strip()
         # extract explicit scope tag **[alpha]** or **[beta]**
         scope_m = re.search(r'\*\*\[(alpha|beta)\]\*\*', raw)
         explicit_scope = scope_m.group(1) if scope_m else None
@@ -399,6 +404,7 @@ def parse_kanban_items(md_path):
             'beta':     is_beta,
             'scope':    scope,
             'deferred': is_deferred,
+            'pr':       pr,
         })
     return sections
 
@@ -811,10 +817,13 @@ def build_status_html():
             text  = apply_inline(it['text'])
             cls   = 'sb-needs-pr' if it['status'] == 'needs-pr' else 'sb-partial'
             scope = 'beta' if it.get('beta') else 'alpha'
+            pr_badge = (f'<a class="pr-badge" href="https://github.com/tobymao/18xx/pull/{it["pr"]}"'
+                        f' target="_blank" rel="noopener">#{it["pr"]}</a>') if it.get('pr') else ''
             p.append(
                 f'<div class="sb-item {cls}" data-layer="{layer}" data-scope="{scope}">'
                 f'<div class="sb-status-dot"></div>'
                 f'<span class="sb-item-text">{text}</span>'
+                f'{pr_badge}'
                 f'<span class="layer-tag">{layer}</span>'
                 f'</div>'
             )
@@ -830,10 +839,13 @@ def build_status_html():
             text  = apply_inline(it['text'])
             cls   = 'sb-needs-pr' if it['status'] == 'needs-pr' else 'sb-partial'
             scope = 'beta' if it.get('beta') else 'alpha'
+            pr_badge = (f'<a class="pr-badge" href="https://github.com/tobymao/18xx/pull/{it["pr"]}"'
+                        f' target="_blank" rel="noopener">#{it["pr"]}</a>') if it.get('pr') else ''
             p.append(
                 f'<div class="sb-item {cls}" data-layer="{layer}" data-scope="{scope}">'
                 f'<div class="sb-status-dot"></div>'
                 f'<span class="sb-item-text">{text}</span>'
+                f'{pr_badge}'
                 f'</div>'
             )
         p.append('</div>')
@@ -1763,6 +1775,20 @@ article:has(.status-board) { max-width: 1400px; }
 .sb-todo      .sb-status-dot { background: transparent; border: 1.5px solid rgba(13,31,56,0.28); }
 
 .sb-item-text { flex: 1; min-width: 0; color: #1a0f08; }
+.pr-badge {
+  flex-shrink: 0;
+  font-size: 0.6rem;
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: 0.04em;
+  padding: 0.1em 0.45em;
+  border-radius: 3px;
+  background: rgba(42,74,176,0.10);
+  color: #2a4ab0;
+  text-decoration: none;
+  border: 1px solid rgba(42,74,176,0.25);
+  margin-right: 0.25em;
+}
+.pr-badge:hover { background: rgba(42,74,176,0.18); }
 .layer-tag {
   flex-shrink: 0;
   font-family: 'Cinzel', Georgia, serif;

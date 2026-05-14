@@ -205,9 +205,22 @@ revisit and align (this ADR or rubocop config).
 
 ---
 
+## ADR-010 — Verify ability stubs in 18oe_abilities before submitting upstream PR
+
+- **Date:** 2026-05-15
+- **Status:** ACCEPTED
+
+**Context.** PR #50 (gamefixes) was split for upstream submission. During the split, several ability stubs were stripped out because they belong in a separate `18oe_abilities` PR: `assign_krasnaya_strela!`, `event_d_token_phase_change!`, `assign_d_token!`, `cheap_upgrade?`, `pay_mail_contract!`, `d_corp_hex_bonus`, and their associated constants.
+
+**Decision.** Before submitting the `18oe_abilities` branch as an upstream PR, verify that all six stubs and their constants are present in that branch. Do not submit until confirmed.
+
+**Consequences.** If the stubs are missing when the PR is submitted, reviewers will see broken references from the gamefixes PRs. The check is a one-time pre-submission gate; once the PR is merged this ADR is resolved.
+
+---
+
 ## How to add a new ADR
 
-1. Pick the next available ID (e.g. `ADR-009`).
+1. Pick the next available ID (e.g. `ADR-010`).
 2. Use the template:
 
    ```markdown
