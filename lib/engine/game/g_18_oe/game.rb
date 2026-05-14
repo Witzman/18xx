@@ -40,8 +40,8 @@ module Engine
         MUST_SELL_IN_BLOCKS = false
         HOME_TOKEN_TIMING = :float
         TILE_UPGRADES_MUST_USE_MAX_EXITS = [:cities].freeze
-        # bank-break ends current OR; first level-8 purchase ends after one more full OR set
-        GAME_END_CHECK = { bank: :current_or, final_phase: :one_more_full_or_set }.freeze
+        # §11.6.4/11.6.5: no player-bankruptcy game-end; force-buy converts major or suspends minor
+        GAME_END_CHECK = { bank: :full_or }.freeze
         # Physical game includes 20×£5,000 notes set aside at setup; injected when first level-8 bought
         REMAINDER_CASH = 100_000
 
