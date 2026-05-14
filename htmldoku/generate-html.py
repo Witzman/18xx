@@ -1890,6 +1890,27 @@ article:has(.status-board) { max-width: 1400px; }
   margin-right: 0.25em;
 }
 .pr-badge:hover { background: rgba(42,74,176,0.18); }
+/* rules-summary implementation status pills */
+.impl-pill {
+  display: inline-block;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.12em 0.55em;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-left: 0.5em;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.impl-done    { background: rgba(45,122,45,0.15);  color: #1a5c1a; border: 1px solid rgba(45,122,45,0.3); }
+.impl-pr      { background: rgba(42,74,176,0.12);  color: #1a2e80; border: 1px solid rgba(42,74,176,0.3); }
+.impl-partial { background: rgba(184,120,0,0.12);  color: #7a4e00; border: 1px solid rgba(184,120,0,0.3); }
+.impl-todo    { background: rgba(140,30,30,0.10);  color: #8c1e1e; border: 1px solid rgba(140,30,30,0.25); }
+.impl-def     { background: rgba(100,80,60,0.08);  color: #6a5040; border: 1px solid rgba(100,80,60,0.2); }
+.impl-beta    { font-style: italic; opacity: 0.75; }
+
 .layer-tag {
   flex-shrink: 0;
   font-family: 'Cinzel', Georgia, serif;
@@ -2949,6 +2970,78 @@ def build_map_status_html():
 
 
 # ---------------------------------------------------------------------------
+# Rules-summary implementation status pills
+# Maps rules-summary.md H2 titles → one or more COVERAGE_DATA section names.
+# Aggregate status = worst item across all mapped sections
+# (todo > partial > needs-pr > done > deferred).
+# ---------------------------------------------------------------------------
+
+_RULES_SECTION_MAP = {
+    'Company Types':            ['Game Setup', 'Entities', 'Railroad Formation'],
+    'Game Phases (Railroad)':   ['Game Setup', 'Auction Phase'],
+    'Train Phases & Rusting':   ['Train Data & Phases'],
+    'Train Limits by Phase':    ['Train Data & Phases'],
+    'Stock Market Movement':    ['Stock Market Grid', 'Stock Rounds'],
+    'Operating Round (per company)': ['OR Steps (Major)', 'Track Laying',
+                                      'Token Placement', 'Train Purchase'],
+    'Track Rights Zones':       ['Track Rights', 'Track Rights Chit System'],
+    'Orient Express':           ['Orient Express'],
+    'National Revenue (unique)':['Nationals'],
+    'Cross-Water Costs':        ['Route & Revenue (Cross-Water)'],
+    'Pullman Cars':             ['Pullman Cars'],
+    'Minor Abilities':          ['Minor Abilities'],
+    'Private Abilities':        ['Private Abilities'],
+    'Auction Phase':            ['Auction Phase'],
+    'Dividend Options':         ['OR Steps (Major)'],
+    'Consolidation Phase':      ['Consolidation Phase'],
+    'End Game':                 ['End Game'],
+}
+
+_STATUS_PRIORITY = {'todo': 0, 'partial': 1, 'needs-pr': 2, 'done': 3, 'deferred': 4}
+
+_PILL_CONFIG = {
+    'done':     ('impl-done',    '✓', 'done'),
+    'needs-pr': ('impl-pr',      '→', 'needs PR'),
+    'partial':  ('impl-partial', '~', 'partial'),
+    'todo':     ('impl-todo',    '✗', 'todo'),
+    'deferred': ('impl-def',     '—', 'deferred'),
+}
+
+
+def _rules_section_status(cov_section_names):
+    """Return (status, all_beta) for the given COVERAGE_DATA sections."""
+    items = []
+    for chapter, chapter_items in COVERAGE_DATA:
+        if chapter in cov_section_names:
+            items.extend(chapter_items)
+    if not items:
+        return None, False
+    worst = min(items, key=lambda t: _STATUS_PRIORITY.get(t[1], 99))
+    all_beta = all(t[2] == 'beta' for t in items)
+    return worst[1], all_beta
+
+
+def inject_rules_status_pills(html):
+    """Post-process rules-summary HTML: append status pills to mapped H2 headings."""
+    def _repl(m):
+        attrs        = m.group(1)
+        heading_text = m.group(2)
+        plain = re.sub(r'<[^>]+>', '', heading_text).strip().replace('&amp;', '&')
+        cov_sections = _RULES_SECTION_MAP.get(plain)
+        if not cov_sections:
+            return m.group(0)
+        status, all_beta = _rules_section_status(cov_sections)
+        if not status:
+            return m.group(0)
+        cls, icon, label = _PILL_CONFIG.get(status, ('impl-todo', '?', status))
+        beta_tag = ' <span class="impl-beta">beta</span>' if all_beta and status != 'done' else ''
+        pill = f'<span class="impl-pill {cls}">{icon} {label}{beta_tag}</span>'
+        return f'<h2{attrs}>{heading_text} {pill}</h2>'
+
+    return re.sub(r'<h2([^>]*)>(.*?)</h2>', _repl, html)
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -2969,6 +3062,10 @@ def convert_file(md_path, out_dir):
 
     # Step 5: restore Mermaid divs (after all other transforms)
     body_html = restore_mermaid(body_html, mermaid_blocks)
+
+    # Step 6: 18OE rules-summary — inject live implementation status pills
+    if md_path.stem == 'rules-summary':
+        body_html = inject_rules_status_pills(body_html)
 
     out_filename = md_path.stem + ".html"
     title = extract_title(body_html)
