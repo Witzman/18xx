@@ -7,6 +7,7 @@ import os
 import shutil
 import html as _html
 from pathlib import Path
+from datetime import date
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -2043,6 +2044,42 @@ article:has(.coverage-map) { max-width: 1200px; }
 }
 
 /* ── Alpha Gaps page ─────────────────────────────────────────────────── */
+/* Alpha summary banner */
+.alpha-banner {
+  background: linear-gradient(135deg, rgba(13,31,56,0.06) 0%, rgba(201,168,67,0.08) 100%);
+  border: 1px solid rgba(201,168,67,0.3);
+  border-radius: 6px;
+  padding: 1.1rem 1.3rem 0.9rem;
+  margin: 1.2rem 0 1.6rem;
+}
+.alpha-banner-header {
+  display: flex; align-items: baseline; gap: 0.8rem;
+  margin-bottom: 0.85rem;
+}
+.alpha-banner-title {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #5a4a38;
+}
+.alpha-banner-date {
+  margin-left: auto;
+  font-size: 0.68rem; color: #8a7050; font-style: italic;
+}
+.readiness-red   { font-size: 0.72rem; font-weight: 700; color: #c03030; letter-spacing: 0.05em; }
+.readiness-amber { font-size: 0.72rem; font-weight: 700; color: #b87800; letter-spacing: 0.05em; }
+.readiness-green { font-size: 0.72rem; font-weight: 700; color: #2d7a2d; letter-spacing: 0.05em; }
+.alpha-banner-stats {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.alpha-banner-stat {
+  padding: 0.3rem 0.75rem; border-radius: 3px;
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #faf6ec;
+}
+.alpha-banner-bar .bar-rows { margin: 0; }
+.alpha-banner-bar .bar-row  { margin-bottom: 0; }
+
 .gap-stats {
   display: flex; flex-wrap: wrap; gap: 0.6rem;
   margin: 1.4rem 0 2rem;
@@ -2617,32 +2654,52 @@ def build_alpha_gaps_html():
     def sev_cls(sev):
         return {'HIGH': 'sev-high', 'MEDIUM': 'sev-med', 'LOW': 'sev-low'}.get(sev, 'sev-med')
 
+    wd_a, wpr_a, wpa_a, wto_a, _ = weighted_coverage_stats(scope_filter='alpha')
+    w_total_a = wd_a + wpr_a + wpa_a + wto_a or 1.0
+    alpha_pct = round((wd_a + wpr_a) / w_total_a * 100)
+    generated_date = date.today().strftime('%Y-%m-%d')
+
+    # Determine overall readiness signal
+    if n_high == 0 and n_todo == 0 and n_partial == 0:
+        readiness_cls, readiness_label = 'readiness-green', 'Alpha ready'
+    elif n_high == 0:
+        readiness_cls, readiness_label = 'readiness-amber', 'Bugs clear — features pending'
+    else:
+        readiness_cls, readiness_label = 'readiness-red', f'{n_high} blocker{"s" if n_high != 1 else ""}'
+
     p = []
     p.append('<h1>18OE — Open for Alpha</h1>')
     p.append('<p class="page-crosslink">Fast triage view · bugs and missing features sorted by impact. '
              'For full rulebook picture → <a href="rulebook-coverage.html">Rulebook Coverage</a> · '
              'For in-flight work → <a href="status.html">Implementation Tracker</a></p>')
-    p.append('<p class="bar-note">Bar weights: L3 step/round = 3× · L2 override = 2× · L1 data = 1×</p>')
 
-    # Weighted alpha-scope progress bar (coverage items only, alpha scope)
-    wd_a, wpr_a, wpa_a, wto_a, _ = weighted_coverage_stats(scope_filter='alpha')
-    w_total_a = wd_a + wpr_a + wpa_a + wto_a or 1.0
-    alpha_pct = round((wd_a + wpr_a) / w_total_a * 100)
-    p.append(build_shared_bar(
-        rows=[{'label': 'Alpha scope', 'done': wd_a, 'pr': wpr_a, 'partial': wpa_a,
-               'todo': wto_a, 'total': w_total_a,
-               'right': f'<strong>{alpha_pct}%</strong> complete (effort-weighted)'}],
-        chips=[],
-    ))
-
-    # Stats bar
-    p.append('<div class="gap-stats">')
-    p.append(f'<div class="gap-stat gap-stat-high">HIGH bugs <span>{n_high}</span></div>')
-    p.append(f'<div class="gap-stat gap-stat-med">MEDIUM bugs <span>{n_medium}</span></div>')
-    p.append(f'<div class="gap-stat gap-stat-low">LOW bugs <span>{n_low}</span></div>')
-    p.append(f'<div class="gap-stat gap-stat-feat">Missing features <span>{n_todo}</span></div>')
-    p.append(f'<div class="gap-stat gap-stat-partial">Partial impl. <span>{n_partial}</span></div>')
+    # ── Summary banner ──────────────────────────────────────────────────────
+    p.append('<div class="alpha-banner">')
+    p.append(f'<div class="alpha-banner-header">'
+             f'<span class="alpha-banner-title">Alpha gap summary</span>'
+             f'<span class="{readiness_cls}">{readiness_label}</span>'
+             f'<span class="alpha-banner-date">generated {generated_date}</span>'
+             f'</div>')
+    p.append('<div class="alpha-banner-stats">')
+    stat_defs = [
+        ('gap-stat-high',    f'{n_high} HIGH bug{"s" if n_high != 1 else ""}'),
+        ('gap-stat-med',     f'{n_medium} MEDIUM'),
+        ('gap-stat-low',     f'{n_low} LOW'),
+        ('gap-stat-feat',    f'{n_todo} missing feature{"s" if n_todo != 1 else ""}'),
+        ('gap-stat-partial', f'{n_partial} partial'),
+    ]
+    for cls, label in stat_defs:
+        p.append(f'<div class="alpha-banner-stat {cls}">{label}</div>')
     p.append('</div>')
+    bar_html = build_shared_bar(
+        rows=[{'label': '', 'done': wd_a, 'pr': wpr_a, 'partial': wpa_a,
+               'todo': wto_a, 'total': w_total_a,
+               'right': f'<strong>{alpha_pct}%</strong> alpha scope complete'}],
+        chips=[],
+    )
+    p.append(f'<div class="alpha-banner-bar">{bar_html}</div>')
+    p.append('</div>')
+    p.append('<p class="bar-note">Bar weights: L3 step/round = 3× · L2 override = 2× · L1 data = 1×</p>')
 
     # ── Section 1: HIGH bugs ────────────────────────────────────────────────
     p.append('<h2 class="gap-section-h">Critical Bugs — fix before any playtesting</h2>')

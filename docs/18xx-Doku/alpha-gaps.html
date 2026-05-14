@@ -83,26 +83,28 @@
 <article>
 <h1>18OE — Open for Alpha</h1>
 <p class="page-crosslink">Fast triage view · bugs and missing features sorted by impact. For full rulebook picture → <a href="rulebook-coverage.html">Rulebook Coverage</a> · For in-flight work → <a href="status.html">Implementation Tracker</a></p>
-<p class="bar-note">Bar weights: L3 step/round = 3× · L2 override = 2× · L1 data = 1×</p>
-<div class="bar-rows">
+<div class="alpha-banner">
+<div class="alpha-banner-header"><span class="alpha-banner-title">Alpha gap summary</span><span class="readiness-red">5 blockers</span><span class="alpha-banner-date">generated 2026-05-15</span></div>
+<div class="alpha-banner-stats">
+<div class="alpha-banner-stat gap-stat-high">5 HIGH bugs</div>
+<div class="alpha-banner-stat gap-stat-med">3 MEDIUM</div>
+<div class="alpha-banner-stat gap-stat-low">0 LOW</div>
+<div class="alpha-banner-stat gap-stat-feat">39 missing features</div>
+<div class="alpha-banner-stat gap-stat-partial">6 partial</div>
+</div>
+<div class="alpha-banner-bar"><div class="bar-rows">
 <div class="bar-row">
-<span class="bar-label-left">Alpha scope</span>
 <div class="progress-track">
 <div class="pb-done"    style="width:59.4%"></div>
 <div class="pb-pr"      style="width:11.5%"></div>
 <div class="pb-partial" style="width:2.6%"></div>
 <div class="pb-todo"    style="width:26.5%"></div>
 </div>
-<span class="bar-label-right"><strong>71%</strong> complete (effort-weighted)</span>
+<span class="bar-label-right"><strong>71%</strong> alpha scope complete</span>
 </div>
+</div></div>
 </div>
-<div class="gap-stats">
-<div class="gap-stat gap-stat-high">HIGH bugs <span>5</span></div>
-<div class="gap-stat gap-stat-med">MEDIUM bugs <span>3</span></div>
-<div class="gap-stat gap-stat-low">LOW bugs <span>0</span></div>
-<div class="gap-stat gap-stat-feat">Missing features <span>39</span></div>
-<div class="gap-stat gap-stat-partial">Partial impl. <span>6</span></div>
-</div>
+<p class="bar-note">Bar weights: L3 step/round = 3× · L2 override = 2× · L1 data = 1×</p>
 <h2 class="gap-section-h">Critical Bugs — fix before any playtesting</h2>
 <table class="gap-table">
 <thead><tr><th>ID</th><th>Rule violated</th><th>Symptom</th></tr></thead><tbody>
