@@ -1068,6 +1068,14 @@ def build_coverage_html():
         )
     p.append('</div>')
 
+    DRILL_ICON = {
+        'done':     ('✓', 'cov-dr-done'),
+        'needs-pr': ('→', 'cov-dr-pr'),
+        'partial':  ('~', 'cov-dr-partial'),
+        'todo':     ('✗', 'cov-dr-todo'),
+        'deferred': ('—', 'cov-dr-def'),
+    }
+
     # heatmap grid
     p.append('<div class="coverage-map">')
     for chapter, items in COVERAGE_DATA:
@@ -1076,7 +1084,8 @@ def build_coverage_html():
         all_scopes = [scope for _, _, scope in items]
         chapter_scope = 'beta' if all(s == 'beta' for s in all_scopes) else 'mixed'
         p.append(f'<div class="cov-chapter" data-chapter-scope="{chapter_scope}">')
-        p.append(f'<div class="cov-chapter-title" id="{anchor}">{_html.escape(chapter)}</div>')
+        p.append(f'<div class="cov-chapter-title cov-toggle" id="{anchor}">'
+                 f'{_html.escape(chapter)}</div>')
         p.append('<div class="cov-items">')
         for label, status, scope in items:
             p.append(
@@ -1084,7 +1093,21 @@ def build_coverage_html():
                 f'{_html.escape(label)}'
                 f'</div>'
             )
-        p.append('</div></div>')
+        p.append('</div>')
+        # drill-down detail table (hidden until section clicked)
+        p.append('<div class="cov-detail">')
+        p.append('<table class="cov-detail-table"><tbody>')
+        for label, status, scope in items:
+            icon, icon_cls = DRILL_ICON.get(status, ('?', ''))
+            p.append(
+                f'<tr class="cov-dr {icon_cls}">'
+                f'<td class="cov-dr-icon">{icon}</td>'
+                f'<td class="cov-dr-label">{_html.escape(label)}</td>'
+                f'<td class="cov-dr-scope"><span class="scope-pill scope-pill-{scope}">{scope}</span></td>'
+                f'</tr>'
+            )
+        p.append('</tbody></table></div>')
+        p.append('</div>')
     p.append('</div>')
 
     content = '\n'.join(p)
@@ -1929,6 +1952,41 @@ article:has(.coverage-map) { max-width: 1200px; }
   padding-bottom: 0.3rem;
   border-bottom: 1px solid rgba(201,168,67,0.3);
 }
+.cov-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+.cov-toggle::before {
+  content: '▶';
+  font-size: 0.5rem;
+  margin-right: 0.45em;
+  opacity: 0.45;
+  vertical-align: middle;
+}
+.cov-chapter.open .cov-toggle::before { content: '▼'; }
+.cov-chapter.open .cov-toggle { color: #1a3a24; }
+
+.cov-detail { display: none; margin: 0.5rem 0 0.8rem; }
+.cov-chapter.open .cov-detail { display: block; }
+.cov-detail-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.cov-dr td { padding: 0.18rem 0.4rem; }
+.cov-dr-icon { width: 1.4em; text-align: center; font-weight: bold; opacity: 0.85; }
+.cov-dr-label { color: #1a0f08; }
+.cov-dr-done   .cov-dr-icon { color: #2d7a2d; }
+.cov-dr-pr     .cov-dr-icon { color: #2a4ab0; }
+.cov-dr-partial .cov-dr-icon { color: #b87800; }
+.cov-dr-todo   .cov-dr-icon { color: rgba(13,31,56,0.35); }
+.cov-dr-def    .cov-dr-icon { color: rgba(100,80,60,0.5); }
+.cov-dr:hover td { background: rgba(201,168,67,0.07); }
+.scope-pill {
+  font-size: 0.6rem;
+  padding: 0.05em 0.45em;
+  border-radius: 3px;
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: 0.05em;
+}
+.scope-pill-alpha { background: rgba(29,80,29,0.12); color: #1d501d; }
+.scope-pill-beta  { background: rgba(42,74,176,0.10); color: #2a4ab0; }
 
 .cov-items {
   display: flex;
@@ -2401,6 +2459,14 @@ UI_JS = """\
     });
   }
 
+  function initCoverageToggle() {
+    document.querySelectorAll('.cov-toggle').forEach(function (title) {
+      title.addEventListener('click', function () {
+        title.closest('.cov-chapter').classList.toggle('open');
+      });
+    });
+  }
+
   function initStatusBoard() {
     var board = document.querySelector('.status-board');
     if (!board) return;
@@ -2443,6 +2509,7 @@ UI_JS = """\
     initAnchorLinks();
     initCopyButtons();
     initMilestoneFilter();
+    initCoverageToggle();
     initStatusBoard();
   });
 }());
