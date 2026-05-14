@@ -124,6 +124,30 @@ Level 8 trains only available after the 4th Level 7 purchase (§11.6).
 
 ---
 
+## Pullman Cars §8f *(beta — not yet implemented)*
+
+A Pullman car is a **special asset**, not a train. It does not count against the train limit.
+
+- **Max 1 per company** (non-nationals only)
+- **Revenue bonus** — +£10 × the level of the train it is assigned to, once per OR (e.g. assigned to a 4+4 → +£40)
+- **Assigned at OR start** — owner assigns the Pullman to one of the company's trains before running routes
+
+**Where to buy:**
+
+| Source | Cost | Notes |
+|--------|------|-------|
+| Minor M (CIWL) | £150 + £15 royalty | J-minor discount applies to the £150 only; royalty paid to Minor M |
+| Open Market | £150, no royalty | Available Phase 4+ |
+| Another RR | Negotiated price | Standard inter-company deal |
+
+**Free Pullman** — if Minor M has not closed by Phase 4 start, M receives one free Pullman from its own stock of 10.
+
+**Discard rules** — when a company must discard trains (over limit after rusting), rusted trains go first. A Pullman may be voluntarily returned to the Open Market at any time.
+
+**Zero trains** — a company holding a Pullman but no trains retains the Pullman until it acquires its next train.
+
+---
+
 ## Cross-Water Routing §8d *(beta — costs not yet implemented)*
 
 The map has two types of water crossings. Both increase effective distance for city-limit purposes.
