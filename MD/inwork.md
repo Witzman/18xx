@@ -12,24 +12,24 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 ---
 
 ## Track Rights
-- [>] 20% terrain discount zones **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
+- [>] 20% terrain discount zones **[alpha]** **[L2]** tobymao#12604
 
 ## Stock Market Grid
-- [>] LEFT (zero dividend) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] No movement (below par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] RIGHT (at/above par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
-- [>] >60% president pool buy at 2× **[alpha]** **[L2]** `18oe_fix_president_overcap` tobymao#12603
-- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
+- [>] LEFT (zero dividend) **[alpha]** **[L2]** tobymao#12602
+- [>] No movement (below par) **[alpha]** **[L2]** tobymao#12602
+- [>] RIGHT (at/above par) **[alpha]** **[L2]** tobymao#12602
+- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** tobymao#12604
+- [>] >60% president pool buy at 2× **[alpha]** **[L2]** tobymao#12603
+- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** tobymao#12604
 
 ## Train Data & Phases
-- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
+- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** tobymao#12605
 
 ## End Game
-- [>] Bank break pre-L8 timing **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] L8 purchase end trigger **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
+- [>] Bank break pre-L8 timing **[alpha]** **[L2]** tobymao#12605
+- [>] L8 purchase end trigger **[alpha]** **[L2]** tobymao#12605
+- [>] Remainder cash injection **[alpha]** **[L2]** tobymao#12605
+- [>] Bankrupt trigger removed **[alpha]** **[L2]** tobymao#12605
 
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
