@@ -953,7 +953,6 @@ module Engine
           phase.status.include?('train_obligation')
         end
 
-<<<<<<< HEAD
         def upgrade_cost(tile, hex, entity, spender)
           base_cost = tile.upgrades.sum(&:cost)
           return super if base_cost.zero?
@@ -1169,20 +1168,6 @@ module Engine
           @minor_floated_regions.delete(minor.id)
           close_corporation(minor, quiet: true)
           @log << "#{minor.name} closed"
-=======
-        def game_end_check_final_phase?
-          @level8_train_purchased
-        end
-
-        def event_level8_train_purchased!
-          return if @level8_train_purchased
-
-          @level8_train_purchased = true
-          remainder = self.class::REMAINDER_CASH
-          @bank.instance_variable_set(:@cash, @bank.cash + remainder)
-          @log << "-- Event: First level 8 train purchased --"
-          @log << "#{format_currency(remainder)} remainder cash added to bank (§13)"
->>>>>>> 530268bdc (fix(18oe): bank-break timing + level-8 game-end trigger + remainder cash (BUG-024/025))
         end
 
         # UP movement at end of SR: only for majors and nationals that are fully player-held
