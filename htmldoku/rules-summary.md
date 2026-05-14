@@ -11,7 +11,7 @@ Quick reference for the core rules of 18OE. Intended as a developer cheat-sheet 
 | Minor | 1 (100%) | £120 fixed | Selected in auction; floated in Regional/Minor Phase |
 | Regional | 3 (50%+25%+25%) | £60/65/70/75/80/90 | Pay 2× par to treasury |
 | Major | 9 (20%+8×10%) | £75/80/90/100/110/120 | Expand from floated regional |
-| National | 9 (20%+8×10%) | Inherits major | Forms at Phase 4/6/8 start |
+| National | 9 (20%+8×10%) | Inherits major | Major converts — voluntary at Ph4/6/8, or forced |
 
 ---
 

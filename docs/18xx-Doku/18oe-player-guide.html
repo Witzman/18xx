@@ -96,15 +96,16 @@
 <p>2-player uses a without-concessions variant (starting cash already reflects this).</p>
 <hr>
 <h2 id="company-types">Company Types</h2>
-<table><thead><tr><th>Type</th><th>Shares</th><th>Par range</th><th>Float</th><th>Dividends</th><th>Tokens</th><th>Zone</th></tr></thead><tbody><tr><td>Minor</td><td>1 × 100%</td><td>£120 fixed</td><td>Via auction card</td><td>Half-pay only</td><td>1</td><td>Home zone only</td></tr><tr><td>Regional</td><td>50%+25%+25%</td><td>£60–£90</td><td>Pay 2× par to treasury</td><td>Any</td><td>2–3</td><td>Home zone only</td></tr><tr><td>Major</td><td>20%+8×10%</td><td>£75–£120</td><td>Regional <em>converts</em> into major</td><td>Any</td><td>Varies</td><td>Anywhere (cost)</td></tr><tr><td>National</td><td>20%+8×10%</td><td>Inherits major</td><td>Phase 4/6/8 trigger</td><td>Full-pay only</td><td>None</td><td>Entire zone (virtual)</td></tr></tbody></table>
+<table><thead><tr><th>Type</th><th>Shares</th><th>Par range</th><th>Float</th><th>Dividends</th><th>Tokens</th><th>Zone</th></tr></thead><tbody><tr><td>Minor</td><td>1 × 100%</td><td>£120 fixed</td><td>Via auction card</td><td>Half-pay only</td><td>1</td><td>Home zone only</td></tr><tr><td>Regional</td><td>50%+25%+25%</td><td>£60–£90</td><td>Pay 2× par to treasury</td><td>Any</td><td>2–3</td><td>Home zone only</td></tr><tr><td>Major</td><td>20%+8×10%</td><td>£75–£120</td><td>Regional <em>converts</em> into major</td><td>Any</td><td>Varies</td><td>Anywhere (cost)</td></tr><tr><td>National</td><td>20%+8×10%</td><td>Inherits major</td><td>Major converts — choice or forced</td><td>Full-pay only</td><td>None</td><td>Entire zone (virtual)</td></tr></tbody></table>
 <p><strong>Minors and regionals run in parallel</strong> during the Regional/Minor Phase — they are not a progression. A regional <em>converts</em> to a major in a SR (president pays 2× par). A minor <em>merges into</em> an existing major (absorbed, not converted). Both relationships are independent.</p>
+<p>A major <em>becomes a national</em> when its president chooses to convert (at Phase 4/6/8 trigger) — or is forced to (bankruptcy, consolidation). Conversion is never automatic.</p>
 <p><strong>Incremental capitalisation</strong> — treasury receives only the proceeds of shares actually sold. Unsold shares in treasury pay no revenue to the bank; they dilute the dividend per share.</p>
 <hr>
 <h2 id="game-flow">Game Flow</h2>
 <pre><code>Auction Phase
   └── Regional/Minor Phase  (SRs + ORs, 2 ORs per set)
   │     Minors and regionals float and run in parallel
-  │     Regionals may convert to majors during any SR
+  │     Regionals may convert to majors during any SR (president pays 2× par)
   │     Minors may merge into majors during any SR
   │     Phase ends: 18 regionals floated AND all 12 minors floated
   └── Major Phase  (SRs + ORs, 2 ORs per set)

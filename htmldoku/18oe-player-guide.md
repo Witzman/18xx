@@ -38,9 +38,11 @@ Quick reference for experienced 18xx players new to 18OE. Assumes familiarity wi
 | Minor | 1 × 100% | £120 fixed | Via auction card | Half-pay only | 1 | Home zone only |
 | Regional | 50%+25%+25% | £60–£90 | Pay 2× par to treasury | Any | 2–3 | Home zone only |
 | Major | 20%+8×10% | £75–£120 | Regional *converts* into major | Any | Varies | Anywhere (cost) |
-| National | 20%+8×10% | Inherits major | Phase 4/6/8 trigger | Full-pay only | None | Entire zone (virtual) |
+| National | 20%+8×10% | Inherits major | Major converts — choice or forced | Full-pay only | None | Entire zone (virtual) |
 
 **Minors and regionals run in parallel** during the Regional/Minor Phase — they are not a progression. A regional *converts* to a major in a SR (president pays 2× par). A minor *merges into* an existing major (absorbed, not converted). Both relationships are independent.
+
+A major *becomes a national* when its president chooses to convert (at Phase 4/6/8 trigger) — or is forced to (bankruptcy, consolidation). Conversion is never automatic.
 
 **Incremental capitalisation** — treasury receives only the proceeds of shares actually sold. Unsold shares in treasury pay no revenue to the bank; they dilute the dividend per share.
 
@@ -52,7 +54,7 @@ Quick reference for experienced 18xx players new to 18OE. Assumes familiarity wi
 Auction Phase
   └── Regional/Minor Phase  (SRs + ORs, 2 ORs per set)
   │     Minors and regionals float and run in parallel
-  │     Regionals may convert to majors during any SR
+  │     Regionals may convert to majors during any SR (president pays 2× par)
   │     Minors may merge into majors during any SR
   │     Phase ends: 18 regionals floated AND all 12 minors floated
   └── Major Phase  (SRs + ORs, 2 ORs per set)

@@ -180,6 +180,22 @@ On the first OE run: +3 RIGHT share price movement (in addition to normal divide
 
 ---
 
+## National Formation §11 *(beta — not fully implemented)*
+
+A national is formed when a major **converts**. Formation is never automatic.
+
+**Voluntary** — at Phase 4, 6, or 8 start, every president of a major is offered conversion in turn order (starting with the player who triggered the phase). Each may convert any of their majors, or pass.
+
+**Forced** — a major may be forced to convert when it cannot cover a mandatory train purchase (insolvency) or during the Consolidation Phase.
+
+**What happens on conversion:**
+- Treasury cash returned to bank
+- Unsold treasury shares moved to Open Market
+- All map tokens removed
+- Company type flips to `:national`; trains inherited; track rights/OE markers removed
+
+---
+
 ## National Revenue §11 *(partially implemented)*
 
 Nationals have virtual tokens in every city and town in their home zone — no physical tokens needed, no blocking. Revenue calculated in two parts:
