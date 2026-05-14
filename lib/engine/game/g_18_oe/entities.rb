@@ -447,6 +447,20 @@ module Engine
                              'track construction in the owning RR\'s zone (§11.1.5). '\
                              'Extra tile point for matching terrain: not yet implemented (BUG-034).',
               },
+              {
+                type: 'tile_discount',
+                terrain: 'water',
+                discount: 0, # augments zone discount to 50% when zone match; 0 prevents base engine applying its own discount
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
+                tiles: [],
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
+              },
             ],
           },
           {
@@ -466,6 +480,20 @@ module Engine
                 description: 'Augments the zone terrain discount from 20% to 50% for mountain/rough '\
                              'track construction in the owning RR\'s zone (§11.1.5). '\
                              'Extra tile point for matching terrain: not yet implemented (BUG-034).',
+              },
+              {
+                type: 'tile_discount',
+                terrain: 'mountain',
+                discount: 0, # augments zone discount to 50% when zone match; 0 prevents base engine applying its own discount
+                owner_type: 'corporation',
+              },
+              {
+                type: 'tile_lay',
+                tiles: [],
+                when: 'track',
+                count_per_or: 1,
+                owner_type: 'corporation',
+                consume_tile_lay: false,
               },
             ],
           },
