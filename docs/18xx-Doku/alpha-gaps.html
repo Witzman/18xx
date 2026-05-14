@@ -88,19 +88,19 @@
 <div class="bar-row">
 <span class="bar-label-left">Alpha scope</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:63.9%"></div>
-<div class="pb-pr"      style="width:12.7%"></div>
-<div class="pb-partial" style="width:3.2%"></div>
-<div class="pb-todo"    style="width:20.2%"></div>
+<div class="pb-done"    style="width:58.9%"></div>
+<div class="pb-pr"      style="width:11.4%"></div>
+<div class="pb-partial" style="width:3.0%"></div>
+<div class="pb-todo"    style="width:26.7%"></div>
 </div>
-<span class="bar-label-right"><strong>77%</strong> complete (effort-weighted)</span>
+<span class="bar-label-right"><strong>70%</strong> complete (effort-weighted)</span>
 </div>
 </div>
 <div class="gap-stats">
 <div class="gap-stat gap-stat-high">HIGH bugs <span>5</span></div>
 <div class="gap-stat gap-stat-med">MEDIUM bugs <span>3</span></div>
 <div class="gap-stat gap-stat-low">LOW bugs <span>0</span></div>
-<div class="gap-stat gap-stat-feat">Missing features <span>19</span></div>
+<div class="gap-stat gap-stat-feat">Missing features <span>39</span></div>
 <div class="gap-stat gap-stat-partial">Partial impl. <span>7</span></div>
 </div>
 <h2 class="gap-section-h">Critical Bugs — fix before any playtesting</h2>
@@ -115,48 +115,74 @@
 <h2 class="gap-section-h">Missing Alpha Features — not yet implemented</h2>
 <table class="gap-table">
 <thead><tr><th>Area</th><th>Feature</th></tr></thead><tbody>
-<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Stock Market Grid</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Reserved secondary shares</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Voluntary regional removal</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Train Purchase</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">First-round insolvency</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Forced purchase</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Train type lock inter-RR</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals)</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Remove `Engine::Step::Bankrupt` from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">OR Steps (Major)</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Transfer Tokens</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Investigate `Engine::Step::Exchange` in OR step list — minor exchange abilities fire in SR only; confirm Exchange never triggers during OR and remove if vestigial</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Stock Rounds</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Trade with another player</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Reserved secondary shares — during Initial SR only, each player may designate one regional&#x27;s secondary (25%) share as reserved; no other player may purchase it until the second SR; cancelled if regional expands to major before its first OR</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Trade with another player — during own SR turn, controlling player may offer personal share trade to any other player; recipient not obligated to accept</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Voluntary regional removal — player may remove one unfloated regional during Regional/Minor Phase; max 6 total</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Track Laying</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">First-OR green tile exception</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE19 unknown tile</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE20–OE22 brown double-town</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE9–OE11 green double-town</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Tile quantities verify</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Auction Phase</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">All-pass price reduction</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Map &amp; Components</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Audit OE-specific tile upgrade paths against physical manifest</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE19 — tile type unknown; must be identified and defined</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE20–OE22 — brown double-town path edge orientations needed</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE9–OE11 — green double-town path edge orientations needed</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify standard tile quantities against physical tile manifest</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Minor Abilities</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">A – Silver Banner</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Barclay, Bevan &amp; Tritton</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Swift Metropolitan Line</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**8.2** Barclay, Bevan, Barclay &amp; Tritton — owner selects one of three abilities at time of use</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Token Transfer Between Majors</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Sell token back to charter</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Transfer cost schedule</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Transfer token between majors</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Cost: token value (paying major) + token value (receiving major, same zone) + transfer fee (Normal £20 / Grand £40 / Metropolis £60)</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">During major&#x27;s OR Transfer Tokens step: controlling player transfers one token between two majors</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Selling a token: returns to charter at highest-cost open position</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Tests</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Basic game flow (auction → regional/minor → major phase)</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Pullman Cars</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Company with zero trains but holds Pullman: retain until next train acquired</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Discard order: rusted trains first; Pullman voluntarily returnable to Open Market</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Minor M free Pullman: if Minor M not closed at Phase 4 start, places free Pullman</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Tests</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Minor ability transfer</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Pullman Cars</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Pullman asset type — does not count against train limit; max 1 per non-national company</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Tests</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Pullman car revenue</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Pullman Cars</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Purchase from Minor M: £150 + £15 royalty; J-minor discount on price only</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Purchase from Open Market: £150, no royalty; available Phase 4+</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Purchase from another RR: negotiated price</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Revenue bonus: +£10 × assigned train level, once per OR</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Tests</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Smoke spec — `Engine::Game::G18OE.new(%w[A B C D])` does not raise</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Stock market movement (right/left/up/down, edge cases)</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Train phase transitions (rusting, limits)</td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Partial Implementations — need completion</h2>
 <table class="gap-table">
 <thead><tr><th>Area</th><th>Feature</th></tr></thead><tbody>
-<tr class="gap-section-row"><td colspan="2" class="gap-section-label">Token Placement</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">Lille White Cliffs position</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Minor Abilities</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">C – Golden Bell</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">D – Green Junction</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">L – Krasnaya Strela</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**D** (Green Junction) — `hex_bonus`/`event_d_token_phase_change!`/`assign_d_token!` wired; **still needed**: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**J** (Grey Locomotive Works) — `train_discount` (0.1) wired; removed `owner_type`/TODO; ability-transfer to major → beta; **needs PR**</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — `assign_krasnaya_strela!`/`restore_krasnaya_strela!` wired; **still needed**: train-choice step + D-train exception</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">Brandt &amp; Brandau</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">Central Circle</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">Hochberg Mining</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `tile_lay` (free, count: 4) wired; **still needed**: per-OR cap (max 2/OR)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — `token` (extra_slot, special_only) wired; **still needed**: town revenue scoring (£10/£20/£40/£60 by phase), SR window</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Hochberg Mining** — `assign_hexes` wired; **still needed**: routing exclusion + placement eligibility (cost ≥ £45)</td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Medium Bugs — rule violations in specific cases</h2>
 <table class="gap-table">

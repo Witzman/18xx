@@ -88,19 +88,19 @@
 <div class="bar-row">
 <span class="bar-label-left">Map & Components</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:83.3%"></div>
+<div class="pb-done"    style="width:42.3%"></div>
 <div class="pb-pr"      style="width:0.0%"></div>
-<div class="pb-partial" style="width:4.2%"></div>
-<div class="pb-todo"    style="width:12.5%"></div>
+<div class="pb-partial" style="width:0.0%"></div>
+<div class="pb-todo"    style="width:57.7%"></div>
 </div>
-<span class="bar-label-right"><strong>83%</strong> · 22 / 33 items across map sections</span>
+<span class="bar-label-right"><strong>42%</strong> · 23 / 39 items across map sections</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
-<div class="stat-chip stat-done">Done <span>22</span></div>
+<div class="stat-chip stat-done">Done <span>23</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>0</span></div>
-<div class="stat-chip stat-partial">Partial <span>2</span></div>
-<div class="stat-chip stat-todo">To do <span>9</span></div>
+<div class="stat-chip stat-partial">Partial <span>0</span></div>
+<div class="stat-chip stat-todo">To do <span>16</span></div>
 </div>
 <h2 id="overall-status">Overall Status</h2>
 <table class="map-status-table">
@@ -134,10 +134,24 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Pre-printed yellow tiles">Pre-printed yellow tiles</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Pre-printed ferry paths">Pre-printed ferry paths</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Sea zones (19)">Sea zones (19)</div>
-<div class="cov-item cov-partial" data-scope="beta" title="Ferry sea hexes (partial)">Ferry sea hexes (partial)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Port icons">Port icons</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Sea zone borders / ferry distances">Sea zone borders / ferry distances</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Logo SVGs">Logo SVGs</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Province borders + partition engine">Province borders + partition engine</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb">**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 — green double-town path edge orientations needed">OE9–OE11 — green double-town path edge orientations needed</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 — brown double-town path edge orientations needed">OE20–OE22 — brown double-town path edge orientations needed</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE19 — tile type unknown; must be identified and defined">OE19 — tile type unknown; must be identified and defined</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Verify standard tile quantities against physical tile manifest">Verify standard tile quantities against physical tile manifest</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Audit OE-specific tile upgrade paths against physical manifest">Audit OE-specific tile upgrade paths against physical manifest</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete">Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25">**Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Ferry route engine override — `game.rb` override to whitelist exits toward blue hexes that carry a matching pre-printed path">Ferry route engine override — `game.rb` override to whitelist exits toward blue hexes that carry a matching pre-printed path</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Lille↔London ferry** — tiles connect correctly; all other ferry routes blocked pending L2 engine override">**Lille↔London ferry** — tiles connect correctly; all other ferry routes blocked pending L2 engine override</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Port sea stubs** `[BETA]` — blue tiles at port entry points use `junction;path=a:X,b:_0,terminal:1` as connectors between land port paths and sea ferry routes; model: land port → stub → sea ferry hexes → stub → land port; implement per port once ferry routing engine override is in place; public vs private port access distinction applies here (see §8d)">**Port sea stubs** `[BETA]` — blue tiles at port entry points use `junction;path=a:X,b:_0,terminal:1` as connectors between land port paths and sea ferry routes; model: land port → stub → sea ferry hexes → stub → land port; implement per port once ferry routing engine override is in place; public vs private port access distinction applies here (see §8d)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work">**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="cov-track-laying">Track Laying</div>
@@ -151,13 +165,7 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point costs">Tile point costs</div>
 <div class="cov-item cov-done" data-scope="alpha" title="TILE_UPGRADES_MUST_USE_MAX_EXITS">TILE_UPGRADES_MUST_USE_MAX_EXITS</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Metropolis upgrade labels">Metropolis upgrade labels</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Nationals pay no terrain">Nationals pay no terrain</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 green double-town">OE9–OE11 green double-town</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 brown double-town">OE20–OE22 brown double-town</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE19 unknown tile">OE19 unknown tile</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Tile quantities verify">Tile quantities verify</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="First-OR green tile exception">First-OR green tile exception</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Patronage tile payout">Patronage tile payout</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="cov-token-placement">Token Placement</div>
@@ -165,8 +173,6 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Zone restriction">Zone restriction</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Connectivity check">Connectivity check</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Nationals skip token step">Nationals skip token step</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="Lille White Cliffs position">Lille White Cliffs position</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Cross-water token costs">Cross-water token costs</div>
 </div></div>
 </div>
 <hr>

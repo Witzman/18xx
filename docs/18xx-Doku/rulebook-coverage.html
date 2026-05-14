@@ -83,35 +83,35 @@
 <article>
 <h1>18OE — Rulebook Coverage</h1>
 <p class="page-crosslink">For current sprint state → <a href="status.html">Implementation Tracker</a> · Alpha gaps → <a href="alpha-gaps.html">Open for Alpha</a></p>
-<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">205 mechanics tracked across 26 rulebook chapters.</p>
+<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">228 mechanics tracked across 28 rulebook chapters.</p>
 <p class="bar-note">Bar widths weighted by section effort (L3 systems = 3× · L2 overrides = 2× · L1 data = 1×).</p>
 <div class="bar-rows">
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:36.1%"></div>
-<div class="pb-pr"      style="width:10.3%"></div>
-<div class="pb-partial" style="width:2.7%"></div>
-<div class="pb-todo"    style="width:50.9%"></div>
+<div class="pb-done"    style="width:35.7%"></div>
+<div class="pb-pr"      style="width:9.6%"></div>
+<div class="pb-partial" style="width:3.3%"></div>
+<div class="pb-todo"    style="width:51.3%"></div>
 </div>
-<span class="bar-label-right"><strong>46%</strong> implemented or in review</span>
+<span class="bar-label-right"><strong>45%</strong> implemented or in review</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:63.9%"></div>
-<div class="pb-pr"      style="width:12.7%"></div>
-<div class="pb-partial" style="width:3.2%"></div>
-<div class="pb-todo"    style="width:20.2%"></div>
+<div class="pb-done"    style="width:58.9%"></div>
+<div class="pb-pr"      style="width:11.4%"></div>
+<div class="pb-partial" style="width:3.0%"></div>
+<div class="pb-todo"    style="width:26.7%"></div>
 </div>
-<span class="bar-label-right"><strong>77%</strong> alpha scope done</span>
+<span class="bar-label-right"><strong>70%</strong> alpha scope done</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
-<div class="stat-chip stat-done">Done &amp; merged <span>87</span></div>
-<div class="stat-chip stat-pr">Needs PR <span>18</span></div>
-<div class="stat-chip stat-partial">Partial <span>11</span></div>
-<div class="stat-chip stat-todo">To do <span>80</span></div>
+<div class="stat-chip stat-done">Done &amp; merged <span>94</span></div>
+<div class="stat-chip stat-pr">Needs PR <span>17</span></div>
+<div class="stat-chip stat-partial">Partial <span>12</span></div>
+<div class="stat-chip stat-todo">To do <span>96</span></div>
 <div class="stat-chip stat-todo">Deferred <span>9</span></div>
 </div>
 <div class="status-filters" style="margin-bottom:1rem">
@@ -138,7 +138,16 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Incremental capitalisation">Incremental capitalisation</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Regional float condition">Regional float condition</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Regional dump restriction">Regional dump restriction</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Patronage tile setup">Patronage tile setup</div>
+</div></div>
+<div class="cov-chapter" data-chapter-scope="mixed">
+<div class="cov-chapter-title" id="entities">Entities</div>
+<div class="cov-items">
+<div class="cov-item cov-done" data-scope="alpha" title="All 24 regionals defined">All 24 regionals defined</div>
+<div class="cov-item cov-done" data-scope="alpha" title="All 12 minors defined">All 12 minors defined</div>
+<div class="cov-item cov-done" data-scope="alpha" title="All 10 privates defined">All 10 privates defined</div>
+<div class="cov-item cov-done" data-scope="alpha" title="All 12 minor auction cards">All 12 minor auction cards</div>
+<div class="cov-item cov-done" data-scope="alpha" title="All 10 concession cards">All 10 concession cards</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Charter colours for all 12 minors">Charter colours for all 12 minors</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="map--components">Map &amp; Components</div>
@@ -151,10 +160,24 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Pre-printed yellow tiles">Pre-printed yellow tiles</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Pre-printed ferry paths">Pre-printed ferry paths</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Sea zones (19)">Sea zones (19)</div>
-<div class="cov-item cov-partial" data-scope="beta" title="Ferry sea hexes (partial)">Ferry sea hexes (partial)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Port icons">Port icons</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Sea zone borders / ferry distances">Sea zone borders / ferry distances</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Logo SVGs">Logo SVGs</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Province borders + partition engine">Province borders + partition engine</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb">**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 — green double-town path edge orientations needed">OE9–OE11 — green double-town path edge orientations needed</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 — brown double-town path edge orientations needed">OE20–OE22 — brown double-town path edge orientations needed</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="OE19 — tile type unknown; must be identified and defined">OE19 — tile type unknown; must be identified and defined</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Verify standard tile quantities against physical tile manifest">Verify standard tile quantities against physical tile manifest</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Audit OE-specific tile upgrade paths against physical manifest">Audit OE-specific tile upgrade paths against physical manifest</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete">Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25">**Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Ferry route engine override — `game.rb` override to whitelist exits toward blue hexes that carry a matching pre-printed path">Ferry route engine override — `game.rb` override to whitelist exits toward blue hexes that carry a matching pre-printed path</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Lille↔London ferry** — tiles connect correctly; all other ferry routes blocked pending L2 engine override">**Lille↔London ferry** — tiles connect correctly; all other ferry routes blocked pending L2 engine override</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**Port sea stubs** `[BETA]` — blue tiles at port entry points use `junction;path=a:X,b:_0,terminal:1` as connectors between land port paths and sea ferry routes; model: land port → stub → sea ferry hexes → stub → land port; implement per port once ferry routing engine override is in place; public vs private port access distinction applies here (see §8d)">**Port sea stubs** `[BETA]` — blue tiles at port entry points use `junction;path=a:X,b:_0,terminal:1` as connectors between land port paths and sea ferry routes; model: land port → stub → sea ferry hexes → stub → land port; implement per port once ferry routing engine override is in place; public vs private port access distinction applies here (see §8d)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work">**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="track-rights">Track Rights</div>
@@ -169,37 +192,43 @@
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="20% terrain discount zones">20% terrain discount zones</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
+<div class="cov-chapter-title" id="track-rights-chit-system">Track Rights Chit System</div>
+<div class="cov-items">
+<div class="cov-item cov-done" data-scope="alpha" title="MINOR_TRACK_RIGHTS_CHITS">MINOR_TRACK_RIGHTS_CHITS</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Asterisked zones cap">Asterisked zones cap</div>
+<div class="cov-item cov-done" data-scope="alpha" title="region_available? / cost">region_available? / cost</div>
+<div class="cov-item cov-done" data-scope="alpha" title="HomeToken process">HomeToken process</div>
+<div class="cov-item cov-done" data-scope="alpha" title="major_phase?">major_phase?</div>
+</div></div>
+<div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="auction-phase">Auction Phase</div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="Waterfall auction tiered rows">Waterfall auction tiered rows</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Minor card → float + £120 par">Minor card → float + £120 par</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="All-pass price reduction">All-pass price reduction</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player">All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player</div>
 </div></div>
-<div class="cov-chapter" data-chapter-scope="beta">
+<div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="concession-phase">Concession Phase</div>
 <div class="cov-items">
-<div class="cov-item cov-deferred" data-scope="beta" title="Concession round">Concession round</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="Ordered float actions">Ordered float actions</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="Float obligation transfer">Float obligation transfer</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="Round sequencing">Round sequencing</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="2-player without-concessions">2-player without-concessions</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="Define Concession round with ordered float actions (CON1–CON10)">Define Concession round with ordered float actions (CON1–CON10)</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="Wire concession cards to specific regional/major home tokens and par values">Wire concession cards to specific regional/major home tokens and par values</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="Float obligation: holder pays 2× par; obligation transfers if holder cannot pay">Float obligation: holder pays 2× par; obligation transfers if holder cannot pay</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="Round sequencing: Auction → Concession → Regional/Minor Phase">Round sequencing: Auction → Concession → Regional/Minor Phase</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="2-player without-concessions variant: skip Concession Phase (starting cash already correct)">2-player without-concessions variant: skip Concession Phase (starting cash already correct)</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="stock-market-grid">Stock Market Grid</div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="8×17 grid with prices">8×17 grid with prices</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Par colour bands">Par colour bands</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Minors/regionals exempt">Minors/regionals exempt</div>
+<div class="cov-item cov-done" data-scope="alpha" title="UP end-of-SR (no OM shares)">UP end-of-SR (no OM shares)</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Post-conversion sell window">Post-conversion sell window</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="LEFT (zero dividend)">LEFT (zero dividend)</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="No movement (below par)">No movement (below par)</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="RIGHT (at/above par)">RIGHT (at/above par)</div>
-<div class="cov-item cov-done" data-scope="alpha" title="Minors/regionals exempt">Minors/regionals exempt</div>
-<div class="cov-item cov-done" data-scope="alpha" title="UP end-of-SR (no OM shares)">UP end-of-SR (no OM shares)</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="Sold-out order (hi→lo price)">Sold-out order (hi→lo price)</div>
-<div class="cov-item cov-done" data-scope="alpha" title="Post-conversion sell window">Post-conversion sell window</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Reserved secondary shares">Reserved secondary shares</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="&gt;60% president pool buy at 2×">&gt;60% president pool buy at 2×</div>
-<div class="cov-item cov-todo" data-scope="beta" title="+3 RIGHT on OE first run">+3 RIGHT on OE first run</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Voluntary regional removal">Voluntary regional removal</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="§11.7 issuance DOWN movement">§11.7 issuance DOWN movement</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
@@ -207,13 +236,13 @@
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="7-level roster">7-level roster</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Rust triggers (L4/L6/L8)">Rust triggers (L4/L6/L8)</div>
-<div class="cov-item cov-needs-pr" data-scope="alpha" title="L8 unlock after 4th L7">L8 unlock after 4th L7</div>
 <div class="cov-item cov-done" data-scope="alpha" title="8 named phases">8 named phases</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Tile colour by phase">Tile colour by phase</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Status flags">Status flags</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Consolidation event on L5">Consolidation event on L5</div>
 <div class="cov-item cov-done" data-scope="alpha" title="National corp type">National corp type</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Level 3 restriction first OR">Level 3 restriction first OR</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="L8 unlock after 4th L7">L8 unlock after 4th L7</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="track-laying">Track Laying</div>
@@ -227,13 +256,7 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point costs">Tile point costs</div>
 <div class="cov-item cov-done" data-scope="alpha" title="TILE_UPGRADES_MUST_USE_MAX_EXITS">TILE_UPGRADES_MUST_USE_MAX_EXITS</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Metropolis upgrade labels">Metropolis upgrade labels</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Nationals pay no terrain">Nationals pay no terrain</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 green double-town">OE9–OE11 green double-town</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 brown double-town">OE20–OE22 brown double-town</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE19 unknown tile">OE19 unknown tile</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Tile quantities verify">Tile quantities verify</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="First-OR green tile exception">First-OR green tile exception</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Patronage tile payout">Patronage tile payout</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="token-placement">Token Placement</div>
@@ -241,47 +264,45 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Zone restriction">Zone restriction</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Connectivity check">Connectivity check</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Nationals skip token step">Nationals skip token step</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="Lille White Cliffs position">Lille White Cliffs position</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Cross-water token costs">Cross-water token costs</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="route--revenue-cross-water">Route &amp; Revenue (Cross-Water)</div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="Sea zone data">Sea zone data</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Cross-water track costs">Cross-water track costs</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Cross-water token costs">Cross-water token costs</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Ferry mechanics / distance">Ferry mechanics / distance</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Port authority purchase">Port authority purchase</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Port authority transfer">Port authority transfer</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Port types (public/private)">Port types (public/private)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Offshore port mechanics">Offshore port mechanics</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Channel passages">Channel passages</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Local train town counting">Local train town counting</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Combined train runs">Combined train runs</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Local train town counting: towns beyond city limit fill to train level; express trains skip towns">Local train town counting: towns beyond city limit fill to train level; express trains skip towns</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Combined train runs: Level ≤4 trains combine (sum); Level 5+, 4D, 5D cannot combine">Combined train runs: Level ≤4 trains combine (sum); Level 5+, 4D, 5D cannot combine</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Cross-water costs: Ferry = +£5 track / +£20 token × distance; Sea = +£10 track / +£40 token × zones">Cross-water costs: Ferry = +£5 track / +£20 token × distance; Sea = +£10 track / +£40 token × zones</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Ferry mechanics: distance counts against city limit; public ferry usable by any RR; enemy tokens block">Ferry mechanics: distance counts against city limit; public ferry usable by any RR; enemy tokens block</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Port authority markers: each reduces sea zone count + ferry distance by 2; 16 total (8 North Sea, 8 Med)">Port authority markers: each reduces sea zone count + ferry distance by 2; 16 total (8 North Sea, 8 Med)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Port authority purchase — majors only, one per major; £125 paid during OR at any point before Buy Trains step; North Sea covers light-blue zones, Mediterranean covers sea-green zones; also reduces cross-water track and token costs">Port authority purchase — majors only, one per major; £125 paid during OR at any point before Buy Trains step; North Sea covers light-blue zones, Mediterranean covers sea-green zones; also reduces cross-water track and token costs</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Port authority transfer — major may buy a PA marker from another major during its Transfer Tokens OR step; price exactly £125 to selling major&#x27;s treasury">Port authority transfer — major may buy a PA marker from another major during its Transfer Tokens OR step; price exactly £125 to selling major&#x27;s treasury</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Port types: public (any RR) vs private (owning RR only)">Port types: public (any RR) vs private (owning RR only)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Offshore port mechanics: train connects regardless of intervening hexes">Offshore port mechanics: train connects regardless of intervening hexes</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Channel passages at Copenhagen and Constantinople">Channel passages at Copenhagen and Constantinople</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="beta">
 <div class="cov-chapter-title" id="orient-express">Orient Express</div>
 <div class="cov-items">
-<div class="cov-item cov-todo" data-scope="beta" title="OE route detection">OE route detection</div>
-<div class="cov-item cov-todo" data-scope="beta" title="First-time bonus by phase">First-time bonus by phase</div>
-<div class="cov-item cov-todo" data-scope="beta" title="+3 RIGHT on first run">+3 RIGHT on first run</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Train combining for OE">Train combining for OE</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Subsequent runs (no bonus)">Subsequent runs (no bonus)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Mandatory OE rule">Mandatory OE rule</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Detect valid OE route: Constantinople (AA82) + one of Paris/London/Berlin/Madrid/Sankt-Peterburg + land track">Detect valid OE route: Constantinople (AA82) + one of Paris/London/Berlin/Madrid/Sankt-Peterburg + land track</div>
+<div class="cov-item cov-todo" data-scope="beta" title="First-time bonus: £30 (Ph2–4), £60 (Ph5–6), £100 (Ph7–8); OE marker placed on major">First-time bonus: £30 (Ph2–4), £60 (Ph5–6), £100 (Ph7–8); OE marker placed on major</div>
+<div class="cov-item cov-todo" data-scope="beta" title="+3 RIGHT on first OE run (also §6b)">+3 RIGHT on first OE run (also §6b)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Train combining: Level ≤4 combine; combined level = sum; city limit = combined level">Train combining: Level ≤4 combine; combined level = sum; city limit = combined level</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Subsequent OE runs: no bonus, no extra stock movement">Subsequent OE runs: no bonus, no extra stock movement</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Mandatory OE: if OE route is best possible, president must run it">Mandatory OE: if OE route is best possible, president must run it</div>
 <div class="cov-item cov-todo" data-scope="beta" title="OE blocked for nationals">OE blocked for nationals</div>
-<div class="cov-item cov-todo" data-scope="beta" title="D-train no double on OE bonus">D-train no double on OE bonus</div>
+<div class="cov-item cov-todo" data-scope="beta" title="D-train bonus does NOT apply to OE first-time bonus">D-train bonus does NOT apply to OE first-time bonus</div>
 </div></div>
-<div class="cov-chapter" data-chapter-scope="beta">
+<div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="pullman-cars">Pullman Cars</div>
 <div class="cov-items">
-<div class="cov-item cov-todo" data-scope="beta" title="Pullman asset type">Pullman asset type</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Revenue bonus +£10/level">Revenue bonus +£10/level</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Purchase from Minor M">Purchase from Minor M</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Purchase from Open Market">Purchase from Open Market</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Purchase from another RR">Purchase from another RR</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Minor M free Pullman (Ph4)">Minor M free Pullman (Ph4)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Discard / return to OM">Discard / return to OM</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Zero trains + Pullman retain">Zero trains + Pullman retain</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Pullman asset type — does not count against train limit; max 1 per non-national company">Pullman asset type — does not count against train limit; max 1 per non-national company</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Revenue bonus: +£10 × assigned train level, once per OR">Revenue bonus: +£10 × assigned train level, once per OR</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Purchase from Minor M: £150 + £15 royalty; J-minor discount on price only">Purchase from Minor M: £150 + £15 royalty; J-minor discount on price only</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Purchase from Open Market: £150, no royalty; available Phase 4+">Purchase from Open Market: £150, no royalty; available Phase 4+</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Purchase from another RR: negotiated price">Purchase from another RR: negotiated price</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Minor M free Pullman: if Minor M not closed at Phase 4 start, places free Pullman">Minor M free Pullman: if Minor M not closed at Phase 4 start, places free Pullman</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Discard order: rusted trains first; Pullman voluntarily returnable to Open Market">Discard order: rusted trains first; Pullman voluntarily returnable to Open Market</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Company with zero trains but holds Pullman: retain until next train acquired">Company with zero trains but holds Pullman: retain until next train acquired</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="train-purchase">Train Purchase</div>
@@ -290,10 +311,10 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Phase-status check">Phase-status check</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Depot level gating">Depot level gating</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Inter-RR purchase Phase 4+">Inter-RR purchase Phase 4+</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Train type lock inter-RR">Train type lock inter-RR</div>
-<div class="cov-item cov-needs-pr" data-scope="beta" title="Nationals claim rusted trains">Nationals claim rusted trains</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Forced purchase">Forced purchase</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="First-round insolvency">First-round insolvency</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3)">Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals)">Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value">First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Remove `Engine::Step::Bankrupt` from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override">Remove `Engine::Step::Bankrupt` from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="or-steps-major">OR Steps (Major)</div>
@@ -303,10 +324,10 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Place Token">Place Token</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Run Trains / Revenue">Run Trains / Revenue</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Pay / Split / Hold">Pay / Split / Hold</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Transfer Tokens">Transfer Tokens</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Buy Trains">Buy Trains</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Buy/Sell Own Shares (§11.7)">Buy/Sell Own Shares (§11.7)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Buy Abandoned Minor (§11.7)">Buy Abandoned Minor (§11.7)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Investigate `Engine::Step::Exchange` in OR step list — minor exchange abilities fire in SR only; confirm Exchange never triggers during OR and remove if vestigial">Investigate `Engine::Step::Exchange` in OR step list — minor exchange abilities fire in SR only; confirm Exchange never triggers during OR and remove if vestigial</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Major purchases one abandoned minor from Open Market for £60 (to bank); minor&#x27;s charter + assets added as if merged but no share of major stock issued to former owner">Major purchases one abandoned minor from Open Market for £60 (to bank); minor&#x27;s charter + assets added as if merged but no share of major stock issued to former owner</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="stock-rounds">Stock Rounds</div>
@@ -315,9 +336,11 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Home token in SR">Home token in SR</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Regional→major conversion">Regional→major conversion</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Share issuance for majors">Share issuance for majors</div>
-<div class="cov-item cov-needs-pr" data-scope="beta" title="Minor SR merge action">Minor SR merge action</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Change of presidency">Change of presidency</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Trade with another player">Trade with another player</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Voluntary regional removal — player may remove one unfloated regional during Regional/Minor Phase; max 6 total">Voluntary regional removal — player may remove one unfloated regional during Regional/Minor Phase; max 6 total</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Reserved secondary shares — during Initial SR only, each player may designate one regional&#x27;s secondary (25%) share as reserved; no other player may purchase it until the second SR; cancelled if regional expands to major before its first OR">Reserved secondary shares — during Initial SR only, each player may designate one regional&#x27;s secondary (25%) share as reserved; no other player may purchase it until the second SR; cancelled if regional expands to major before its first OR</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Trade with another player — during own SR turn, controlling player may offer personal share trade to any other player; recipient not obligated to accept">Trade with another player — during own SR turn, controlling player may offer personal share trade to any other player; recipient not obligated to accept</div>
+<div class="cov-item cov-todo" data-scope="beta" title="+3 RIGHT — on the first Orient Express run, share price moves 3 steps right (depends on §8e)">+3 RIGHT — on the first Orient Express run, share price moves 3 steps right (depends on §8e)</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="railroad-formation">Railroad Formation</div>
@@ -325,33 +348,41 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Floating a minor">Floating a minor</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Floating a regional">Floating a regional</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Floating a major">Floating a major</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Forming a national (trigger)">Forming a national (trigger)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Forming a national (steps)">Forming a national (steps)</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Abandoning a minor">Abandoning a minor</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Forming a national (trigger): phase 4/6/8 purchase → `trigger_nationals_formation!` → ordered queue">Forming a national (trigger): phase 4/6/8 purchase → `trigger_nationals_formation!` → ordered queue</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Forming a national (steps): `Step::ConvertToNational` — cash→bank, treasury certs→OM, tokens removed, national placed, trains inherited">Forming a national (steps): `Step::ConvertToNational` — cash→bank, treasury certs→OM, tokens removed, national placed, trains inherited</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Abandoning a minor (§9.5): triggered by national formation or consolidation failure — `abandon_minor!`: charter→Open Market; trains→Open Market; tokens removed; cash→bank; track rights chit stays">Abandoning a minor (§9.5): triggered by national formation or consolidation failure — `abandon_minor!`: charter→Open Market; trains→Open Market; tokens removed; cash→bank; track rights chit stays</div>
+<div class="cov-item cov-todo" data-scope="beta" title="D minor token and L minor marker stay with their charters on abandonment">D minor token and L minor marker stay with their charters on abandonment</div>
+<div class="cov-item cov-todo" data-scope="beta" title="M minor Pullman stays with charter on abandonment">M minor Pullman stays with charter on abandonment</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="nationals">Nationals</div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="National type in train limits">National type in train limits</div>
 <div class="cov-item cov-done" data-scope="alpha" title="National region hexes">National region hexes</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Formation trigger">Formation trigger</div>
-<div class="cov-item cov-todo" data-scope="beta" title="ConvertToNational step">ConvertToNational step</div>
-<div class="cov-item cov-todo" data-scope="beta" title="National revenue">National revenue</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Inherent Pullman">Inherent Pullman</div>
-<div class="cov-item cov-todo" data-scope="beta" title="No tokens / no terrain">No tokens / no terrain</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Rusted train claim">Rusted train claim</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Train exchange/flip/upgrade">Train exchange/flip/upgrade</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Merged minors abandoned">Merged minors abandoned</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Track rights removed on form.">Track rights removed on form.</div>
+<div class="cov-item cov-needs-pr" data-scope="beta" title="Rusted train claim">Rusted train claim</div>
+<div class="cov-item cov-partial" data-scope="beta" title="**Nationals claim rusted trains** `[BETA]` — `spend_minmax [0,0]`, fast-path in `process_buy_train`, `trigger_nationals_formation!` implemented; **needs PR**">**Nationals claim rusted trains** `[BETA]` — `spend_minmax [0,0]`, fast-path in `process_buy_train`, `trigger_nationals_formation!` implemented; **needs PR**</div>
+<div class="cov-item cov-todo" data-scope="beta" title="`national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only">`national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Inherent Pullman: `+£10 × highest non-rusted train level`">Inherent Pullman: `+£10 × highest non-rusted train level`</div>
+<div class="cov-item cov-todo" data-scope="beta" title="No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done">No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Train limit discard via `depot.reclaim_train`">Train limit discard via `depot.reclaim_train`</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Merged minors abandoned at national formation (depends on `@minor_track_rights`)">Merged minors abandoned at national formation (depends on `@minor_track_rights`)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Track rights / OE markers / private markers removed at formation">Track rights / OE markers / private markers removed at formation</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Exchange owned rusted train for higher-level unclaimed rusted train">Exchange owned rusted train for higher-level unclaimed rusted train</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Flip owned rusted train from express to local side">Flip owned rusted train from express to local side</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Upgrade rusted → non-rusted by purchasing from same-owner major">Upgrade rusted → non-rusted by purchasing from same-owner major</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title" id="track-rights-chit-system">Track Rights Chit System</div>
+<div class="cov-chapter-title" id="consolidation-phase">Consolidation Phase</div>
 <div class="cov-items">
-<div class="cov-item cov-done" data-scope="alpha" title="MINOR_TRACK_RIGHTS_CHITS">MINOR_TRACK_RIGHTS_CHITS</div>
-<div class="cov-item cov-done" data-scope="alpha" title="Asterisked zones cap">Asterisked zones cap</div>
-<div class="cov-item cov-done" data-scope="alpha" title="region_available? / cost">region_available? / cost</div>
-<div class="cov-item cov-done" data-scope="alpha" title="HomeToken process">HomeToken process</div>
-<div class="cov-item cov-done" data-scope="alpha" title="major_phase?">major_phase?</div>
+<div class="cov-item cov-done" data-scope="alpha" title="L5 trigger scaffold">L5 trigger scaffold</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Conditional merger: major/national may offer; if no offer, company is abandoned">Conditional merger: major/national may offer; if no offer, company is abandoned</div>
+</div></div>
+<div class="cov-chapter" data-chapter-scope="mixed">
+<div class="cov-chapter-title" id="token-transfer-between-majors">Token Transfer Between Majors</div>
+<div class="cov-items">
+<div class="cov-item cov-todo" data-scope="alpha" title="During major&#x27;s OR Transfer Tokens step: controlling player transfers one token between two majors">During major&#x27;s OR Transfer Tokens step: controlling player transfers one token between two majors</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Cost: token value (paying major) + token value (receiving major, same zone) + transfer fee (Normal £20 / Grand £40 / Metropolis £60)">Cost: token value (paying major) + token value (receiving major, same zone) + transfer fee (Normal £20 / Grand £40 / Metropolis £60)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Selling a token: returns to charter at highest-cost open position">Selling a token: returns to charter at highest-cost open position</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="beta">
 <div class="cov-chapter-title" id="minor-mergers">Minor Mergers</div>
@@ -359,83 +390,83 @@
 <div class="cov-item cov-needs-pr" data-scope="beta" title="Minor SR merge action">Minor SR merge action</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="Plumbing / can_merge">Plumbing / can_merge</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="merge_minor!">merge_minor!</div>
-<div class="cov-item cov-todo" data-scope="beta" title="No-stock connection check">No-stock connection check</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Token conflict choice">Token conflict choice</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Side payment UI">Side payment UI</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Solicit-offers rule">Solicit-offers rule</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Consolidation forced mergers">Consolidation forced mergers</div>
-</div></div>
-<div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title" id="consolidation-phase">Consolidation Phase</div>
-<div class="cov-items">
-<div class="cov-item cov-done" data-scope="alpha" title="L5 trigger scaffold">L5 trigger scaffold</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Cannot pass with minors">Cannot pass with minors</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Conditional merger / abandon">Conditional merger / abandon</div>
-</div></div>
-<div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title" id="token-transfer-between-majors">Token Transfer Between Majors</div>
-<div class="cov-items">
-<div class="cov-item cov-todo" data-scope="alpha" title="Transfer token between majors">Transfer token between majors</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Transfer cost schedule">Transfer cost schedule</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Sell token back to charter">Sell token back to charter</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Port authority transfer">Port authority transfer</div>
+<div class="cov-item cov-partial" data-scope="beta" title="**Minor SR merge action** `[BETA]` — `can_merge_minors?` / `minor_by_id` / `mergeable_entity/entities` / `process_merge` / `merge_minor!` / `transfer_minor_track_rights!` implemented; **needs PR**">**Minor SR merge action** `[BETA]` — `can_merge_minors?` / `minor_by_id` / `mergeable_entity/entities` / `process_merge` / `merge_minor!` / `transfer_minor_track_rights!` implemented; **needs PR**</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**7.1** Ability transfer — minor merges into regional/major; ability inherited; nationals cannot inherit">**7.1** Ability transfer — minor merges into regional/major; ability inherited; nationals cannot inherit</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**7.2** Minor A (Silver Banner) — bank pays major current share price at moment of merger">**7.2** Minor A (Silver Banner) — bank pays major current share price at moment of merger</div>
+<div class="cov-item cov-todo" data-scope="beta" title="No-stock connection check: merge only if unlimited-city train can reach minor&#x27;s token to major&#x27;s network">No-stock connection check: merge only if unlimited-city train can reach minor&#x27;s token to major&#x27;s network</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Player choice on token conflict and train decline">Player choice on token conflict and train decline</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Cross-player personal cash side payment UI">Cross-player personal cash side payment UI</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Solicit-offers rule for unmergeable minors">Solicit-offers rule for unmergeable minors</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Cannot pass in Consolidation Phase if owns unfloated minors/regionals not yet merged">Cannot pass in Consolidation Phase if owns unfloated minors/regionals not yet merged</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Consolidation Round forced mergers (§10.6) — hook into `Step::Consolidate`">Consolidation Round forced mergers (§10.6) — hook into `Step::Consolidate`</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="end-game">End Game</div>
 <div class="cov-items">
+<div class="cov-item cov-done" data-scope="alpha" title="Win condition (scoring)">Win condition (scoring)</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="Bank break pre-L8 timing">Bank break pre-L8 timing</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="L8 purchase end trigger">L8 purchase end trigger</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="Remainder cash injection">Remainder cash injection</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Final two OR sequence">Final two OR sequence</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Second final OR (repeat rev.)">Second final OR (repeat rev.)</div>
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="Bankrupt trigger removed">Bankrupt trigger removed</div>
-<div class="cov-item cov-done" data-scope="alpha" title="Win condition (scoring)">Win condition (scoring)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Second final OR: each company pays same revenue as first final OR; no track/token/train actions (BUG-026)">Second final OR: each company pays same revenue as first final OR; no track/token/train actions (BUG-026)</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="minor-abilities">Minor Abilities</div>
 <div class="cov-items">
-<div class="cov-item cov-todo" data-scope="alpha" title="A – Silver Banner">A – Silver Banner</div>
 <div class="cov-item cov-done" data-scope="alpha" title="B – Orange Scroll">B – Orange Scroll</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="C – Golden Bell">C – Golden Bell</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="D – Green Junction">D – Green Junction</div>
 <div class="cov-item cov-done" data-scope="alpha" title="E – Blue Coast">E – Blue Coast</div>
 <div class="cov-item cov-done" data-scope="alpha" title="F – White Peak">F – White Peak</div>
 <div class="cov-item cov-done" data-scope="alpha" title="G – Indigo Foundry">G – Indigo Foundry</div>
-<div class="cov-item cov-todo" data-scope="beta" title="H – Great Western Steamship">H – Great Western Steamship</div>
-<div class="cov-item cov-needs-pr" data-scope="alpha" title="J – Grey Locomotive">J – Grey Locomotive</div>
 <div class="cov-item cov-done" data-scope="alpha" title="K – Vermilion Seal">K – Vermilion Seal</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="L – Krasnaya Strela">L – Krasnaya Strela</div>
-<div class="cov-item cov-todo" data-scope="beta" title="M – CIWL Pullmans">M – CIWL Pullmans</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Ability transfer on merge">Ability transfer on merge</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="J – Grey Locomotive">J – Grey Locomotive</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step">**C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**D** (Green Junction) — `hex_bonus`/`event_d_token_phase_change!`/`assign_d_token!` wired; **still needed**: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)">**D** (Green Junction) — `hex_bonus`/`event_d_token_phase_change!`/`assign_d_token!` wired; **still needed**: unreachable-city placement step (land cities only; sea/ferry variant → beta todo)</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**J** (Grey Locomotive Works) — `train_discount` (0.1) wired; removed `owner_type`/TODO; ability-transfer to major → beta; **needs PR**">**J** (Grey Locomotive Works) — `train_discount` (0.1) wired; removed `owner_type`/TODO; ability-transfer to major → beta; **needs PR**</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**L** (Krasnaya Strela) — `assign_krasnaya_strela!`/`restore_krasnaya_strela!` wired; **still needed**: train-choice step + D-train exception">**L** (Krasnaya Strela) — `assign_krasnaya_strela!`/`restore_krasnaya_strela!` wired; **still needed**: train-choice step + D-train exception</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)">**7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="**D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry">**D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="private-abilities">Private Abilities</div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="Robert Stephenson (none)">Robert Stephenson (none)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Ponts et Chaussées (none)">Ponts et Chaussées (none)</div>
-<div class="cov-item cov-partial" data-scope="beta" title="Wien Südbahn hof">Wien Südbahn hof</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Barclay, Bevan &amp; Tritton">Barclay, Bevan &amp; Tritton</div>
-<div class="cov-item cov-partial" data-scope="beta" title="Star Harbor">Star Harbor</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="Central Circle">Central Circle</div>
-<div class="cov-item cov-partial" data-scope="beta" title="White Cliffs Ferry">White Cliffs Ferry</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="Hochberg Mining">Hochberg Mining</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="Brandt &amp; Brandau">Brandt &amp; Brandau</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="Swift Metropolitan Line">Swift Metropolitan Line</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**8.2** Barclay, Bevan, Barclay &amp; Tritton — owner selects one of three abilities at time of use">**8.2** Barclay, Bevan, Barclay &amp; Tritton — owner selects one of three abilities at time of use</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit">**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**Central Circle** — `token` (extra_slot, special_only) wired; **still needed**: town revenue scoring (£10/£20/£40/£60 by phase), SR window">**Central Circle** — `token` (extra_slot, special_only) wired; **still needed**: town revenue scoring (£10/£20/£40/£60 by phase), SR window</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**Hochberg Mining** — `assign_hexes` wired; **still needed**: routing exclusion + placement eligibility (cost ≥ £45)">**Hochberg Mining** — `assign_hexes` wired; **still needed**: routing exclusion + placement eligibility (cost ≥ £45)</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**Brandt &amp; Brandau** — `tile_lay` (free, count: 4) wired; **still needed**: per-OR cap (max 2/OR)">**Brandt &amp; Brandau** — `tile_lay` (free, count: 4) wired; **still needed**: per-OR cap (max 2/OR)</div>
+<div class="cov-item cov-partial" data-scope="beta" title="**Wien Südbahnhof** `[BETA]` — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass for free placement anywhere + sea-zone crossing costs">**Wien Südbahnhof** `[BETA]` — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass for free placement anywhere + sea-zone crossing costs</div>
+<div class="cov-item cov-partial" data-scope="beta" title="**Star Harbor** `[BETA]` — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window">**Star Harbor** `[BETA]` — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window</div>
+<div class="cov-item cov-partial" data-scope="beta" title="**White Cliffs Ferry** `[BETA]` — `token` (hexes: [&#x27;N31&#x27;]) wired; **still needed**: Phase 5 start event hook + ferry routing">**White Cliffs Ferry** `[BETA]` — `token` (hexes: [&#x27;N31&#x27;]) wired; **still needed**: Phase 5 start event hook + ferry routing</div>
 </div></div>
 <div class="cov-chapter" data-chapter-scope="beta">
 <div class="cov-chapter-title" id="patronage-tiles">Patronage Tiles</div>
 <div class="cov-items">
-<div class="cov-item cov-todo" data-scope="beta" title="Setup randomisation">Setup randomisation</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Payout on track lay">Payout on track lay</div>
-<div class="cov-item cov-todo" data-scope="beta" title="Minor float on patronage hex">Minor float on patronage hex</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Setup: randomise and place patronage tiles on map cities at game start (3 pink, 3 yellow, 3 white, 8 green drawn per group, rest discarded)">Setup: randomise and place patronage tiles on map cities at game start (3 pink, 3 yellow, 3 white, 8 green drawn per group, rest discarded)</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Payout: when a RR first lays a track tile in a patronage hex during Lay Track step, bank pays one-time bonus equal to tile amount for the highest track color available in current Train Phase; patronage tile removed">Payout: when a RR first lays a track tile in a patronage hex during Lay Track step, bank pays one-time bonus equal to tile amount for the highest track color available in current Train Phase; patronage tile removed</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Float edge case: minor that places its home token on a patronage hex fulfils it immediately and receives the lowest payout shown on the tile">Float edge case: minor that places its home token on a patronage hex fulfils it immediately and receives the lowest payout shown on the tile</div>
 </div></div>
-<div class="cov-chapter" data-chapter-scope="beta">
+<div class="cov-chapter" data-chapter-scope="mixed">
 <div class="cov-chapter-title" id="variants--scenarios">Variants &amp; Scenarios</div>
 <div class="cov-items">
-<div class="cov-item cov-deferred" data-scope="beta" title="UK-FR variant entities">UK-FR variant entities</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="UK-FR train rusting">UK-FR train rusting</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="UK-FR map hexes">UK-FR map hexes</div>
-<div class="cov-item cov-deferred" data-scope="beta" title="Medium / short scenarios">Medium / short scenarios</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="UK-FR variant entities (4 minors: C/H/K/M; 7 regionals: BEL/GSWR/GWR/LNWR/MIDI/OU/PLM)">UK-FR variant entities (4 minors: C/H/K/M; 7 regionals: BEL/GSWR/GWR/LNWR/MIDI/OU/PLM)</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="UK-FR train rusting rules">UK-FR train rusting rules</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="UK-FR map hex definitions">UK-FR map hex definitions</div>
+<div class="cov-item cov-deferred" data-scope="alpha" title="Medium / short scenarios — reduced RR counts, modified OE destinations">Medium / short scenarios — reduced RR counts, modified OE destinations</div>
+</div></div>
+<div class="cov-chapter" data-chapter-scope="mixed">
+<div class="cov-chapter-title" id="tests">Tests</div>
+<div class="cov-items">
+<div class="cov-item cov-todo" data-scope="alpha" title="Smoke spec — `Engine::Game::G18OE.new(%w[A B C D])` does not raise">Smoke spec — `Engine::Game::G18OE.new(%w[A B C D])` does not raise</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Basic game flow (auction → regional/minor → major phase)">Basic game flow (auction → regional/minor → major phase)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Train phase transitions (rusting, limits)">Train phase transitions (rusting, limits)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Stock market movement (right/left/up/down, edge cases)">Stock market movement (right/left/up/down, edge cases)</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Minor ability transfer">Minor ability transfer</div>
+<div class="cov-item cov-todo" data-scope="alpha" title="Pullman car revenue">Pullman car revenue</div>
+<div class="cov-item cov-todo" data-scope="beta" title="National revenue calculation">National revenue calculation</div>
+<div class="cov-item cov-todo" data-scope="beta" title="Orient Express bonus (first run, subsequent runs)">Orient Express bonus (first run, subsequent runs)</div>
 </div></div>
 </div>
 </article>

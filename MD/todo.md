@@ -63,7 +63,7 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ---
 
-## Map
+## Map & Components
 
 - [ ] **BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb **[L1]**
 - [ ] **BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:` **[L1]**
@@ -77,13 +77,13 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ---
 
-## §4 — Auction Phase
+## Auction Phase
 
 - [ ] All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player **[L2]**
 
 ---
 
-## §6 — Stock Round
+## Stock Rounds
 
 - [ ] Voluntary regional removal — player may remove one unfloated regional during Regional/Minor Phase; max 6 total **[L2/L3]**
 - [ ] Reserved secondary shares — during Initial SR only, each player may designate one regional's secondary (25%) share as reserved; no other player may purchase it until the second SR; cancelled if regional expands to major before its first OR **[L2]**
@@ -93,7 +93,7 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ---
 
-## §8b — Track Laying
+## Track Laying
 
 - [ ] First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately **[L2]**
 
@@ -103,7 +103,7 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ---
 
-## §8f — Pullman Cars
+## Pullman Cars
 
 No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_revenue`.
 
@@ -118,7 +118,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §8g — Train Purchase
+## Train Purchase
 
 - [ ] Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3) **[L2]**
 - [ ] Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals) **[L3]**
@@ -129,7 +129,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §8h — Major's OR Buy/Sell Shares Step (§11.7)
+## OR Steps (Major)
 
 - [ ] Investigate `Engine::Step::Exchange` in OR step list — minor exchange abilities fire in SR only; confirm Exchange never triggers during OR and remove if vestigial **[L2]**
 
@@ -137,7 +137,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §9 — Minor Special Abilities
+## Minor Abilities
 
 - [ ] **7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f) **[L3]**
 - [/] **C** (Golden Bell) — `choose_ability`/`@golden_bell_position`/`operating_order` wired; **still needed**: OR-start choice-prompt step **[L3]** `18oe_abilities`
@@ -149,7 +149,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §10 — Private Special Abilities
+## Private Abilities
 
 - [ ] **8.2** Barclay, Bevan, Barclay & Tritton — owner selects one of three abilities at time of use **[L3]**
 - [ ] **8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit **[L3]**
@@ -163,7 +163,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §14 — Token Transfer Between Majors
+## Token Transfer Between Majors
 
 - [ ] During major's OR Transfer Tokens step: controlling player transfers one token between two majors **[L2]**
 - [ ] Cost: token value (paying major) + token value (receiving major, same zone) + transfer fee (Normal £20 / Grand £40 / Metropolis £60) **[L2]**
@@ -175,7 +175,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ---
 
-## §16 — Tests (Alpha)
+## Tests
 
 - [ ] Smoke spec — `Engine::Game::G18OE.new(%w[A B C D])` does not raise
 - [ ] Basic game flow (auction → regional/minor → major phase)
@@ -194,7 +194,7 @@ Target: sea zones · ports and ferry runs · Orient Express · minor→major mer
 
 ---
 
-## Map
+## Map & Components
 
 - [ ] Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete **[L1]**
 - [ ] **Ferry sea hexes** — partial work exists; still needed: N29/G22/N25/I22/I24/AE12/AF13/AB21/AB23/AB25 **[L1]**
@@ -205,7 +205,7 @@ Target: sea zones · ports and ferry runs · Orient Express · minor→major mer
 
 ---
 
-## §2 — Patronage Tiles (§11.1.8)
+## Patronage Tiles
 
 45 tiles placed randomly on the map at setup (pink/yellow/green/white groups). Data and payout mechanic both needed.
 
@@ -215,13 +215,13 @@ Target: sea zones · ports and ferry runs · Orient Express · minor→major mer
 
 ---
 
-## §6 — Stock Round
+## Stock Rounds
 
 - [ ] +3 RIGHT — on the first Orient Express run, share price moves 3 steps right (depends on §8e) **[L2]**
 
 ---
 
-## §8d — Routing: Land + Cross-Water
+## Route & Revenue (Cross-Water)
 
 - [ ] Local train town counting: towns beyond city limit fill to train level; express trains skip towns **[L2]**
 - [ ] Combined train runs: Level ≤4 trains combine (sum); Level 5+, 4D, 5D cannot combine **[L2]**
@@ -239,7 +239,7 @@ Sea zones defined as data only; no routing logic yet.
 
 ---
 
-## §8e — Orient Express
+## Orient Express
 
 No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
@@ -254,20 +254,20 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ---
 
-## §8h — Major's OR Buy/Sell Shares Step (§11.7)
+## OR Steps (Major)
 
 - [ ] Major purchases one abandoned minor from Open Market for £60 (to bank); minor's charter + assets added as if merged but no share of major stock issued to former owner **[L2]**
 
 ---
 
-## §9 — Minor Special Abilities
+## Minor Abilities
 
 - [ ] **7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8) **[L2]**
 - [ ] **D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry **[L3]**
 
 ---
 
-## §10 — Private Special Abilities
+## Private Abilities
 
 - [/] **Wien Südbahnhof** `[BETA]` — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass for free placement anywhere + sea-zone crossing costs **[L2→L3]** `18oe_abilities`
 - [/] **Star Harbor** `[BETA]` — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[L3]** `18oe_abilities`
@@ -275,7 +275,7 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ---
 
-## §9 — Railroad Formation (Nationals) + Abandoning a Minor
+## Railroad Formation
 
 - [ ] Forming a national (trigger): phase 4/6/8 purchase → `trigger_nationals_formation!` → ordered queue **[L2]**
 - [ ] Forming a national (steps): `Step::ConvertToNational` — cash→bank, treasury certs→OM, tokens removed, national placed, trains inherited **[L2/L3]**
@@ -285,7 +285,7 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ---
 
-## §11 — Nationals
+## Nationals
 
 - [/] **Nationals claim rusted trains** `[BETA]` — `spend_minmax [0,0]`, fast-path in `process_buy_train`, `trigger_nationals_formation!` implemented; **needs PR** **[L2/L3]** `18oe_mergers`
 - [ ] `national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only **[L2]**
@@ -300,7 +300,7 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ---
 
-## §10.5 — Minor SR Mergers (Full)
+## Minor Mergers
 
 - [/] **Minor SR merge action** `[BETA]` — `can_merge_minors?` / `minor_by_id` / `mergeable_entity/entities` / `process_merge` / `merge_minor!` / `transfer_minor_track_rights!` implemented; **needs PR** **[L2/L3]** `18oe_mergers`
 - [ ] **7.1** Ability transfer — minor merges into regional/major; ability inherited; nationals cannot inherit **[L3]**
@@ -313,25 +313,25 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 ---
 
-## §12E — Minor Merger Edge Cases (Beta)
+## Minor Mergers
 
 - [ ] Consolidation Round forced mergers (§10.6) — hook into `Step::Consolidate` **[L3]**
 
 ---
 
-## §13 — Consolidation Phase
+## Consolidation Phase
 
 - [ ] Conditional merger: major/national may offer; if no offer, company is abandoned **[L3]**
 
 ---
 
-## §15 — End Game Rules
+## End Game
 
 - [ ] Second final OR: each company pays same revenue as first final OR; no track/token/train actions (BUG-026) **[L3]**
 
 ---
 
-## §16 — Tests (Beta)
+## Tests
 
 - [ ] National revenue calculation
 - [ ] Orient Express bonus (first run, subsequent runs)
@@ -342,7 +342,7 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 
 # Deferred *(out of scope until full game ships)*
 
-## §5 — Concession Railroad Phase
+## Concession Phase
 
 Concession cards defined (§2.5). Phase skipped for now: current flow goes Auction → Regional/Minor Phase.
 Requires a distinct round with queue management; deferred until core mechanics are stable.
@@ -355,11 +355,11 @@ Requires a distinct round with queue management; deferred until core mechanics a
 
 ---
 
-## §17 — Variants & Scenarios
+## Variants & Scenarios
 
 No work until the full 18OE base game reaches beta.
 
-- Confirm UK-FR variant entities (4 minors: C/H/K/M; 7 regionals: BEL/GSWR/GWR/LNWR/MIDI/OU/PLM)
-- UK-FR train rusting rules
-- Validate UK-FR map hex definitions
-- Other scenarios (medium/short) — reduced RR counts, modified OE destinations
+- [ ] UK-FR variant entities (4 minors: C/H/K/M; 7 regionals: BEL/GSWR/GWR/LNWR/MIDI/OU/PLM) **[L1]**
+- [ ] UK-FR train rusting rules **[L1]**
+- [ ] UK-FR map hex definitions **[L1]**
+- [ ] Medium / short scenarios — reduced RR counts, modified OE destinations **[L2]**

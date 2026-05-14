@@ -328,24 +328,35 @@ def build_search_index(out_dir):
 
 
 def parse_kanban_items(md_path):
-    """Parse inwork.md or todo.md → list of {title, items[{text, status, layer, beta}]}.
+    """Parse inwork.md, todo.md, or done.md → list of {title, items[{text, status, layer, beta, scope, deferred}]}.
+
+    Scope detection (item.scope):
+      - Explicit **[alpha]** or **[beta]** tag in item text takes precedence
+      - Falls back to H1/H2 context: 'beta' if in # Beta … section, else 'alpha'
 
     Beta detection (item.beta = True when any of):
       - H1 section title contains 'Beta' (e.g. '# Beta Backlog' in todo.md)
-      - H2 section title is exactly 'Beta' (e.g. '## Beta' in inwork.md)
+      - H2 section title is exactly 'Beta'
       - Item text contains the literal token '[BETA]'
+      - Derived scope is 'beta'
+
+    Deferred detection (item.deferred = True):
+      - H1 section title contains 'Deferred'
     """
     text = md_path.read_text(encoding="utf-8")
     STATUS_MAP = {'x': 'merged', '>': 'needs-pr', 't': 'testing', '~': 'partial', '/': 'started', ' ': 'todo'}
     sections = []
     current = None
-    in_beta_h1 = False   # flipped by # Beta … H1 headers
-    in_beta_h2 = False   # flipped by ## Beta H2 header
+    in_beta_h1     = False   # flipped by # Beta … H1 headers
+    in_beta_h2     = False   # flipped by ## Beta H2 header
+    in_deferred_h1 = False   # flipped by # Deferred … H1 headers
     for line in text.splitlines():
         h1 = re.match(r'^# (.+)', line)
         if h1:
             title = h1.group(1).strip()
-            in_beta_h1 = 'beta' in title.lower() and 'alpha' not in title.lower()
+            title_lower = title.lower()
+            in_beta_h1     = 'beta' in title_lower and 'alpha' not in title_lower
+            in_deferred_h1 = 'deferred' in title_lower
             continue
         h2 = re.match(r'^## (.+)', line)
         if h2:
@@ -361,18 +372,33 @@ def parse_kanban_items(md_path):
             continue
         status_char = m.group(1)
         raw = m.group(2)
-        # strip "→ needs PR" suffix before extracting layer
+        # strip "→ needs PR" suffix and trailing branch tag before extracting fields
         raw = re.sub(r'\s*→\s*needs PR\s*$', '', raw).strip()
-        layer_m = re.search(r'\*\*\[([^\]]+)\]\*\*', raw)
+        raw = re.sub(r'\s*`[^`]+`\s*$', '', raw).strip()
+        # extract explicit scope tag **[alpha]** or **[beta]**
+        scope_m = re.search(r'\*\*\[(alpha|beta)\]\*\*', raw)
+        explicit_scope = scope_m.group(1) if scope_m else None
+        # extract layer tag (last **[…]** that looks like a layer)
+        layer_m = re.search(r'\*\*\[([LlNn][^\]]*)\]\*\*', raw)
         layer = layer_m.group(1) if layer_m else ''
-        # strip trailing layer tag
-        clean = re.sub(r'\s*\*\*\[[^\]]+\]\*\*\s*$', '', raw).strip()
-        is_beta = in_beta_h1 or in_beta_h2 or '[BETA]' in raw
+        # strip all **[…]** tags from display text
+        clean = re.sub(r'\s*\*\*\[[^\]]+\]\*\*', '', raw).strip()
+        # determine scope and beta flag
+        is_beta_ctx = in_beta_h1 or in_beta_h2 or '[BETA]' in raw
+        if explicit_scope is not None:
+            scope   = explicit_scope
+            is_beta = explicit_scope == 'beta'
+        else:
+            is_beta = is_beta_ctx
+            scope   = 'beta' if is_beta else 'alpha'
+        is_deferred = in_deferred_h1
         current['items'].append({
-            'text': clean,
-            'status': STATUS_MAP.get(status_char, 'todo'),
-            'layer': layer,
-            'beta': is_beta,
+            'text':     clean,
+            'status':   STATUS_MAP.get(status_char, 'todo'),
+            'layer':    layer,
+            'beta':     is_beta,
+            'scope':    scope,
+            'deferred': is_deferred,
         })
     return sections
 
@@ -398,270 +424,74 @@ def parse_done(md_path):
 
 
 # ---------------------------------------------------------------------------
-# Rulebook coverage data
-# status: "done" | "needs-pr" | "partial" | "todo" | "deferred"
-# scope:  "alpha" | "beta"   (alpha = needed to ship alpha; beta = sea/OE/Pullman/etc.)
+# Rulebook coverage — loaded from MD/ kanban files at startup
+# (replaces the former hardcoded COVERAGE_DATA constant)
 # ---------------------------------------------------------------------------
 
-COVERAGE_DATA = [
-    ("Game Setup", [
-        ("Player range & starting cash", "done",     "alpha"),
-        ("Bank \u00a354,000",           "done",     "alpha"),
-        ("Certificate limits",           "done",     "alpha"),
-        ("Three-tier hierarchy",         "done",     "alpha"),
-        ("Incremental capitalisation",   "done",     "alpha"),
-        ("Regional float condition",     "done",     "alpha"),
-        ("Regional dump restriction",    "done",     "alpha"),
-        ("Patronage tile setup",         "todo",     "beta"),
-    ]),
-    ("Map & Components", [
-        ("651-hex grid",                      "done",    "alpha"),
-        ("19 red off-board hexes",            "done",    "alpha"),
-        ("Terrain costs",                     "done",    "alpha"),
-        ("255 location names",                "done",    "alpha"),
-        ("Station slot revenues",             "done",    "alpha"),
-        ("Pre-printed yellow tiles",          "done",    "alpha"),
-        ("Pre-printed ferry paths",           "done",    "alpha"),
-        ("Sea zones (19)",                    "done",    "alpha"),
-        ("Ferry sea hexes (partial)",         "partial", "beta"),
-        ("Port icons",                        "done",    "alpha"),
-        ("Sea zone borders / ferry distances","todo",    "beta"),
-        ("Logo SVGs",                         "done",    "alpha"),
-    ]),
-    ("Track Rights", [
-        ("8 zones defined",                  "done", "alpha"),
-        ("Zone fee on par",                  "done", "alpha"),
-        ("Zone token restriction",           "done", "alpha"),
-        ("Minor zone assignment",            "done", "alpha"),
-        ("Asterisked-zone cap (UK/PHS/FR)",  "done", "alpha"),
-        ("Dynamic minor regions",            "done", "alpha"),
-        ("Home token filtering",             "done", "alpha"),
-        ("20% terrain discount zones",       "needs-pr", "alpha"),
-    ]),
-    ("Auction Phase", [
-        ("Waterfall auction tiered rows",    "done", "alpha"),
-        ("Minor card \u2192 float + \u00a3120 par", "done", "alpha"),
-        ("All-pass price reduction",         "todo", "alpha"),
-    ]),
-    ("Concession Phase", [
-        ("Concession round",             "deferred", "beta"),
-        ("Ordered float actions",        "deferred", "beta"),
-        ("Float obligation transfer",    "deferred", "beta"),
-        ("Round sequencing",             "deferred", "beta"),
-        ("2-player without-concessions", "deferred", "beta"),
-    ]),
-    ("Stock Market Grid", [
-        ("8\u00d717 grid with prices",       "done",     "alpha"),
-        ("Par colour bands",                  "done",     "alpha"),
-        ("LEFT (zero dividend)",              "needs-pr", "alpha"),
-        ("No movement (below par)",           "needs-pr", "alpha"),
-        ("RIGHT (at/above par)",              "needs-pr", "alpha"),
-        ("Minors/regionals exempt",           "done",     "alpha"),
-        ("UP end-of-SR (no OM shares)",       "done",     "alpha"),
-        ("Sold-out order (hi→lo price)", "needs-pr", "alpha"),
-        ("Post-conversion sell window",       "done",     "alpha"),
-        ("Reserved secondary shares",         "todo",     "alpha"),
-        (">60% president pool buy at 2×","needs-pr", "alpha"),
-        ("+3 RIGHT on OE first run",          "todo",     "beta"),
-        ("Voluntary regional removal",        "todo",     "alpha"),
-        ("§11.7 issuance DOWN movement", "needs-pr", "alpha"),
-    ]),
-    ("Train Data & Phases", [
-        ("7-level roster",                "done", "alpha"),
-        ("Rust triggers (L4/L6/L8)",      "done", "alpha"),
-        ("L8 unlock after 4th L7",        "needs-pr", "alpha"),
-        ("8 named phases",                "done", "alpha"),
-        ("Tile colour by phase",          "done", "alpha"),
-        ("Status flags",                  "done", "alpha"),
-        ("Consolidation event on L5",     "done", "alpha"),
-        ("National corp type",            "done", "alpha"),
-        ("Level 3 restriction first OR",  "done", "alpha"),
-    ]),
-    ("Track Laying", [
-        ("OE1\u2013OE3 yellow double-town",      "done", "alpha"),
-        ("OE4\u2013OE8 yellow city",             "done", "alpha"),
-        ("OE12\u2013OE18 green city",            "done", "alpha"),
-        ("OE23\u2013OE33 brown city",            "done", "alpha"),
-        ("OE34\u2013OE44 gray city",             "done", "alpha"),
-        ("Tile point budgets",                    "done", "alpha"),
-        ("Tile point costs",                      "done", "alpha"),
-        ("TILE_UPGRADES_MUST_USE_MAX_EXITS",      "done", "alpha"),
-        ("Metropolis upgrade labels",             "done", "alpha"),
-        ("Nationals pay no terrain",              "todo", "beta"),
-        ("OE9\u2013OE11 green double-town",      "todo", "alpha"),
-        ("OE20\u2013OE22 brown double-town",     "todo", "alpha"),
-        ("OE19 unknown tile",                     "todo", "alpha"),
-        ("Tile quantities verify",                "todo", "alpha"),
-        ("First-OR green tile exception",         "todo", "alpha"),
-        ("Patronage tile payout",                 "todo", "beta"),
-    ]),
-    ("Token Placement", [
-        ("Zone restriction",            "done",    "alpha"),
-        ("Connectivity check",          "done",    "alpha"),
-        ("Nationals skip token step",   "done",    "alpha"),
-        ("Lille White Cliffs position", "partial", "alpha"),
-        ("Cross-water token costs",     "todo",    "beta"),
-    ]),
-    ("Route & Revenue (Cross-Water)", [
-        ("Sea zone data",              "done", "alpha"),
-        ("Cross-water track costs",    "todo", "beta"),
-        ("Cross-water token costs",    "todo", "beta"),
-        ("Ferry mechanics / distance", "todo", "beta"),
-        ("Port authority purchase",    "todo", "beta"),
-        ("Port authority transfer",    "todo", "beta"),
-        ("Port types (public/private)","todo", "beta"),
-        ("Offshore port mechanics",    "todo", "beta"),
-        ("Channel passages",           "todo", "beta"),
-        ("Local train town counting",  "todo", "beta"),
-        ("Combined train runs",        "todo", "beta"),
-    ]),
-    ("Orient Express", [
-        ("OE route detection",            "todo", "beta"),
-        ("First-time bonus by phase",     "todo", "beta"),
-        ("+3 RIGHT on first run",         "todo", "beta"),
-        ("Train combining for OE",        "todo", "beta"),
-        ("Subsequent runs (no bonus)",    "todo", "beta"),
-        ("Mandatory OE rule",             "todo", "beta"),
-        ("OE blocked for nationals",      "todo", "beta"),
-        ("D-train no double on OE bonus", "todo", "beta"),
-    ]),
-    ("Pullman Cars", [
-        ("Pullman asset type",          "todo", "beta"),
-        ("Revenue bonus +\u00a310/level","todo","beta"),
-        ("Purchase from Minor M",       "todo", "beta"),
-        ("Purchase from Open Market",   "todo", "beta"),
-        ("Purchase from another RR",    "todo", "beta"),
-        ("Minor M free Pullman (Ph4)",  "todo", "beta"),
-        ("Discard / return to OM",      "todo", "beta"),
-        ("Zero trains + Pullman retain","todo", "beta"),
-    ]),
-    ("Train Purchase", [
-        ("Reserved 2+2 obligation",      "done",     "alpha"),
-        ("Phase-status check",           "done",     "alpha"),
-        ("Depot level gating",           "done",     "alpha"),
-        ("Inter-RR purchase Phase 4+",   "done",     "alpha"),
-        ("Train type lock inter-RR",     "todo",     "alpha"),
-        ("Nationals claim rusted trains","needs-pr", "beta"),
-        ("Forced purchase",              "todo",     "alpha"),
-        ("First-round insolvency",       "todo",     "alpha"),
-    ]),
-    ("OR Steps (Major)", [
-        ("Operating order by share price","done", "alpha"),
-        ("Lay Track",                    "done", "alpha"),
-        ("Place Token",                  "done", "alpha"),
-        ("Run Trains / Revenue",         "done", "alpha"),
-        ("Pay / Split / Hold",           "done", "alpha"),
-        ("Transfer Tokens",              "todo", "alpha"),
-        ("Buy Trains",                   "done", "alpha"),
-        ("Buy/Sell Own Shares (\u00a711.7)", "done",    "alpha"),
-        ("Buy Abandoned Minor (\u00a711.7)", "todo", "beta"),
-    ]),
-    ("Stock Rounds", [
-        ("Sell-then-buy order",          "done",     "alpha"),
-        ("Home token in SR",             "done",     "alpha"),
-        ("Regional\u2192major conversion","done",   "alpha"),
-        ("Share issuance for majors",    "done",     "alpha"),
-        ("Minor SR merge action",        "needs-pr", "beta"),
-        ("Change of presidency",         "done",     "alpha"),
-        ("Trade with another player",    "todo",     "alpha"),
-    ]),
-    ("Railroad Formation", [
-        ("Floating a minor",             "done", "alpha"),
-        ("Floating a regional",          "done", "alpha"),
-        ("Floating a major",             "done", "alpha"),
-        ("Forming a national (trigger)", "todo", "beta"),
-        ("Forming a national (steps)",   "todo", "beta"),
-        ("Abandoning a minor",           "todo", "beta"),
-    ]),
-    ("Nationals", [
-        ("National type in train limits", "done", "alpha"),
-        ("National region hexes",         "done", "alpha"),
-        ("Formation trigger",             "todo", "beta"),
-        ("ConvertToNational step",        "todo", "beta"),
-        ("National revenue",              "todo", "beta"),
-        ("Inherent Pullman",              "todo", "beta"),
-        ("No tokens / no terrain",        "todo", "beta"),
-        ("Rusted train claim",            "todo", "beta"),
-        ("Train exchange/flip/upgrade",   "todo", "beta"),
-        ("Merged minors abandoned",       "todo", "beta"),
-        ("Track rights removed on form.", "todo", "beta"),
-    ]),
-    ("Track Rights Chit System", [
-        ("MINOR_TRACK_RIGHTS_CHITS", "done", "alpha"),
-        ("Asterisked zones cap",     "done", "alpha"),
-        ("region_available? / cost", "done", "alpha"),
-        ("HomeToken process",        "done", "alpha"),
-        ("major_phase?",             "done", "alpha"),
-    ]),
-    ("Minor Mergers", [
-        ("Minor SR merge action",       "needs-pr", "beta"),
-        ("Plumbing / can_merge",        "needs-pr", "beta"),
-        ("merge_minor!",                "needs-pr", "beta"),
-        ("No-stock connection check",   "todo",     "beta"),
-        ("Token conflict choice",       "todo",     "beta"),
-        ("Side payment UI",             "todo",     "beta"),
-        ("Solicit-offers rule",         "todo",     "beta"),
-        ("Consolidation forced mergers","todo",     "beta"),
-    ]),
-    ("Consolidation Phase", [
-        ("L5 trigger scaffold",          "done",     "alpha"),
-        ("Cannot pass with minors",      "todo",     "beta"),
-        ("Conditional merger / abandon", "todo",     "beta"),
-    ]),
-    ("Token Transfer Between Majors", [
-        ("Transfer token between majors","todo", "alpha"),
-        ("Transfer cost schedule",       "todo", "alpha"),
-        ("Sell token back to charter",   "todo", "alpha"),
-        ("Port authority transfer",      "todo", "beta"),
-    ]),
-    ("End Game", [
-        ("Bank break pre-L8 timing",     "needs-pr", "alpha"),
-        ("L8 purchase end trigger",      "needs-pr", "alpha"),
-        ("Remainder cash injection",     "needs-pr", "alpha"),
-        ("Final two OR sequence",        "todo", "beta"),
-        ("Second final OR (repeat rev.)","todo", "beta"),
-        ("Bankrupt trigger removed",     "needs-pr", "alpha"),
-        ("Win condition (scoring)",      "done", "alpha"),
-    ]),
-    ("Minor Abilities", [
-        ("A \u2013 Silver Banner",          "todo",     "alpha"),
-        ("B \u2013 Orange Scroll",          "done",     "alpha"),
-        ("C \u2013 Golden Bell",            "partial",  "alpha"),
-        ("D \u2013 Green Junction",         "partial",  "alpha"),
-        ("E \u2013 Blue Coast",             "done",     "alpha"),
-        ("F \u2013 White Peak",             "done",     "alpha"),
-        ("G \u2013 Indigo Foundry",         "done",     "alpha"),
-        ("H \u2013 Great Western Steamship","todo",     "beta"),
-        ("J \u2013 Grey Locomotive",        "needs-pr", "alpha"),
-        ("K \u2013 Vermilion Seal",         "done",     "alpha"),
-        ("L \u2013 Krasnaya Strela",        "partial",  "alpha"),
-        ("M \u2013 CIWL Pullmans",          "todo",     "beta"),
-        ("Ability transfer on merge",        "todo",     "beta"),
-    ]),
-    ("Private Abilities", [
-        ("Robert Stephenson (none)",   "done",    "alpha"),
-        ("Ponts et Chauss\u00e9es (none)", "done", "alpha"),
-        ("Wien S\u00fcdbahn hof",     "partial", "beta"),
-        ("Barclay, Bevan & Tritton",   "todo",    "alpha"),
-        ("Star Harbor",                "partial", "beta"),
-        ("Central Circle",             "partial", "alpha"),
-        ("White Cliffs Ferry",         "partial", "beta"),
-        ("Hochberg Mining",            "partial", "alpha"),
-        ("Brandt & Brandau",           "partial", "alpha"),
-        ("Swift Metropolitan Line",    "todo",    "alpha"),
-    ]),
-    ("Patronage Tiles", [
-        ("Setup randomisation",          "todo", "beta"),
-        ("Payout on track lay",          "todo", "beta"),
-        ("Minor float on patronage hex", "todo", "beta"),
-    ]),
-    ("Variants & Scenarios", [
-        ("UK-FR variant entities",    "deferred", "beta"),
-        ("UK-FR train rusting",       "deferred", "beta"),
-        ("UK-FR map hexes",           "deferred", "beta"),
-        ("Medium / short scenarios",  "deferred", "beta"),
-    ]),
+# Canonical section order for the coverage grid (matches SECTION_BASE_WEIGHTS keys).
+# Sections found in the MD files that aren't listed here appear at the end.
+_COVERAGE_SECTION_ORDER = [
+    'Game Setup', 'Entities', 'Map & Components', 'Track Rights',
+    'Track Rights Chit System', 'Auction Phase', 'Concession Phase',
+    'Stock Market Grid', 'Train Data & Phases', 'Track Laying',
+    'Token Placement', 'Route & Revenue (Cross-Water)', 'Orient Express',
+    'Pullman Cars', 'Train Purchase', 'OR Steps (Major)', 'Stock Rounds',
+    'Railroad Formation', 'Nationals', 'Consolidation Phase',
+    'Token Transfer Between Majors', 'Minor Mergers', 'End Game',
+    'Minor Abilities', 'Private Abilities', 'Patronage Tiles',
+    'Variants & Scenarios', 'Tests',
 ]
+
+
+def load_coverage_from_md():
+    """Build COVERAGE_DATA list from MD/ kanban files.
+
+    Returns [(section_name, [(label, status, scope), ...]), ...] — the same
+    tuple format the rest of the generator expects.  Any source MD file that
+    is missing is silently skipped so the generator still runs offline.
+    """
+    STATUS_REMAP = {
+        'merged':   'done',
+        'needs-pr': 'needs-pr',
+        'testing':  'partial',
+        'partial':  'partial',
+        'started':  'partial',
+        'todo':     'todo',
+    }
+    merged = {}   # section_title → list of (label, status, scope)
+    order  = []   # insertion-order tracking
+
+    for fname in ('done.md', 'inwork.md', 'todo.md'):
+        path = MD_DIR / fname
+        if not path.exists():
+            continue
+        for sec in parse_kanban_items(path):
+            title = sec['title']
+            if title not in merged:
+                merged[title] = []
+                order.append(title)
+            for it in sec['items']:
+                if it.get('deferred'):
+                    cov_status = 'deferred'
+                else:
+                    cov_status = STATUS_REMAP.get(it['status'], 'todo')
+                scope = it.get('scope', 'beta' if it.get('beta') else 'alpha')
+                merged[title].append((it['text'], cov_status, scope))
+
+    # Sort sections: known order first, then any extras in insertion order
+    def _section_key(t):
+        try:
+            return _COVERAGE_SECTION_ORDER.index(t)
+        except ValueError:
+            return len(_COVERAGE_SECTION_ORDER)
+
+    sorted_titles = sorted(order, key=_section_key)
+    # Drop sections with no parseable checkbox items
+    return [(t, merged[t]) for t in sorted_titles if merged[t]]
+
+
+COVERAGE_DATA = load_coverage_from_md()
+
 
 # ---------------------------------------------------------------------------
 # Map status overview table  (drives the "Overall Status" section of
@@ -701,11 +531,13 @@ MAP_STATUS_TABLE = [
 SECTION_BASE_WEIGHTS = {
     # Mostly data / constants (L1)
     'Game Setup':                     0.5,
+    'Entities':                       0.5,
     'Map & Components':               0.5,
     'Track Rights Chit System':       1.0,
     'Train Data & Phases':            1.0,
     'Variants & Scenarios':           0.5,
     'Patronage Tiles':                1.0,
+    'Tests':                          0.5,
     # Light game logic (L1-L2)
     'Concession Phase':               1.5,
     'Auction Phase':                  1.5,
@@ -839,10 +671,13 @@ def build_status_html():
 
     inwork_sections = parse_kanban_items(inwork_path)
     todo_sections   = parse_kanban_items(todo_path)
-    done_sections   = parse_done(done_path)
+    done_sections   = parse_kanban_items(done_path)
+
+    def _done_items(sections):
+        return [it for s in sections for it in s['items'] if it['status'] in ('merged', 'done')]
 
     # Raw item counts (for display only)
-    count_done    = len(done_sections)
+    count_done    = len(_done_items(done_sections))
     count_pr      = sum(1 for s in inwork_sections for it in s['items'] if it['status'] == 'needs-pr')
     count_partial = sum(1 for s in inwork_sections for it in s['items'] if it['status'] in ('partial', 'testing'))
     count_started = sum(1 for s in todo_sections   for it in s['items'] if it['status'] == 'started')
@@ -856,9 +691,7 @@ def build_status_html():
     # Weighted sums — each item weighted by its layer tag
     def _w(it): return layer_weight(it.get('layer', ''))
 
-    w_done    = sum(_w(it) for s in done_sections
-                    for it in [{'layer': ''}])                                             # done items lack tags → default
-    w_done    = count_done * _DEFAULT_LAYER_WEIGHT                                         # approximate done with average
+    w_done    = sum(_w(it) for it in _done_items(done_sections))
     w_pr      = sum(_w(it) for s in inwork_sections for it in s['items'] if it['status'] == 'needs-pr')
     w_partial = sum(_w(it) * 0.5 for s in inwork_sections for it in s['items']
                     if it['status'] in ('partial', 'testing'))
@@ -871,7 +704,7 @@ def build_status_html():
     w_total   = w_done + w_pr + w_partial + w_started + w_todo or 1.0
 
     # Alpha-scoped weighted sums
-    w_done_a    = w_done  # all done items count for alpha (they were alpha when done)
+    w_done_a    = sum(_w(it) for it in _done_items(done_sections) if not it.get('beta'))
     w_pr_a      = sum(_w(it) for s in inwork_sections for it in s['items']
                       if it['status'] == 'needs-pr' and _is_alpha(it))
     w_partial_a = sum(_w(it) * 0.5 for s in inwork_sections for it in s['items']
@@ -950,10 +783,15 @@ def build_status_html():
     p.append(f'<div class="sb-col-header done-col">Done &amp; Merged<span class="sb-col-count">{count_done}</span></div>')
     p.append('<div class="sb-col-body">')
     for sec in done_sections:
+        items = [it for it in sec['items'] if it['status'] in ('merged', 'done')]
+        if not items:
+            continue
         p.append('<div class="sb-done-card">')
-        p.append(f'<div class="sb-done-title">{_html.escape(sec["title"])}</div>')
-        if sec['summary']:
-            p.append(f'<div class="sb-done-summary">{_html.escape(sec["summary"])}</div>')
+        p.append(
+            f'<div class="sb-done-title">{_html.escape(sec["title"])}'
+            f'<span class="sb-col-count" style="font-size:0.75rem;margin-left:0.4em">{len(items)}</span>'
+            f'</div>'
+        )
         p.append('</div>')
     p.append('</div></div>')
 

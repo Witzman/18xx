@@ -11,6 +11,39 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
+## Track Rights
+- [>] 20% terrain discount zones **[alpha]** **[L2]** `18oe_fix_stock_terrain`
+
+## Stock Market Grid
+- [>] LEFT (zero dividend) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
+- [>] No movement (below par) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
+- [>] RIGHT (at/above par) **[alpha]** **[L2]** `18oe_fix_share_price_movement`
+- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** `18oe_fix_stock_terrain`
+- [>] >60% president pool buy at 2× **[alpha]** **[L2]** `18oe_fix_president_overcap`
+- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** `18oe_fix_stock_terrain`
+
+## Train Data & Phases
+- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+
+## End Game
+- [>] Bank break pre-L8 timing **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+- [>] L8 purchase end trigger **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+- [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+- [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend`
+
+## Minor Abilities
+- [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
+
+## Nationals
+- [>] Rusted train claim **[beta]** **[L2/L3]** `18oe_mergers`
+
+## Minor Mergers
+- [>] Minor SR merge action **[beta]** **[L2/L3]** `18oe_mergers`
+- [>] Plumbing / can_merge **[beta]** **[L2/L3]** `18oe_mergers`
+- [>] merge_minor! **[beta]** **[L2/L3]** `18oe_mergers`
+
+---
+
 ## Active Workarounds
 
 **WA-1** *(BETA SCOPE)* — `national_revenue` linked/unlinked split unverified. To remove: confirm `Graph.new(home_as_token: true, no_blocking: true)` correctly identifies linked nodes in a test game. Not relevant until nationalization is implemented.
