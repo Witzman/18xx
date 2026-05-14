@@ -7,52 +7,6 @@ Layers: L1 constants · L2 Game::Base override · L3 new Step/Round file
 
 ---
 
-## Status Dashboard
-
-*Updated 2026-05-14*
-
-```
-Alpha milestone progress
-──────────────────────────────────────────────────────────────────
-§1  Game Setup             ████████████████████  Complete  ✅
-§2a Companies / Entities   ████████████████████  Complete  ✅
-§2b Map                    █████████████████░░░  ~85%  (OE tiles + ferry hexes pending)
-§3  Track Rights           ████████████████████  Complete  ✅
-§4  Auction Phase          ████████████████░░░░  ~80%  (all-pass reduction pending)
-§6a Stock Market Grid      ████████████████████  Complete  ✅
-§6b Share Price Movement   ████████████████████  Complete  ✅
-§6c Stock Round            ██████████████░░░░░░  ~70%  (minor merge done; removal + reserved pending)
-§6d Dividend Options       ████████████████████  Complete  ✅
-§7a Train Data             ████████████████████  Complete  ✅
-§7b Phase Structure        ████████████████████  Complete  ✅
-§8a Operating Order        ████████████████████  Complete  ✅
-§8b Track Laying           ██████████████████░░  ~90%  (first-OR exception)
-§8c Token Placement        ████████████████████  Complete  ✅
-§8f Pullman Cars           ░░░░░░░░░░░░░░░░░░░░  0%  (not started)
-§8g Train Purchase         ████████████░░░░░░░░  ~60%  (obligation done; force-buy pending)
-§8h OR Share Step          ████████████░░░░░░░░  ~60%  (DOWN done; Exchange TBD)
-§9  Minor Abilities        ██████████████████░░  ~90%  (CIWL Pullman pending)
-§10 Private Abilities      ████████████████░░░░  ~80%  (2 complex abilities)
-§11 Nationals (base)       █████████████░░░░░░░  ~65%  (formation + rusted-train claim done; revenue beta)
-§12A Track Rights Chit     ████████████████████  Complete  ✅
-§13a Consolidation Scaffold ████████████████████  Complete  ✅
-§14 Token Transfer         ░░░░░░░░░░░░░░░░░░░░  0%  (not started)
-§15 End Game               ████████████████████  ~80% overall  (alpha-scope done; second final OR → beta)
-§16 Tests                  ░░░░░░░░░░░░░░░░░░░░  0%  (not started)
-
-Bug tracker  ████████████████░░░░  19 / 27 bugs closed  (70%)
-Alpha bugs   ████░░░░░░░░░░░░░░░░  2 open alpha bugs  (BUG-028/029)
-
-Branch status (rebased 2026-05-14 onto upstream/master after PRs #12578 + #12592 merged)
-──────────────────────────────────────────────────────────────────
-18oe_abilities    ██████████  rebased ✓  abilities wiring (C/D/J/L + privates)
-18oe_gamefixes    ██████████  rebased ✓  10 bug fixes
-18oe_mergers      ██████████  rebased ✓  minor merger · national formation · SR fixes
-18oe_testing      ░░░░░░░░░░  pending    integration branch not yet updated
-```
-
----
-
 # Alpha Backlog
 
 Target: auction · floating · minor-regional phase · major phase to game end · map complete (port icons displayed, no routing) · all minor/private abilities not gated on beta features.
