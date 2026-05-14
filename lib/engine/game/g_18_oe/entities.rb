@@ -668,8 +668,7 @@ module Engine
               {
                 type: 'train_discount',
                 discount: 0.1,
-                trains: [], # TODO: fill with all train names once final train roster is confirmed
-                owner_type: 'corporation',
+                trains: [],
                 when: 'buying_train',
               },
             ],
