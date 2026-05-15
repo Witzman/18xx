@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 2   Open (beta): 6   Fixed: 17   Won't fix: 2   Total: 27
-Bugs closed  ██████████████████░░  19 / 27  (70%)
-Alpha bugs   ████░░░░░░░░░░░░░░░░  2 open alpha bugs
+Open (alpha): 5   Open (beta): 6   Fixed: 17   Won't fix: 2   Total: 30
+Bugs closed  ██████████████████░░  19 / 30  (63%)
+Alpha bugs   ██████░░░░░░░░░░░░░░  5 open alpha bugs
 ```
 
 ---
@@ -36,6 +36,44 @@ Alpha bugs   ████░░░░░░░░░░░░░░░░  2 ope
 **Symptom.** U24 is defined as `'city=revenue:10;icon=image:port,sticky:1'` — no `path=` at all. A train that enters U24 has nowhere to exit; the city is completely unroutable.
 
 **Fix needed.** Add the two correct path edges (verify edge numbers against physical map), then move the hex from `white:` to `yellow:` in map.rb.
+
+---
+
+### BUG-031 — Krasnaya Strela D-train exception not implemented
+
+- **Status:** OPEN
+- **Severity:** MEDIUM (alpha scope — +1+1 boost applied correctly; doubling exception is a no-op until D-train revenue doubling exists)
+- **File:** `lib/engine/game/g_18_oe/game.rb`
+- **Rule:** §15.7 — "If the train is a D train the extra city does not double in value."
+
+**Symptom.** 4D/5D trains do not currently double city revenue in 18OE; the Krasnaya Strela rule that the extra city "does not double" is therefore moot. Once D-train doubling is implemented, the exception must suppress doubling for the extra city.
+
+**Fix needed.** (1) Implement D-train city doubling. (2) Override revenue calculation for Krasnaya Strela + D-train: identify the extra city stop and exclude it from doubling.
+
+---
+
+### BUG-032 — CCTC token city counts as city stop, not town stop
+
+- **Status:** OPEN
+- **Severity:** LOW (alpha scope — revenue approximation via hex_bonus is correct; routing graph still counts the hex as a city against the train's city limit)
+- **File:** `lib/engine/game/g_18_oe/step/token.rb` + routing graph
+- **Rule:** §14.6 — "The owning RR counts the token as a town when running a route including this hex."
+
+**Symptom.** The CCTC hex_bonus correctly adds £10/£20/£40/£60 phase revenue, but the routing graph treats the city as a city stop (consuming a city slot). Should consume a town slot instead.
+
+**Fix needed.** Modify routing graph or revenue_for to treat the CCTC hex as a town node for the owning RR. May require engine-level change.
+
+---
+
+### BUG-033 — HMLC routing exclusion hook needs validation
+
+- **Status:** INVESTIGATING
+- **Severity:** MEDIUM (alpha scope — `check_route_token` override logic is correct but the hook fires per-token, not per-path; non-owner exclusion may not fire for tokened routes)
+- **File:** `lib/engine/game/g_18_oe/game.rb:check_route_token`
+
+**Symptom.** Unknown until browser testing. `check_route_token` is called once per route; `route.paths` iteration should catch Hochberg hexes for non-owner RRs. If the hook is not called for routes without a valid token, the exclusion silently fails.
+
+**Fix needed.** Browser test scenario 14 (HMLC routing by non-owner). If exclusion fails, switch to `route_valid?` override or graph-level blocking.
 
 ---
 
