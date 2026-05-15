@@ -2725,7 +2725,9 @@ _SECTION_PRIORITY = {
 def parse_bugs_md(path):
     """Parse MD/bugs.md and return list of dicts for OPEN bugs.
 
-    Each dict: { id, title, severity, summary }
+    Each dict: { id, title, severity, scope, symptom, file }
+    scope is 'alpha' or 'beta', derived from the parenthetical in the
+    Severity line, e.g. "HIGH (alpha scope — ...)" or "MEDIUM (beta scope — ...)".
     """
     if not path.exists():
         return []
@@ -2740,7 +2742,7 @@ def parse_bugs_md(path):
         bug_id    = id_m.group(1)
         title     = id_m.group(2).strip()
         status_m  = re.search(r'\*\*Status:\*\*\s*([A-Z]+)', block)
-        sev_m     = re.search(r'\*\*Severity:\*\*\s*(HIGH|MEDIUM|LOW)', block)
+        sev_m     = re.search(r'\*\*Severity:\*\*\s*(HIGH|MEDIUM|LOW)\s*\(?(alpha|beta)?\s*scope', block)
         sym_m     = re.search(r'\*\*Symptom\.\*\*\s*(.+?)(?=\n\n|\*\*|$)', block, re.DOTALL)
         file_m    = re.search(r'\*\*File:\*\*\s*`([^`]+)`', block)
         if not status_m:
@@ -2749,13 +2751,14 @@ def parse_bugs_md(path):
         if status not in ('OPEN', 'INVESTIGATING'):
             continue
         severity = sev_m.group(1) if sev_m else 'MEDIUM'
+        scope    = sev_m.group(2) if (sev_m and sev_m.group(2)) else 'alpha'
         # Collapse symptom to one line
         symptom = ''
         if sym_m:
             symptom = re.sub(r'\s+', ' ', sym_m.group(1)).strip()[:160]
         file_path = file_m.group(1) if file_m else ''
         bugs.append({'id': bug_id, 'title': title, 'severity': severity,
-                     'symptom': symptom, 'file': file_path})
+                     'scope': scope, 'symptom': symptom, 'file': file_path})
     return bugs
 
 
@@ -2764,10 +2767,13 @@ def build_alpha_gaps_html():
     bugs_path = MD_DIR / "bugs.md"
     open_bugs = parse_bugs_md(bugs_path)
 
+    # Alpha-gaps page shows only alpha-scope bugs
+    alpha_bugs  = [b for b in open_bugs if b.get('scope', 'alpha') == 'alpha']
+
     # Partition bugs by severity
-    high_bugs   = [b for b in open_bugs if b['severity'] == 'HIGH']
-    medium_bugs = [b for b in open_bugs if b['severity'] == 'MEDIUM']
-    low_bugs    = [b for b in open_bugs if b['severity'] == 'LOW']
+    high_bugs   = [b for b in alpha_bugs if b['severity'] == 'HIGH']
+    medium_bugs = [b for b in alpha_bugs if b['severity'] == 'MEDIUM']
+    low_bugs    = [b for b in alpha_bugs if b['severity'] == 'LOW']
 
     # Collect todo/partial alpha items from COVERAGE_DATA, grouped by section
     alpha_todo    = []   # (section, item_name, status)
@@ -2791,7 +2797,7 @@ def build_alpha_gaps_html():
     n_low    = len(low_bugs)
     n_todo   = len(alpha_todo)
     n_partial= len(alpha_partial)
-    total_open = len(open_bugs)
+    total_open = len(alpha_bugs)
 
     def sev_cls(sev):
         return {'HIGH': 'sev-high', 'MEDIUM': 'sev-med', 'LOW': 'sev-low'}.get(sev, 'sev-med')
