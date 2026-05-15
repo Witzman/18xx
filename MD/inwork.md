@@ -32,7 +32,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 - [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
 
 ## D-Train Revenue (BUG-031)
-- [>] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_dtrain_doubling` tobymao#12607
+- [>] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_abilities`
 
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
@@ -70,7 +70,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
-| `18oe_dtrain_doubling` | origin/master | fork #58 / upstream #12607 open | D-train city doubling + Krasnaya Strela exception (BUG-031) |
+
 | `18oe_abilities` | upstream/master | rebased ✓ | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |

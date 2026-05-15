@@ -151,7 +151,7 @@ Alpha bugs   ██░░░░░░░░░░░░░░░░░░  1 ope
 
 ### BUG-031 — Krasnaya Strela D-train exception + D-train doubling
 
-- **Status:** FIXED 2026-05-15 `bc0b37325` (18oe_dtrain_doubling / tobymao#12607)
+- **Status:** FIXED 2026-05-15 `ead78920c` (18oe_abilities)
 - **Severity:** MEDIUM (alpha scope)
 - **File:** `lib/engine/game/g_18_oe/game.rb`
 - **Rule:** §11.6 / §15.7 — D-trains double all city + offboard revenue; Krasnaya Strela extra city does not double.

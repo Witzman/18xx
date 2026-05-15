@@ -229,7 +229,7 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">D-Train Revenue (BUG-031)</div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) <code>18oe_dtrain_doubling</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12607" target="_blank" rel="noopener">#12607</a><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
@@ -271,7 +271,7 @@
 <div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">L8 purchase end trigger <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
 <div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remainder cash injection <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
 <div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Bankrupt trigger removed <code>18oe_fix_level8_gameend</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12605" target="_blank" rel="noopener">#12605</a></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) <code>18oe_dtrain_doubling</code></span><a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12607" target="_blank" rel="noopener">#12607</a></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L2/L3</div>
@@ -289,15 +289,15 @@
 </div>
 <div class="sb-col-body view-branch" style="display:none">
 <div class="sb-section">
-<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_abilities</span><span class="branch-count">4</span></div>
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_abilities</span><span class="branch-count">5</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">J – Grey Locomotive</span><span class="layer-tag">L1</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
-<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_dtrain_doubling</span> <a class="pr-badge" href="https://github.com/tobymao/18xx/pull/12607" target="_blank" rel="noopener">#12607</a><span class="branch-count">2</span></div>
-<div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) <code>18oe_dtrain_doubling</code></span><span class="layer-tag">L2</span></div>
+<div class="sb-section-title sb-branch-title"><span class="branch-name">18oe_dtrain_doubling</span><span class="branch-count">1</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>L</strong> (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in <code>18oe_dtrain_doubling</code> (BUG-031)</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
