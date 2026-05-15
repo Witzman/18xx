@@ -505,7 +505,20 @@ end
 
 ---
 
-## 19. Understand what base step methods gate before overriding
+## 19. Understand what base step methods gate before overriding — and check if the base already handles your case
+
+**Check the base first.** Before writing a custom method, verify that the base implementation does not already return the correct value for your game. A common mistake is overriding a hook that the engine already resolves correctly from existing constants or phase data.
+
+**Example — `game_end_check_final_phase?`:** The base returns `true` when the current phase is the last phase in PHASES. If your game's final phase is triggered by a train event (`on: '8+8'`), the base already handles it — writing a custom `@flag`-based override is redundant.
+
+```ruby
+# Redundant — base already returns true when on:'8+8' phase is active:
+def game_end_check_final_phase?
+  @level8_train_purchased
+end
+
+# Correct: delete the override and let the base work.
+```
 
 Some base step methods do more than their name implies. Before overriding, read the base implementation and every call site.
 
@@ -1145,6 +1158,118 @@ next if partition.type != :divider && partition.type != :province && ...
 
 ---
 
+## 45. `case` for multi-branch type dispatch
+
+When a single variable is tested against three or more values, use a `case` statement. Guard-returns (`return X if y == :z`) are appropriate for binary checks and early exits — not multi-way dispatch.
+
+**Bad:**
+```ruby
+def get_par_prices(entity, corp)
+  prices = @game.stock_market.par_prices
+  return prices if corp.type == :minor
+  return prices.select { |p| p.price * 2 <= available_cash(entity) } if corp.type == :regional
+  super
+end
+```
+
+**Good:**
+```ruby
+def get_par_prices(entity, corp)
+  prices = @game.stock_market.par_prices
+  case corp.type
+  when :minor    then prices
+  when :regional then prices.select { |p| p.price * 2 <= available_cash(entity) }
+  else                super
+  end
+end
+```
+
+Always include an `else` branch so unhandled cases fall through correctly (usually to `super`). See also §12 for `case` in `next_round!`.
+
+---
+
+## 46. Multi-symbol membership: `%i[]` over chained `==`
+
+When testing whether a value equals any one of two or more symbols, use `%i[].include?` instead of `||`-chained equality comparisons.
+
+**Bad:**
+```ruby
+return {} if entity.type == :minor || entity.type == :regional
+```
+
+**Good:**
+```ruby
+return {} if %i[minor regional].include?(entity.type)
+```
+
+The same pattern applies to strings: `%w[foo bar].include?(x)`. See also §26 for other Ruby collection idioms.
+
+---
+
+## 47. Non-standard share prices — override `modify_purchase_price`, not `process_buy_shares`
+
+The UI buy button reads its displayed price from `step.modify_purchase_price(bundle)`. Charging a non-standard price only in `process_buy_shares` via `exchange_price:` correctly charges the right amount but shows the wrong (original market) price before the player clicks — the player sees no indication they are paying 2×.
+
+**Correct approach:**
+1. Override `modify_purchase_price(bundle)` to return the adjusted price.
+2. The UI computes `modified_share_price = adjusted_price / bundle.num_shares` and passes it back as `bundle.share_price` on the action.
+3. `share_pool.buy_shares` uses `bundle.price` (which now reflects `share_price`) — the correct amount is charged with no `process_buy_shares` override needed.
+
+**Critical guard — avoid 4× on action replay:** `bundle.share_price` is already set when an action is deserialized for replay. If `modify_purchase_price` doubles unconditionally, it charges 4× on replay. Guard against this:
+
+```ruby
+def modify_purchase_price(bundle)
+  # bundle.share_price is set on the action-replay path where the price is
+  # already adjusted — return as-is to avoid charging 4×.
+  return bundle.price if bundle.share_price
+  return bundle.price * 2 if president_pool_overcap_buy?(current_entity, bundle)
+  super
+end
+```
+
+**How `can_buy?` stays correct:** The base `can_buy?` calls `modify_purchase_price` for its cash check. On the UI path, `bundle.share_price` is nil so `modify_purchase_price` returns the adjusted price. On the validation path (inside `check_legal_buy`), `bundle.share_price` is set so `modify_purchase_price` returns `bundle.price` (already adjusted). Both paths check the right amount.
+
+Reference: `g_18_royal_gorge/step/buy_sell_par_shares.rb` `modify_purchase_price` and `assets/app/view/game/button/buy_share.rb`.
+
+---
+
+## 48. Train availability — use `available_on:` in TRAINS, not manual depot queries
+
+When a train type should only appear in the depot once a certain phase is active, set `available_on: 'phase_name'` in the TRAINS definition. `Depot#available_upcoming_trains` already filters by this field — no step code is needed for visibility.
+
+**Bad (manual depot query in step):**
+```ruby
+def buyable_trains(entity)
+  trains = super
+  if @game.level8_train_available?
+    unless trains.any? { |t| t.name == '8+8' }
+      lvl8 = @game.depot.upcoming.find { |t| t.name == '8+8' }
+      trains += [lvl8] if lvl8
+    end
+  else
+    trains = trains.reject { |t| t.name == '8+8' }
+  end
+  trains
+end
+```
+
+**Good (declarative in TRAINS, single eligibility guard in step):**
+```ruby
+# In game.rb TRAINS:
+{ name: '8+8', ..., available_on: '7+7', ... }
+
+# In step — only the game-specific gate remains:
+def buyable_trains(entity)
+  trains = super
+  trains = trains.reject { |t| t.name == '8+8' } unless @game.level8_train_available?
+  trains
+end
+```
+
+`available_on: 'X'` means: surface this train in the depot once phase `X` (or any later phase) is active. The value must be a phase name from PHASES. Additional game-specific eligibility rules (purchase-count gates, entity-type restrictions) still belong in a step guard.
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1152,4 +1277,4 @@ next if partition.type != :divider && partition.type != :province && ...
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-14 — §44 revised: blocks_partition root cause is entity definition (symbol literal), not ability class; to_sym/to_f in partition.rb are load-bearing.*
+*Version: 2026-05-15 — §45–48 added from PR review feedback: case for type dispatch, %i[] membership, modify_purchase_price pattern, available_on: in TRAINS. §19 extended: check base before overriding.*
