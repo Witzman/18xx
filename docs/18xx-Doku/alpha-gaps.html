@@ -92,7 +92,7 @@
 <div class="alpha-banner-stats">
 <div class="alpha-banner-stat gap-stat-high">0 HIGH bugs</div>
 <div class="alpha-banner-stat gap-stat-med">2 MEDIUM</div>
-<div class="alpha-banner-stat gap-stat-low">1 LOW</div>
+<div class="alpha-banner-stat gap-stat-low">0 LOW</div>
 <div class="alpha-banner-stat gap-stat-feat">36 missing features</div>
 <div class="alpha-banner-stat gap-stat-partial">7 partial</div>
 </div>
@@ -176,7 +176,7 @@
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` added; engine enforces cap automatically</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred (see BUG-032)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">D-Train Revenue (BUG-031)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</td></tr>
@@ -188,10 +188,7 @@
 <tr class="gap-row-med"><td class="gap-id">BUG-033</td><td class="gap-title">HMLC routing exclusion hook needs validation</td><td class="gap-sym">Unknown until browser testing. `check_route_token` is called once per route; `route.paths` iteration should catch Hochberg hexes for non-owner RRs. If the hook </td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Low Bugs — cosmetic / edge-case</h2>
-<table class="gap-table">
-<thead><tr><th>ID</th><th>Issue</th><th>Symptom</th></tr></thead><tbody>
-<tr class="gap-row-low"><td class="gap-id">BUG-032</td><td class="gap-title">CCTC token city counts as city stop, not town stop</td><td class="gap-sym">The CCTC hex_bonus correctly adds £10/£20/£40/£60 phase revenue, but the routing graph treats the city as a city stop (consuming a city slot). Should consume a </td></tr>
-</tbody></table>
+<p class="gap-none">No LOW bugs open.</p>
 </article>
 </main>
 </div>

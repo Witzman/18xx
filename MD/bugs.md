@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 3   Open (beta): 6   Fixed: 18   Won't fix: 2   Total: 29
+Open (alpha): 2   Open (beta): 7   Fixed: 18   Won't fix: 2   Total: 29
 Bugs closed  ████████████████████  20 / 29  (69%)
-Alpha bugs   ████░░░░░░░░░░░░░░░░  3 open alpha bugs
+Alpha bugs   ███░░░░░░░░░░░░░░░░░  2 open alpha bugs
 ```
 
 ---
@@ -43,7 +43,7 @@ Alpha bugs   ████░░░░░░░░░░░░░░░░  3 ope
 ### BUG-032 — CCTC token city counts as city stop, not town stop
 
 - **Status:** OPEN
-- **Severity:** LOW (alpha scope — revenue approximation via hex_bonus is correct; routing graph still counts the hex as a city against the train's city limit)
+- **Severity:** LOW (beta scope — revenue approximation via hex_bonus is correct; routing graph still counts the hex as a city against the train's city limit)
 - **File:** `lib/engine/game/g_18_oe/step/token.rb` + routing graph
 - **Rule:** §14.6 — "The owning RR counts the token as a town when running a route including this hex."
 

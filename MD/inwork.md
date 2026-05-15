@@ -41,7 +41,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 - [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031) **[alpha]** **[L3]** `18oe_abilities`
 
 ## Private Abilities
-- [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred (see BUG-032) **[alpha]** **[L2]** `18oe_abilities`
+- [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032) **[alpha]** **[L2]** `18oe_abilities`
 - [t] **Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test **[alpha]** **[L3]** `18oe_abilities`
 - [t] **Brandt & Brandau** — `count_per_or: 2` added; engine enforces cap automatically **[alpha]** **[L1]** `18oe_abilities`
 - [~] **Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: Token step zone-bypass + sea-zone crossing costs **[beta]** **[L2/L3]** `18oe_abilities`
