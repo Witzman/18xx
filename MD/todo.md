@@ -77,7 +77,8 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 - [ ] Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3) **[L2]**
 - [ ] Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals) **[L3]**
 - [ ] First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value **[L3]**
-- [ ] Remove `Engine::Step::Bankrupt` from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override **[L2]**
+
+*Remove `Engine::Step::Bankrupt` from OR step list — shifted to Beta (depends on BUG-019 force-buy mechanics). BUG-027 (`bankrupt: :immediate` game-end check) fixed 2026-05-14.*
 
 *Level 3 trains not available in first OR — implemented via `non_starter_trains_available? = major_phase? && @first_or_done`. Removed from todo 2026-05-14.*
 
@@ -204,6 +205,7 @@ No OE logic yet. Prerequisite: all city revenues verified against physical map.
 ## OR Steps (Major)
 
 - [ ] Major purchases one abandoned minor from Open Market for £60 (to bank); minor's charter + assets added as if merged but no share of major stock issued to former owner **[L2]**
+- [ ] Remove `Engine::Step::Bankrupt` from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019); replace with a custom no-op or override **[L2]**
 
 ---
 

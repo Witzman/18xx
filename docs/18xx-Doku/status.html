@@ -102,12 +102,12 @@
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:49.9%"></div>
-<div class="pb-pr"      style="width:9.3%"></div>
+<div class="pb-done"    style="width:50.3%"></div>
+<div class="pb-pr"      style="width:9.4%"></div>
 <div class="pb-partial" style="width:2.8%"></div>
-<div class="pb-todo"    style="width:38.0%"></div>
+<div class="pb-todo"    style="width:37.5%"></div>
 </div>
-<span class="bar-label-right">59%<span class="bar-aside"> · 54 remaining · <span class="bar-beta">64 beta deferred</span></span></span>
+<span class="bar-label-right">60%<span class="bar-aside"> · 53 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
@@ -116,7 +116,7 @@
 <div class="stat-chip stat-partial">Partial <span>9</span></div>
 <div class="stat-chip stat-partial">Started <span>0</span></div>
 <div class="stat-chip stat-todo">To do <span>105</span></div>
-<div class="stat-chip stat-beta">Beta deferred <span>64</span></div>
+<div class="stat-chip stat-beta">Beta deferred <span>65</span></div>
 </div>
 <div class="status-filters">
 <span class="filter-label">Milestone:</span>
@@ -382,7 +382,6 @@
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3)</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals)</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value</span><span class="layer-tag">L3</span></div>
-<div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remove <code>Engine::Step::Bankrupt</code> from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">OR Steps (Major)</div>
@@ -458,6 +457,7 @@
 <div class="sb-section">
 <div class="sb-section-title">OR Steps (Major)</div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Major purchases one abandoned minor from Open Market for £60 (to bank); minor's charter + assets added as if merged but no share of major stock issued to former owner</span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Remove <code>Engine::Step::Bankrupt</code> from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019); replace with a custom no-op or override</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
@@ -559,7 +559,6 @@
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Trade with another player — during own SR turn, controlling player may offer personal share trade to any other player; recipient not obligated to accept</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Train type lock for inter-company purchases — minors may only sell to minors, regionals to regionals, majors to majors (§11.3)</span></div>
-<div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Remove <code>Engine::Step::Bankrupt</code> from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019/BUG-027); replace with a custom no-op or override</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Investigate <code>Engine::Step::Exchange</code> in OR step list — minor exchange abilities fire in SR only; confirm Exchange never triggers during OR and remove if vestigial</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">During major's OR Transfer Tokens step: controlling player transfers one token between two majors</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Cost: token value (paying major) + token value (receiving major, same zone) + transfer fee (Normal £20 / Grand £40 / Metropolis £60)</span></div>
@@ -587,6 +586,7 @@
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">OE blocked for nationals</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">D-train bonus does NOT apply to OE first-time bonus</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Major purchases one abandoned minor from Open Market for £60 (to bank); minor's charter + assets added as if merged but no share of major stock issued to former owner</span></div>
+<div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Remove <code>Engine::Step::Bankrupt</code> from OR step list — base bankruptcy fires game-end immediately; 18OE force-buy should route to national conversion (BUG-019); replace with a custom no-op or override</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.9</strong> Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Forming a national (trigger): phase 4/6/8 purchase → <code>trigger_nationals_formation!</code> → ordered queue</span></div>
 <div class="sb-item sb-todo" data-layer="L2" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Abandoning a minor (§9.5): triggered by national formation or consolidation failure — <code>abandon_minor!</code>: charter→Open Market; trains→Open Market; tokens removed; cash→bank; track rights chit stays</span></div>
