@@ -267,6 +267,41 @@ def event_close_companies!
 end</code></pre>
 <p>Call <code>super</code> to run the base class logic (closing companies, etc.) before or after your additions.</p>
 <hr>
+<h3 id="gating-a-train-behind-a-purchase-count-not-just-available_on">Gating a train behind a purchase count (not just available_on)</h3>
+<p><code>available_on:</code> makes a train visible in the depot after a named train tier is bought, but it does not enforce a purchase <em>count</em>. To require N copies of a prior train to be bought first, combine <code>available_on:</code> (for depot visibility) with a <code>buyable_trains</code> filter in a custom BuyTrain step:</p>
+<pre><code class="language-ruby"># In TRAINS (game.rb) — depot surfaces the 8+8 once 7+7 phase is active
+{ name: '8+8', available_on: '7+7', ... }
+
+# In step/buy_train.rb — additional count gate
+def buyable_trains(entity)
+  trains = super
+  trains = trains.reject { |t| t.name == '8+8' } unless @game.level8_train_available?
+  trains
+end
+
+# In game.rb
+def level8_train_available?
+  sold = depot.trains.count { |t| t.name == '7+7' } - depot.upcoming.count { |t| t.name == '7+7' }
+  sold &gt;= 4
+end</code></pre>
+<p>Reference: <code>lib/engine/game/g_18_oe/game.rb</code>, <code>lib/engine/game/g_18_oe/step/buy_train.rb</code></p>
+<hr>
+<h3 id="injecting-remainder-cash-into-the-bank-on-a-train-event">Injecting remainder cash into the bank on a train event</h3>
+<p>Some physical games set aside extra notes at setup and inject them when a specific train is bought, to prevent the bank from breaking prematurely during the final OR set. Model this with a one-shot event method guarded by an instance variable:</p>
+<pre><code class="language-ruby"># In game.rb
+REMAINDER_CASH = 100_000   # e.g. 20 × £5,000 notes (§13)
+
+def event_remainder_cash!
+  return if @remainder_cash_added
+  @remainder_cash_added = true
+  @bank.instance_variable_set(:@cash, @bank.cash + self.class::REMAINDER_CASH)
+  @log &lt;&lt; "-- Event: #{format_currency(self.class::REMAINDER_CASH)} remainder cash added to bank --"
+end</code></pre>
+<p>Wire it via <code>events:</code> on the relevant train in <code>TRAINS</code>:</p>
+<pre><code class="language-ruby">{ name: '8+8', events: [{ 'type' =&gt; 'remainder_cash' }], ... }</code></pre>
+<p>The guard (<code>return if @remainder_cash_added</code>) ensures only the first purchase fires the injection even though the event fires for every 8+8 bought.</p>
+<p>Reference: <code>lib/engine/game/g_18_oe/game.rb</code></p>
+<hr>
 <h3 id="phase-gated-action-in-a-step">Phase-gated action in a Step</h3>
 <p>Check the current phase status inside a Step's <code>actions</code> method to enable or disable options:</p>
 <pre><code class="language-ruby">def actions(entity)

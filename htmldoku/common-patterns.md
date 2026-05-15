@@ -283,6 +283,60 @@ Call `super` to run the base class logic (closing companies, etc.) before or aft
 
 ---
 
+### Gating a train behind a purchase count (not just available_on)
+
+`available_on:` makes a train visible in the depot after a named train tier is bought, but it does not enforce a purchase *count*. To require N copies of a prior train to be bought first, combine `available_on:` (for depot visibility) with a `buyable_trains` filter in a custom BuyTrain step:
+
+```ruby
+# In TRAINS (game.rb) — depot surfaces the 8+8 once 7+7 phase is active
+{ name: '8+8', available_on: '7+7', ... }
+
+# In step/buy_train.rb — additional count gate
+def buyable_trains(entity)
+  trains = super
+  trains = trains.reject { |t| t.name == '8+8' } unless @game.level8_train_available?
+  trains
+end
+
+# In game.rb
+def level8_train_available?
+  sold = depot.trains.count { |t| t.name == '7+7' } - depot.upcoming.count { |t| t.name == '7+7' }
+  sold >= 4
+end
+```
+
+Reference: `lib/engine/game/g_18_oe/game.rb`, `lib/engine/game/g_18_oe/step/buy_train.rb`
+
+---
+
+### Injecting remainder cash into the bank on a train event
+
+Some physical games set aside extra notes at setup and inject them when a specific train is bought, to prevent the bank from breaking prematurely during the final OR set. Model this with a one-shot event method guarded by an instance variable:
+
+```ruby
+# In game.rb
+REMAINDER_CASH = 100_000   # e.g. 20 × £5,000 notes (§13)
+
+def event_remainder_cash!
+  return if @remainder_cash_added
+  @remainder_cash_added = true
+  @bank.instance_variable_set(:@cash, @bank.cash + self.class::REMAINDER_CASH)
+  @log << "-- Event: #{format_currency(self.class::REMAINDER_CASH)} remainder cash added to bank --"
+end
+```
+
+Wire it via `events:` on the relevant train in `TRAINS`:
+
+```ruby
+{ name: '8+8', events: [{ 'type' => 'remainder_cash' }], ... }
+```
+
+The guard (`return if @remainder_cash_added`) ensures only the first purchase fires the injection even though the event fires for every 8+8 bought.
+
+Reference: `lib/engine/game/g_18_oe/game.rb`
+
+---
+
 ### Phase-gated action in a Step
 
 Check the current phase status inside a Step's `actions` method to enable or disable options:

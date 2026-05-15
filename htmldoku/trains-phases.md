@@ -221,7 +221,40 @@ These constants in `game.rb` control the economy.
 | `SELL_AFTER` | Symbol | When players may first sell: `:after_sr_floated`, `:operate`, `:p_any_operate` |
 | `MUST_BUY_TRAIN` | Symbol | When corporations must buy a train: `:always`, `:route`, `false` |
 | `EBUY_FROM_OTHERS` | Boolean | Whether a corporation can emergency-buy trains from other corporations |
-| `GAME_END_CHECK` | Hash | End conditions, e.g. `{ bank: :full_or, stock_market: :immediate }` |
+| `GAME_END_CHECK` | Hash | End conditions — keys are triggers, values are timing (see table below) |
+| `REMAINDER_CASH` | Integer | Extra cash injected into the bank on a specific event (e.g. when first endgame train is bought) to prevent premature bank break during the final OR set |
+
+### GAME_END_CHECK keys and timing values
+
+`GAME_END_CHECK` is a hash where each key is a trigger and the value is the timing of the end.
+
+**Trigger keys:**
+
+| Key | Fires when |
+|-----|-----------|
+| `bank` | Bank cash reaches zero |
+| `stock_market` | A share price token reaches a `j` (black) cell |
+| `bankrupt` | A corporation cannot meet an emergency train purchase |
+| `final_phase` | The last phase is entered (first copy of the last train tier is bought) |
+| `final_train` | The last train in the depot is purchased |
+
+**Timing values:**
+
+| Value | Effect |
+|-------|--------|
+| `:immediate` | Game ends right now, mid-round |
+| `:current_round` | Game ends at the end of the current round |
+| `:current_or` | Game ends at the end of the current Operating Round |
+| `:full_or` | Game ends after the current full OR set completes |
+| `:one_more_full_or_set` | One additional full OR set plays out after the trigger, then the game ends |
+
+Multiple triggers can coexist. When two triggers fire simultaneously the one with **earlier** timing wins (`:immediate` beats `:current_or` beats `:full_or`, etc.).
+
+**18OE example** (§13: bank-break ends at current OR; first L8 purchase gives one more full OR set):
+
+```ruby
+GAME_END_CHECK = { bank: :current_or, final_phase: :one_more_full_or_set }.freeze
+```
 
 ### Looking up reference values
 
