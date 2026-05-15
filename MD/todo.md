@@ -19,7 +19,6 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ## Map & Components
 
-- [ ] **BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb **[L1]**
 - [ ] **BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:` **[L1]**
 - [ ] Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed) **[L1]**
 - [ ] N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map **[L1]**

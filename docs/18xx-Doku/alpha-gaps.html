@@ -88,21 +88,21 @@
 <h1>18OE — Open for Alpha</h1>
 <p class="page-crosslink">Fast triage view · bugs and missing features sorted by impact. For full rulebook picture → <a href="rulebook-coverage.html">Rulebook Coverage</a> · For in-flight work → <a href="status.html">Implementation Tracker</a></p>
 <div class="alpha-banner">
-<div class="alpha-banner-header"><span class="alpha-banner-title">Alpha gap summary</span><span class="readiness-red">1 blocker</span><span class="alpha-banner-date">generated 2026-05-15</span></div>
+<div class="alpha-banner-header"><span class="alpha-banner-title">Alpha gap summary</span><span class="readiness-amber">Bugs clear — features pending</span><span class="alpha-banner-date">generated 2026-05-15</span></div>
 <div class="alpha-banner-stats">
-<div class="alpha-banner-stat gap-stat-high">1 HIGH bug</div>
+<div class="alpha-banner-stat gap-stat-high">0 HIGH bugs</div>
 <div class="alpha-banner-stat gap-stat-med">3 MEDIUM</div>
 <div class="alpha-banner-stat gap-stat-low">1 LOW</div>
-<div class="alpha-banner-stat gap-stat-feat">38 missing features</div>
+<div class="alpha-banner-stat gap-stat-feat">37 missing features</div>
 <div class="alpha-banner-stat gap-stat-partial">6 partial</div>
 </div>
 <div class="alpha-banner-bar"><div class="bar-rows">
 <div class="bar-row">
 <div class="progress-track">
-<div class="pb-done"    style="width:60.0%"></div>
+<div class="pb-done"    style="width:60.1%"></div>
 <div class="pb-pr"      style="width:11.6%"></div>
 <div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:25.8%"></div>
+<div class="pb-todo"    style="width:25.7%"></div>
 </div>
 <span class="bar-label-right"><strong>72%</strong> alpha scope complete</span>
 </div>
@@ -110,10 +110,7 @@
 </div>
 <p class="bar-note">Bar weights: L3 step/round = 3× · L2 override = 2× · L1 data = 1×</p>
 <h2 class="gap-section-h">Critical Bugs — fix before any playtesting</h2>
-<table class="gap-table">
-<thead><tr><th>ID</th><th>Rule violated</th><th>Symptom</th></tr></thead><tbody>
-<tr class="gap-row-high"><td class="gap-id">BUG-028</td><td class="gap-title">U24 Bordeaux: no path edges (city unroutable)</td><td class="gap-sym">U24 is defined as `&#x27;city=revenue:10;icon=image:port,sticky:1&#x27;` — no `path=` at all. A train that enters U24 has nowhere to exit; the city is completely unroutab</td></tr>
-</tbody></table>
+<p class="gap-none">No HIGH bugs open.</p>
 <h2 class="gap-section-h">Missing Alpha Features — not yet implemented</h2>
 <table class="gap-table">
 <thead><tr><th>Area</th><th>Feature</th></tr></thead><tbody>
@@ -132,7 +129,6 @@
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Auction Phase</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Map &amp; Components</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-028** — U24 Bordeaux: no path edges; add correct edge pair + move `white:` → `yellow:` in map.rb</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Audit OE-specific tile upgrade paths against physical manifest</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td></tr>
