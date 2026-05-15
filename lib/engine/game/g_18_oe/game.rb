@@ -211,6 +211,7 @@ module Engine
               price: 1000,
             }],
             num: 11,
+            available_on: '7+7',
             events: [{ 'type' => 'level8_train_purchased' }],
           },
         ].freeze
@@ -795,10 +796,6 @@ module Engine
         def after_end_of_operating_turn(operator)
           restore_krasnaya_strela! if @krasnaya_strela_train&.owner == operator
           super
-        end
-
-        def game_end_check_final_phase?
-          @level8_train_purchased
         end
 
         def event_level8_train_purchased!
