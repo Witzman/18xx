@@ -5,7 +5,6 @@ require_relative 'entities'
 require_relative 'map'
 require_relative '../base'
 require_relative 'round/consolidation'
-require_relative 'round/stock'
 require_relative 'step/consolidate'
 require_relative 'step/convert_to_national'
 
@@ -247,8 +246,8 @@ module Engine
         ASTERISKED_ZONES_CAP = 4
 
         ZONE_DISCOUNT_ZONES         = %w[SP IT SC RU].freeze
-        ZONE_DISCOUNT_RATE          = 0.2 # 20% §11.1.5
-        ZONE_TERRAIN_DISCOUNT_RATE  = 0.5 # 50% §11.1.5; E/F augment zone discount to this rate
+        ZONE_DISCOUNT_RATE          = Rational(1, 5).freeze # 20% §11.1.5
+        ZONE_TERRAIN_DISCOUNT_RATE  = Rational(1, 2).freeze # 50% §11.1.5; E/F augment zone discount
         TILE_POINT_BUDGET = { minor: 3, regional: 3, major: 6, national: 9 }.freeze
         MINOR_MAX_TREASURY = 180
         EF_TERRAIN_AUGMENT          = { 'E' => :water, 'F' => :mountain }.freeze
@@ -1330,6 +1329,11 @@ module Engine
         end
 
         def owning_corporation(entity)
+          resolved = entity.corporation? ? entity : entity.owner
+          resolved&.corporation? ? resolved : nil
+        end
+
+        def resolve_corporation(entity)
           resolved = entity.corporation? ? entity : entity.owner
           resolved&.corporation? ? resolved : nil
         end
