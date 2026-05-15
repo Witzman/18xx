@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 4   Open (beta): 6   Fixed: 17   Won't fix: 2   Total: 29
-Bugs closed  ██████████████████░░  19 / 29  (66%)
-Alpha bugs   █████░░░░░░░░░░░░░░░  4 open alpha bugs
+Open (alpha): 3   Open (beta): 6   Fixed: 18   Won't fix: 2   Total: 29
+Bugs closed  ████████████████████  20 / 29  (69%)
+Alpha bugs   ████░░░░░░░░░░░░░░░░  3 open alpha bugs
 ```
 
 ---
@@ -62,19 +62,6 @@ Alpha bugs   █████░░░░░░░░░░░░░░░  4 ope
 **Symptom.** Unknown until browser testing. `check_route_token` is called once per route; `route.paths` iteration should catch Hochberg hexes for non-owner RRs. If the hook is not called for routes without a valid token, the exclusion silently fails.
 
 **Fix needed.** Browser test scenario 14 (HMLC routing by non-owner). If exclusion fails, switch to `route_valid?` override or graph-level blocking.
-
----
-
-### BUG-029 — N31 Lille: second path edge missing
-
-- **Status:** OPEN
-- **Severity:** MEDIUM (alpha scope — Lille has edge 1 but is missing edge 0, blocking routes from the White Cliffs Ferry direction)
-- **File:** `lib/engine/game/g_18_oe/map.rb` (`white:` section)
-- **Rule:** §3 — N31 Lille is a pre-printed yellow label-Y tile with two path connections.
-
-**Symptom.** N31 is defined as `'city=revenue:10;label=Y;border=edge:2,type:impassable;path=a:1,b:_0'` — only edge 1 is present. The second edge (0) that connects toward the English Channel / White Cliffs Ferry approach is absent.
-
-**Fix needed.** Add `path=a:0,b:_0` (verify against physical map), then move from `white:` to `yellow:`.
 
 ---
 
@@ -171,6 +158,21 @@ Alpha bugs   █████░░░░░░░░░░░░░░░  4 ope
 ---
 
 ## Resolved
+
+### — Fixed 2026-05-15 —
+
+### BUG-029 — N31 Lille: pre-printed revenue incorrect (£10 → £20)
+
+- **Status:** FIXED 2026-05-15 `98cdbf9dd` (18oe_fix_stock_terrain / tobymao#12604)
+- **Severity:** MEDIUM (alpha scope)
+- **File:** `lib/engine/game/g_18_oe/map.rb`
+- **Rule:** §3 — N31 Lille pre-printed yellow tile shows £20 revenue.
+
+**Symptom.** `revenue:10` in map.rb; physical map shows £20. Original filing (missing edge 0) was incorrect — Lille is a white city with a single pre-printed path to edge 1, matching the Christiania pattern. No second edge exists.
+
+**Fix landed.** Changed `revenue:10` → `revenue:20` on line 465 of map.rb.
+
+---
 
 ### — Fixed 2026-05-14 —
 

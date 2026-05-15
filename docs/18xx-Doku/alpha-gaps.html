@@ -91,18 +91,18 @@
 <div class="alpha-banner-header"><span class="alpha-banner-title">Alpha gap summary</span><span class="readiness-amber">Bugs clear — features pending</span><span class="alpha-banner-date">generated 2026-05-15</span></div>
 <div class="alpha-banner-stats">
 <div class="alpha-banner-stat gap-stat-high">0 HIGH bugs</div>
-<div class="alpha-banner-stat gap-stat-med">3 MEDIUM</div>
+<div class="alpha-banner-stat gap-stat-med">2 MEDIUM</div>
 <div class="alpha-banner-stat gap-stat-low">1 LOW</div>
-<div class="alpha-banner-stat gap-stat-feat">37 missing features</div>
+<div class="alpha-banner-stat gap-stat-feat">36 missing features</div>
 <div class="alpha-banner-stat gap-stat-partial">6 partial</div>
 </div>
 <div class="alpha-banner-bar"><div class="bar-rows">
 <div class="bar-row">
 <div class="progress-track">
-<div class="pb-done"    style="width:60.1%"></div>
+<div class="pb-done"    style="width:60.2%"></div>
 <div class="pb-pr"      style="width:11.6%"></div>
 <div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:25.7%"></div>
+<div class="pb-todo"    style="width:25.5%"></div>
 </div>
 <span class="bar-label-right"><strong>72%</strong> alpha scope complete</span>
 </div>
@@ -129,7 +129,6 @@
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Auction Phase</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Map &amp; Components</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**BUG-029** — N31 Lille: edge 0 missing; add `path=a:0,b:_0` + verify both edges + move `white:` → `yellow:`</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Audit OE-specific tile upgrade paths against physical manifest</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE19 — tile type unknown; must be identified and defined</td></tr>
@@ -185,7 +184,6 @@
 <thead><tr><th>ID</th><th>Rule violated</th><th>Symptom</th></tr></thead><tbody>
 <tr class="gap-row-med"><td class="gap-id">BUG-031</td><td class="gap-title">Krasnaya Strela D-train exception not implemented</td><td class="gap-sym">4D/5D trains do not currently double city revenue in 18OE; the Krasnaya Strela rule that the extra city &quot;does not double&quot; is therefore moot. Once D-train doubli</td></tr>
 <tr class="gap-row-med"><td class="gap-id">BUG-033</td><td class="gap-title">HMLC routing exclusion hook needs validation</td><td class="gap-sym">Unknown until browser testing. `check_route_token` is called once per route; `route.paths` iteration should catch Hochberg hexes for non-owner RRs. If the hook </td></tr>
-<tr class="gap-row-med"><td class="gap-id">BUG-029</td><td class="gap-title">N31 Lille: second path edge missing</td><td class="gap-sym">N31 is defined as `&#x27;city=revenue:10;label=Y;border=edge:2,type:impassable;path=a:1,b:_0&#x27;` — only edge 1 is present. The second edge (0) that connects toward the</td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Low Bugs — cosmetic / edge-case</h2>
 <table class="gap-table">
