@@ -211,11 +211,7 @@ module Engine
             num: 14,
           },
           # Level 8 — gray double-sided (8+8 / 5D); permanent
-<<<<<<< HEAD
           # NOTE: purchase of the FIRST level-8 triggers game end
-=======
-          # NOTE: purchase of the FIRST level-8 triggers game end (§13)
->>>>>>> 530268bdc (fix(18oe): bank-break timing + level-8 game-end trigger + remainder cash (BUG-024/025))
           {
             name: '8+8',
             distance: [{ 'nodes' => ['town'], 'pay' => 8, 'visit' => 99 },
@@ -227,14 +223,9 @@ module Engine
                          { 'nodes' => %w[city offboard], 'pay' => 5, 'visit' => 99 }],
               price: 1000,
             }],
-<<<<<<< HEAD
             num: 8,
             available_on: '7+7',
             events: [{ 'type' => 'remainder_cash_added' }],
-=======
-            num: 11,
-            events: [{ 'type' => 'level8_train_purchased' }],
->>>>>>> 530268bdc (fix(18oe): bank-break timing + level-8 game-end trigger + remainder cash (BUG-024/025))
           },
         ].freeze
 
