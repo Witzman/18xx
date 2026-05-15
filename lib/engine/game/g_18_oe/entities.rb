@@ -190,6 +190,7 @@ module Engine
                 tiles: [],
                 free: true,
                 count: 4,
+                count_per_or: 2,
                 owner_type: 'corporation',
                 when: %w[track special_track],
                 closed_when_used_up: true,
