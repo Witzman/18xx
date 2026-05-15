@@ -87,15 +87,15 @@
 <article>
 <h1>18OE — Rulebook Coverage</h1>
 <p class="page-crosslink">For current sprint state → <a href="status.html">Implementation Tracker</a> · Alpha gaps → <a href="alpha-gaps.html">Open for Alpha</a></p>
-<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">223 mechanics tracked across 28 rulebook chapters.</p>
+<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">224 mechanics tracked across 29 rulebook chapters.</p>
 <p class="bar-note">Bar widths weighted by section effort (L3 systems = 3× · L2 overrides = 2× · L1 data = 1×).</p>
 <div class="bar-rows">
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:36.5%"></div>
-<div class="pb-pr"      style="width:9.9%"></div>
-<div class="pb-partial" style="width:2.4%"></div>
+<div class="pb-done"    style="width:36.3%"></div>
+<div class="pb-pr"      style="width:9.8%"></div>
+<div class="pb-partial" style="width:2.6%"></div>
 <div class="pb-todo"    style="width:51.3%"></div>
 </div>
 <span class="bar-label-right"><strong>46%</strong> implemented or in review</span>
@@ -103,18 +103,18 @@
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:60.2%"></div>
+<div class="pb-done"    style="width:59.8%"></div>
 <div class="pb-pr"      style="width:11.6%"></div>
-<div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:25.5%"></div>
+<div class="pb-partial" style="width:2.9%"></div>
+<div class="pb-todo"    style="width:25.7%"></div>
 </div>
-<span class="bar-label-right"><strong>72%</strong> alpha scope done</span>
+<span class="bar-label-right"><strong>71%</strong> alpha scope done</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>94</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>17</span></div>
-<div class="stat-chip stat-partial">Partial <span>9</span></div>
+<div class="stat-chip stat-partial">Partial <span>10</span></div>
 <div class="stat-chip stat-todo">To do <span>94</span></div>
 <div class="stat-chip stat-todo">Deferred <span>9</span></div>
 </div>
@@ -725,7 +725,7 @@
 <div class="cov-item cov-needs-pr" data-scope="alpha" title="J – Grey Locomotive">J – Grey Locomotive</div>
 <div class="cov-item cov-partial" data-scope="alpha" title="**C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice">**C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice</div>
 <div class="cov-item cov-partial" data-scope="alpha" title="**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired">**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception deferred (see BUG-031)">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception deferred (see BUG-031)</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)</div>
 <div class="cov-item cov-todo" data-scope="beta" title="**7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)">**7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)</div>
 <div class="cov-item cov-todo" data-scope="beta" title="**D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry">**D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry</div>
@@ -741,7 +741,7 @@
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">J – Grey Locomotive</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception deferred (see BUG-031)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">**7.9** Minor H (Great Western Steamship) — reduces sea zones by 1 (Ph1–6) or 2 (Ph7–8)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">**D (Green Junction)** — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
@@ -830,6 +830,17 @@
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Pullman car revenue</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">National revenue calculation</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Orient Express bonus (first run, subsequent runs)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+</tbody></table></div>
+</div>
+<div class="cov-chapter" data-chapter-scope="mixed">
+<div class="cov-chapter-title cov-toggle" id="d-train-revenue-bug-031"><span class="cov-ch-name">D-Train Revenue (BUG-031)</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:0.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:100.0%"></div></div></div><span class="cov-sec-count">0/1</span></div>
+<div class="cov-items">
+<div class="cov-item cov-partial" data-scope="alpha" title="D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</div>
+</div>
+<div class="cov-detail">
+<div class="cov-detail-summary"><span class="cov-dr-partial">1 partial</span></div>
+<table class="cov-detail-table"><tbody>
+<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 </tbody></table></div>
 </div>
 </div>

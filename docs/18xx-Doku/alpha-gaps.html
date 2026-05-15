@@ -94,17 +94,17 @@
 <div class="alpha-banner-stat gap-stat-med">2 MEDIUM</div>
 <div class="alpha-banner-stat gap-stat-low">1 LOW</div>
 <div class="alpha-banner-stat gap-stat-feat">36 missing features</div>
-<div class="alpha-banner-stat gap-stat-partial">6 partial</div>
+<div class="alpha-banner-stat gap-stat-partial">7 partial</div>
 </div>
 <div class="alpha-banner-bar"><div class="bar-rows">
 <div class="bar-row">
 <div class="progress-track">
-<div class="pb-done"    style="width:60.2%"></div>
+<div class="pb-done"    style="width:59.8%"></div>
 <div class="pb-pr"      style="width:11.6%"></div>
-<div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:25.5%"></div>
+<div class="pb-partial" style="width:2.9%"></div>
+<div class="pb-todo"    style="width:25.7%"></div>
 </div>
-<span class="bar-label-right"><strong>72%</strong> alpha scope complete</span>
+<span class="bar-label-right"><strong>71%</strong> alpha scope complete</span>
 </div>
 </div></div>
 </div>
@@ -173,11 +173,13 @@
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Minor Abilities</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception deferred (see BUG-031)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` added; engine enforces cap automatically</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred (see BUG-032)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</td></tr>
+<tr class="gap-section-row"><td colspan="2" class="gap-section-label">D-Train Revenue (BUG-031)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Medium Bugs — rule violations in specific cases</h2>
 <table class="gap-table">

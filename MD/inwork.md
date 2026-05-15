@@ -31,11 +31,14 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 - [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
 - [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
 
+## D-Train Revenue (BUG-031)
+- [~] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_dtrain_doubling`
+
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
 - [t] **C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice **[alpha]** **[L3]** `18oe_abilities`
 - [t] **D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired **[alpha]** **[L3]** `18oe_abilities`
-- [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception deferred (see BUG-031) **[alpha]** **[L3]** `18oe_abilities`
+- [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031) **[alpha]** **[L3]** `18oe_abilities`
 
 ## Private Abilities
 - [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred (see BUG-032) **[alpha]** **[L2]** `18oe_abilities`
@@ -63,10 +66,11 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
-## Branch Status *(updated 2026-05-14)*
+## Branch Status *(updated 2026-05-15)*
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
+| `18oe_dtrain_doubling` | origin/master | new | D-train city doubling + Krasnaya Strela exception (BUG-031) |
 | `18oe_abilities` | upstream/master | rebased ✓ | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
