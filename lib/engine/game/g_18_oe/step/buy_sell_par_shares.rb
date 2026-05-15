@@ -77,6 +77,7 @@ module Engine
           end
 
           def modify_purchase_price(bundle)
+            return bundle.price if bundle.share_price
             return bundle.corporation.share_price.price * 2 if president_pool_overcap_buy?(current_entity, bundle)
 
             super
