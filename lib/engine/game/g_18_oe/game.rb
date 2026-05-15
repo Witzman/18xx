@@ -6,6 +6,10 @@ require_relative 'map'
 require_relative '../base'
 require_relative 'round/consolidation'
 require_relative 'step/consolidate'
+require_relative 'step/golden_bell_choice'
+require_relative 'step/d_token_placement'
+require_relative 'step/krasnaya_strela_assign'
+require_relative 'step/hochberg_placement'
 
 module Engine
   module Game
@@ -231,6 +235,14 @@ module Engine
         GOLDEN_BELL_CORP_ID   = 'C'
         D_TOKEN_CORP_ID       = 'D'
         MAIL_CONTRACT_CORP_ID = 'K'
+        CCTC_COMPANY_SYM      = 'CCTC'
+        CCTC_TOWN_REVENUE     = { '2' => 10, '3' => 20, '4' => 20, '5' => 40, '6' => 40, '7' => 60, '8' => 60 }.freeze
+        HMLC_COMPANY_SYM      = 'HMLC'
+        HMLC_MIN_TERRAIN_COST = 45
+        KRASNAYA_STRELA_CORP_ID = 'L'
+        TRAIN_DISCOUNT_RATE   = 0.1
+        D_TOKEN_PHASE2_BONUS  = 20
+        D_TOKEN_PHASE5_BONUS  = 40
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -659,6 +671,8 @@ module Engine
           @regional_corps_floated = 0
           @fulfilled_train_obligation = Set.new
           @first_or_done = false
+          @cctc_corp = nil
+          @cctc_hex = nil
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -776,13 +790,15 @@ module Engine
             boosted = h.dup
             if boosted['nodes'] == ['town']
               boosted['pay'] += 1
-            elsif !(boosted['nodes'] & %w[city offboard]).empty?
+            elsif boosted['nodes'].intersect?(%w[city offboard])
               boosted['pay'] += 1
               boosted['visit'] += 1 if boosted['visit'] < 99
             end
             boosted
           end
           @log << "#{train.name} train receives Krasnaya Strela +1+1 marker"
+          # TODO: D-train exception — extra city should not double in value (§15.7).
+          # Requires D-train revenue doubling to be implemented first. See BUG-031.
         end
 
         def restore_krasnaya_strela!
@@ -802,75 +818,7 @@ module Engine
           return unless (bonus = d_corp_hex_bonus)
 
           bonus.hexes.clear
-          bonus.amount = 40
-          @log << "-- Event: Green Junction Mercantile +£20 marker removed; +£40 marker now available --"
-        end
-
-        def assign_d_token!(hex)
-          return unless (bonus = d_corp_hex_bonus)
-
-          bonus.hexes.replace([hex.coordinates])
-          @log << "Green Junction Mercantile places +#{format_currency(bonus.amount)} marker on #{hex.name}"
-        end
-
-        def cheap_upgrade?(entity)
-          self.class::CHEAP_UPGRADE_CORPORATIONS.include?(entity.id)
-        end
-
-        def pay_mail_contract!
-          k_corp = corporations.find { |c| c.id == self.class::MAIL_CONTRACT_CORP_ID && !c.closed? }
-          return unless k_corp
-
-          amount = self.class::MAIL_CONTRACT_REVENUE[@phase.name]
-          return unless amount&.positive?
-
-          @bank.spend(amount, k_corp)
-          @log << "#{k_corp.name} receives mail contract of #{format_currency(amount)}"
-        end
-
-        def upgrade_cost(old_tile, hex, entity, spender)
-          return super unless (ability = terrain_discount_ability(entity, old_tile))
-
-          base_cost = old_tile.upgrades.sum(&:cost)
-          discount = (base_cost * self.class::TERRAIN_DISCOUNT_RATE).floor
-          log_cost_discount(spender, ability, discount)
-          base_cost - discount
-        end
-
-        def assign_krasnaya_strela!(train)
-          @krasnaya_strela_train = train
-          @krasnaya_strela_base_distance = train.distance.map(&:dup)
-          train.distance = train.distance.map do |h|
-            boosted = h.dup
-            if boosted['nodes'] == ['town']
-              boosted['pay'] += 1
-            elsif !(boosted['nodes'] & %w[city offboard]).empty?
-              boosted['pay'] += 1
-              boosted['visit'] += 1 if boosted['visit'] < 99
-            end
-            boosted
-          end
-          @log << "#{train.name} train receives Krasnaya Strela +1+1 marker"
-        end
-
-        def restore_krasnaya_strela!
-          return unless @krasnaya_strela_train
-
-          @krasnaya_strela_train.distance = @krasnaya_strela_base_distance
-          @krasnaya_strela_train = nil
-          @krasnaya_strela_base_distance = nil
-        end
-
-        def after_end_of_operating_turn(operator)
-          restore_krasnaya_strela! if @krasnaya_strela_train&.owner == operator
-          super
-        end
-
-        def event_d_token_phase_change!
-          return unless (bonus = d_corp_hex_bonus)
-
-          bonus.hexes.clear
-          bonus.amount = 40
+          bonus.amount = self.class::D_TOKEN_PHASE5_BONUS
           @log << "-- Event: Green Junction Mercantile +£20 marker removed; +£40 marker now available --"
         end
 
@@ -1034,23 +982,99 @@ module Engine
           ])
         end
 
+        def setup_cctc_revenue!(corp, hex)
+          return unless corp.corporation?
+
+          amount = self.class::CCTC_TOWN_REVENUE[@phase.name]
+          corp.add_ability(Engine::Ability::HexBonus.new(
+            type: :hex_bonus,
+            hexes: [hex.coordinates],
+            amount: amount,
+            owner_type: :corporation,
+          ))
+          @cctc_corp = corp
+          @cctc_hex = hex
+          @log << "#{corp.name} receives CCTC revenue bonus: +#{format_currency(amount)} when routing through " \
+                  "#{hex.name} (#{hex.location_name})"
+          # TODO: CCTC hex should count as a town stop (not city) for routing purposes (§14.6).
+          # Requires routing-graph change; hex_bonus approximation in place. See BUG-032.
+        end
+
+        def after_phase_change(name)
+          super
+          update_cctc_revenue!
+        end
+
         def operating_round(round_num)
           Round::G18OE::Operating.new(self, [
+            G18OE::Step::GoldenBellChoice,
             Engine::Step::Bankrupt,
             Engine::Step::Exchange,
             Engine::Step::DiscardTrain,
             Engine::Step::HomeToken,
             G18OE::Step::Track,
+            G18OE::Step::DTokenPlacement,
+            G18OE::Step::HochbergPlacement,
             G18OE::Step::Token,
+            G18OE::Step::KrasnayaStrelaAssign,
             Engine::Step::Route,
             G18OE::Step::Dividend,
             G18OE::Step::BuyTrain,
-            # Convert step to do national conversions at 4/6/8?
             Engine::Step::IssueShares,
           ], round_num: round_num)
         end
 
+        def d_token_available?(entity)
+          bonus = abilities(entity, :hex_bonus)
+          bonus&.hexes&.empty?
+        end
+
+        def valid_d_token_hex?(hex)
+          !metropolis_hex?(hex) && hex.tile.color != :red && hex.tile.cities.any?
+        end
+
+        def hochberg_eligible_hex?(hex)
+          hex.tile.upgrades.any? { |u| u.terrain && u.cost >= self.class::HMLC_MIN_TERRAIN_COST }
+        end
+
+        def check_route_token(route, token)
+          super
+          check_hochberg_exclusion!(route)
+        end
+
         private
+
+        def update_cctc_revenue!
+          return unless @cctc_corp && @cctc_hex
+
+          bonus = @cctc_corp.all_abilities.find do |a|
+            a.type == :hex_bonus && a.hexes.include?(@cctc_hex.coordinates)
+          end
+          return unless bonus
+
+          amount = self.class::CCTC_TOWN_REVENUE[@phase.name]
+          bonus.amount = amount
+          @log << "#{@cctc_corp.name} CCTC revenue updated to #{format_currency(amount)} (Phase #{@phase.name})"
+        end
+
+        def check_hochberg_exclusion!(route)
+          hmlc = companies.find { |c| c.sym == self.class::HMLC_COMPANY_SYM }
+          return unless hmlc
+
+          hochberg_hexes = abilities(hmlc, :assign_hexes)&.hexes
+          return if hochberg_hexes.nil? || hochberg_hexes.empty?
+
+          routing_corp = route.train.owner
+          hmlc_owner = hmlc.owner
+          hmlc_owner_player = hmlc_owner.is_a?(Player) ? hmlc_owner : hmlc_owner&.owner
+          return if hmlc_owner_player && routing_corp.player == hmlc_owner_player
+
+          route.hexes.each do |hex|
+            next unless hochberg_hexes.include?(hex.coordinates)
+
+            raise GameError, "#{routing_corp.name} cannot route through Hochberg-marked hex #{hex.name}"
+          end
+        end
 
         def d_corp_hex_bonus
           d_corp = corporations.find { |c| c.id == self.class::D_TOKEN_CORP_ID && !c.closed? }

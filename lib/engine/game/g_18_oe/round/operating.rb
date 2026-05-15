@@ -14,7 +14,12 @@ module Engine
         def after_setup
           @game.golden_bell_position = :normal
           @game.pay_mail_contract!
-          super
+          # GoldenBellChoice#process_choose_ability calls start_operating when done.
+          super unless @awaiting_golden_bell
+        end
+
+        def operating_entities_after_golden_bell
+          @game.operating_order.select { |e| @entities.include?(e) }
         end
       end
     end

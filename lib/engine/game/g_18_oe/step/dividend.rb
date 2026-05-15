@@ -29,7 +29,7 @@ module Engine
           end
 
           def share_price_change(entity, _revenue)
-            return {} if entity.type == :minor || entity.type == :regional
+            return {} if %i[minor regional].include?(entity.type)
 
             super
           end

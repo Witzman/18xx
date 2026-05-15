@@ -23,6 +23,16 @@ module Engine
 
             raise GameError, "Cannot place token on #{hex.name}#{city_string} because it is not connected"
           end
+
+          def place_token(entity, city, token, connected: true, extra_action: false,
+                          special_ability: nil, check_tokenable: true, spender: nil, same_hex_allowed: false)
+            super
+            return unless special_ability&.type == :token
+            return unless special_ability.owner.is_a?(Engine::Company)
+            return unless special_ability.owner.sym == @game.class::CCTC_COMPANY_SYM
+
+            @game.setup_cctc_revenue!(entity, city.hex)
+          end
         end
       end
     end
