@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 2   Open (beta): 7   Fixed: 18   Won't fix: 2   Total: 29
-Bugs closed  ████████████████████  20 / 29  (69%)
-Alpha bugs   ███░░░░░░░░░░░░░░░░░  2 open alpha bugs
+Open (alpha): 1   Open (beta): 7   Fixed: 19   Won't fix: 2   Total: 29
+Bugs closed  ████████████████████  21 / 29  (72%)
+Alpha bugs   ██░░░░░░░░░░░░░░░░░░  1 open alpha bug
 ```
 
 ---
@@ -27,18 +27,6 @@ Alpha bugs   ███░░░░░░░░░░░░░░░░░  2 ope
 ## Open
 
 
-### BUG-031 — Krasnaya Strela D-train exception not implemented
-
-- **Status:** OPEN
-- **Severity:** MEDIUM (alpha scope — +1+1 boost applied correctly; doubling exception is a no-op until D-train revenue doubling exists)
-- **File:** `lib/engine/game/g_18_oe/game.rb`
-- **Rule:** §15.7 — "If the train is a D train the extra city does not double in value."
-
-**Symptom.** 4D/5D trains do not currently double city revenue in 18OE; the Krasnaya Strela rule that the extra city "does not double" is therefore moot. Once D-train doubling is implemented, the exception must suppress doubling for the extra city.
-
-**Fix needed.** (1) Implement D-train city doubling. (2) Override revenue calculation for Krasnaya Strela + D-train: identify the extra city stop and exclude it from doubling.
-
----
 
 ### BUG-032 — CCTC token city counts as city stop, not town stop
 
@@ -160,6 +148,17 @@ Alpha bugs   ███░░░░░░░░░░░░░░░░░  2 ope
 ## Resolved
 
 ### — Fixed 2026-05-15 —
+
+### BUG-031 — Krasnaya Strela D-train exception + D-train doubling
+
+- **Status:** FIXED 2026-05-15 `bc0b37325` (18oe_dtrain_doubling / tobymao#12607)
+- **Severity:** MEDIUM (alpha scope)
+- **File:** `lib/engine/game/g_18_oe/game.rb`
+- **Rule:** §11.6 / §15.7 — D-trains double all city + offboard revenue; Krasnaya Strela extra city does not double.
+
+**Fix landed.** `revenue_for` override: for 4D/5D, adds each city/offboard's `route_revenue` a second time. KS exception: when `@krasnaya_strela_train == route.train`, subtracts the minimum city/offboard revenue from the bonus (player's optimal choice). `d_train?` predicate added. `@krasnaya_strela_train` initialised to nil in setup; set by Minor L abilities branch.
+
+---
 
 ### BUG-029 — N31 Lille: pre-printed revenue incorrect (£10 → £20)
 
