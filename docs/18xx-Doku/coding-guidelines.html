@@ -321,6 +321,21 @@ def setup_green_phase_companies
   # focused helper
 end</code></pre>
 <ul><li>Guard clauses at the top: <code>return unless condition</code></li><li>Log with <code>@log &lt;&lt; "-- Event: #{description} --"</code></li><li>Use <code>round_state</code> in step files to declare and initialise step-level state.</li></ul>
+<p><strong>Event names describe the effect, not the trigger.</strong> Players see event names in the info tab. Name the event after what changes in game state, not what caused it.</p>
+<pre><code class="language-ruby"># Bad — describes the trigger:
+events: [{ 'type' =&gt; 'level8_train_purchased' }]
+def event_level8_train_purchased! ...
+
+# Good — describes the effect:
+events: [{ 'type' =&gt; 'remainder_cash_added' }]
+def event_remainder_cash_added! ...</code></pre>
+<p><strong>Always add an <code>EVENTS_TEXT</code> entry for every custom event.</strong> Without it the info tab shows the raw event key.</p>
+<pre><code class="language-ruby">EVENTS_TEXT = Base::EVENTS_TEXT.merge(
+  'remainder_cash_added' =&gt; [
+    'Remainder Cash Added',
+    '£100,000 remainder cash injected into bank; game ends after one more full OR set (§13)',
+  ]
+).freeze</code></pre>
 <p>Reference: <code>g_18_royal_gorge/game.rb</code> lines 327–379.</p>
 <hr>
 <h2 id="14-disable-actions-via-actions-never-via-raise-in-process_">14. Disable actions via <code>actions()</code>, never via <code>raise</code> in <code>process_*</code></h2>
@@ -390,6 +405,12 @@ end
 def fulfilled_train_obligation?(entity) # boolean query
   !phase.status.include?('train_obligation') || @fulfilled_train_obligation.include?(entity.id)
 end</code></pre>
+<p><strong>Name methods from the caller's perspective — what the caller receives, not how the method works internally.</strong> A caller asking "which corporation is behind this entity?" gets more information from <code>owning_corporation(entity)</code> than from <code>resolve_corporation(entity)</code>.</p>
+<pre><code class="language-ruby"># Bad — describes internal mechanics:
+def resolve_corporation(entity) ...
+
+# Good — describes what the caller receives:
+def owning_corporation(entity) ...</code></pre>
 <hr>
 <h2 id="19-understand-what-base-step-methods-gate-before-overriding--and-check-if-the-base-already-handles-your-case">19. Understand what base step methods gate before overriding — and check if the base already handles your case</h2>
 <p><strong>Check the base first.</strong> Before writing a custom method, verify that the base implementation does not already return the correct value for your game. A common mistake is overriding a hook that the engine already resolves correctly from existing constants or phase data.</p>
@@ -551,6 +572,8 @@ CORPORATIONS = [
 <p>Remove all debug artefacts before opening a PR:</p>
 <ul><li><code>LOGGER.debug { ... }</code> blocks added during development</li><li><code>puts</code>, <code>p</code>, <code>pp</code> statements</li><li>Commented-out code blocks</li><li>Methods that exist but are never called from within the game</li></ul>
 <p>If a method might be needed later, leave a TODO in <code>MD/todo.md</code> and delete it now. Reviewers treat dead code as a signal that the PR wasn't reviewed before submission.</p>
+<p><strong>Dead abilities are the same as dead methods — remove them.</strong> A <code>tile_lay</code> ability with <code>tiles: []</code> and no corresponding <code>SpecialTrack</code> step in the operating round is never triggered. A <code>tile_discount</code> with <code>discount: 0</code> does nothing visible. Both are dead code. Remove them and log the unimplemented mechanic in <code>MD/bugs.md</code>.</p>
+<p>Description text on a <code>description</code> ability must match the actual implemented behaviour. If the description says "33% discount" but the code only augments a zone discount, fix the text — or a reviewer will assume the description is the spec and the code is wrong.</p>
 <hr>
 <h2 id="29-named-entity-accessors-over-hardcoded-symbol-lookups">29. Named entity accessors over hardcoded symbol lookups</h2>
 <p>When game logic repeatedly references a specific entity by its symbol string, add a named accessor to <code>game.rb</code>. This removes the coupling to the symbol string and makes variant subclasses easy to override.</p>
@@ -839,11 +862,66 @@ def buyable_trains(entity)
   trains
 end</code></pre>
 <p><code>available_on: 'X'</code> means: surface this train in the depot once phase <code>X</code> (or any later phase) is active. The value must be a phase name from PHASES. Additional game-specific eligibility rules (purchase-count gates, entity-type restrictions) still belong in a step guard.</p>
+<p><strong>Use <code>train.index</code> to count how many trains of a type have been purchased — O(1), no depot scan.</strong></p>
+<p><code>train.index</code> is the sequential position of the train within its cohort (all trains share the same name). The first <code>7+7</code> in the depot has <code>index == 0</code>; after four have been bought, <code>depot.upcoming.first.index == 4</code>.</p>
+<pre><code class="language-ruby"># Bad — counts twice through all depot trains:
+def level8_train_available?
+  remaining = depot.upcoming.count { |t| t.name == '7+7' }
+  total = depot.trains.count { |t| %w[7+7 4D].include?(t.name) }
+  total - remaining &gt;= 4
+end
+
+# Good — phase guards + O(1) index check:
+def level8_train_available?
+  return false if phase.name.to_i &lt; 7
+  return true if phase.name.to_i == 8
+
+  next_train = @depot.upcoming.first
+  next_train.index &gt;= 4 || next_train.name != '7+7'
+end</code></pre>
+<p>Note: <code>phase.name.to_i</code> is acceptable here because the phase names are guaranteed to be numeric in this game. Prefer status strings (§5) when phase names could be non-numeric.</p>
+<hr>
+<h2 id="49-ability-types-are-contracts--dont-use-them-as-data-sentinels">49. Ability types are contracts — don't use them as data sentinels</h2>
+<p>Never configure a known engine ability type to do nothing just to serve as a data carrier for your own game logic. A <code>tile_discount</code> with <code>discount: 0</code> is a hack: it abuses the ability type as a terrain-type marker, does nothing visible to players, and breaks silently if the engine changes its handling of zero-discount abilities.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby"># in entities.rb — discount: 0 used only as a terrain-type sentinel:
+{ type: 'tile_discount', terrain: 'water', discount: 0, owner_type: 'corporation' }
+
+# in game.rb — scans all_abilities looking for the sentinel:
+def terrain_discount_ability(entity, tile)
+  resolved.all_abilities.find { |a| a.type == :tile_discount &amp;&amp; a.terrain &amp;&amp; a.discounts_tile?(tile) }
+end</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby"># in game.rb — game constant maps entity ID to terrain type:
+EF_TERRAIN_AUGMENT = { 'E' =&gt; :water, 'F' =&gt; :mountain }.freeze
+
+# direct O(1) lookup — no ability type abused:
+def terrain_augmented_by?(entity, tile)
+  corp = owning_corporation(entity)
+  return nil unless corp
+  terrain = self.class::EF_TERRAIN_AUGMENT[corp.id]
+  terrain &amp;&amp; tile.terrain.include?(terrain) ? corp : nil
+end</code></pre>
+<p>The same principle applies to <code>tile_lay</code> with <code>tiles: []</code>, <code>count: 0</code>, or any other ability configured to be inert — these are markers pretending to be abilities. Replace them with a constant or hash.</p>
+<hr>
+<h2 id="50-no-instance_variable_set-on-engine-objects--add-a-method-instead">50. No <code>instance_variable_set</code> on engine objects — add a method instead</h2>
+<p>Reaching into a core engine object (<code>@bank</code>, <code>@depot</code>, <code>@phase</code>, <code>@round</code>) with <code>instance_variable_set</code> bypasses the intended API and breaks silently when internal field names change.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">@bank.instance_variable_set(:@cash, @bank.cash + remainder)</code></pre>
+<p><strong>Good:</strong> add a minimal public method to the engine class:</p>
+<pre><code class="language-ruby"># lib/engine/bank.rb
+def receive(cash)
+  @cash += cash
+end
+
+# game.rb
+@bank.receive(remainder)</code></pre>
+<p>The method name becomes part of the engine's documented API, can be safely overridden in subclasses, and communicates intent to reviewers. <code>instance_variable_set</code> on engine objects is a reviewer red flag — expect a change request.</p>
 <hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-15 — §45–48 added from PR review feedback: case for type dispatch, %i[] membership, modify_purchase_price pattern, available_on: in TRAINS. §19 extended: check base before overriding.</em></p>
+<p><em>Version: 2026-05-16 — §49–50 added from PR #12604/#12605 review feedback: ability-type sentinels, instance_variable_set on engine objects. §13 extended: event name convention + EVENTS_TEXT requirement. §18 extended: method naming from caller's perspective. §28 extended: dead abilities. §48 extended: train.index for counting purchases.</em></p>
 </article>
 </main>
 </div>

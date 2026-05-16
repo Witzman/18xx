@@ -391,6 +391,29 @@ end
 - Log with `@log << "-- Event: #{description} --"`
 - Use `round_state` in step files to declare and initialise step-level state.
 
+**Event names describe the effect, not the trigger.** Players see event names in the info tab. Name the event after what changes in game state, not what caused it.
+
+```ruby
+# Bad — describes the trigger:
+events: [{ 'type' => 'level8_train_purchased' }]
+def event_level8_train_purchased! ...
+
+# Good — describes the effect:
+events: [{ 'type' => 'remainder_cash_added' }]
+def event_remainder_cash_added! ...
+```
+
+**Always add an `EVENTS_TEXT` entry for every custom event.** Without it the info tab shows the raw event key.
+
+```ruby
+EVENTS_TEXT = Base::EVENTS_TEXT.merge(
+  'remainder_cash_added' => [
+    'Remainder Cash Added',
+    '£100,000 remainder cash injected into bank; game ends after one more full OR set (§13)',
+  ]
+).freeze
+```
+
 Reference: `g_18_royal_gorge/game.rb` lines 327–379.
 
 ---
@@ -501,6 +524,16 @@ end
 def fulfilled_train_obligation?(entity) # boolean query
   !phase.status.include?('train_obligation') || @fulfilled_train_obligation.include?(entity.id)
 end
+```
+
+**Name methods from the caller's perspective — what the caller receives, not how the method works internally.** A caller asking "which corporation is behind this entity?" gets more information from `owning_corporation(entity)` than from `resolve_corporation(entity)`.
+
+```ruby
+# Bad — describes internal mechanics:
+def resolve_corporation(entity) ...
+
+# Good — describes what the caller receives:
+def owning_corporation(entity) ...
 ```
 
 ---
@@ -768,6 +801,10 @@ Remove all debug artefacts before opening a PR:
 - Methods that exist but are never called from within the game
 
 If a method might be needed later, leave a TODO in `MD/todo.md` and delete it now. Reviewers treat dead code as a signal that the PR wasn't reviewed before submission.
+
+**Dead abilities are the same as dead methods — remove them.** A `tile_lay` ability with `tiles: []` and no corresponding `SpecialTrack` step in the operating round is never triggered. A `tile_discount` with `discount: 0` does nothing visible. Both are dead code. Remove them and log the unimplemented mechanic in `MD/bugs.md`.
+
+Description text on a `description` ability must match the actual implemented behaviour. If the description says "33% discount" but the code only augments a zone discount, fix the text — or a reviewer will assume the description is the spec and the code is wrong.
 
 ---
 
@@ -1268,6 +1305,87 @@ end
 
 `available_on: 'X'` means: surface this train in the depot once phase `X` (or any later phase) is active. The value must be a phase name from PHASES. Additional game-specific eligibility rules (purchase-count gates, entity-type restrictions) still belong in a step guard.
 
+**Use `train.index` to count how many trains of a type have been purchased — O(1), no depot scan.**
+
+`train.index` is the sequential position of the train within its cohort (all trains share the same name). The first `7+7` in the depot has `index == 0`; after four have been bought, `depot.upcoming.first.index == 4`.
+
+```ruby
+# Bad — counts twice through all depot trains:
+def level8_train_available?
+  remaining = depot.upcoming.count { |t| t.name == '7+7' }
+  total = depot.trains.count { |t| %w[7+7 4D].include?(t.name) }
+  total - remaining >= 4
+end
+
+# Good — phase guards + O(1) index check:
+def level8_train_available?
+  return false if phase.name.to_i < 7
+  return true if phase.name.to_i == 8
+
+  next_train = @depot.upcoming.first
+  next_train.index >= 4 || next_train.name != '7+7'
+end
+```
+
+Note: `phase.name.to_i` is acceptable here because the phase names are guaranteed to be numeric in this game. Prefer status strings (§5) when phase names could be non-numeric.
+
+---
+
+## 49. Ability types are contracts — don't use them as data sentinels
+
+Never configure a known engine ability type to do nothing just to serve as a data carrier for your own game logic. A `tile_discount` with `discount: 0` is a hack: it abuses the ability type as a terrain-type marker, does nothing visible to players, and breaks silently if the engine changes its handling of zero-discount abilities.
+
+**Bad:**
+```ruby
+# in entities.rb — discount: 0 used only as a terrain-type sentinel:
+{ type: 'tile_discount', terrain: 'water', discount: 0, owner_type: 'corporation' }
+
+# in game.rb — scans all_abilities looking for the sentinel:
+def terrain_discount_ability(entity, tile)
+  resolved.all_abilities.find { |a| a.type == :tile_discount && a.terrain && a.discounts_tile?(tile) }
+end
+```
+
+**Good:**
+```ruby
+# in game.rb — game constant maps entity ID to terrain type:
+EF_TERRAIN_AUGMENT = { 'E' => :water, 'F' => :mountain }.freeze
+
+# direct O(1) lookup — no ability type abused:
+def terrain_augmented_by?(entity, tile)
+  corp = owning_corporation(entity)
+  return nil unless corp
+  terrain = self.class::EF_TERRAIN_AUGMENT[corp.id]
+  terrain && tile.terrain.include?(terrain) ? corp : nil
+end
+```
+
+The same principle applies to `tile_lay` with `tiles: []`, `count: 0`, or any other ability configured to be inert — these are markers pretending to be abilities. Replace them with a constant or hash.
+
+---
+
+## 50. No `instance_variable_set` on engine objects — add a method instead
+
+Reaching into a core engine object (`@bank`, `@depot`, `@phase`, `@round`) with `instance_variable_set` bypasses the intended API and breaks silently when internal field names change.
+
+**Bad:**
+```ruby
+@bank.instance_variable_set(:@cash, @bank.cash + remainder)
+```
+
+**Good:** add a minimal public method to the engine class:
+```ruby
+# lib/engine/bank.rb
+def receive(cash)
+  @cash += cash
+end
+
+# game.rb
+@bank.receive(remainder)
+```
+
+The method name becomes part of the engine's documented API, can be safely overridden in subclasses, and communicates intent to reviewers. `instance_variable_set` on engine objects is a reviewer red flag — expect a change request.
+
 ---
 
 ## What's next
@@ -1277,4 +1395,4 @@ end
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-15 — §45–48 added from PR review feedback: case for type dispatch, %i[] membership, modify_purchase_price pattern, available_on: in TRAINS. §19 extended: check base before overriding.*
+*Version: 2026-05-16 — §49–50 added from PR #12604/#12605 review feedback: ability-type sentinels, instance_variable_set on engine objects. §13 extended: event name convention + EVENTS_TEXT requirement. §18 extended: method naming from caller's perspective. §28 extended: dead abilities. §48 extended: train.index for counting purchases.*
