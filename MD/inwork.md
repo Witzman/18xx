@@ -36,7 +36,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ## Minor Abilities
 - [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
-- [t] **C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice **[alpha]** **[L3]** `18oe_abilities`
+- [>] **C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice **[alpha]** **[L3]** `18oe_abilities`
 - [t] **D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired **[alpha]** **[L3]** `18oe_abilities`
 - [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031) **[alpha]** **[L3]** `18oe_abilities`
 
