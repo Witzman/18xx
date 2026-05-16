@@ -7,7 +7,7 @@ module Engine
     module G18OE
       module Step
         class GoldenBellChoice < Engine::Step::Base
-          ACTIONS = %w[choose_ability].freeze
+          ACTIONS = %w[choose].freeze
 
           def round_state
             { awaiting_golden_bell: false }
@@ -50,16 +50,15 @@ module Engine
             { 'first' => 'First', 'last' => 'Last', 'normal' => 'Normal order' }
           end
 
-          def process_choose_ability(action)
+          def process_choose(action)
             entity = action.entity
             raise GameError, 'Not the Golden Bell entity' unless entity == @game.golden_bell_entity
 
-            ability = @game.abilities(entity, :choose_ability)
             choice = action.choice.to_sym
             @game.golden_bell_position = choice
             @round.awaiting_golden_bell = false
             @game.log << "#{entity.name} will operate #{choice} this OR"
-            ability&.use!
+            @game.abilities(entity, :choose_ability)&.use!
             @round.entities.replace(@round.operating_entities_after_golden_bell)
             @round.start_operating
           end
