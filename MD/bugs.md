@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 1   Open (beta): 7   Fixed: 19   Won't fix: 2   Total: 29
-Bugs closed  ████████████████████  21 / 29  (72%)
-Alpha bugs   ██░░░░░░░░░░░░░░░░░░  1 open alpha bug
+Open (alpha): 2   Open (beta): 7   Fixed: 19   Won't fix: 2   Total: 30
+Bugs closed  ████████████████████  21 / 30  (70%)
+Alpha bugs   ████░░░░░░░░░░░░░░░░  2 open alpha bugs
 ```
 
 ---
@@ -27,6 +27,28 @@ Alpha bugs   ██░░░░░░░░░░░░░░░░░░  1 ope
 ## Open
 
 
+
+### BUG-034 — Minor E/F standalone 33% terrain discount not implemented
+
+- **Status:** OPEN
+- **Severity:** MEDIUM (alpha scope — E/F only augment zone discount to 50%; standalone case missing)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `upgrade_cost`
+- **Rule:** §15.5 (E) / §15.8 (F) — "This minor receives a 33% discount on all [blue/green] terrain costs (multiply by 0.67, round down)."
+
+**Symptom.** When an RR owning E or F builds on matching terrain *outside* their zone (no zone discount applies), they receive 0% discount instead of 33%. The zone-augmentation path (20% → 50%) is correctly implemented via `EF_TERRAIN_AUGMENT`, but the standalone discount path is absent.
+
+**Full discount matrix (§15.5/§15.8 + §11.1.5):**
+
+| Zone match | Terrain match | Correct | Actual |
+|---|---|---|---|
+| Yes | Yes | 50% | 50% ✓ |
+| Yes | No | 20% | 20% ✓ |
+| No | Yes | 33% | 0% ✗ |
+| No | No | 0% | 0% ✓ |
+
+**Fix needed.** In `upgrade_cost`, after the zone-augmentation check: if no zone match but the entity owns E or F and terrain matches, apply `(base_cost * 0.67).floor`.
+
+---
 
 ### BUG-032 — CCTC token city counts as city stop, not town stop
 
