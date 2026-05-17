@@ -1,0 +1,309 @@
+# frozen_string_literal: true
+
+require_relative 'entities'
+require_relative 'map'
+require_relative 'meta'
+require_relative '../base'
+require_relative '../double_sided_tiles'
+require_relative 'trains'
+
+module Engine
+  module Game
+    module G18Cuba
+      class Game < Game::Base
+        include_meta(G18Cuba::Meta)
+        include Entities
+        include Map
+        include Trains
+
+        include DoubleSidedTiles
+
+        TRACK_RESTRICTION = :permissive
+        CURRENCY_FORMAT_STR = '$%s'
+        HOME_TOKEN_TIMING = :operate
+
+        BANK_CASH = 10_000
+
+        CERT_LIMIT = { 2 => 35, 3 => 30, 4 => 20, 5 => 17, 6 => 15 }.freeze
+
+        STARTING_CASH = { 2 => 950, 3 => 900, 4 => 680, 5 => 650, 6 => 650 }.freeze
+
+        MARKET = [
+          %w[50 55 60 65 70p 75p 80p 85p 90p 95p 100p 105 110 115 120 126 192 198 144
+             151 158 172 180 188 196 204 013 222 231 240 250 260 275 290 300],
+        ].freeze
+
+        PHASES = [{ name: '2', train_limit: 4, tiles: [:yellow], operating_rounds: 1 },
+                  {
+                    name: '3',
+                    on: '3',
+                    train_limit: 4,
+                    tiles: %i[yellow green],
+                    operating_rounds: 2,
+                  },
+                  {
+                    name: '4',
+                    on: '4',
+                    train_limit: 3,
+                    tiles: %i[yellow green],
+                    operating_rounds: 2,
+                  },
+                  {
+                    name: '5',
+                    on: '5',
+                    train_limit: 2,
+                    tiles: %i[yellow green brown],
+                    operating_rounds: 3,
+                  },
+                  {
+                    name: '6',
+                    on: '6',
+                    train_limit: 2,
+                    tiles: %i[yellow green brown],
+                    operating_rounds: 3,
+                  },
+                  {
+                    name: '8',
+                    on: '8',
+                    train_limit: 2,
+                    tiles: %i[yellow green brown gray],
+                    operating_rounds: 3,
+                  }].freeze
+
+        def operating_round(round_num)
+          Round::Operating.new(self, [
+            Engine::Step::Bankrupt,
+            Engine::Step::Exchange,
+            Engine::Step::SpecialTrack,
+            Engine::Step::SpecialToken,
+            Engine::Step::BuyCompany,
+            Engine::Step::HomeToken,
+            G18Cuba::Step::Track,
+            Engine::Step::Token,
+            Engine::Step::Route,
+            G18Cuba::Step::Dividend,
+            Engine::Step::DiscardTrain,
+            G18Cuba::Step::BuyTrain,
+            [Engine::Step::BuyCompany, { blocks: true }],
+          ], round_num: round_num)
+        end
+
+        def init_stock_market
+          StockMarket.new(self.class::MARKET, [], zigzag: :flip)
+        end
+
+        def multiple_buy_only_from_market?
+          !optional_rules&.include?(:multiple_brown_from_ipo)
+        end
+
+        def num_trains(train)
+          num_players = [@players.size, 2].max
+          TRAIN_FOR_PLAYER_COUNT[num_players][train[:name].to_sym]
+        end
+
+        def company_header(company)
+          case company.type
+          when :concession
+            'CONCESSION'
+          when :commission
+            'COMMISSIONER'
+          else
+            raise "Unknown company type: #{company.type}"
+          end
+        end
+
+        def commissioners
+          @commissioners ||= @companies.select { |c| c.type == :commission }
+        end
+
+        def concessions
+          @concessions ||= @companies.select { |c| c.type == :concession }
+        end
+
+        def setup
+          super
+          @tile_groups = init_tile_groups
+          initialize_tile_opposites!
+          @unused_tiles = []
+          @sugar_cubes = {}
+          @minor_graph = Graph.new(self, skip_track: :broad)
+        end
+
+        def init_graph
+          Graph.new(self, skip_track: :narrow)
+        end
+
+        def graph_for_entity(entity)
+          return @graph unless entity&.type == :minor
+
+          @minor_graph ||= Graph.new(self, skip_track: :broad)
+        end
+
+        def clear_graph
+          @minor_graph.clear
+          super
+        end
+
+        def clear_graph_for_entity(entity)
+          if entity&.type == :minor
+            @minor_graph.clear
+          else
+            super
+          end
+        end
+
+        def init_tile_groups
+          self.class::TILE_GROUPS
+        end
+
+        def new_auction_round
+          Engine::Round::Auction.new(self, [G18Cuba::Step::SelectionAuction])
+        end
+
+        def new_draft_round
+          Engine::Round::Draft.new(self, [G18Cuba::Step::SimpleDraft], reverse_order: false)
+        end
+
+        def stock_round
+          Round::Stock.new(self, [
+            Engine::Step::HomeToken,
+            G18Cuba::Step::BuySellParShares,
+          ])
+        end
+
+        def close_unopened_minors
+          @corporations.each { |c| c.close! if c.type == :minor && !c.floated? }
+          @log << 'Unopened minors close'
+        end
+
+        def can_par?(corporation, entity)
+          # FC cannot be parred
+          # Minors can only be parred by players with a concession to exchange
+          return false if corporation.type == :state
+          return super unless corporation.type == :minor
+
+          entity.companies.any? { |c| abilities(c, :exchange) }
+        end
+
+        def next_round!
+          # After Init -> Auction Commissions -> Draft Concessions -> Stock Round -> Operating Rounds
+          @round =
+            case @round
+            when Round::Draft
+              new_stock_round
+            when Round::Stock
+              close_unopened_minors if @turn == 1
+              @operating_rounds = @phase.operating_rounds
+              reorder_players
+              new_operating_round
+            when Round::Operating
+              if @round.round_num < @operating_rounds
+                or_round_finished
+                new_operating_round(@round.round_num + 1)
+              else
+                @turn += 1
+                or_round_finished
+                or_set_finished
+                new_stock_round
+              end
+            when init_round.class
+              init_round_finished
+              reorder_players(:least_cash, log_player_order: true)
+              new_draft_round
+            end
+        end
+
+        def home_token_locations(corporation)
+          # TODO: FEC home token, especifically corner case to be added with no available token -> use cheater token
+          return super unless corporation.type == :minor
+
+          hexes.select do |hex|
+            # no token allowed on Y and H cities
+            next false if hex.tile.labels.any? { |l| %w[Y H].include?(l.to_s) }
+
+            hex.tile.cities.any? do |city|
+              next false unless city.tokenable?(corporation, free: true)
+
+              # no other minor may already be here
+              city.tokens.none? { |t| t&.corporation&.type == :minor }
+            end
+          end
+        end
+
+        def token_cost_override(entity, city, token)
+          return 0 if (entity.type == :minor || entity.sym == 'FEC') && (token == entity.tokens.first)
+
+          super
+        end
+
+        def sugar_production(corporation, total_revenue)
+          return if total_revenue.zero? || corporation.type != :minor
+
+          sugar_cubes = case total_revenue
+                        when 0..29 then 0
+                        when 30..79 then 1
+                        when 80..150 then 2
+                        else 3
+                        end
+
+          @sugar_cubes[corporation] = sugar_cubes
+          @log << "#{corporation.name} produces #{sugar_cubes} sugar cube(s) "\
+                  "from #{format_currency(total_revenue)} revenue."
+        end
+
+        def or_round_finished
+          # For the moment reset sugar cubes, handling for FC to be implemented later
+          return if @sugar_cubes.values.none?(&:positive?)
+
+          @sugar_cubes.clear
+          @log << 'All remaining sugar cubes are removed at the end of the Operating Round.'
+        end
+
+        def all_potential_upgrades(tile, tile_manifest: false, selected_company: nil)
+          corp = selected_company || @round&.current_entity&.corporation
+
+          super.reject do |t|
+            # Hex not available for selector, therefore passing nil and ignoring home hex check for minors
+            tile_blocked_for_corp?(t, corp, nil, for_selector: true)
+          end
+        end
+
+        def tile_blocked_for_corp?(tile, corp, hex, for_selector: false)
+          return false unless corp
+
+          if corp.type == :minor
+            minor_tile_blocked?(tile, corp.tokens.first.hex, hex, for_selector: for_selector)
+          else
+            major_tile_blocked?(tile)
+          end
+        end
+
+        private
+
+        def tile_has_only_track_type?(tile, track_type)
+          # Returns true if all paths on the tile are of the given track type
+          tile.paths.all? { |path| path.track == track_type }
+        end
+
+        def minor_tile_blocked?(tile, home_hex, current_hex, for_selector: false)
+          # Determines if a tile is illegal for a minor:
+          # - Tiles with only broad tracks are always illegal
+          # - City tiles are illegal except on the minor's home hex
+          # - When `for_selector` is true, the home/city rule is ignored because the hex is unknown
+          pure_broad = tile_has_only_track_type?(tile, :broad)
+
+          return pure_broad if for_selector
+
+          return pure_broad if current_hex == home_hex
+
+          !tile.cities.empty? || pure_broad
+        end
+
+        def major_tile_blocked?(tile)
+          # Returns true if a yellow tile is illegal for a major: only pure broad tracks allowed on yellow
+          tile.color == :yellow && !tile_has_only_track_type?(tile, :broad)
+        end
+      end
+    end
+  end
+end

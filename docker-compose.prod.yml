@@ -1,0 +1,65 @@
+x-rack: &rack
+  command: bash -c "bundle exec rake prod_up && bundle exec unicorn -c config/unicorn.rb"
+  image: 18xx_rack:prod
+  environment:
+    RACK_ENV: production
+    DATABASE_URL: $DATABASE_URL
+    ELASTIC_KEY: $ELASTIC_KEY
+    NEW_RELIC_LICENSE_KEY: $NEW_RELIC_LICENSE_KEY
+    NEW_RELIC_DISABLE_MIDDLEWARE_INSTRUMENTATION: 1
+    SLACK_WEBHOOK_URL: $SLACK_WEBHOOK_URL
+    RUBYOPT: --yjit
+    PORT: 9292
+    OPAL_PREFORK_DISABLE: "true"
+  restart: always
+  build:
+    args:
+      RACK_ENV: production
+    context: .
+  volumes:
+    - ./public:/18xx/public
+  depends_on:
+    - db
+    - redis
+  logging:
+    options:
+      max-size: "50m"
+
+services:
+  rack:
+    <<: *rack
+
+  rack_backup:
+    <<: *rack
+
+  queue:
+    <<: *rack
+    command: bundle exec ruby queue.rb
+
+  redis:
+    restart: always
+
+  db:
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    restart: always
+
+  nginx:
+    restart: always
+    build:
+      context: ./nginx/
+    ports:
+      - 80:80
+      - 443:443
+      - 127.0.0.1:8080:8080
+    volumes:
+      - ./public:/public
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - rack
+      - rack_backup
+    logging:
+      options:
+        max-size: "300m"
