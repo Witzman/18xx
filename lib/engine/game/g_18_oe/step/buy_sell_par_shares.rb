@@ -343,7 +343,7 @@ module Engine
 
           def choice_name
             return 'Claim SML preserved 2+2 train for a controlled RR' if can_claim_sml?(current_entity)
-            return 'Prevent share price DROP' if can_use_bbbt_option3?
+            return '(B,B,B&T) Prevent share price DROP' if can_use_bbbt_option3?
 
             super
           end
