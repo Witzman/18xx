@@ -145,7 +145,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor C charter. '\
-                  'Exchange this private during a Stock Round to float Minor C.',
+                  'Exchange this private during a Stock Round to float Minor C. '\
+                  'Minor ability: at the start of each OR, the president chooses operating '\
+                  'position — first, last, or normal order.',
             auction_row: 5,
             abilities: [
               {
@@ -162,7 +164,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor H charter. '\
-                  'Exchange this private during a Stock Round to float Minor H.',
+                  'Exchange this private during a Stock Round to float Minor H. '\
+                  'Minor ability: reduces sea zones counting toward train city limits '\
+                  'by 1 (Phases 1–6) or 2 (Phases 7–8).',
             auction_row: 7,
             abilities: [
               {
@@ -179,7 +183,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor K charter. '\
-                  'Exchange this private during a Stock Round to float Minor K.',
+                  'Exchange this private during a Stock Round to float Minor K. '\
+                  'Minor ability: mail contract — bank pays treasury at OR start: '\
+                  '£20 (Phase 2), £40 (Phases 3–4), £50 (Phases 5–6), £60 (Phases 7–8).',
             auction_row: 7,
             abilities: [
               {
@@ -196,7 +202,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor M charter. '\
-                  'Exchange this private during a Stock Round to float Minor M.',
+                  'Exchange this private during a Stock Round to float Minor M. '\
+                  'Minor ability: owns 10 Pullman cars; other RRs pay £150 each '\
+                  '(£15 royalty to Minor M or its owning major).',
             auction_row: 7,
             abilities: [
               {
@@ -213,7 +221,8 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor A charter. '\
-                  'Exchange this private during a Stock Round to float Minor A.',
+                  'Exchange this private during a Stock Round to float Minor A. '\
+                  'Minor ability: at merger, the bank pays the major\'s current share value into its treasury.',
             auction_row: 5,
             abilities: [
               {
@@ -230,7 +239,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor B charter. '\
-                  'Exchange this private during a Stock Round to float Minor B.',
+                  'Exchange this private during a Stock Round to float Minor B. '\
+                  'Minor ability: all track upgrades cost only 1 tile point (towns included; '\
+                  'cities, grand cities, and metropolises excluded).',
             auction_row: 5,
             abilities: [
               {
@@ -247,7 +258,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor D charter. '\
-                  'Exchange this private during a Stock Round to float Minor D.',
+                  'Exchange this private during a Stock Round to float Minor D. '\
+                  'Minor ability: place a +£20 bonus marker on any non-metropolis, non-red city '\
+                  '(even unreachable); marker becomes +£40 at Phase 5.',
             auction_row: 6,
             abilities: [
               {
@@ -264,7 +277,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor E charter. '\
-                  'Exchange this private during a Stock Round to float Minor E.',
+                  'Exchange this private during a Stock Round to float Minor E. '\
+                  'Minor ability: augments zone terrain discount from 20% to 50% for '\
+                  'water/coast track construction in the owning RR\'s zone.',
             auction_row: 6,
             abilities: [
               {
@@ -281,7 +296,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor F charter. '\
-                  'Exchange this private during a Stock Round to float Minor F.',
+                  'Exchange this private during a Stock Round to float Minor F. '\
+                  'Minor ability: augments zone terrain discount from 20% to 50% for '\
+                  'mountain/rough track construction in the owning RR\'s zone.',
             auction_row: 6,
             abilities: [
               {
@@ -298,7 +315,8 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor G charter. '\
-                  'Exchange this private during a Stock Round to float Minor G.',
+                  'Exchange this private during a Stock Round to float Minor G. '\
+                  'Minor ability: receives 2 extra tile points every OR.',
             auction_row: 6,
             abilities: [
               {
@@ -315,7 +333,8 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor J charter. '\
-                  'Exchange this private during a Stock Round to float Minor J.',
+                  'Exchange this private during a Stock Round to float Minor J. '\
+                  'Minor ability: 10% discount on all train purchases (including Pullman cars).',
             auction_row: 7,
             abilities: [
               {
@@ -332,7 +351,9 @@ module Engine
             value: 120,
             revenue: 0,
             desc: 'Purchased in the auction to acquire the Minor L charter. '\
-                  'Exchange this private during a Stock Round to float Minor L.',
+                  'Exchange this private during a Stock Round to float Minor L. '\
+                  'Minor ability: +1+1 marker assigned to one train each OR, '\
+                  'increasing its city limit and town count by 1 each.',
             auction_row: 7,
             abilities: [
               {
