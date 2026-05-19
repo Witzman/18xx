@@ -718,6 +718,11 @@ module Engine
 
         def revenue_for(route, stops)
           base = super
+
+          route.train.owner.all_abilities
+            .select { |a| a.type == :hex_bonus && a.hexes.any? }
+            .each { |a| base += a.amount * stops.count { |s| a.hexes.include?(s.hex.coordinates) } }
+
           return base unless d_train?(route.train)
 
           # §11.6 — D-trains double all city and red-zone (offboard) revenue
@@ -1391,7 +1396,7 @@ module Engine
         end
 
         def d_token_available?(entity)
-          bonus = abilities(entity, :hex_bonus)
+          bonus = entity.all_abilities.find { |a| a.type == :hex_bonus }
           bonus&.hexes&.empty?
         end
 
