@@ -12,21 +12,21 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 ---
 
 ## D-Train Revenue (BUG-031)
-- [>] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_abilities`
+- [>] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_testing`
 
 ## Minor Abilities
-- [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_abilities`
-- [>] **C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice **[alpha]** **[L3]** `18oe_abilities`
-- [t] **D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired **[alpha]** **[L3]** `18oe_abilities`
-- [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031) **[alpha]** **[L3]** `18oe_abilities`
+- [>] J – Grey Locomotive **[alpha]** **[L1]** `18oe_testing`
+- [>] **C** (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); `first`/`last`/`normal`; entity order rebuilt from `operating_order` after choice **[alpha]** **[L3]** `18oe_testing`
+- [t] **D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired **[alpha]** **[L3]** `18oe_testing`
+- [t] **L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031) **[alpha]** **[L3]** `18oe_testing`
 
 ## Private Abilities
-- [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032) **[alpha]** **[L2]** `18oe_abilities`
-- [t] **Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test **[alpha]** **[L3]** `18oe_abilities`
-- [~] **Brandt & Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point) **[alpha]** **[L2]** `18oe_abilities`
-- [~] **Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged **[beta]** **[L2/L3]** `18oe_abilities`
-- [~] **Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[beta]** **[L3]** `18oe_abilities`
-- [~] **White Cliffs Ferry** — `token` (hexes: ['N31']) wired; **still needed**: Phase 5 start event hook + ferry routing **[beta]** **[L3]** `18oe_abilities`
+- [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032) **[alpha]** **[L2]** `18oe_testing`
+- [t] **Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test **[alpha]** **[L3]** `18oe_testing`
+- [~] **Brandt & Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point) **[alpha]** **[L2]** `18oe_testing`
+- [~] **Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged **[beta]** **[L2/L3]** `18oe_testing`
+- [~] **Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[beta]** **[L3]** `18oe_testing`
+- [~] **White Cliffs Ferry** — `token` (hexes: ['N31']) wired; **still needed**: Phase 5 start event hook + ferry routing **[beta]** **[L3]** `18oe_testing`
 
 ## Nationals
 - [>] Rusted train claim **[beta]** **[L2/L3]** `18oe_mergers`
@@ -50,7 +50,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
-| `18oe_abilities` | upstream/master | rebased ✓ | Minor C/D/J/L + private abilities wiring |
+| `18oe_abilities` | upstream/master | deleted (merged into 18oe_testing) | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
 | `18oe_testing` | upstream/master | rebased ✓ | Integration: gamefixes + abilities + mergers |
