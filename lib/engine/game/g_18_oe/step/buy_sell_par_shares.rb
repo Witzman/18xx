@@ -35,7 +35,7 @@ module Engine
             actions << 'sell_shares' if can_sell_any?(entity)
             actions << 'convert' if can_convert_any?(entity)
             actions << 'merge' if can_merge_any?(entity)
-            actions << 'choose' if can_claim_sml?(entity)
+            actions << 'choose' if can_claim_sml?(entity) || can_use_bbbt_option3?
             actions << 'pass' if !can_float_minor?(entity) && !actions.empty?
             actions
           end
@@ -83,6 +83,7 @@ module Engine
 
             super
           end
+
 
           def can_sell?(entity, bundle)
             return false unless bundle
@@ -337,21 +338,34 @@ module Engine
           end
 
           def choice_name
-            'Claim SML preserved 2+2 train for a controlled RR'
+            return 'Claim SML preserved 2+2 train for a controlled RR' if can_claim_sml?(current_entity)
+            return 'Protect a corporation share price from DROP (B,B,B&T §14.4)' if can_use_bbbt_option3?
+
+            super
           end
 
           def choices
             return sml_choices if can_claim_sml?(current_entity)
+            return bbbt_choices if can_use_bbbt_option3?
 
             {}
           end
 
           def process_choose(action)
-            corp = @game.corporation_by_id(action.choice)
-            raise GameError, 'Corporation not eligible for SML train' unless
-              @game.sml_claimable_corps(current_entity).include?(corp)
+            if action.choice.start_with?('bbbt_')
+              corp_id = action.choice.sub('bbbt_', '')
+              corp = @game.corporation_by_id(corp_id)
+              raise GameError, 'Corporation not eligible for BBBT protection' unless
+                @game.bbbt_protectable_corps.include?(corp)
 
-            @game.claim_sml_train!(corp)
+              @game.bbbt_protect!(corp, current_entity)
+            else
+              corp = @game.corporation_by_id(action.choice)
+              raise GameError, 'Corporation not eligible for SML train' unless
+                @game.sml_claimable_corps(current_entity).include?(corp)
+
+              @game.claim_sml_train!(corp)
+            end
           end
 
           private
@@ -397,6 +411,14 @@ module Engine
 
           def sml_choices
             @game.sml_claimable_corps(current_entity).to_h { |c| [c.id, c.name] }
+          end
+
+          def can_use_bbbt_option3?
+            current_entity&.player? && @game.can_use_bbbt_option3?(current_entity)
+          end
+
+          def bbbt_choices
+            @game.bbbt_protectable_corps.to_h { |c| ["bbbt_#{c.id}", c.name] }
           end
 
           def president_pool_overcap_buy?(entity, bundle)

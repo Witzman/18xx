@@ -271,7 +271,8 @@ module Engine
         D_TOKEN_PHASE5_BONUS  = 40
         SML_COMPANY_SYM = 'SML'
         SML_TRAIN_NAME  = '2+2'
-        BBE_COMPANY_SYM = 'BBE'
+        BBE_COMPANY_SYM  = 'BBE'
+        BBBT_COMPANY_SYM = 'BBBT'
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -707,7 +708,8 @@ module Engine
           @cctc_hex = nil
           @sml_claimed = false
           @sml_trains  = Set.new
-          @bbe_hexes   = {}
+          @bbe_hexes        = {}
+          @bbbt_protected_corp = nil
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -1219,7 +1221,16 @@ module Engine
           @log << '-- Event: Consolidation phase triggered --'
         end
 
+        def sell_shares_and_change_price(bundle, allow_president_change: true, swap: nil, movement: nil)
+          if @bbbt_protected_corp == bundle.corporation
+            movement = :none
+            @log << "#{bundle.corporation.name} share price DROP blocked by Barclay, Bevan, Barclay and Tritton"
+          end
+          super
+        end
+
         def next_round!
+          finish_bbbt_sr! if @round.is_a?(Engine::Round::Stock) && @bbbt_protected_corp
           @round =
             case @round
             when Engine::Round::Operating
@@ -1455,6 +1466,27 @@ module Engine
                   'only this RR may route here'
         end
 
+        def can_use_bbbt_option3?(player)
+          return false unless @round&.stock?
+
+          bbbt = company_by_id(self.class::BBBT_COMPANY_SYM)
+          return false unless bbbt&.owner == player
+          return false if @bbbt_protected_corp
+
+          corporations.any? { |c| c.share_price }
+        end
+
+        def bbbt_protectable_corps
+          corporations.select { |c| c.share_price }
+        end
+
+        def bbbt_protect!(corp, player)
+          @bbbt_protected_corp = corp
+          bbbt_name = company_by_id(self.class::BBBT_COMPANY_SYM)&.name || 'Barclay, Bevan, Barclay and Tritton'
+          @log << "#{player.name} uses #{bbbt_name}: #{corp.name} share price protected from DROP "\
+                  'for the remainder of this SR'
+        end
+
         private
 
         def update_cctc_revenue!
@@ -1487,6 +1519,16 @@ module Engine
 
             raise GameError, "#{routing_corp.name} cannot route through Hochberg-marked hex #{hex.name}"
           end
+        end
+
+        def finish_bbbt_sr!
+          @bbbt_protected_corp = nil
+          bbbt = company_by_id(self.class::BBBT_COMPANY_SYM)
+          return unless bbbt && !bbbt.closed?
+
+          company_closing_after_using_ability(bbbt)
+          bbbt.close!
+          @log << "#{bbbt.name} closes (option 3 exercised this SR)"
         end
 
         def check_bbe_exclusion!(route)
