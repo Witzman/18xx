@@ -93,27 +93,27 @@
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
 <div class="pb-done"    style="width:32.7%"></div>
-<div class="pb-pr"      style="width:9.0%"></div>
-<div class="pb-partial" style="width:2.9%"></div>
-<div class="pb-todo"    style="width:55.4%"></div>
+<div class="pb-pr"      style="width:9.8%"></div>
+<div class="pb-partial" style="width:2.5%"></div>
+<div class="pb-todo"    style="width:55.1%"></div>
 </div>
-<span class="bar-label-right">112&thinsp;/&thinsp;224 items</span>
+<span class="bar-label-right">113&thinsp;/&thinsp;224 items</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
 <div class="pb-done"    style="width:50.3%"></div>
-<div class="pb-pr"      style="width:10.1%"></div>
-<div class="pb-partial" style="width:2.8%"></div>
-<div class="pb-todo"    style="width:36.8%"></div>
+<div class="pb-pr"      style="width:11.3%"></div>
+<div class="pb-partial" style="width:2.3%"></div>
+<div class="pb-todo"    style="width:36.2%"></div>
 </div>
-<span class="bar-label-right">60%<span class="bar-aside"> · 51 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
+<span class="bar-label-right">62%<span class="bar-aside"> · 50 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>94</span></div>
-<div class="stat-chip stat-pr">Needs PR <span>18</span></div>
-<div class="stat-chip stat-partial">Partial <span>9</span></div>
+<div class="stat-chip stat-pr">Needs PR <span>19</span></div>
+<div class="stat-chip stat-partial">Partial <span>8</span></div>
 <div class="stat-chip stat-partial">Started <span>0</span></div>
 <div class="stat-chip stat-todo">To do <span>103</span></div>
 <div class="stat-chip stat-beta">Beta deferred <span>65</span></div>
@@ -234,6 +234,7 @@
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
 <div class="sb-item sb-needs-pr" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">J – Grey Locomotive</span><span class="layer-tag">L1</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); <code>first</code>/<code>last</code>/<code>normal</code>; entity order rebuilt from <code>operating_order</code> after choice</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Private Abilities</div>
@@ -283,6 +284,7 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L3</div>
+<div class="sb-item sb-needs-pr" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); <code>first</code>/<code>last</code>/<code>normal</code>; entity order rebuilt from <code>operating_order</code> after choice</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span></div>
 </div>
@@ -303,10 +305,6 @@
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">count_per_or: 2</span><span class="branch-count">1</span></div>
 <div class="sb-item sb-partial" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> added; engine enforces cap automatically</span><span class="layer-tag">L1</span></div>
-</div>
-<div class="sb-section">
-<div class="sb-section-title sb-branch-title"><span class="branch-name">first</span><span class="branch-count">1</span></div>
-<div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); <code>first</code>/<code>last</code>/<code>normal</code>; entity order rebuilt from <code>operating_order</code> after choice</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">token</span><span class="branch-count">3</span></div>
@@ -344,6 +342,10 @@
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Minor SR merge action</span><span class="layer-tag">L2/L3</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Plumbing / can_merge</span><span class="layer-tag">L2/L3</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">merge_minor!</span><span class="layer-tag">L2/L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">first</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-needs-pr" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>C</strong> (Golden Bell) — pre-OR blocking choice step (GoldenBellChoice); <code>first</code>/<code>last</code>/<code>normal</code>; entity order rebuilt from <code>operating_order</code> after choice</span><span class="layer-tag">L3</span></div>
 </div>
 </div></div>
 <div class="sb-col">
