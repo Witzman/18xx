@@ -271,6 +271,7 @@ module Engine
         D_TOKEN_PHASE5_BONUS  = 40
         SML_COMPANY_SYM = 'SML'
         SML_TRAIN_NAME  = '2+2'
+        BBE_COMPANY_SYM = 'BBE'
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -706,6 +707,7 @@ module Engine
           @cctc_hex = nil
           @sml_claimed = false
           @sml_trains  = Set.new
+          @bbe_hexes   = {}
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -988,6 +990,11 @@ module Engine
           base_cost = tile.upgrades.sum(&:cost)
           return super if base_cost.zero?
 
+          if bbe_active_for_lay?(entity, hex)
+            @log << "#{(spender || entity).name} uses B&B Engineers token: no terrain cost"
+            return 0
+          end
+
           entity_zone = entity_track_rights_zone(entity)
           hex_zone = region_for_hex(hex)
           zone_match = hex_zone && entity_zone == hex_zone &&
@@ -1084,6 +1091,8 @@ module Engine
           @log << "#{k_corp.name} receives mail contract of #{format_currency(amount)}"
         end
 
+        # Action::Merge deserialises via game.minor_by_id; 18OE minors live in
+        # @corporations, not the engine's @minors array.
         def minor_by_id(id)
           corp = corporation_by_id(id)
           corp if corp&.type == :minor
@@ -1386,6 +1395,7 @@ module Engine
         def check_route_token(route, token)
           super
           check_hochberg_exclusion!(route)
+          check_bbe_exclusion!(route)
         end
 
         def num_corp_trains(entity)
@@ -1426,6 +1436,25 @@ module Engine
                   '(outside train limit; cannot be sold)'
         end
 
+        def bbe_active_for_lay?(entity, hex)
+          return false unless entity.respond_to?(:companies)
+
+          bbe = company_by_id(self.class::BBE_COMPANY_SYM)
+          return false unless bbe&.owner == entity
+
+          ability = abilities(bbe, :tile_lay, time: 'track')
+          return false unless ability
+
+          hex.tile.terrain.any?
+        end
+
+        def mark_bbe_hex!(hex, corp)
+          @bbe_hexes[hex.id] = corp
+          bbe_name = company_by_id(self.class::BBE_COMPANY_SYM)&.name || 'B&B Engineers'
+          @log << "#{corp.name} places a #{bbe_name} token on #{hex.name} (#{hex.location_name}): "\
+                  'only this RR may route here'
+        end
+
         private
 
         def update_cctc_revenue!
@@ -1457,6 +1486,20 @@ module Engine
             next unless hochberg_hexes.include?(hex.coordinates)
 
             raise GameError, "#{routing_corp.name} cannot route through Hochberg-marked hex #{hex.name}"
+          end
+        end
+
+        def check_bbe_exclusion!(route)
+          return if @bbe_hexes.empty?
+
+          routing_corp = route.train.owner
+
+          route.hexes.each do |hex|
+            next unless (owner_corp = @bbe_hexes[hex.id])
+            next if owner_corp == routing_corp
+
+            raise GameError,
+                  "#{routing_corp.name} cannot route through B&B Engineers-marked hex #{hex.name}"
           end
         end
 

@@ -29,13 +29,15 @@ module Engine
           end
 
           def lay_tile_action(action)
-            tile = action.tile
-            old_tile = action.hex.tile
+            entity  = action.entity
+            hex     = action.hex
+            tile    = action.tile
+            old_tile = hex.tile
             metropolis = @game.metropolis_tile?(tile)
-            points_available = get_tile_lay(action.entity) - @points_used
+            points_available = get_tile_lay(entity) - @points_used
             points_cost = if tile.color != :yellow && metropolis
                             4
-                          elsif tile.color != :yellow && !(@game.cheap_upgrade?(action.entity) && tile.cities.empty?)
+                          elsif tile.color != :yellow && !(@game.cheap_upgrade?(entity) && tile.cities.empty?)
                             2
                           else
                             1
@@ -43,16 +45,29 @@ module Engine
             raise GameError, 'Cannot lay an upgrade now' if tile.color != :yellow && points_cost > points_available
             raise GameError, 'Cannot lay a yellow now' if tile.color == :yellow && points_cost > points_available
 
+            bbe_used = @game.bbe_active_for_lay?(entity, hex)
+
             lay_tile(action)
             @game.log << "Used #{points_cost} tile point(s) to lay tile"
             @game.log << "#{points_available - points_cost} point(s) remaining"
-            if track_upgrade?(old_tile, tile, action.hex)
+            if track_upgrade?(old_tile, tile, hex)
               @round.upgraded_track = true
               @round.num_upgraded_track += 1
             end
             @round.num_laid_track += 1
-            @round.laid_hexes << action.hex
+            @round.laid_hexes << hex
             @points_used += points_cost
+
+            return unless bbe_used
+
+            bbe = @game.company_by_id(@game.class::BBE_COMPANY_SYM)
+            ability = @game.abilities(bbe, :tile_lay)
+            ability&.use!
+            @game.mark_bbe_hex!(hex, entity)
+            return unless ability&.count&.zero?
+
+            @game.company_closing_after_using_ability(bbe)
+            bbe.close!
           end
 
           def tracker_available_hex(entity, hex)
