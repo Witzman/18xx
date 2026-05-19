@@ -209,9 +209,19 @@ The `par_via_exchange` field handles the mechanical association; the `descriptio
 | Star Harbor Trading Co. | Port token in port city (doesn't consume slot) | `token` + `assign_hexes` |
 | Central Circle Transport Corp. | Token in non-port city as town (£10–£60 by phase) | `token` + `hex_bonus` |
 | White Cliffs Ferry | Lille (N31) token at Phase 5; enables ferry | `tile_lay` + phase-trigger logic |
-| Hochberg Mining & Lumber | Token in rough terrain hex; track restricted to owner | `assign_hexes` + custom hook |
-| Brandt & Brandau, Engineers | 4 tokens, up to 2/OR, free yellow tile; closes on last token | `tile_lay` (free: true, count: 4, closed_when_used_up: true) |
-| Swift Metropolitan Line | Protects one 2+2 from train limit | Custom game hook; no standard type |
+| Hochberg Mining & Lumber | Token in rough terrain hex; track restricted to owner | `assign_hexes` + custom hook in `check_route_token` |
+| Brandt & Brandau, Engineers | 4 tokens, up to 2/OR, free yellow tile on terrain hex; non-owner RRs blocked | `tile_lay` (free, count: 4, count_per_or: 2, owner_type: corporation) + `@bbe_hexes` tracking + `check_bbe_exclusion!` |
+| Swift Metropolitan Line | From Phase 4: preserved 2+2 outside train limit; cannot be sold | SR `choose` action; `claim_sml_train!` assigns rusted 2+2 (buyable=false); `num_corp_trains` + `must_buy_train?` exclude SML train |
+
+### Implementation notes — BBE and SML
+
+**Brandt & Brandau, Engineers (BBE)**
+
+`owner_type: 'corporation'` on the `tile_lay` ability means the ability only activates after a corporation has purchased BBE from the player. Once corp-owned, during the Track step on a terrain hex, `upgrade_cost` returns 0 (terrain free). After the lay, the Track step calls `ability.use!` and `mark_bbe_hex!(hex, corp)`, storing the hex in `@bbe_hexes`. `check_bbe_exclusion!` (called from `check_route_token`) raises `GameError` if a non-owning corp routes through a marked hex. The removal mechanic (opponent pays terrain + tile point to remove token) is not yet implemented.
+
+**Swift Metropolitan Line (SML)**
+
+Implemented entirely in `game.rb` via `can_claim_sml?` / `claim_sml_train!` and an SR `choose` action on `BuySellParShares`. The rusted 2+2 is assigned with `buyable = false` and tracked in `@sml_trains`. `num_corp_trains` and `must_buy_train?` both exclude SML trains from their counts.
 
 ---
 
@@ -222,4 +232,4 @@ The `par_via_exchange` field handles the mechanical association; the `descriptio
 - Tile lay mechanics: [Tile Reference](tiles.html)
 
 ---
-*Version: 2026-05-08 — derived from `lib/engine/ability/base.rb`, `lib/engine/ability/tile_lay.rb`, `lib/engine/game/base.rb`.*
+*Version: 2026-05-19 — derived from `lib/engine/ability/base.rb`, `lib/engine/ability/tile_lay.rb`, `lib/engine/game/base.rb`.*

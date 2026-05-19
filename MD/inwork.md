@@ -23,7 +23,8 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 ## Private Abilities
 - [t] **Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032) **[alpha]** **[L2]** `18oe_testing`
 - [t] **Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test **[alpha]** **[L3]** `18oe_testing`
-- [~] **Brandt & Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point) **[alpha]** **[L2]** `18oe_testing`
+- [t] **Swift Metropolitan Line** — SR `choose` action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap **[alpha]** **[L2]** `18oe_testing`
+- [t] **Brandt & Brandau** — `count_per_or: 2` + free tile wired; routing exclusion implemented (non-owning RRs blocked via `@bbe_hexes`); **still needed**: removal mechanic (pay terrain cost + tile point) **[alpha]** **[L2]** `18oe_testing`
 - [~] **Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged **[beta]** **[L2/L3]** `18oe_testing`
 - [~] **Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window **[beta]** **[L3]** `18oe_testing`
 - [~] **White Cliffs Ferry** — `token` (hexes: ['N31']) wired; **still needed**: Phase 5 start event hook + ferry routing **[beta]** **[L3]** `18oe_testing`

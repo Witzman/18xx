@@ -87,15 +87,15 @@
 <article>
 <h1>18OE — Rulebook Coverage</h1>
 <p class="page-crosslink">For current sprint state → <a href="status.html">Implementation Tracker</a> · Alpha gaps → <a href="alpha-gaps.html">Open for Alpha</a></p>
-<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">224 mechanics tracked across 29 rulebook chapters.</p>
+<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">225 mechanics tracked across 29 rulebook chapters.</p>
 <p class="bar-note">Bar widths weighted by section effort (L3 systems = 3× · L2 overrides = 2× · L1 data = 1×).</p>
 <div class="bar-rows">
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:42.8%"></div>
+<div class="pb-done"    style="width:42.6%"></div>
 <div class="pb-pr"      style="width:4.2%"></div>
-<div class="pb-partial" style="width:2.1%"></div>
+<div class="pb-partial" style="width:2.4%"></div>
 <div class="pb-todo"    style="width:50.8%"></div>
 </div>
 <span class="bar-label-right"><strong>47%</strong> implemented or in review</span>
@@ -103,18 +103,18 @@
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:70.5%"></div>
+<div class="pb-done"    style="width:69.9%"></div>
 <div class="pb-pr"      style="width:2.4%"></div>
-<div class="pb-partial" style="width:2.2%"></div>
-<div class="pb-todo"    style="width:24.9%"></div>
+<div class="pb-partial" style="width:2.6%"></div>
+<div class="pb-todo"    style="width:25.1%"></div>
 </div>
-<span class="bar-label-right"><strong>73%</strong> alpha scope done</span>
+<span class="bar-label-right"><strong>72%</strong> alpha scope done</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>106</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>7</span></div>
-<div class="stat-chip stat-partial">Partial <span>8</span></div>
+<div class="stat-chip stat-partial">Partial <span>9</span></div>
 <div class="stat-chip stat-todo">To do <span>94</span></div>
 <div class="stat-chip stat-todo">Deferred <span>9</span></div>
 </div>
@@ -748,13 +748,14 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title cov-toggle" id="private-abilities"><span class="cov-ch-name"><a class="cov-rules-link" href="rules-summary.html#private-abilities" title="View in rules reference">Private Abilities</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:20.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:60.0%"></div></div></div><span class="cov-sec-count">2/10</span></div>
+<div class="cov-chapter-title cov-toggle" id="private-abilities"><span class="cov-ch-name"><a class="cov-rules-link" href="rules-summary.html#private-abilities" title="View in rules reference">Private Abilities</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:18.2%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:63.6%"></div></div></div><span class="cov-sec-count">2/11</span></div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="Robert Stephenson (none)">Robert Stephenson (none)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Ponts et Chaussées (none)">Ponts et Chaussées (none)</div>
 <div class="cov-item cov-partial" data-scope="alpha" title="**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</div>
 <div class="cov-item cov-partial" data-scope="alpha" title="**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</div>
-<div class="cov-item cov-partial" data-scope="alpha" title="**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**Swift Metropolitan Line** — SR `choose` action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap">**Swift Metropolitan Line** — SR `choose` action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap</div>
+<div class="cov-item cov-partial" data-scope="alpha" title="**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; routing exclusion implemented (non-owning RRs blocked via `@bbe_hexes`); **still needed**: removal mechanic (pay terrain cost + tile point)">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; routing exclusion implemented (non-owning RRs blocked via `@bbe_hexes`); **still needed**: removal mechanic (pay terrain cost + tile point)</div>
 <div class="cov-item cov-partial" data-scope="beta" title="**Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged">**Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</div>
 <div class="cov-item cov-partial" data-scope="beta" title="**Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window">**Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window</div>
 <div class="cov-item cov-partial" data-scope="beta" title="**White Cliffs Ferry** — `token` (hexes: [&#x27;N31&#x27;]) wired; **still needed**: Phase 5 start event hook + ferry routing">**White Cliffs Ferry** — `token` (hexes: [&#x27;N31&#x27;]) wired; **still needed**: Phase 5 start event hook + ferry routing</div>
@@ -762,13 +763,14 @@
 <div class="cov-item cov-todo" data-scope="alpha" title="**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit">**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-done">2 done</span> · <span class="cov-dr-partial">6 partial</span> · <span class="cov-dr-todo">2 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">2 done</span> · <span class="cov-dr-partial">7 partial</span> · <span class="cov-dr-todo">2 todo</span></div>
 <table class="cov-detail-table"><tbody>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Robert Stephenson (none)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Ponts et Chaussées (none)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Swift Metropolitan Line** — SR `choose` action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; routing exclusion implemented (non-owning RRs blocked via `@bbe_hexes`); **still needed**: removal mechanic (pay terrain cost + tile point)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Wien Südbahnhof** — `token` (price: 0, teleport_price: 0, extra_action: true) wired; **still needed**: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**Star Harbor** — `token` (extra_slot, special_only) wired; **still needed**: port routing, revenue exclusion, SR window</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-partial"><td class="cov-dr-icon">~</td><td class="cov-dr-label">**White Cliffs Ferry** — `token` (hexes: [&#x27;N31&#x27;]) wired; **still needed**: Phase 5 start event hook + ferry routing</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>

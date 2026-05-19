@@ -94,17 +94,17 @@
 <div class="alpha-banner-stat gap-stat-med">2 MEDIUM</div>
 <div class="alpha-banner-stat gap-stat-low">0 LOW</div>
 <div class="alpha-banner-stat gap-stat-feat">36 missing features</div>
-<div class="alpha-banner-stat gap-stat-partial">5 partial</div>
+<div class="alpha-banner-stat gap-stat-partial">6 partial</div>
 </div>
 <div class="alpha-banner-bar"><div class="bar-rows">
 <div class="bar-row">
 <div class="progress-track">
-<div class="pb-done"    style="width:70.5%"></div>
+<div class="pb-done"    style="width:69.9%"></div>
 <div class="pb-pr"      style="width:2.4%"></div>
-<div class="pb-partial" style="width:2.2%"></div>
-<div class="pb-todo"    style="width:24.9%"></div>
+<div class="pb-partial" style="width:2.6%"></div>
+<div class="pb-todo"    style="width:25.1%"></div>
 </div>
-<span class="bar-label-right"><strong>73%</strong> alpha scope complete</span>
+<span class="bar-label-right"><strong>72%</strong> alpha scope complete</span>
 </div>
 </div></div>
 </div>
@@ -174,9 +174,10 @@
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; routing exclusion implemented (non-owning RRs blocked via `@bbe_hexes`); **still needed**: removal mechanic (pay terrain cost + tile point)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Swift Metropolitan Line** — SR `choose` action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap</td></tr>
 </tbody></table>
 <h2 class="gap-section-h">Medium Bugs — rule violations in specific cases</h2>
 <table class="gap-table">

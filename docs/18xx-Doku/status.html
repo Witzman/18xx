@@ -92,28 +92,28 @@
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:38.4%"></div>
+<div class="pb-done"    style="width:38.3%"></div>
 <div class="pb-pr"      style="width:3.9%"></div>
-<div class="pb-partial" style="width:2.6%"></div>
+<div class="pb-partial" style="width:2.8%"></div>
 <div class="pb-todo"    style="width:55.0%"></div>
 </div>
-<span class="bar-label-right">113&thinsp;/&thinsp;224 items</span>
+<span class="bar-label-right">113&thinsp;/&thinsp;225 items</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:59.1%"></div>
+<div class="pb-done"    style="width:58.6%"></div>
 <div class="pb-pr"      style="width:2.2%"></div>
-<div class="pb-partial" style="width:2.4%"></div>
-<div class="pb-todo"    style="width:36.3%"></div>
+<div class="pb-partial" style="width:2.8%"></div>
+<div class="pb-todo"    style="width:36.4%"></div>
 </div>
-<span class="bar-label-right">61%<span class="bar-aside"> · 50 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
+<span class="bar-label-right">61%<span class="bar-aside"> · 51 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>106</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>7</span></div>
-<div class="stat-chip stat-partial">Partial <span>8</span></div>
+<div class="stat-chip stat-partial">Partial <span>9</span></div>
 <div class="stat-chip stat-partial">Started <span>0</span></div>
 <div class="stat-chip stat-todo">To do <span>103</span></div>
 <div class="stat-chip stat-beta">Beta deferred <span>65</span></div>
@@ -201,7 +201,7 @@
 </div>
 </div></div>
 <div class="sb-col">
-<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">15</span></div>
+<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">16</span></div>
 <div class="sb-col-body view-rules">
 <div class="sb-section">
 <div class="sb-section-title">D-Train Revenue (BUG-031)</div>
@@ -214,7 +214,6 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Private Abilities</div>
-<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</span><span class="layer-tag">L2/L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span></div>
@@ -238,7 +237,6 @@
 <div class="sb-section">
 <div class="sb-section-title">L2</div>
 <div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</span></div>
-<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L2/L3</div>
@@ -269,8 +267,12 @@
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">choose</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Swift Metropolitan Line</strong> — SR <code>choose</code> action (Phase 4+); claim_sml_train! assigns rusted 2+2 outside train limit (buyable=false, rusted=true); num_corp_trains + must_buy_train? exclude SML train; route restriction §11.3.8 free via base check_overlap</span><span class="layer-tag">L2</span></div>
+</div>
+<div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">count_per_or: 2</span><span class="branch-count">1</span></div>
-<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; routing exclusion implemented (non-owning RRs blocked via <code>@bbe_hexes</code>); <strong>still needed</strong>: removal mechanic (pay terrain cost + tile point)</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">token</span><span class="branch-count">3</span></div>
