@@ -951,10 +951,37 @@ end
 <p><strong>Resolution:</strong> keep the HEAD method AND add the incoming method below it. Do not skip either side. Do not merge them into one block. They are independent and both correct.</p>
 <p>This pattern repeats on every rebase when multiple 18OE branches have been open simultaneously. The conflict always resolves by keeping both insertions; if you are unsure which is "ours" and which is "upstream", keep both — deleting one causes a missing method error at runtime.</p>
 <hr>
+<h2 id="54-choose-action-requires-choice_available-on-the-step">54. <code>'choose'</code> action requires <code>choice_available?</code> on the step</h2>
+<p>The SR frontend view (<code>assets/app/view/game/round/stock.rb</code>) calls <code>@step.choice_available?(@current_entity)</code> whenever <code>'choose'</code> is in <code>current_actions</code>. If the method is missing, the view raises <code>NoMethodError</code> and the entire SR page crashes.</p>
+<p><strong>Rule:</strong> any step that can return <code>'choose'</code> from <code>actions()</code> must define <code>choice_available?</code>.</p>
+<p>The simplest correct implementation when <code>actions()</code> already gates the action:</p>
+<pre><code class="language-ruby">def choice_available?(_entity)
+  true
+end</code></pre>
+<p>This is safe because <code>actions()</code> is the authoritative gate — <code>'choose'</code> only appears when a choice actually exists. <code>choice_available?</code> is a secondary UI hint, not the eligibility check.</p>
+<p>Only override with real logic if the step can include <code>'choose'</code> in <code>actions()</code> while <code>choice_available?</code> should return <code>false</code> for the same entity (unusual).</p>
+<p><strong>Bad (crashes SR view):</strong></p>
+<pre><code class="language-ruby">def actions(entity)
+  actions = []
+  actions &lt;&lt; 'choose' if can_claim_sml?(entity)
+  actions
+end
+# missing choice_available? — NoMethodError at runtime</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby">def actions(entity)
+  actions = []
+  actions &lt;&lt; 'choose' if can_claim_sml?(entity)
+  actions
+end
+
+def choice_available?(_entity)
+  true
+end</code></pre>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-19 — §51–53 added from session: cross-game grep protocol for shared engine files; partition renderer order-agnosticism; rebase conflict pattern for parallel insertions.</em></p>
+<p><em>Version: 2026-05-20 — §54 added: <code>choice_available?</code> contract for steps using <code>'choose'</code> action.</em></p>
 </article>
 </main>
 </div>

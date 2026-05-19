@@ -17,8 +17,8 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 2   Open (beta): 7   Fixed: 19   Won't fix: 2   Total: 30
-Bugs closed  ████████████████████  21 / 30  (70%)
+Open (alpha): 2   Open (beta): 7   Fixed: 22   Won't fix: 2   Total: 33
+Bugs closed  ████████████████████  24 / 33  (73%)
 Alpha bugs   ████░░░░░░░░░░░░░░░░  2 open alpha bugs
 ```
 
@@ -168,6 +168,49 @@ Alpha bugs   ████░░░░░░░░░░░░░░░░  2 ope
 ---
 
 ## Resolved
+
+### — Fixed 2026-05-20 —
+
+### BUG-037 — `choice_available?` missing from BuySellParShares — SR view crashes
+
+- **Status:** FIXED 2026-05-20 `ea5de62c8` (18oe_testing)
+- **Severity:** HIGH (alpha scope — SR view crashes whenever SML or BBBT option 3 is eligible)
+- **File:** `lib/engine/game/g_18_oe/step/buy_sell_par_shares.rb`
+- **Rule:** N/A (engine contract)
+
+**Root cause.** The SR frontend view (`assets/app/view/game/round/stock.rb:66`) calls `@step.choice_available?(@current_entity)` whenever `'choose'` is in `current_actions`. The SML commit (`3b6730468`) added `'choose'` to actions but never defined `choice_available?` on the step. Dormant until a game state made `can_claim_sml?` or `can_use_bbbt_option3?` return true.
+
+**Fix.** Added `def choice_available?(_entity); true; end`. Safe because `actions()` already gates `'choose'` on the actual eligibility checks.
+
+---
+
+### — Fixed 2026-05-19 —
+
+### BUG-035 — `d_token_available?` always returns nil
+
+- **Status:** FIXED 2026-05-19 (18oe_testing)
+- **Severity:** HIGH (alpha scope — D token placement step never offered to player)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `d_token_available?`
+- **Rule:** §15.2 — Minor D places marker during Track Lay step.
+
+**Root cause.** `d_token_available?` called `g.abilities(entity, :hex_bonus)`, which internally runs `ability_right_owner?`. That check requires `entity.owner&.corporation?` to be truthy — designed for companies owned by corps, not corps owning abilities directly. D corp's owner is a player (or nil when unfloated), so the check always returned nil.
+
+**Fix.** Changed to `entity.all_abilities.find { |a| a.type == :hex_bonus }`, mirroring the pattern already used by `d_corp_hex_bonus`.
+
+---
+
+### BUG-036 — D corp hex_bonus and CCTC hex_bonus never applied to revenue
+
+- **Status:** FIXED 2026-05-19 (18oe_testing)
+- **Severity:** HIGH (alpha scope — D token placement gave no revenue bonus)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `revenue_for`
+- **Rule:** §15.2 — +£20/+£40 bonus per route stop at D's marked hex. §14.6 — CCTC hex_bonus approximation.
+
+**Root cause.** `revenue_for` only handled D-train doubling. No code iterated over `:hex_bonus` abilities on the operating corporation, so D corp's bonus was stored but never paid. Same path affects CCTC's `add_ability` hex_bonus on the owning major.
+
+**Fix.** Added loop before D-train logic: iterates `route.train.owner.all_abilities` for `:hex_bonus` with non-empty hexes, adds `amount * matching_stop_count` to base revenue.
+
+---
 
 ### — Fixed 2026-05-15 —
 

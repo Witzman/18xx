@@ -1450,6 +1450,53 @@ This pattern repeats on every rebase when multiple 18OE branches have been open 
 
 ---
 
+## 54. `'choose'` action requires `choice_available?` on the step
+
+The SR frontend view (`assets/app/view/game/round/stock.rb`) calls
+`@step.choice_available?(@current_entity)` whenever `'choose'` is in `current_actions`.
+If the method is missing, the view raises `NoMethodError` and the entire SR page crashes.
+
+**Rule:** any step that can return `'choose'` from `actions()` must define `choice_available?`.
+
+The simplest correct implementation when `actions()` already gates the action:
+
+```ruby
+def choice_available?(_entity)
+  true
+end
+```
+
+This is safe because `actions()` is the authoritative gate — `'choose'` only appears when a
+choice actually exists. `choice_available?` is a secondary UI hint, not the eligibility check.
+
+Only override with real logic if the step can include `'choose'` in `actions()` while
+`choice_available?` should return `false` for the same entity (unusual).
+
+**Bad (crashes SR view):**
+```ruby
+def actions(entity)
+  actions = []
+  actions << 'choose' if can_claim_sml?(entity)
+  actions
+end
+# missing choice_available? — NoMethodError at runtime
+```
+
+**Good:**
+```ruby
+def actions(entity)
+  actions = []
+  actions << 'choose' if can_claim_sml?(entity)
+  actions
+end
+
+def choice_available?(_entity)
+  true
+end
+```
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1457,4 +1504,4 @@ This pattern repeats on every rebase when multiple 18OE branches have been open 
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-19 — §51–53 added from session: cross-game grep protocol for shared engine files; partition renderer order-agnosticism; rebase conflict pattern for parallel insertions.*
+*Version: 2026-05-20 — §54 added: `choice_available?` contract for steps using `'choose'` action.*
