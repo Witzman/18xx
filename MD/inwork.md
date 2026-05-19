@@ -11,26 +11,6 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
-## Track Rights
-- [>] 20% terrain discount zones **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
-
-## Stock Market Grid
-- [>] LEFT (zero dividend) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] No movement (below par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] RIGHT (at/above par) **[alpha]** **[L2]** `18oe_fix_share_price_movement` tobymao#12602
-- [>] Sold-out order (hi→lo price) **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
-- [>] >60% president pool buy at 2× **[alpha]** **[L2]** `18oe_fix_president_overcap` tobymao#12603
-- [>] §11.7 issuance DOWN movement **[alpha]** **[L2]** `18oe_fix_stock_terrain` tobymao#12604
-
-## Train Data & Phases
-- [>] L8 unlock after 4th L7 **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-
-## End Game
-- [>] Bank break pre-L8 timing **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] L8 purchase end trigger **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] Remainder cash injection **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-- [>] Bankrupt trigger removed **[alpha]** **[L2]** `18oe_fix_level8_gameend` tobymao#12605
-
 ## D-Train Revenue (BUG-031)
 - [>] D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7) **[alpha]** **[L2]** `18oe_abilities`
 
@@ -66,17 +46,16 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
-## Branch Status *(updated 2026-05-15)*
+## Branch Status *(updated 2026-05-19)*
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
-
 | `18oe_abilities` | upstream/master | rebased ✓ | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
 | `18oe_testing` | upstream/master | rebased ✓ | Integration: gamefixes + abilities + mergers |
-| `18oe_fix_par_prices` | upstream/master | fork #52 / upstream #12601 open | par price fix |
-| `18oe_fix_share_price_movement` | upstream/master | fork #53 / upstream #12602 open | BUG-013/014 |
-| `18oe_fix_president_overcap` | upstream/master | fork #54 / upstream #12603 open | BUG-021 |
-| `18oe_fix_stock_terrain` | upstream/master | fork #55 / upstream #12604 open | BUG-008/009/010/015/022 |
-| `18oe_fix_level8_gameend` | upstream/master | fork #56 / upstream #12605 open | BUG-018/024/025/027 |
+| `18oe_fix_par_prices` | upstream/master | merged ✓ tobymao#12601 | par price fix |
+| `18oe_fix_share_price_movement` | upstream/master | merged ✓ tobymao#12602 | BUG-013/014 |
+| `18oe_fix_president_overcap` | upstream/master | merged ✓ tobymao#12603 | BUG-021 |
+| `18oe_fix_stock_terrain` | upstream/master | merged ✓ tobymao#12604 | BUG-008/009/010/015/022 |
+| `18oe_fix_level8_gameend` | upstream/master | merged ✓ tobymao#12605 | BUG-018/024/025/027 |

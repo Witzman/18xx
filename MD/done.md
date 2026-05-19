@@ -38,6 +38,7 @@ Format: `- [x] Short label **[alpha|beta]** **[L1|L2|L3]**`
 
 ## Track Rights
 - [x] 8 zones defined **[alpha]** **[L1]**
+- [x] 20% terrain discount zones **[alpha]** **[L2]**
 - [x] Zone fee on par **[alpha]** **[L1]**
 - [x] Zone token restriction **[alpha]** **[L1]**
 - [x] Minor zone assignment **[alpha]** **[L1]**
@@ -62,9 +63,16 @@ Format: `- [x] Short label **[alpha|beta]** **[L1|L2|L3]**`
 - [x] Minors/regionals exempt **[alpha]** **[L1]**
 - [x] UP end-of-SR (no OM shares) **[alpha]** **[L2]**
 - [x] Post-conversion sell window **[alpha]** **[L2]**
+- [x] LEFT (zero dividend) **[alpha]** **[L2]**
+- [x] No movement (below par) **[alpha]** **[L2]**
+- [x] RIGHT (at/above par) **[alpha]** **[L2]**
+- [x] Sold-out order (hi→lo price) **[alpha]** **[L2]**
+- [x] >60% president pool buy at 2× **[alpha]** **[L2]**
+- [x] §11.7 issuance DOWN movement **[alpha]** **[L2]**
 
 ## Train Data & Phases
 - [x] 7-level roster **[alpha]** **[L1]**
+- [x] L8 unlock after 4th L7 **[alpha]** **[L2]**
 - [x] Rust triggers (L4/L6/L8) **[alpha]** **[L1]**
 - [x] 8 named phases **[alpha]** **[L1]**
 - [x] Tile colour by phase **[alpha]** **[L1]**
@@ -128,6 +136,10 @@ Format: `- [x] Short label **[alpha|beta]** **[L1|L2|L3]**`
 
 ## End Game
 - [x] Win condition (scoring) **[alpha]** **[L2]**
+- [x] Bank break pre-L8 timing **[alpha]** **[L2]**
+- [x] L8 purchase end trigger **[alpha]** **[L2]**
+- [x] Remainder cash injection **[alpha]** **[L2]**
+- [x] Bankrupt trigger removed **[alpha]** **[L2]**
 
 ## Minor Abilities
 - [x] B – Orange Scroll **[alpha]** **[L2]**
