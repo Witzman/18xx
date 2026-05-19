@@ -205,7 +205,7 @@ The `par_via_exchange` field handles the mechanical association; the `descriptio
 | Private | Rule description | Ability types needed |
 |---------|-----------------|----------------------|
 | Wien Südbahnhof | Free station token placement | `token` (price: 0, when: 'token') |
-| Barclay, Bevan, Barclay & Tritton | Three selectable options (re-set par / reserve share / prevent DROP) | `choose_ability` |
+| Barclay, Bevan, Barclay & Tritton | Option 3 (alpha): prevent one corp's price from moving DOWN for rest of SR; options 1+2 deferred to beta | SR `choose` action; `@bbbt_protected_corp`; `sell_shares_and_change_price` override (`movement: :none`); `finish_bbbt_sr!` clears + closes at SR end |
 | Star Harbor Trading Co. | Port token in port city (doesn't consume slot) | `token` + `assign_hexes` |
 | Central Circle Transport Corp. | Token in non-port city as town (£10–£60 by phase) | `token` + `hex_bonus` |
 | White Cliffs Ferry | Lille (N31) token at Phase 5; enables ferry | `tile_lay` + phase-trigger logic |
@@ -213,7 +213,11 @@ The `par_via_exchange` field handles the mechanical association; the `descriptio
 | Brandt & Brandau, Engineers | 4 tokens, up to 2/OR, free yellow tile on terrain hex; non-owner RRs blocked | `tile_lay` (free, count: 4, count_per_or: 2, owner_type: corporation) + `@bbe_hexes` tracking + `check_bbe_exclusion!` |
 | Swift Metropolitan Line | From Phase 4: preserved 2+2 outside train limit; cannot be sold | SR `choose` action; `claim_sml_train!` assigns rusted 2+2 (buyable=false); `num_corp_trains` + `must_buy_train?` exclude SML train |
 
-### Implementation notes — BBE and SML
+### Implementation notes — BBBT, BBE, and SML
+
+**Barclay, Bevan, Barclay & Tritton (BBBT)**
+
+Option 3 only implemented for alpha. During the player's own SR turn, `can_use_bbbt_option3?` gates a `choose` action in `BuySellParShares`. Choice keys are prefixed `bbbt_<corp_id>` to avoid collisions with the SML `choose` keys. `bbbt_protect!(corp, player)` stores `@bbbt_protected_corp` and logs the protection. `sell_shares_and_change_price` is overridden in `game.rb` to pass `movement: :none` when the protected corp is being sold, suppressing all DOWN movement for that sale. `next_round!` calls `finish_bbbt_sr!` when leaving an SR — this clears `@bbbt_protected_corp` and closes BBBT. Options 1 (re-set par) and 2 (custodianship) are deferred to beta.
 
 **Brandt & Brandau, Engineers (BBE)**
 

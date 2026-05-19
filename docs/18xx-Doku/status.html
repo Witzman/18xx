@@ -92,28 +92,28 @@
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:38.3%"></div>
+<div class="pb-done"    style="width:38.1%"></div>
 <div class="pb-pr"      style="width:3.9%"></div>
-<div class="pb-partial" style="width:2.8%"></div>
+<div class="pb-partial" style="width:3.1%"></div>
 <div class="pb-todo"    style="width:55.0%"></div>
 </div>
-<span class="bar-label-right">113&thinsp;/&thinsp;225 items</span>
+<span class="bar-label-right">113&thinsp;/&thinsp;226 items</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:58.6%"></div>
+<div class="pb-done"    style="width:58.2%"></div>
 <div class="pb-pr"      style="width:2.2%"></div>
-<div class="pb-partial" style="width:2.8%"></div>
-<div class="pb-todo"    style="width:36.4%"></div>
+<div class="pb-partial" style="width:3.1%"></div>
+<div class="pb-todo"    style="width:36.5%"></div>
 </div>
-<span class="bar-label-right">61%<span class="bar-aside"> · 51 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
+<span class="bar-label-right">60%<span class="bar-aside"> · 52 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
 <div class="stat-chip stat-done">Done &amp; merged <span>106</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>7</span></div>
-<div class="stat-chip stat-partial">Partial <span>9</span></div>
+<div class="stat-chip stat-partial">Partial <span>10</span></div>
 <div class="stat-chip stat-partial">Started <span>0</span></div>
 <div class="stat-chip stat-todo">To do <span>103</span></div>
 <div class="stat-chip stat-beta">Beta deferred <span>65</span></div>
@@ -201,7 +201,7 @@
 </div>
 </div></div>
 <div class="sb-col">
-<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">16</span></div>
+<div class="sb-col-header inwork-col">In Work<span class="sb-col-count">17</span></div>
 <div class="sb-col-body view-rules">
 <div class="sb-section">
 <div class="sb-section-title">D-Train Revenue (BUG-031)</div>
@@ -265,6 +265,10 @@
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D</strong> (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Central Circle</strong> — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</span><span class="layer-tag">L2</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Hochberg Mining</strong> — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</span><span class="layer-tag">L3</span></div>
+</div>
+<div class="sb-section">
+<div class="sb-section-title sb-branch-title"><span class="branch-name">bbbt_protect!</span><span class="branch-count">1</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Barclay, Bevan, Barclay & Tritton</strong> — option 3 (block DOWN): <code>bbbt_protect!</code> sets <code>@bbbt_protected_corp</code>; <code>sell_shares_and_change_price</code> override passes <code>movement: :none</code>; <code>finish_bbbt_sr!</code> clears + closes at SR end; options 1 (re-par) and 2 (reserve share) deferred to beta</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">choose</span><span class="branch-count">1</span></div>
