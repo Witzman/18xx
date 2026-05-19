@@ -8,7 +8,8 @@ module Engine
       module Step
         class BuyTrain < Engine::Step::BuyTrain
           def must_buy_train?(entity)
-            entity.floated? && entity.trains.empty? && (!@game.fulfilled_train_obligation?(entity) || entity.type == :major)
+            non_sml = entity.trains.reject { |t| @game.sml_train?(t) }
+            entity.floated? && non_sml.empty? && (!@game.fulfilled_train_obligation?(entity) || entity.type == :major)
           end
 
           def can_buy_train?(entity = nil, _shell = nil)

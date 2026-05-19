@@ -269,6 +269,8 @@ module Engine
         TRAIN_DISCOUNT_RATE   = 0.1
         D_TOKEN_PHASE2_BONUS  = 20
         D_TOKEN_PHASE5_BONUS  = 40
+        SML_COMPANY_SYM = 'SML'
+        SML_TRAIN_NAME  = '2+2'
 
         CORPORATIONS_TRACK_RIGHTS = {
           # United Kingdom
@@ -702,7 +704,8 @@ module Engine
           @nationals_formation_queue = []
           @cctc_corp = nil
           @cctc_hex = nil
-          @krasnaya_strela_train = nil
+          @sml_claimed = false
+          @sml_trains  = Set.new
 
           corporations.each do |corp|
             corp.par_via_exchange = companies.find { |c| c.sym == corp.id } if corp.type == :minor
@@ -1383,6 +1386,44 @@ module Engine
         def check_route_token(route, token)
           super
           check_hochberg_exclusion!(route)
+        end
+
+        def num_corp_trains(entity)
+          trains = entity.trains.reject { |t| @sml_trains.include?(t) }
+          self.class::OBSOLETE_TRAINS_COUNT_FOR_LIMIT ? trains.size : trains.count { |t| !t.obsolete }
+        end
+
+        def can_claim_sml?(player)
+          return false if @sml_claimed
+          return false unless @phase.name.to_i >= 4
+
+          sml = company_by_id(self.class::SML_COMPANY_SYM)
+          return false unless sml&.owner == player
+          return false if sml_claimable_corps(player).empty?
+
+          @depot.trains.any? { |t| t.rusted && t.owner.nil? && t.name == self.class::SML_TRAIN_NAME }
+        end
+
+        def sml_claimable_corps(player)
+          corporations.select { |c| c.floated? && c.president?(player) }
+        end
+
+        def sml_train?(train)
+          @sml_trains.include?(train)
+        end
+
+        def claim_sml_train!(corp)
+          train = @depot.trains.find { |t| t.rusted && t.owner.nil? && t.name == self.class::SML_TRAIN_NAME }
+          return unless train
+
+          corp.trains << train
+          train.owner = corp
+          train.buyable = false
+          @sml_trains << train
+          @sml_claimed = true
+          sml_name = company_by_id(self.class::SML_COMPANY_SYM)&.name || 'Swift Metropolitan Line'
+          @log << "#{corp.name} receives a preserved #{train.name} train via #{sml_name} " \
+                  '(outside train limit; cannot be sold)'
         end
 
         private

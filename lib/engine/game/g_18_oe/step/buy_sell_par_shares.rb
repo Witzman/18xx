@@ -35,6 +35,7 @@ module Engine
             actions << 'sell_shares' if can_sell_any?(entity)
             actions << 'convert' if can_convert_any?(entity)
             actions << 'merge' if can_merge_any?(entity)
+            actions << 'choose' if can_claim_sml?(entity)
             actions << 'pass' if !can_float_minor?(entity) && !actions.empty?
             actions
           end
@@ -335,6 +336,24 @@ module Engine
             @log << "#{entity.name} passes"
           end
 
+          def choice_name
+            'Claim SML preserved 2+2 train for a controlled RR'
+          end
+
+          def choices
+            return sml_choices if can_claim_sml?(current_entity)
+
+            {}
+          end
+
+          def process_choose(action)
+            corp = @game.corporation_by_id(action.choice)
+            raise GameError, 'Corporation not eligible for SML train' unless
+              @game.sml_claimable_corps(current_entity).include?(corp)
+
+            @game.claim_sml_train!(corp)
+          end
+
           private
 
           def converting_actions(entity)
@@ -370,6 +389,14 @@ module Engine
 
           def bought_corporation
             @round.current_actions.find { |x| x.is_a?(Action::BuyShares) }&.bundle&.corporation
+          end
+
+          def can_claim_sml?(entity)
+            entity.player? && @game.can_claim_sml?(entity)
+          end
+
+          def sml_choices
+            @game.sml_claimable_corps(current_entity).to_h { |c| [c.id, c.name] }
           end
 
           def president_pool_overcap_buy?(entity, bundle)
