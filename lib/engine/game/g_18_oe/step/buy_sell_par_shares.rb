@@ -337,6 +337,10 @@ module Engine
             @log << "#{entity.name} passes"
           end
 
+          def choice_available?(_entity)
+            true
+          end
+
           def choice_name
             return 'Claim SML preserved 2+2 train for a controlled RR' if can_claim_sml?(current_entity)
             return 'Protect a corporation share price from DROP (B,B,B&T §14.4)' if can_use_bbbt_option3?
