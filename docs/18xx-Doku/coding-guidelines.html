@@ -918,10 +918,43 @@ end
 @bank.receive(remainder)</code></pre>
 <p>The method name becomes part of the engine's documented API, can be safely overridden in subclasses, and communicates intent to reviewers. <code>instance_variable_set</code> on engine objects is a reviewer red flag — expect a change request.</p>
 <hr>
+<h2 id="51-shared-engine-files--cross-game-impact-analysis-before-changing">51. Shared engine files — cross-game impact analysis before changing</h2>
+<p>When modifying any file outside <code>lib/engine/game/g_18_oe/</code> — especially core engine objects like <code>partition.rb</code>, <code>bank.rb</code>, <code>tile.rb</code>, <code>graph.rb</code>, <code>depot.rb</code> — run a three-step cross-game grep before shipping.</p>
+<p><strong>Step 1 — Find all callers:</strong></p>
+<pre><code class="language-bash">grep -rn "partition=" lib/engine/game/   # or method name, DSL key</code></pre>
+<p><strong>Step 2 — Identify edge cases:</strong> which games use parameter values outside the "normal" range?</p>
+<p><strong>Step 3 — Verify each edge case:</strong> is the change a no-op (or intentional) for that game?</p>
+<p><strong>Example — removing the top-level sort from <code>Partition#initialize</code>:</strong></p>
+<ul><li>Grep: 34 entries across 7 games</li><li>Edge case: only <code>g_1862</code> has <code>a:3,b:0</code> (<code>a &gt; b</code> numerically)</li><li>Verify: <code>g_1862</code>'s partition has no <code>restrict:</code> → inner/outer not used for blocking; renderer bezier is symmetric for full-span partitions → no visible change</li></ul>
+<p>If any edge case shows a behavioural difference, the change is not a no-op — document why the change is still correct, or scope it to 18OE only.</p>
+<hr>
+<h2 id="52-partition-renderer--ab-order-is-irrelevant-for-full-span-partitions">52. Partition renderer — <code>@a</code>/<code>@b</code> order is irrelevant for full-span partitions</h2>
+<p>The renderer (<code>assets/app/view/game/part/partitions.rb</code>) draws a bezier path from <code>vertex_a</code> to <code>vertex_b</code>. For full-span (no <code>length:</code>) partitions, <strong>swapping <code>@a</code> and <code>@b</code> produces the same visual result</strong> — the bezier curve is identical, just traversed in reverse.</p>
+<p>The <code>restrict</code> magnet <code>((partition.a + partition.b) / 2).to_i</code> is also symmetric: <code>(3+0)/2 == (0+3)/2</code>.</p>
+<p><strong>Consequence:</strong> a top-level sort on <code>@a</code>/<code>@b</code> in <code>Partition#initialize</code> is only needed for <code>@inner</code>/<code>@outer</code> range construction. Once range construction uses a local <code>a_lo, b_hi = [@a, @b].minmax</code>, the top-level sort is redundant and can be removed — <code>@a</code>/<code>@b</code> retain DSL order for all partitions.</p>
+<p><strong>For <code>length:</code> partitions, direction IS critical.</strong> The renderer computes:</p>
+<pre><code class="language-ruby">vertex_b = vertex_a.zip(vertex_b).map { |a, b| a + (partition.length * (b - a)) }</code></pre>
+<p>This starts at <code>@a</code> and extends <code>length</code> fraction toward <code>@b</code>. Swapping <code>@a</code> and <code>@b</code> flips the draw direction of the partial line. Never sort <code>@a</code>/<code>@b</code> when <code>length:</code> is set.</p>
+<p><strong>General principle:</strong> before adding a guard to preserve a property (e.g., <code>@a ≤ @b</code>), read every consumer of that variable and verify which ones actually require it. If range construction now has its own local sort, ask whether the renderer or any other consumer still needs the global sort.</p>
+<hr>
+<h2 id="53-rebase-conflicts-parallel-independent-insertions--keep-both">53. Rebase conflicts: parallel independent insertions — keep both</h2>
+<p>When two branches both add new methods or constants to the same file at the same insertion point (commonly <code>game.rb</code>), the conflict is <strong>textual, not semantic</strong>. The resolution is always: accept both sides in full.</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+        def upgrade_cost(tile, hex, entity, spender)
+          # ... from PR #12604 ...
+        end
+=======
+        def game_end_check_final_phase?
+          # ... from PR #12605 ...
+        end
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 530268bdc</code></pre>
+<p><strong>Resolution:</strong> keep the HEAD method AND add the incoming method below it. Do not skip either side. Do not merge them into one block. They are independent and both correct.</p>
+<p>This pattern repeats on every rebase when multiple 18OE branches have been open simultaneously. The conflict always resolves by keeping both insertions; if you are unsure which is "ours" and which is "upstream", keep both — deleting one causes a missing method error at runtime.</p>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-16 — §49–50 added from PR #12604/#12605 review feedback: ability-type sentinels, instance_variable_set on engine objects. §13 extended: event name convention + EVENTS_TEXT requirement. §18 extended: method naming from caller's perspective. §28 extended: dead abilities. §48 extended: train.index for counting purchases.</em></p>
+<p><em>Version: 2026-05-19 — §51–53 added from session: cross-game grep protocol for shared engine files; partition renderer order-agnosticism; rebase conflict pattern for parallel insertions.</em></p>
 </article>
 </main>
 </div>

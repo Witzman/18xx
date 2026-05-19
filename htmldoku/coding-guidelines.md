@@ -1388,6 +1388,68 @@ The method name becomes part of the engine's documented API, can be safely overr
 
 ---
 
+## 51. Shared engine files — cross-game impact analysis before changing
+
+When modifying any file outside `lib/engine/game/g_18_oe/` — especially core engine objects like `partition.rb`, `bank.rb`, `tile.rb`, `graph.rb`, `depot.rb` — run a three-step cross-game grep before shipping.
+
+**Step 1 — Find all callers:**
+```bash
+grep -rn "partition=" lib/engine/game/   # or method name, DSL key
+```
+
+**Step 2 — Identify edge cases:** which games use parameter values outside the "normal" range?
+
+**Step 3 — Verify each edge case:** is the change a no-op (or intentional) for that game?
+
+**Example — removing the top-level sort from `Partition#initialize`:**
+- Grep: 34 entries across 7 games
+- Edge case: only `g_1862` has `a:3,b:0` (`a > b` numerically)
+- Verify: `g_1862`'s partition has no `restrict:` → inner/outer not used for blocking; renderer bezier is symmetric for full-span partitions → no visible change
+
+If any edge case shows a behavioural difference, the change is not a no-op — document why the change is still correct, or scope it to 18OE only.
+
+---
+
+## 52. Partition renderer — `@a`/`@b` order is irrelevant for full-span partitions
+
+The renderer (`assets/app/view/game/part/partitions.rb`) draws a bezier path from `vertex_a` to `vertex_b`. For full-span (no `length:`) partitions, **swapping `@a` and `@b` produces the same visual result** — the bezier curve is identical, just traversed in reverse.
+
+The `restrict` magnet `((partition.a + partition.b) / 2).to_i` is also symmetric: `(3+0)/2 == (0+3)/2`.
+
+**Consequence:** a top-level sort on `@a`/`@b` in `Partition#initialize` is only needed for `@inner`/`@outer` range construction. Once range construction uses a local `a_lo, b_hi = [@a, @b].minmax`, the top-level sort is redundant and can be removed — `@a`/`@b` retain DSL order for all partitions.
+
+**For `length:` partitions, direction IS critical.** The renderer computes:
+```ruby
+vertex_b = vertex_a.zip(vertex_b).map { |a, b| a + (partition.length * (b - a)) }
+```
+This starts at `@a` and extends `length` fraction toward `@b`. Swapping `@a` and `@b` flips the draw direction of the partial line. Never sort `@a`/`@b` when `length:` is set.
+
+**General principle:** before adding a guard to preserve a property (e.g., `@a ≤ @b`), read every consumer of that variable and verify which ones actually require it. If range construction now has its own local sort, ask whether the renderer or any other consumer still needs the global sort.
+
+---
+
+## 53. Rebase conflicts: parallel independent insertions — keep both
+
+When two branches both add new methods or constants to the same file at the same insertion point (commonly `game.rb`), the conflict is **textual, not semantic**. The resolution is always: accept both sides in full.
+
+```
+<<<<<<< HEAD
+        def upgrade_cost(tile, hex, entity, spender)
+          # ... from PR #12604 ...
+        end
+=======
+        def game_end_check_final_phase?
+          # ... from PR #12605 ...
+        end
+>>>>>>> 530268bdc
+```
+
+**Resolution:** keep the HEAD method AND add the incoming method below it. Do not skip either side. Do not merge them into one block. They are independent and both correct.
+
+This pattern repeats on every rebase when multiple 18OE branches have been open simultaneously. The conflict always resolves by keeping both insertions; if you are unsure which is "ours" and which is "upstream", keep both — deleting one causes a missing method error at runtime.
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1395,4 +1457,4 @@ The method name becomes part of the engine's documented API, can be safely overr
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-16 — §49–50 added from PR #12604/#12605 review feedback: ability-type sentinels, instance_variable_set on engine objects. §13 extended: event name convention + EVENTS_TEXT requirement. §18 extended: method naming from caller's perspective. §28 extended: dead abilities. §48 extended: train.index for counting purchases.*
+*Version: 2026-05-19 — §51–53 added from session: cross-game grep protocol for shared engine files; partition renderer order-agnosticism; rebase conflict pattern for parallel insertions.*
