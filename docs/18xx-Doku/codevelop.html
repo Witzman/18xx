@@ -102,9 +102,7 @@ git remote add upstream https://github.com/tobymao/18xx.git</code></pre>
 # → open http://localhost:9292</code></pre>
 <h3 id="step-2--get-the-documentation-branch">Step 2 — Get the Documentation branch</h3>
 <p>The workflow keeps documentation on a separate branch so it is always accessible regardless of which feature branch you have checked out. A git worktree exposes the branch as a separate directory without a second clone.</p>
-<p>There are two ways to set this up. <strong>Option A</strong> is faster and gives you a complete working documentation set immediately. <strong>Option B</strong> starts from an empty branch and imports selectively.</p>
-<h4 id="option-a--clone-directly-from-witzman18xx-recommended">Option A — Clone directly from Witzman/18xx (recommended)</h4>
-<p>This copies the <code>Witzman/18xx</code> Documentation branch — all engine documentation pages, the HTML generator, and the tracking file structure — into your fork in one step. Skip Step 3 if you use this option.</p>
+<p>This copies the <code>Witzman/18xx</code> Documentation branch — all engine documentation pages, the HTML generator, and the tracking file structure — into your fork in one step.</p>
 <pre><code class="language-bash">cd ~/18xx/18xx
 
 # Fetch the Documentation branch from Witzman/18xx
@@ -121,34 +119,8 @@ git worktree add ~/18xx-docs Documentation</code></pre>
 <p>Expose <code>MD/</code> and <code>CLAUDE.md</code> at the project root via symlinks:</p>
 <pre><code class="language-bash">ln -s ~/18xx-docs/MD           ~/18xx/MD
 ln -s ~/18xx-docs/MD/CLAUDE.md ~/18xx/CLAUDE.md</code></pre>
-<p>Now <code>~/18xx/MD/</code> and <code>~/18xx/CLAUDE.md</code> are visible on every feature branch without branch switching. Continue to <a href="#step-4----write-your-claudemd">Step 4</a> — your documentation is already populated.</p>
+<p>Now <code>~/18xx/MD/</code> and <code>~/18xx/CLAUDE.md</code> are visible on every feature branch without branch switching.</p>
 <p>To pull in future engine documentation updates, see the <strong>Staying up to date</strong> section in Step 3 below (the <code>engine-docs</code> remote is already configured).</p>
-<hr>
-<h4 id="option-b--create-from-scratch">Option B — Create from scratch</h4>
-<p>Use this if you want a blank Documentation branch and intend to import selectively, or if you do not want a dependency on <code>Witzman/18xx</code>.</p>
-<pre><code class="language-bash"># Create an orphan Documentation branch
-git -C ~/18xx/18xx checkout --orphan Documentation
-git -C ~/18xx/18xx rm -rf .          # clear the working tree
-git -C ~/18xx/18xx commit --allow-empty -m "chore: init Documentation branch"
-git -C ~/18xx/18xx push -u origin Documentation
-
-# Return to master
-git -C ~/18xx/18xx checkout master
-
-# Mount the Documentation branch as a worktree
-git -C ~/18xx/18xx worktree add ~/18xx-docs Documentation</code></pre>
-<p>Create the MD/ directory and seed the tracking files:</p>
-<pre><code class="language-bash">mkdir -p ~/18xx-docs/MD
-touch ~/18xx-docs/MD/CLAUDE.md \
-      ~/18xx-docs/MD/inwork.md \
-      ~/18xx-docs/MD/todo.md \
-      ~/18xx-docs/MD/done.md \
-      ~/18xx-docs/MD/bugs.md \
-      ~/18xx-docs/MD/decisions.md</code></pre>
-<p>Expose <code>MD/</code> and <code>CLAUDE.md</code> at the project root via symlinks:</p>
-<pre><code class="language-bash">ln -s ~/18xx-docs/MD           ~/18xx/MD
-ln -s ~/18xx-docs/MD/CLAUDE.md ~/18xx/CLAUDE.md</code></pre>
-<p>Now <code>~/18xx/MD/</code> and <code>~/18xx/CLAUDE.md</code> are visible on every feature branch without any branch switching. Continue to Step 3 to import the engine documentation.</p>
 <h3 id="step-3--import-the-engine-documentation">Step 3 — Import the engine documentation</h3>
 <p>The engine documentation (all <code>htmldoku/</code> pages, the HTML generator, and the rendered HTML) lives on the <code>Documentation</code> branch of <code>Witzman/18xx</code>. Import it into your own Documentation branch by adding it as a git remote — no manual copying needed.</p>
 <p><strong>From your Documentation worktree:</strong></p>
