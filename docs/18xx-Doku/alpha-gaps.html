@@ -137,7 +137,7 @@
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify standard tile quantities against physical tile manifest</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Minor Abilities</td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f)</td></tr>
+<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**7.13** Minor M (CIWL) — holds 10 Pullman cars (see §11.6.2)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**8.2** Barclay, Bevan, Barclay &amp; Tritton — owner selects one of three abilities at time of use</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">**8.8** Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</td></tr>
@@ -174,7 +174,7 @@
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**D** (Green Junction) — DTokenPlacement step; assign action during track window; any non-metro non-offboard city; Phase 5 transition already wired</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**L** (Krasnaya Strela) — KrasnayaStrelaAssign step wired; train-choice before Route step; D-train doubling exception in `18oe_dtrain_doubling` (BUG-031)</td></tr>
 <tr class="gap-section-row"><td colspan="2" class="gap-section-label">Private Abilities</td></tr>
-<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` added; engine enforces cap automatically</td></tr>
+<tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Brandt &amp; Brandau** — `count_per_or: 2` + free tile wired; **still needed**: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Central Circle** — hex_bonus approximation (£10/£20/£40/£60 by phase via after_phase_change); SR window via extra_action:true already wired; city-as-town routing deferred to beta (BUG-032)</td></tr>
 <tr class="gap-row-partial"><td class="gap-area"></td><td class="gap-feat">**Hochberg Mining** — HochbergPlacement step (rough terrain ≥ £45); routing exclusion via check_route_token override; removal mechanic pending browser test</td></tr>
 </tbody></table>

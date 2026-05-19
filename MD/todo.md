@@ -93,7 +93,7 @@ No Pullman logic yet. Nationals' inherent Pullman bonus already in `national_rev
 
 ## Minor Abilities
 
-- [ ] **7.13** Minor M (CIWL) — holds 10 Pullman cars (see §8f) **[L3]**
+- [ ] **7.13** Minor M (CIWL) — holds 10 Pullman cars (see §11.6.2) **[L3]**
 
 *Ability transfer on merge → beta. Minor A (Silver Banner) → beta. Shifted 2026-05-14.*
 

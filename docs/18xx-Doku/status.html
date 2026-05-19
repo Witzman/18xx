@@ -92,22 +92,22 @@
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:38.5%"></div>
+<div class="pb-done"    style="width:38.4%"></div>
 <div class="pb-pr"      style="width:3.9%"></div>
-<div class="pb-partial" style="width:2.5%"></div>
-<div class="pb-todo"    style="width:55.1%"></div>
+<div class="pb-partial" style="width:2.6%"></div>
+<div class="pb-todo"    style="width:55.0%"></div>
 </div>
 <span class="bar-label-right">113&thinsp;/&thinsp;224 items</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:59.3%"></div>
-<div class="pb-pr"      style="width:2.3%"></div>
-<div class="pb-partial" style="width:2.3%"></div>
-<div class="pb-todo"    style="width:36.2%"></div>
+<div class="pb-done"    style="width:59.1%"></div>
+<div class="pb-pr"      style="width:2.2%"></div>
+<div class="pb-partial" style="width:2.4%"></div>
+<div class="pb-todo"    style="width:36.3%"></div>
 </div>
-<span class="bar-label-right">62%<span class="bar-aside"> · 50 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
+<span class="bar-label-right">61%<span class="bar-aside"> · 50 remaining · <span class="bar-beta">65 beta deferred</span></span></span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
@@ -214,7 +214,8 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Private Abilities</div>
-<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span><span class="layer-tag">L2</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</span><span class="layer-tag">L2/L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span></div>
 </div>
@@ -237,6 +238,7 @@
 <div class="sb-section">
 <div class="sb-section-title">L2</div>
 <div class="sb-item sb-needs-pr" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L2/L3</div>
@@ -244,7 +246,7 @@
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Minor SR merge action</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">Plumbing / can_merge</span></div>
 <div class="sb-item sb-needs-pr" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text">merge_minor!</span></div>
-<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">L3</div>
@@ -268,11 +270,11 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">count_per_or: 2</span><span class="branch-count">1</span></div>
-<div class="sb-item sb-partial" data-layer="L1" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> added; engine enforces cap automatically</span><span class="layer-tag">L1</span></div>
+<div class="sb-item sb-partial" data-layer="L2" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Brandt & Brandau</strong> — <code>count_per_or: 2</code> + free tile wired; <strong>still needed</strong>: routing exclusion (non-owning RRs blocked) + removal mechanic (pay terrain cost + tile point)</span><span class="layer-tag">L2</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title sb-branch-title"><span class="branch-name">token</span><span class="branch-count">3</span></div>
-<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: Token step zone-bypass + sea-zone crossing costs</span><span class="layer-tag">L2/L3</span></div>
+<div class="sb-item sb-partial" data-layer="L2/L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Wien Südbahnhof</strong> — <code>token</code> (price: 0, teleport_price: 0, extra_action: true) wired; <strong>still needed</strong>: cost-bypass in Token step (standard reachability still applies per §14.3) + sea-zone crossing costs still charged</span><span class="layer-tag">L2/L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>Star Harbor</strong> — <code>token</code> (extra_slot, special_only) wired; <strong>still needed</strong>: port routing, revenue exclusion, SR window</span><span class="layer-tag">L3</span></div>
 <div class="sb-item sb-partial" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>White Cliffs Ferry</strong> — <code>token</code> (hexes: ['N31']) wired; <strong>still needed</strong>: Phase 5 start event hook + ferry routing</span><span class="layer-tag">L3</span></div>
 </div>
@@ -338,7 +340,7 @@
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Minor Abilities</div>
-<div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.13</strong> Minor M (CIWL) — holds 10 Pullman cars (see §8f)</span><span class="layer-tag">L3</span></div>
+<div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.13</strong> Minor M (CIWL) — holds 10 Pullman cars (see §11.6.2)</span><span class="layer-tag">L3</span></div>
 </div>
 <div class="sb-section">
 <div class="sb-section-title">Private Abilities</div>
@@ -569,7 +571,7 @@
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Company with zero trains but holds Pullman: retain until next train acquired</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">Forced purchase — president covers shortfall; else national conversion (majors) or insolvency (minors/regionals)</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text">First-round insolvency: president cash → treasury; company receives reserved 2+2; presidential cert → Open Market; president paid face value</span></div>
-<div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.13</strong> Minor M (CIWL) — holds 10 Pullman cars (see §8f)</span></div>
+<div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>7.13</strong> Minor M (CIWL) — holds 10 Pullman cars (see §11.6.2)</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>8.2</strong> Barclay, Bevan, Barclay & Tritton — owner selects one of three abilities at time of use</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="alpha"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>8.8</strong> Swift Metropolitan Line — from Phase 4, one controlled RR may keep one 2+2 outside train limit</span></div>
 <div class="sb-item sb-todo" data-layer="L3" data-scope="beta"><div class="sb-status-dot"></div><span class="sb-item-text"><strong>D (Green Junction)</strong> — sea/ferry variant: unreachable-city placement step where target city is accessible only via sea or ferry</span></div>
