@@ -17,16 +17,31 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 2   Open (beta): 7   Fixed: 22   Won't fix: 2   Total: 33
-Bugs closed  ████████████████████  24 / 33  (73%)
-Alpha bugs   ████░░░░░░░░░░░░░░░░  2 open alpha bugs
+Open (alpha): 3   Open (beta): 7   Fixed: 22   Won't fix: 2   Total: 34
+Bugs closed  ████████████████████  24 / 34  (71%)
+Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
 ```
 
 ---
 
 ## Open
 
+### BUG-038 — `available_on: '7+7'` on 8+8 train crashes buy-train render — upstream fix needed
 
+- **Status:** OPEN (18oe_testing: FIXED `3441e6adc`; **upstream/master: unfixed — needs PR**)
+- **Severity:** HIGH (alpha scope — crashes buy-train panel render whenever operating view renders in phase 7+)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — TRAINS constant
+- **Rule:** N/A (engine contract)
+
+**Symptom.** `Phase#available?` calls `@phases.find_index { |p| p[:name] == phase_name }`. If phase_name does not match any phase, `find_index` returns nil. `nil <= @index` raises `NoMethodError: undefined method '<=' for nil`, crashing the buy-train render.
+
+**Root cause.** `available_on: '7+7'` references the Level-7 train name, not a phase name. Phase names are `'2'`–`'8'`; `'7+7'` does not exist as a phase name. Bug is present on `upstream/master` and in 18oe_testing before fix.
+
+**Fix.** Change `available_on: '7+7'` → `available_on: '7'`. Phase `'7'` triggers `on: '7+7'`, so this correctly makes 8+8 trains visible from the start of the Level-7 phase.
+
+**Action needed.** Submit upstream PR to tobymao/18xx targeting master.
+
+---
 
 ### BUG-034 — Minor E/F standalone 33% terrain discount not implemented
 
