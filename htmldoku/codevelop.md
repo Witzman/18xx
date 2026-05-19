@@ -28,9 +28,48 @@ docker compose up          # first build takes a few minutes
 # → open http://localhost:9292
 ```
 
-### Step 2 — Create the Documentation branch and worktree
+### Step 2 — Get the Documentation branch
 
 The workflow keeps documentation on a separate branch so it is always accessible regardless of which feature branch you have checked out. A git worktree exposes the branch as a separate directory without a second clone.
+
+There are two ways to set this up. **Option A** is faster and gives you a complete working documentation set immediately. **Option B** starts from an empty branch and imports selectively.
+
+#### Option A — Clone directly from Witzman/18xx (recommended)
+
+This copies the `Witzman/18xx` Documentation branch — all engine documentation pages, the HTML generator, and the tracking file structure — into your fork in one step. Skip Step 3 if you use this option.
+
+```bash
+cd ~/18xx/18xx
+
+# Fetch the Documentation branch from Witzman/18xx
+git remote add engine-docs https://github.com/Witzman/18xx.git
+git fetch engine-docs Documentation
+
+# Create your Documentation branch from it and push to your fork
+git checkout -b Documentation engine-docs/Documentation
+git push -u origin Documentation
+
+# Return to master and mount as a worktree
+git checkout master
+git worktree add ~/18xx-docs Documentation
+```
+
+Expose `MD/` and `CLAUDE.md` at the project root via symlinks:
+
+```bash
+ln -s ~/18xx-docs/MD           ~/18xx/MD
+ln -s ~/18xx-docs/MD/CLAUDE.md ~/18xx/CLAUDE.md
+```
+
+Now `~/18xx/MD/` and `~/18xx/CLAUDE.md` are visible on every feature branch without branch switching. Continue to [Step 4](#step-4----write-your-claudemd) — your documentation is already populated.
+
+To pull in future engine documentation updates, see the **Staying up to date** section in Step 3 below (the `engine-docs` remote is already configured).
+
+---
+
+#### Option B — Create from scratch
+
+Use this if you want a blank Documentation branch and intend to import selectively, or if you do not want a dependency on `Witzman/18xx`.
 
 ```bash
 # Create an orphan Documentation branch
@@ -65,7 +104,7 @@ ln -s ~/18xx-docs/MD           ~/18xx/MD
 ln -s ~/18xx-docs/MD/CLAUDE.md ~/18xx/CLAUDE.md
 ```
 
-Now `~/18xx/MD/` and `~/18xx/CLAUDE.md` are visible on every feature branch without any branch switching.
+Now `~/18xx/MD/` and `~/18xx/CLAUDE.md` are visible on every feature branch without any branch switching. Continue to Step 3 to import the engine documentation.
 
 ### Step 3 — Import the engine documentation
 
