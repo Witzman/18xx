@@ -50,12 +50,12 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
-| `18oe_abilities` | upstream/master | deleted (merged into 18oe_testing) | Minor C/D/J/L + private abilities wiring |
+| `18oe_abilities` | upstream/master | deleted — merged into 18oe_testing | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
 | `18oe_testing` | upstream/master | rebased ✓ | Integration: gamefixes + abilities + mergers |
-| `18oe_fix_par_prices` | upstream/master | merged ✓ tobymao#12601 | par price fix |
-| `18oe_fix_share_price_movement` | upstream/master | merged ✓ tobymao#12602 | BUG-013/014 |
-| `18oe_fix_president_overcap` | upstream/master | merged ✓ tobymao#12603 | BUG-021 |
-| `18oe_fix_stock_terrain` | upstream/master | merged ✓ tobymao#12604 | BUG-008/009/010/015/022 |
-| `18oe_fix_level8_gameend` | upstream/master | merged ✓ tobymao#12605 | BUG-018/024/025/027 |
+| `18oe_fix_par_prices` | upstream/master | deleted — merged ✓ tobymao#12601 | par price fix |
+| `18oe_fix_share_price_movement` | upstream/master | deleted — merged ✓ tobymao#12602 | BUG-013/014 |
+| `18oe_fix_president_overcap` | upstream/master | deleted — merged ✓ tobymao#12603 | BUG-021 |
+| `18oe_fix_stock_terrain` | upstream/master | deleted — merged ✓ tobymao#12604 | BUG-008/009/010/015/022 |
+| `18oe_fix_level8_gameend` | upstream/master | deleted — merged ✓ tobymao#12605 | BUG-018/024/025/027 |
