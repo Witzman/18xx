@@ -28,7 +28,7 @@ module Engine
             !actions(current_entity).empty?
           end
 
-          def can_convert_any?
+          def regional_convertible?
             pending_corps(current_entity).any? { |corp| can_convert?(corp) }
           end
 
