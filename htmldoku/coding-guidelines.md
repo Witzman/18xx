@@ -12,7 +12,7 @@ These guidelines implement the nine Head First Design Principles in engine-speci
 | Starting a new step file | §1, §11, §14, §19, §20, §24, §33, §36, §55 |
 | Writing `actions()` | §1, §4, §14, §20, §45, §46, §56 |
 | Defining constants | §2, §7, §25, §29, §56, §57 |
-| Writing game/step boundary | §3, §17, §50, §51, §55 |
+| Writing game/step boundary | §3, §17, §50, §51, §55, §66 |
 | Writing `next_round!` | §12 |
 | Revenue, routing, bonuses | §5, §13, §37, §38 |
 | Event hooks | §13, §48 |
@@ -1962,6 +1962,39 @@ Related: §14 (one concern per step file), §8 (Hollywood Principle).
 
 ---
 
+## 66. Entity-typed hash dispatch belongs in a game method
+
+When a constant is a hash keyed by entity type (`:minor`, `:regional`, `:major`, `:national`), the step must not index into it directly. The step is making a structural assumption about the constant — if the implementation changes (phase-gated values, computed logic), both the constant and the step would need to change.
+
+Wrap the lookup in a named `@game` method. The fallback (`|| 0`, `|| default`) belongs in the game method, not the step.
+
+**Bad:**
+```ruby
+# step/track.rb
+def get_tile_lay(entity)
+  @game.class::TILE_POINT_BUDGET[entity.type] || 0
+end
+```
+
+**Good:**
+```ruby
+# game.rb
+def tile_point_budget(entity)
+  self.class::TILE_POINT_BUDGET[entity.type] || 0
+end
+
+# step/track.rb
+def get_tile_lay(entity)
+  @game.tile_point_budget(entity)
+end
+```
+
+**Engine comparators:** `train_limit(entity)`, `tile_lays(entity)`, `cert_limit(player)` all follow this pattern for entity-typed dispatch. Scalar constants (`MINOR_MAX_TREASURY`, `BANK_CASH`) do not need wrapping — the distinction is whether the access involves indexing by entity state.
+
+Related: §2 (program to interface), §6 (dependency inversion), §7 (Law of Demeter).
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1969,4 +2002,4 @@ Related: §14 (one concern per step file), §8 (Hollywood Principle).
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-20 — §64–65 added from second benchmark pass: unlimited train supply DSL value, don't override Round description. §59–63 and quick reference index added earlier this session.*
+*Version: 2026-05-21 — §66 added: entity-typed hash dispatch belongs in a game method.*
