@@ -15,7 +15,7 @@ module Engine
 
             if entity == player
               # Player can pass once they've had their chance
-              return ['pass'] if eligible_majors(player).any?
+              return ['pass'] unless eligible_majors(player).empty?
             elsif entity.corporation? && entity.type == :major && entity.president?(player)
               return ['convert']
             end
@@ -32,7 +32,7 @@ module Engine
           end
 
           def blocks?
-            @game.nationals_formation_queue.any?
+            !@game.nationals_formation_queue.empty?
           end
 
           def current_entity
