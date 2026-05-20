@@ -804,9 +804,8 @@ module Engine
             @depot.reclaim_train(train)
           end
 
-          # DEFERRED stubs:
-          # 1.3c — abandon merged minors (openpoints §1.3c)
-          # 1.3d — remove track rights / OE / private markers (openpoints §1.3d)
+          # TODO: §1.3c — abandon merged minors not yet implemented (openpoints §1.3c)
+          # TODO: §1.3d — remove track rights / OE / private markers not yet implemented (openpoints §1.3d)
         end
 
         # ── Nationals: revenue ──────────────────────────────────────────────────
