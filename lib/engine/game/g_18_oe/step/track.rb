@@ -45,7 +45,7 @@ module Engine
             raise GameError, 'Cannot lay an upgrade now' if tile.color != :yellow && points_cost > points_available
             raise GameError, 'Cannot lay a yellow now' if tile.color == :yellow && points_cost > points_available
 
-            bbe_used = @game.bbe_active_for_lay?(entity, hex)
+            bbe_active = @game.bbe_active_for_lay?(entity, hex)
 
             lay_tile(action)
             @game.log << "Used #{points_cost} tile point(s) to lay tile"
@@ -58,7 +58,7 @@ module Engine
             @round.laid_hexes << hex
             @points_used += points_cost
 
-            return unless bbe_used
+            return unless bbe_active
 
             bbe = @game.company_by_id(@game.class::BBE_COMPANY_SYM)
             ability = @game.abilities(bbe, :tile_lay)
