@@ -32,6 +32,7 @@ Target: auction · floating · minor-regional phase · major phase to game end �
 
 ## Auction Phase
 
+- [ ] [TRACE-C7.7] **BROWSER** — Waterfall auction tiered row layout: open new game, verify three packet rows render in correct tier order (minor/concession/private) and that only the top-row items are directly purchasable without bidding **[L3]**
 - [ ] All-pass price reduction — if all players consecutively pass before opening packet is sold, privates pay dividends then all items on topmost row reduce by £5; repeats; items reaching £0 must all be taken by next player **[L2]**
 
 ---

@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 3   Open (beta): 7   Fixed: 25   Won't fix: 2   Total: 37
-Bugs closed  ████████████████████  27 / 37  (73%)
-Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
+Open (alpha): 5   Open (beta): 7   Fixed: 25   Won't fix: 2   Total: 39
+Bugs closed  ████████████████████  27 / 39  (69%)
+Alpha bugs   ████████░░░░░░░░░░░░  5 open alpha bugs
 ```
 
 ---
@@ -178,7 +178,55 @@ Alpha bugs   ██████░░░░░░░░░░░░░░  3 ope
 
 **Fix needed.** Replace `corp.ipoed` with `corp.floated?` (or an equivalent check on `corp.share_price && corp.president`) so the filter correctly identifies floated corps regardless of par state. Verify that `close_corporation` for a parred-only regional correctly returns its president's share to the Open Market or removes it.
 
+### BUG-042 — `game.operating_order` is dead code; `select_entities` is a parallel reimplementation
+
+- **Status:** OPEN
+- **Severity:** LOW (code smell; no observable gameplay divergence in current state)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `operating_order` (L709); `lib/engine/game/g_18_oe/round/operating.rb` — `select_entities` (L9)
+- **Rule:** §10.1 — operating order for minors/regionals by float sequence, then majors/nationals by share price
+
+**Symptom.** `Game#operating_order` is defined but never called anywhere in the 18OE codebase. `Round::G18OE::Operating#select_entities` reimplements the same logic independently:
+
+```ruby
+# game.rb:709 — dead code
+def operating_order
+  @minor_regional_order + @corporations.select { |c| %i[major national].include?(c.type) }.sort
+end
+
+# round/operating.rb:9 — actual implementation
+def select_entities
+  @game.minor_regional_order + (@game.corporations.select(&:floated?) - @game.minor_regional_order).sort
+end
+```
+
+**Divergence.** `operating_order` filters by type (`:major`/`:national`) without a floated? check; `select_entities` uses `floated?` and subtraction. If an unfloated major exists, `operating_order` would include it; `select_entities` correctly excludes it.
+
+**Fix.** `select_entities` should call `@game.operating_order`, and `operating_order` should add a `floated?` filter. Or delete `operating_order` if it has no other callers.
+
 ---
+
+### BUG-043 — Train supply counts (L3–L8) exceed physical component totals from §3.1
+
+- **Status:** OPEN
+- **Severity:** LOW (possible intentional inflation for digital; no known gameplay impact)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — TRAINS array, `num:` fields
+- **Rule:** §3.1 — *"Thirty 2+2s … Twenty 3+3s … Ten 4+4s … Eight 5+5s … Six 6+6s … Fourteen 7+7s … Eight 8+8s"*
+
+**Symptom.** Digital supply exceeds rulebook physical component counts:
+
+| Train | Rulebook | Code | Delta |
+|-------|----------|------|-------|
+| 2+2   | 30       | 30   | 0 ✓  |
+| 3/3+3 | 20       | 24   | +4   |
+| 4/4+4 | 10       | 14   | +4   |
+| 5/5+5 | 8        | 11   | +3   |
+| 6/6+6 | 6        | 9    | +3   |
+| 7+7/4D| 14       | 17   | +3   |
+| 8+8/5D| 8        | 11   | +3   |
+
+**Expected.** Counts match §3.1. If inflation is intentional (e.g., to prevent train-runout in 7-player games), document in `MD/decisions.md`.
+
+**Fix.** Either correct to rulebook values (20/10/8/6/14/8) or file an ADR recording the deliberate inflation.
 
 ---
 
