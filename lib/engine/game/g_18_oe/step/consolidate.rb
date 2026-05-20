@@ -25,7 +25,11 @@ module Engine
           end
 
           def blocks?
-            actions(current_entity).any?
+            !actions(current_entity).empty?
+          end
+
+          def can_convert_any?
+            pending_corps(current_entity).any? { |corp| can_convert?(corp) }
           end
 
           def regional_convertible?(entity)
