@@ -96,7 +96,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['can_merge_minors', 'sml_available'],
+            status: ['can_merge_minors', 'sml_available', 'nationals_can_form'],
           },
           {
             name: '5',
@@ -112,7 +112,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_merge_minors', 'sml_available'],
+            status: ['can_merge_minors', 'sml_available', 'nationals_can_form'],
           },
           {
             name: '7',
@@ -128,7 +128,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_merge_minors', 'sml_available'],
+            status: ['can_merge_minors', 'sml_available', 'nationals_can_form'],
           },
         ].freeze
 

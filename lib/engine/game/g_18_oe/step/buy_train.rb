@@ -62,9 +62,9 @@ module Engine
 
             before_phase = @game.phase.name
             super
-            after_phase = @game.phase.name
             @game.fulfill_train_obligation!(entity) if train.name == '2+2' && train.from_depot?
-            return if before_phase == after_phase || !%w[4 6 8].include?(after_phase)
+            return if before_phase == @game.phase.name
+            return unless @game.phase.status.include?('nationals_can_form')
 
             @game.trigger_nationals_formation!(entity.owner)
           end
