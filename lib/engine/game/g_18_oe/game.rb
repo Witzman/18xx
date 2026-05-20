@@ -92,7 +92,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green],
             operating_rounds: 2,
-            status: ['can_merge_minors'],
+            status: ['can_merge_minors', 'sml_available'],
           },
           {
             name: '5',
@@ -100,7 +100,7 @@ module Engine
             train_limit: { minor: 1, regional: 1, major: 3, national: 4 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_merge_minors'],
+            status: ['can_merge_minors', 'sml_available'],
           },
           {
             name: '6',
@@ -108,7 +108,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown],
             operating_rounds: 2,
-            status: ['can_merge_minors'],
+            status: ['can_merge_minors', 'sml_available'],
           },
           {
             name: '7',
@@ -116,7 +116,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_merge_minors'],
+            status: ['can_merge_minors', 'sml_available'],
           },
           {
             name: '8',
@@ -124,7 +124,7 @@ module Engine
             train_limit: { major: 2, national: 3 },
             tiles: %i[yellow green brown gray],
             operating_rounds: 2,
-            status: ['can_merge_minors'],
+            status: ['can_merge_minors', 'sml_available'],
           },
         ].freeze
 
@@ -1417,7 +1417,7 @@ module Engine
 
         def can_claim_sml?(player)
           return false if @sml_claimed
-          return false unless @phase.name.to_i >= 4
+          return false unless @phase.status.include?('sml_available')
 
           sml = company_by_id(self.class::SML_COMPANY_SYM)
           return false unless sml&.owner == player
