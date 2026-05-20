@@ -1,6 +1,27 @@
 # Coding Guidelines
 
-Patterns distilled from pull-request feedback on the 18xx engine. Read these before making any code changes. Each guideline includes the rationale and a concrete example.
+These guidelines implement the nine Head First Design Principles in engine-specific terms. For the full principle mapping see [§58](#58-head-first-design-principles-mapped-to-the-18xx-engine). Patterns distilled from pull-request feedback on the 18xx engine.
+
+---
+
+## Quick Reference — When to Apply Which Guidelines
+
+| Coding moment | Key sections |
+|---------------|-------------|
+| Design check (before any code) | §58, sparring.md principles checklist |
+| Starting a new step file | §1, §11, §14, §19, §20, §24, §33, §36, §55 |
+| Writing `actions()` | §1, §4, §14, §20, §45, §46, §56 |
+| Defining constants | §2, §7, §25, §29, §56, §57 |
+| Writing game/step boundary | §3, §17, §50, §51, §55 |
+| Writing `next_round!` | §12 |
+| Revenue, routing, bonuses | §5, §13, §37, §38 |
+| Event hooks | §13, §48 |
+| Market / variant game | §60, §61, §62 |
+| Entities, abilities | §43, §44, §49 |
+| New game skeleton | §25, §27, §59, §60, §61, §62, §63 |
+| Code review pass | §6, §15, §16, §26, §28, §31, §32, §41, §42 |
+
+---
 
 ---
 
@@ -1759,6 +1780,141 @@ Cohesion test: every method in the file should reference mostly the same state v
 
 ---
 
+## 59. `entity.corporation?` — not `entity.is_a?(Corporation)`
+
+Use the engine predicate, not a Ruby class check. `entity.is_a?(Corporation)` couples the code to the concrete class; `entity.corporation?` is the engine-wide idiom.
+
+**Bad:**
+```ruby
+def system?(entity)
+  return false unless entity
+  entity.is_a?(Corporation) && entity.type == :system
+end
+```
+
+**Good:**
+```ruby
+def system?(entity)
+  entity.corporation? && entity.type == :system
+end
+```
+
+The `nil` guard is also unnecessary — call sites should not pass `nil`; if they do, a `NoMethodError` surfaces the real bug immediately. Related: §43.
+
+---
+
+## 60. Market variants — override `game_market`, not constants
+
+When a variant rule changes the stock market (e.g. an end-game cell), override `game_market` in `game.rb` to return the modified market. Do not define multiple top-line constants and combine them manually.
+
+**Bad (two near-identical constants):**
+```ruby
+STANDARD_TOP_LINE   = %w[64y 68 ... 400].freeze
+FINISH_ON_400_TOP_LINE = %w[64y 68 ... 400e].freeze
+
+REST_OF_MARKET = [...].freeze
+
+# combined in game_market:
+def game_market
+  top = option_finish_on_400? ? self.class::FINISH_ON_400_TOP_LINE : self.class::STANDARD_TOP_LINE
+  [top] + self.class::REST_OF_MARKET
+end
+```
+
+**Good (one constant, single-cell mutation):**
+```ruby
+MARKET = [
+  %w[64y 68 72 ... 400],
+  # remaining rows...
+].freeze
+
+def game_market
+  return self.class::MARKET unless option_finish_on_400?
+
+  market = self.class::MARKET.map(&:dup)
+  market[0][-1] = '400e'
+  market
+end
+```
+
+The constant is the canonical data; the method applies only the variant delta. `init_stock_market` can also be overridden to swap in a `SharePrice` with `endgame: true` if finer control is needed. Related: §5 (phase conditions), §17, §39 (dup before mutating shared constants).
+
+---
+
+## 61. Engine data hash keys — symbols, correct spelling
+
+Keys in engine data hashes (`MARKET_TEXT`, `STOCKMARKET_COLORS`, `EVENTS_TEXT`, `STATUS_TEXT`) must be symbols matching the engine's expected key names exactly.
+
+**Bad:**
+```ruby
+MARKET_TEXT = Base::MARKET_TEXT.merge(
+  'par'      => 'Valid par price',     # string, not symbol
+  'end_game' => 'Game ends here',      # wrong key name
+).freeze
+```
+
+**Good:**
+```ruby
+MARKET_TEXT = Base::MARKET_TEXT.merge(
+  par:     'Valid par price',
+  endgame: 'Stock price reaches this cell; game ends after current OR set',
+).freeze
+```
+
+Common correct key names: `par`, `endgame`, `liquidation`, `acquisition`, `repar`. Check `lib/engine/stock_market.rb` for the authoritative list. String keys silently do nothing; a misnamed symbol also silently does nothing. Related: §2, §13.
+
+---
+
+## 62. Game end check values — `:full_or` not `:current_round` for OR-set end
+
+`GAME_END_CHECK` values control *when* the end is applied after the condition is triggered. Use the correct value for the rule.
+
+| Value | Meaning |
+|-------|---------|
+| `:immediate` | End right now, mid-round |
+| `:current_round` | End at the end of the *current* round (could be SR or OR) |
+| `:full_or` | End at the end of the current *operating round set* |
+| `:one_more_full_or_set` | End after one more complete OR set |
+
+**Common mistake:** using `:current_round` when the rule says "end after the current OR set completes." `:current_round` ends the game at the end of the current SR if the trigger fires during a stock round.
+
+```ruby
+# Bad — ends at end of current round, not OR set:
+GAME_END_CHECK = { bank: :current_round, stock_market: :current_round }.freeze
+
+# Good — ends after the OR set containing the trigger:
+GAME_END_CHECK = { bankrupt: :immediate, bank: :full_or, stock_market: :full_or }.freeze
+```
+
+Check the rulebook end-game clause before choosing a value. Related: §5 (phase/status strings).
+
+---
+
+## 63. String quoting in `desc` fields — `"` over `'` + backslash
+
+When a description string contains an apostrophe, use double-quoted strings to avoid backslash escaping.
+
+**Bad:**
+```ruby
+desc: 'The owning corporation\'s director may place a token.',
+```
+
+**Good:**
+```ruby
+desc: "The owning corporation's director may place a token.",
+```
+
+For multi-line `desc` strings built with `\`, all segments should use the same quote style:
+
+```ruby
+desc: "The owning corporation's director may place a station token for $80 " \
+      'less than the normal cost (minimum $0).',
+```
+
+Switch to `"` only for the segment containing the apostrophe; the rest can stay single-quoted.
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1766,4 +1922,4 @@ Cohesion test: every method in the file should reference mostly the same state v
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-20 — §55–57: entity threading, frozen constant naming, variable reassignment. §58: Head First Design Principles mapped to engine. §7 extended: `@game.class::CONSTANT` convention.*
+*Version: 2026-05-20 — §59–63 added from PR benchmark analysis: entity.corporation? idiom, game_market variant pattern, hash key symbols/spelling, game end check semantics, string quoting for apostrophes. Quick reference index added at top. §55–58 also added this session.*

@@ -101,8 +101,6 @@ L4 — Structural engine divergence (18OE has none)
 
 ## Coding Rules
 
-Read `~/18xx-docs/htmldoku/coding-guidelines.md` before any code change.
-
 - 130-char line limit · no `puts`/`p`/`pp` (use `@log <<`) · `frozen_string_literal: true`
 - Check `g_18_*` comparator titles before implementing new features
 
@@ -118,7 +116,9 @@ Read `MD/sparring.md` before the first code task of each session.
 
 ### 1 — Orient
 
-Read CLAUDE.md (auto) + `MD/inwork.md`. Then present the in-work items grouped by readiness:
+Read CLAUDE.md (auto) + `MD/inwork.md` + `~/18xx-docs/htmldoku/coding-guidelines.md` (full). All three must be read before proceeding.
+
+Then present the in-work items grouped by readiness:
 
 - `[t]` in testing — **resume immediately**: re-run 6a (IRB) to confirm still green, then continue browser testing
 - `[>]` needs PR — submit before starting new work
