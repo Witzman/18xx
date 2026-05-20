@@ -18,7 +18,8 @@ These guidelines implement the nine Head First Design Principles in engine-speci
 | Event hooks | §13, §48 |
 | Market / variant game | §60, §61, §62 |
 | Entities, abilities | §43, §44, §49 |
-| New game skeleton | §25, §27, §59, §60, §61, §62, §63 |
+| New game skeleton | §25, §27, §59, §60, §61, §62, §63, §64 |
+| Round subclass | §11, §12, §36, §65 |
 | Code review pass | §6, §15, §16, §26, §28, §31, §32, §41, §42 |
 
 ---
@@ -1915,6 +1916,52 @@ Switch to `"` only for the segment containing the apostrophe; the rest can stay 
 
 ---
 
+## 64. Unlimited train supply — use `num: 'unlimited'`, not a guessed integer
+
+When a train type has no defined supply cap, use the string `'unlimited'` as the `num:` value. Guessing a large integer is a data error: the depot will show a count, the game may end incorrectly when trains run out, and the intent is invisible to a reviewer.
+
+**Bad:**
+```ruby
+{ name: '8', distance: 999, price: 900, num: 7 },   # guess
+{ name: '8', distance: 999, price: 900, num: 99 },  # hack
+```
+
+**Good:**
+```ruby
+{ name: '8', distance: 999, price: 900, num: 'unlimited' },
+```
+
+`'unlimited'` is the authoritative DSL value — `Depot` handles it correctly and `available_upcoming_trains` surfaces the train without a count limit. Related: §2, §30.
+
+---
+
+## 65. Don't override `description` in Round subclasses
+
+`Round#description` delegates to the active step's `description`. The engine builds the game title bar as `"#{game.title} [#{round.name}] #{step.description}"`. Overriding `description` in a Round subclass replaces the step name with a static string, resulting in display like `"1835 OR1: 1835 Draft Round"` regardless of which step is active.
+
+**Bad:**
+```ruby
+class Draft < Engine::Round::Base
+  def description
+    '1835 Draft Round'
+  end
+end
+```
+
+**Good:** delete the override and let the active step's `description` fill the space. If you need to show a static label, set it via the step:
+
+```ruby
+class DraftStep < Engine::Step::Base
+  def description
+    '1835 Draft'
+  end
+end
+```
+
+Related: §14 (one concern per step file), §8 (Hollywood Principle).
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1922,4 +1969,4 @@ Switch to `"` only for the segment containing the apostrophe; the rest can stay 
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-20 — §59–63 added from PR benchmark analysis: entity.corporation? idiom, game_market variant pattern, hash key symbols/spelling, game end check semantics, string quoting for apostrophes. Quick reference index added at top. §55–58 also added this session.*
+*Version: 2026-05-20 — §64–65 added from second benchmark pass: unlimited train supply DSL value, don't override Round description. §59–63 and quick reference index added earlier this session.*

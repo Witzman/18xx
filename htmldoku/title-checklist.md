@@ -7,7 +7,7 @@ Use this checklist to track progress from first commit to production release.
 ## Before First Run
 
 - [ ] **Designer/publisher approval obtained** — implementing a title requires permission from the rights holder; confirm before opening any PR (questions → Slack **#18xxgamesdev**)
-- [ ] `lib/engine/game/g_<name>/meta.rb` created with `DEV_STAGE = :prealpha`
+- [ ] `lib/engine/game/g_<name>/meta.rb` created with `DEV_STAGE = :prealpha`, `GAME_DESIGNER`, `GAME_LOCATION`, and `GAME_PUBLISHER` filled in; add `GAME_RULES_URL` if rules are publicly available
 - [ ] `lib/engine/game/g_<name>/entities.rb` — CORPORATIONS and COMPANIES defined
 - [ ] `lib/engine/game/g_<name>/map.rb` — TILES, LOCATION_NAMES, HEXES, LAYOUT defined
 - [ ] `lib/engine/game/g_<name>/game.rb` — includes meta/entities/map, TRAINS, PHASES, MARKET defined

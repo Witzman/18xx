@@ -89,7 +89,7 @@
 <p>These guidelines implement the nine Head First Design Principles in engine-specific terms. For the full principle mapping see <a href="#58-head-first-design-principles-mapped-to-the-18xx-engine">§58</a>. Patterns distilled from pull-request feedback on the 18xx engine.</p>
 <hr>
 <h2 id="quick-reference--when-to-apply-which-guidelines">Quick Reference — When to Apply Which Guidelines</h2>
-<table><thead><tr><th>Coding moment</th><th>Key sections</th></tr></thead><tbody><tr><td>Design check (before any code)</td><td>§58, sparring.md principles checklist</td></tr><tr><td>Starting a new step file</td><td>§1, §11, §14, §19, §20, §24, §33, §36, §55</td></tr><tr><td>Writing <code>actions()</code></td><td>§1, §4, §14, §20, §45, §46, §56</td></tr><tr><td>Defining constants</td><td>§2, §7, §25, §29, §56, §57</td></tr><tr><td>Writing game/step boundary</td><td>§3, §17, §50, §51, §55</td></tr><tr><td>Writing <code>next_round!</code></td><td>§12</td></tr><tr><td>Revenue, routing, bonuses</td><td>§5, §13, §37, §38</td></tr><tr><td>Event hooks</td><td>§13, §48</td></tr><tr><td>Market / variant game</td><td>§60, §61, §62</td></tr><tr><td>Entities, abilities</td><td>§43, §44, §49</td></tr><tr><td>New game skeleton</td><td>§25, §27, §59, §60, §61, §62, §63</td></tr><tr><td>Code review pass</td><td>§6, §15, §16, §26, §28, §31, §32, §41, §42</td></tr></tbody></table>
+<table><thead><tr><th>Coding moment</th><th>Key sections</th></tr></thead><tbody><tr><td>Design check (before any code)</td><td>§58, sparring.md principles checklist</td></tr><tr><td>Starting a new step file</td><td>§1, §11, §14, §19, §20, §24, §33, §36, §55</td></tr><tr><td>Writing <code>actions()</code></td><td>§1, §4, §14, §20, §45, §46, §56</td></tr><tr><td>Defining constants</td><td>§2, §7, §25, §29, §56, §57</td></tr><tr><td>Writing game/step boundary</td><td>§3, §17, §50, §51, §55</td></tr><tr><td>Writing <code>next_round!</code></td><td>§12</td></tr><tr><td>Revenue, routing, bonuses</td><td>§5, §13, §37, §38</td></tr><tr><td>Event hooks</td><td>§13, §48</td></tr><tr><td>Market / variant game</td><td>§60, §61, §62</td></tr><tr><td>Entities, abilities</td><td>§43, §44, §49</td></tr><tr><td>New game skeleton</td><td>§25, §27, §59, §60, §61, §62, §63, §64</td></tr><tr><td>Round subclass</td><td>§11, §12, §36, §65</td></tr><tr><td>Code review pass</td><td>§6, §15, §16, §26, §28, §31, §32, §41, §42</td></tr></tbody></table>
 <hr>
 <hr>
 <h2 id="reference-games--study-before-implementing-a-mechanic">Reference Games — Study Before Implementing a Mechanic</h2>
@@ -1225,10 +1225,35 @@ GAME_END_CHECK = { bankrupt: :immediate, bank: :full_or, stock_market: :full_or 
       'less than the normal cost (minimum $0).',</code></pre>
 <p>Switch to <code>"</code> only for the segment containing the apostrophe; the rest can stay single-quoted.</p>
 <hr>
+<h2 id="64-unlimited-train-supply--use-num-unlimited-not-a-guessed-integer">64. Unlimited train supply — use <code>num: 'unlimited'</code>, not a guessed integer</h2>
+<p>When a train type has no defined supply cap, use the string <code>'unlimited'</code> as the <code>num:</code> value. Guessing a large integer is a data error: the depot will show a count, the game may end incorrectly when trains run out, and the intent is invisible to a reviewer.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">{ name: '8', distance: 999, price: 900, num: 7 },   # guess
+{ name: '8', distance: 999, price: 900, num: 99 },  # hack</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby">{ name: '8', distance: 999, price: 900, num: 'unlimited' },</code></pre>
+<p><code>'unlimited'</code> is the authoritative DSL value — <code>Depot</code> handles it correctly and <code>available_upcoming_trains</code> surfaces the train without a count limit. Related: §2, §30.</p>
+<hr>
+<h2 id="65-dont-override-description-in-round-subclasses">65. Don't override <code>description</code> in Round subclasses</h2>
+<p><code>Round#description</code> delegates to the active step's <code>description</code>. The engine builds the game title bar as <code>"#{game.title} [#{round.name}] #{step.description}"</code>. Overriding <code>description</code> in a Round subclass replaces the step name with a static string, resulting in display like <code>"1835 OR1: 1835 Draft Round"</code> regardless of which step is active.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">class Draft &lt; Engine::Round::Base
+  def description
+    '1835 Draft Round'
+  end
+end</code></pre>
+<p><strong>Good:</strong> delete the override and let the active step's <code>description</code> fill the space. If you need to show a static label, set it via the step:</p>
+<pre><code class="language-ruby">class DraftStep &lt; Engine::Step::Base
+  def description
+    '1835 Draft'
+  end
+end</code></pre>
+<p>Related: §14 (one concern per step file), §8 (Hollywood Principle).</p>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-20 — §59–63 added from PR benchmark analysis: entity.corporation? idiom, game_market variant pattern, hash key symbols/spelling, game end check semantics, string quoting for apostrophes. Quick reference index added at top. §55–58 also added this session.</em></p>
+<p><em>Version: 2026-05-20 — §64–65 added from second benchmark pass: unlimited train supply DSL value, don't override Round description. §59–63 and quick reference index added earlier this session.</em></p>
 </article>
 </main>
 </div>

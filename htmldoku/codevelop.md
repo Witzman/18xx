@@ -305,6 +305,7 @@ Context is loaded in three tiers to keep token cost per session low.
 |------|------|-------------|-----------------|
 | Always | `MD/CLAUDE.md` | Session start (auto) | Project identity, file locations, layer taxonomy, doc lookup table, coding rules |
 | Always | `MD/inwork.md` | Session start | Items currently in flight — `[~]` in dev · `[t]` testing in progress · `[>]` needs PR · also drives coverage pages |
+| Always | `htmldoku/coding-guidelines.md` | Session start | All coding rules (65 sections) — active from first prompt; drives PR review quality |
 | On demand | `MD/sparring.md` | Before first code task | Full sparring protocol and pre-code checklist |
 | On demand | `MD/todo.md` | Planning sessions only | Full backlog — all `[ ]` and `[/]` items with layer annotations · also drives coverage pages |
 | On demand | `MD/bugs.md`, `MD/decisions.md`, etc. | When relevant | Bugs, architecture decisions, rules summary |
@@ -356,7 +357,7 @@ Reading `.md` source files instead of the generated HTML saves roughly 30–40% 
 
 ## How a Session Works
 
-**1. Orient** — Claude reads `CLAUDE.md` (auto) and `MD/inwork.md`, then presents in-work items grouped by readiness: `[t]` testing-in-progress first (resume immediately — re-run IRB, continue browser testing), then `[>]` needs-PR, then `[~]` in development. Quick wins highlighted. User selects one item before anything else happens.
+**1. Orient** — Claude reads `CLAUDE.md` (auto), `MD/inwork.md`, and `htmldoku/coding-guidelines.md` (full) — all three before anything else. Then presents in-work items grouped by readiness: `[t]` testing-in-progress first (resume immediately — re-run IRB, continue browser testing), then `[>]` needs-PR, then `[~]` in development. Quick wins highlighted. User selects one item before anything else happens.
 
 **2. Branch** — each item in `MD/inwork.md` carries a branch tag (backtick-wrapped name at the end of the line). Claude reads this before touching git:
 
@@ -468,17 +469,18 @@ The biggest risk in a long-running project is context drift — Claude accumulat
 
 | Risk | Mitigation |
 |------|-----------|
-| Stale in-flight state | `MD/inwork.md` is the only always-loaded state file; it contains only active items |
+| Stale in-flight state | `MD/inwork.md` is always-loaded but contains only active items — never grows with history |
 | Wrong branch checked out | Branch tag on every item in `inwork.md` — Claude reads it before touching git |
 | Resuming half-tested work | `[t]` status flags items where IRB passed but browser testing is incomplete |
 | Backlog noise at session start | `MD/todo.md` is never auto-loaded; consulted only during planning |
+| PR review complaints about style | `coding-guidelines.md` (65 rules) loaded at session start — rules active before first prompt |
 | Re-litigating architecture decisions | `MD/decisions.md` records every non-obvious choice with the alternative rejected |
 | Forgetting a rule fix | `MD/bugs.md` logs every bug with the rule citation and fix |
 | Claude re-deriving engine patterns | `htmldoku/` pages are read before coding, not discovered mid-session |
 | Drifting from upstream | Branch recommendation in step 2 checks upstream divergence + outstanding PRs |
 | Coverage pages out of sync | Re-run `generate-html.py` after every item move — it reads `MD/done.md` + `inwork.md` + `todo.md` live |
 | Documentation drifting from code | After-commit prompt: "does any MD/ or htmldoku/ page need updating?" |
-| Token cost growing over time | Always-loaded files kept short; sparring protocol and backlog are on-demand |
+| Token cost growing over time | Always-loaded files: CLAUDE.md + inwork.md (short) + coding-guidelines.md (65 rules, one load); sparring and backlog on-demand |
 
 ---
 
@@ -494,4 +496,4 @@ The biggest risk in a long-running project is context drift — Claude accumulat
 - Title readiness stages: [Title Checklist](title-checklist.html)
 
 ---
-*Version: 2026-05-20 — design principles checklist added to sparring protocol; §58 cross-reference in codevelop; principle-number pushback convention.*
+*Version: 2026-05-21 — coding-guidelines.md added as always-loaded (session-start) context tier; orient step updated; keeping-context-sharp table updated.*
