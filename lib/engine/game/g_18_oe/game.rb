@@ -878,7 +878,6 @@ module Engine
           super
         end
 
-
         def national?(entity)
           entity.respond_to?(:type) && entity.type == :national
         end
