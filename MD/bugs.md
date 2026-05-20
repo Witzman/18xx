@@ -17,9 +17,9 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 5   Open (beta): 7   Fixed: 25   Won't fix: 2   Total: 39
-Bugs closed  ████████████████████  27 / 39  (69%)
-Alpha bugs   ████████░░░░░░░░░░░░  5 open alpha bugs
+Open (alpha): 3   Open (beta): 7   Fixed: 27   Won't fix: 2   Total: 39
+Bugs closed  ██████████████████████  29 / 39  (74%)
+Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
 ```
 
 ---
@@ -180,7 +180,7 @@ Alpha bugs   ████████░░░░░░░░░░░░  5 ope
 
 ### BUG-042 — `game.operating_order` is dead code; `select_entities` is a parallel reimplementation
 
-- **Status:** OPEN
+- **Status:** FIXED 2026-05-20 `7ede73eda` (18oe_guidelines, PR #12647)
 - **Severity:** LOW (code smell; no observable gameplay divergence in current state)
 - **File:** `lib/engine/game/g_18_oe/game.rb` — `operating_order` (L709); `lib/engine/game/g_18_oe/round/operating.rb` — `select_entities` (L9)
 - **Rule:** §10.1 — operating order for minors/regionals by float sequence, then majors/nationals by share price
@@ -207,7 +207,7 @@ end
 
 ### BUG-043 — Train supply counts (L3–L8) exceed physical component totals from §3.1
 
-- **Status:** OPEN
+- **Status:** FIXED 2026-05-20 `7ede73eda` (18oe_guidelines, PR #12647)
 - **Severity:** LOW (possible intentional inflation for digital; no known gameplay impact)
 - **File:** `lib/engine/game/g_18_oe/game.rb` — TRAINS array, `num:` fields
 - **Rule:** §3.1 — *"Thirty 2+2s … Twenty 3+3s … Ten 4+4s … Eight 5+5s … Six 6+6s … Fourteen 7+7s … Eight 8+8s"*
