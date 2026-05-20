@@ -218,6 +218,32 @@ revisit and align (this ADR or rubocop config).
 
 ---
 
+## ADR-011 — Naming conventions adopted during 2026-05-20 coding-guidelines audit
+
+- **Date:** 2026-05-20
+- **Status:** ACCEPTED
+
+**Context.** A full audit of 18OE against the engine coding guidelines surfaced several naming issues across game.rb, track.rb, consolidate.rb, and buy_sell_par_shares.rb.
+
+**Decisions.**
+
+| Old name | New name | File | Reason |
+|----------|----------|------|--------|
+| `cheap_upgrade?` | `discounted_upgrade?` | game.rb | Aligns with `ZONE_DISCOUNT_*` naming convention |
+| `CHEAP_UPGRADE_CORPORATIONS` | `DISCOUNTED_UPGRADE_CORPORATIONS` | game.rb | Same |
+| `@consolidation_done` | `@consolidation_complete` | game.rb | `_done` is vague; `_complete` is idiomatic Ruby flag |
+| `@first_or_done` | `@first_or_complete` | game.rb | Same |
+| `bbe_used` (local) | `bbe_active` | step/track.rb | Pairs with `bbe_active_for_lay?` method name |
+| `can_convert_any?` | `regional_convertible?` | step/consolidate.rb | Distinguishes from `BuySellParShares#can_convert_any?(player)` |
+
+**Non-renames (considered and rejected).**
+- `can_convert?(entity)` in consolidate.rb — kept as-is; it is the per-corp eligibility check called by `regional_convertible?`, distinct from the parent's two-arg version by arity
+- `regional_consolidatable?` — proposed then reverted; conflated consolidation (merge/abandon) with conversion (regional→major)
+
+**Consequences.** `18oe_guidelines` PR (#12647) carries the upstream-safe subset (all except `bbe_active` which is testing-only). `18oe_testing` carries all renames.
+
+---
+
 ## How to add a new ADR
 
 1. Pick the next available ID (e.g. `ADR-010`).

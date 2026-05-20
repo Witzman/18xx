@@ -17,8 +17,8 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 3   Open (beta): 7   Fixed: 22   Won't fix: 2   Total: 34
-Bugs closed  ████████████████████  24 / 34  (71%)
+Open (alpha): 3   Open (beta): 7   Fixed: 25   Won't fix: 2   Total: 37
+Bugs closed  ████████████████████  27 / 37  (73%)
 Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
 ```
 
@@ -185,6 +185,49 @@ Alpha bugs   ██████░░░░░░░░░░░░░░  3 ope
 ## Resolved
 
 ### — Fixed 2026-05-20 —
+
+### BUG-041 — `can_convert_any?` in Consolidate raises `ArgumentError` (arity mismatch with parent)
+
+- **Status:** FIXED 2026-05-20 `a5d43a697` (18oe_guidelines) / `ee7245592` (18oe_testing)
+- **Severity:** HIGH (alpha scope — consolidation step crashes whenever the step becomes active)
+- **File:** `lib/engine/game/g_18_oe/step/consolidate.rb`
+- **Rule:** N/A (engine contract)
+
+**Symptom.** `Consolidate#actions` calls `can_convert_any?` with no arguments. Ruby finds `BuySellParShares#can_convert_any?(player)` via inheritance — that method requires one argument — raises `ArgumentError: wrong number of arguments (given 0, expected 1)`. The entire consolidation step is broken on upstream/master.
+
+**Fix.** Added no-arg `regional_convertible?` method to `Consolidate` and changed `actions` to call it. Renamed from `can_convert_any?` to avoid shadowing the parent's different method.
+
+---
+
+### BUG-040 — Yellow metropolis tile incorrectly costs 1 tile point instead of 2 (§11.1.3)
+
+- **Status:** FIXED 2026-05-20 `942f79536` (18oe_testing only — upstream/master had correct code)
+- **Severity:** MEDIUM (alpha scope — undercharges tile points when placing yellow on metropolis hex)
+- **File:** `lib/engine/game/g_18_oe/step/track.rb` — `lay_tile_action`
+- **Rule:** §11.1.3 — yellow metropolis costs 2 points; upgrade metropolis costs 4 points.
+
+**Symptom.** Placing a yellow tile on a metropolis hex costs 1 point instead of 2. Regression introduced in 18oe_testing when `cheap_upgrade?` logic restructured the `points_cost` branch, accidentally shadowing the yellow+metropolis case.
+
+**Root cause.** Original upstream condition `tile.color != :yellow && metropolis → 4` guarded against non-yellow only. The `cheap_upgrade?` addition added `tile.color != :yellow` as a top-level branch, leaving no path for yellow+metropolis to cost 2.
+
+**Fix.** Restructured `points_cost` branch: metropolis check is outermost (`metropolis ? (yellow ? 2 : 4) : ...`), so yellow metro is never shadowed.
+
+---
+
+### BUG-039 — Consolidation round fires after OR1 in a two-OR set, skipping OR2 (§5.1.5)
+
+- **Status:** FIXED 2026-05-20 `a5d43a697` (18oe_guidelines) / present in 18oe_testing (earlier fix)
+- **Severity:** HIGH (alpha + upstream scope — entire OR2 skipped when consolidation is triggered)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `next_round!`
+- **Rule:** §5.1.5 — consolidation round follows the complete OR set, not individual ORs.
+
+**Symptom.** When a Level-5 train is purchased in OR1 of a two-OR set, `next_round!` immediately transitions to the consolidation round, skipping OR2. Every corporation that hasn't operated in OR2 misses its turn.
+
+**Root cause.** `next_round!` checked `@consolidation_triggered && !@consolidation_complete` inside the `when Engine::Round::Operating` branch with no check on `round_num`. Any OR completion triggered the consolidation.
+
+**Fix.** Added `round_num < @operating_rounds` guard first: if more ORs remain in the set, advance to next OR. Only after the last OR does the consolidation (or stock round) trigger.
+
+---
 
 ### BUG-037 — `choice_available?` missing from BuySellParShares — SR view crashes
 

@@ -48,10 +48,11 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
-## Branch Status *(updated 2026-05-19)*
+## Branch Status *(updated 2026-05-20)*
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
+| `18oe_guidelines` | upstream/master | PR open tobymao#12647 | Coding guidelines + bug fixes (upstream-safe): BUG-039/040/041 + 5 cleanups |
 | `18oe_abilities` | upstream/master | deleted — merged into 18oe_testing | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
