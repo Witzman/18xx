@@ -190,6 +190,7 @@
 <p><strong>Timing values:</strong></p>
 <table><thead><tr><th>Value</th><th>Effect</th></tr></thead><tbody><tr><td><code>:immediate</code></td><td>Game ends right now, mid-round</td></tr><tr><td><code>:current_round</code></td><td>Game ends at the end of the current round</td></tr><tr><td><code>:current_or</code></td><td>Game ends at the end of the current Operating Round</td></tr><tr><td><code>:full_or</code></td><td>Game ends after the current full OR set completes</td></tr><tr><td><code>:one_more_full_or_set</code></td><td>One additional full OR set plays out after the trigger, then the game ends</td></tr></tbody></table>
 <p>Multiple triggers can coexist. When two triggers fire simultaneously the one with <strong>earlier</strong> timing wins (<code>:immediate</code> beats <code>:current_or</code> beats <code>:full_or</code>, etc.).</p>
+<p><strong>Common mistake:</strong> using <code>:current_round</code> when the rule says "end after the current OR set completes." <code>:current_round</code> ends the game at the end of whatever round is active when the trigger fires — including a Stock Round. If the bank breaks during a stock round, <code>:current_round</code> ends the game immediately after that SR, with no OR set played. Use <code>:full_or</code> to guarantee the end is deferred to OR set completion. See also <a href="coding-guidelines.html">Coding Guidelines §62</a>.</p>
 <p><strong>18OE example</strong> (§13: bank-break ends at current OR; first L8 purchase gives one more full OR set):</p>
 <pre><code class="language-ruby">GAME_END_CHECK = { bank: :current_or, final_phase: :one_more_full_or_set }.freeze</code></pre>
 <h3 id="looking-up-reference-values">Looking up reference values</h3>
@@ -199,7 +200,7 @@
 <h2 id="whats-next">What's Next</h2>
 <ul><li>Defining map hexes, tile supply, and location names: <a href="map.html">Map Configuration</a></li><li>How Steps use phase status to gate actions: <a href="round-step-system.html">Rounds & Steps</a></li><li>Ability types that interact with trains and phases: <a href="abilities.html">Abilities</a></li><li>Testing the economic arc: <a href="testing.html">Testing Your Game</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-08 — derived from <code>lib/engine/depot.rb</code>, <code>lib/engine/phase.rb</code>, <code>lib/engine/stock_market.rb</code>, <code>lib/engine/train.rb</code>, <code>lib/engine/game/base.rb</code>, <code>lib/engine/game/g_1830/game.rb</code>.</em></p>
+<p><em>Version: 2026-05-20 — GAME_END_CHECK common-mistake note added (§62 cross-ref). Derived from <code>lib/engine/depot.rb</code>, <code>lib/engine/phase.rb</code>, <code>lib/engine/stock_market.rb</code>, <code>lib/engine/train.rb</code>, <code>lib/engine/game/base.rb</code>, <code>lib/engine/game/g_1830/game.rb</code>.</em></p>
 </article>
 </main>
 </div>

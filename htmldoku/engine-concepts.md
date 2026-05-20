@@ -321,4 +321,4 @@ Work through the tutorial in order:
 6. [Rounds & Steps](round-step-system.html) — customise the decision sequence
 
 ---
-*Version: 2026-05-08 — derived from `lib/engine/game/base.rb`, `lib/engine/round/base.rb`, `lib/engine/step/base.rb`, `lib/engine/phase.rb`.*
+*Version: 2026-05-20 — no content changes this session. Derived from `lib/engine/game/base.rb`, `lib/engine/round/base.rb`, `lib/engine/step/base.rb`, `lib/engine/phase.rb`.*

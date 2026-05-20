@@ -289,4 +289,4 @@ Always inherit from the closest concrete Step rather than `Step::Base` directly 
 - Testing your Step with fixtures: [Testing Your Game](testing.html)
 
 ---
-*Version: 2026-05-08 — derived from `lib/engine/round/base.rb`, `lib/engine/step/base.rb`, `lib/engine/round/operating.rb`, `lib/engine/round/stock.rb`, `lib/engine/game/base.rb`.*
+*Version: 2026-05-20 — no content changes this session. Derived from `lib/engine/round/base.rb`, `lib/engine/step/base.rb`, `lib/engine/round/operating.rb`, `lib/engine/round/stock.rb`, `lib/engine/game/base.rb`.*

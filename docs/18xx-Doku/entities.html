@@ -145,10 +145,23 @@
   },
 ].freeze</code></pre>
 <hr>
+<h2 id="entity-predicates--use-the-engine-idiom">Entity predicates — use the engine idiom</h2>
+<p>When checking what kind of object an entity is, use the engine predicates rather than Ruby class checks.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">def system?(entity)
+  entity.is_a?(Corporation) &amp;&amp; entity.type == :system
+end</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby">def system?(entity)
+  entity.corporation? &amp;&amp; entity.type == :system
+end</code></pre>
+<table><thead><tr><th>Predicate</th><th>Returns true when</th></tr></thead><tbody><tr><td><code>entity.corporation?</code></td><td>Object is a <code>Corporation</code> instance</td></tr><tr><td><code>entity.player?</code></td><td>Object is a <code>Player</code> instance</td></tr><tr><td><code>entity.company?</code></td><td>Object is a <code>Company</code> instance</td></tr><tr><td><code>entity.minor?</code></td><td>Object is an <code>Engine::Minor</code> instance</td></tr></tbody></table>
+<p><strong>18OE note:</strong> 18OE minors are <code>Corporation</code> objects with <code>type: :minor</code> — not <code>Engine::Minor</code> instances. <code>entity.minor?</code> returns <code>false</code> for them. Always use <code>entity.type == :minor</code> for 18OE entity-type discrimination. See <a href="coding-guidelines.html">Coding Guidelines §43</a> and <a href="coding-guidelines.html">§59</a>.</p>
+<hr>
 <h2 id="whats-next">What's Next</h2>
 <ul><li>Train, phase, and market configuration: <a href="trains-phases.html">Trains, Phases & Market</a></li><li>Map and hex layout: <a href="map.html">Map Configuration</a></li><li>Complete ability type reference: <a href="abilities.html">Ability Types</a></li><li>Step-by-step implementation guide: <a href="game-implementation.html">Game Structure</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-08 — derived from <code>lib/engine/corporation.rb</code>, <code>lib/engine/company.rb</code>, <code>lib/engine/game/g_1830/entities.rb</code>.</em></p>
+<p><em>Version: 2026-05-20 — Entity predicates section added (entity.corporation? idiom, §59 cross-ref). Derived from <code>lib/engine/corporation.rb</code>, <code>lib/engine/company.rb</code>, <code>lib/engine/game/g_1830/entities.rb</code>.</em></p>
 </article>
 </main>
 </div>

@@ -426,6 +426,46 @@ grep -rl "type: 'teleport'" lib/engine/game/
 
 ---
 
+## Market Variant Patterns
+
+### Variant market with a single-cell delta (`game_market`)
+
+When an optional rule changes one cell of the stock market (e.g. adding an end-game marker to the top row), override `game_market` in `game.rb`. Keep a single canonical `MARKET` constant and apply only the delta in the method.
+
+```ruby
+# game.rb
+MARKET = [
+  %w[64y 68 72 76 82 90 100p 110 120 140 160 180 200 225 250 275 300 325 350 375 400],
+  # ... remaining rows
+].freeze
+
+def game_market
+  return self.class::MARKET unless option_finish_on_400?
+
+  market = self.class::MARKET.map(&:dup)
+  market[0][-1] = '400e'   # add end-game marker to top-right cell
+  market
+end
+
+def init_stock_market
+  Engine::StockMarket.new(game_market, self.class::CERT_LIMIT_TYPES,
+                          multiple_buy_types: self.class::MULTIPLE_BUY_TYPES)
+end
+```
+
+**Why not two constants?** Two near-identical constants (e.g. `STANDARD_TOP_LINE` + `FINISH_ON_400_TOP_LINE`) duplicate data with only a one-character difference, making it harder to spot what changed. The `game_market` method makes the delta explicit. See [Coding Guidelines §60](coding-guidelines.html).
+
+**`MARKET_TEXT` and `STOCKMARKET_COLORS`** keys must be symbols matching exact engine names. Common misspelling: `end_game:` → should be `endgame:`. See [Coding Guidelines §61](coding-guidelines.html).
+
+```ruby
+MARKET_TEXT = Base::MARKET_TEXT.merge(
+  par:     'Valid par price',
+  endgame: 'Stock price reaches this cell; game ends after current OR set',
+).freeze
+```
+
+---
+
 ## What's Next
 
 - Revenue hook reference: [Revenue & Routing](revenue-routing.html)
@@ -434,4 +474,4 @@ grep -rl "type: 'teleport'" lib/engine/game/
 - Verifying patterns with fixtures: [Testing Your Game](testing.html)
 
 ---
-*Version: 2026-05-08 — derived from production game titles in `lib/engine/game/`, `lib/engine/step/`, `lib/engine/game/base.rb`.*
+*Version: 2026-05-20 — Market Variant Patterns section added (game_market, MARKET_TEXT keys — §60/§61 cross-refs). Derived from production game titles in `lib/engine/game/`, `lib/engine/step/`, `lib/engine/game/base.rb`.*

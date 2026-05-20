@@ -137,6 +137,35 @@ COMPANIES = [
 
 ---
 
+## Entity predicates — use the engine idiom
+
+When checking what kind of object an entity is, use the engine predicates rather than Ruby class checks.
+
+**Bad:**
+```ruby
+def system?(entity)
+  entity.is_a?(Corporation) && entity.type == :system
+end
+```
+
+**Good:**
+```ruby
+def system?(entity)
+  entity.corporation? && entity.type == :system
+end
+```
+
+| Predicate | Returns true when |
+|-----------|------------------|
+| `entity.corporation?` | Object is a `Corporation` instance |
+| `entity.player?` | Object is a `Player` instance |
+| `entity.company?` | Object is a `Company` instance |
+| `entity.minor?` | Object is an `Engine::Minor` instance |
+
+**18OE note:** 18OE minors are `Corporation` objects with `type: :minor` — not `Engine::Minor` instances. `entity.minor?` returns `false` for them. Always use `entity.type == :minor` for 18OE entity-type discrimination. See [Coding Guidelines §43](coding-guidelines.html) and [§59](coding-guidelines.html).
+
+---
+
 ## What's Next
 
 - Train, phase, and market configuration: [Trains, Phases & Market](trains-phases.html)
@@ -145,4 +174,4 @@ COMPANIES = [
 - Step-by-step implementation guide: [Game Structure](game-implementation.html)
 
 ---
-*Version: 2026-05-08 — derived from `lib/engine/corporation.rb`, `lib/engine/company.rb`, `lib/engine/game/g_1830/entities.rb`.*
+*Version: 2026-05-20 — Entity predicates section added (entity.corporation? idiom, §59 cross-ref). Derived from `lib/engine/corporation.rb`, `lib/engine/company.rb`, `lib/engine/game/g_1830/entities.rb`.*

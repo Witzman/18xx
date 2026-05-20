@@ -250,6 +250,8 @@ These constants in `game.rb` control the economy.
 
 Multiple triggers can coexist. When two triggers fire simultaneously the one with **earlier** timing wins (`:immediate` beats `:current_or` beats `:full_or`, etc.).
 
+**Common mistake:** using `:current_round` when the rule says "end after the current OR set completes." `:current_round` ends the game at the end of whatever round is active when the trigger fires — including a Stock Round. If the bank breaks during a stock round, `:current_round` ends the game immediately after that SR, with no OR set played. Use `:full_or` to guarantee the end is deferred to OR set completion. See also [Coding Guidelines §62](coding-guidelines.html).
+
 **18OE example** (§13: bank-break ends at current OR; first L8 purchase gives one more full OR set):
 
 ```ruby
@@ -277,4 +279,4 @@ Before inventing your own numbers, check a production title that plays similarly
 - Testing the economic arc: [Testing Your Game](testing.html)
 
 ---
-*Version: 2026-05-08 — derived from `lib/engine/depot.rb`, `lib/engine/phase.rb`, `lib/engine/stock_market.rb`, `lib/engine/train.rb`, `lib/engine/game/base.rb`, `lib/engine/game/g_1830/game.rb`.*
+*Version: 2026-05-20 — GAME_END_CHECK common-mistake note added (§62 cross-ref). Derived from `lib/engine/depot.rb`, `lib/engine/phase.rb`, `lib/engine/stock_market.rb`, `lib/engine/train.rb`, `lib/engine/game/base.rb`, `lib/engine/game/g_1830/game.rb`.*
