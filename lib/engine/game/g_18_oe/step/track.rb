@@ -35,10 +35,10 @@ module Engine
             old_tile = hex.tile
             metropolis = @game.metropolis_tile?(tile)
             points_available = get_tile_lay(entity) - @points_used
-            points_cost = if tile.color != :yellow && metropolis
-                            4
-                          elsif tile.color != :yellow && !(@game.cheap_upgrade?(entity) && tile.cities.empty?)
-                            2
+            points_cost = if metropolis
+                            tile.color == :yellow ? 2 : 4
+                          elsif tile.color != :yellow
+                            (@game.cheap_upgrade?(entity) && tile.cities.empty?) ? 1 : 2
                           else
                             1
                           end
