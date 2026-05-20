@@ -724,7 +724,7 @@ module Engine
           base = super
 
           route.train.owner.all_abilities
-            .select { |a| a.type == :hex_bonus && a.hexes.any? }
+            .select { |a| a.type == :hex_bonus && !a.hexes.empty? }
             .each { |a| base += a.amount * stops.count { |s| a.hexes.include?(s.hex.coordinates) } }
 
           return base unless d_train?(route.train)
@@ -1401,7 +1401,7 @@ module Engine
         end
 
         def valid_d_token_hex?(hex)
-          !metropolis_hex?(hex) && hex.tile.color != :red && hex.tile.cities.any?
+          !metropolis_hex?(hex) && hex.tile.color != :red && !hex.tile.cities.empty?
         end
 
         def hochberg_eligible_hex?(hex)
@@ -1461,7 +1461,7 @@ module Engine
           ability = abilities(bbe, :tile_lay, time: 'track')
           return false unless ability
 
-          hex.tile.terrain.any?
+          !hex.tile.terrain.empty?
         end
 
         def mark_bbe_hex!(hex, corp)
