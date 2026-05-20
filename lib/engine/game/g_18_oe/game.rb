@@ -262,7 +262,7 @@ module Engine
         EXTRA_TILE_POINTS = { 'G' => 2 }.freeze
         MINOR_MAX_TREASURY = 180
         MAIL_CONTRACT_REVENUE = { '2' => 20, '3' => 40, '4' => 40, '5' => 50, '6' => 50, '7' => 60, '8' => 60 }.freeze
-        CHEAP_UPGRADE_CORPORATIONS = %w[B].freeze
+        DISCOUNTED_UPGRADE_CORPORATIONS = %w[B].freeze
         GOLDEN_BELL_CORP_ID   = 'C'
         D_TOKEN_CORP_ID       = 'D'
         MAIL_CONTRACT_CORP_ID = 'K'
@@ -1077,8 +1077,8 @@ module Engine
           @log << "Green Junction Mercantile places +#{format_currency(bonus.amount)} marker on #{hex.name}"
         end
 
-        def cheap_upgrade?(entity)
-          self.class::CHEAP_UPGRADE_CORPORATIONS.include?(entity.id)
+        def discounted_upgrade?(entity)
+          self.class::DISCOUNTED_UPGRADE_CORPORATIONS.include?(entity.id)
         end
 
         def pay_mail_contract!

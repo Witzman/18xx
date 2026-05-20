@@ -38,7 +38,7 @@ module Engine
             points_cost = if metropolis
                             tile.color == :yellow ? 2 : 4
                           elsif tile.color != :yellow
-                            (@game.cheap_upgrade?(entity) && tile.cities.empty?) ? 1 : 2
+                            (@game.discounted_upgrade?(entity) && tile.cities.empty?) ? 1 : 2
                           else
                             1
                           end
@@ -81,7 +81,7 @@ module Engine
 
             metropolis = @game.metropolis_hex?(hex)
             color = hex.tile.color
-            min_upgrade_cost = @game.cheap_upgrade?(entity) ? 1 : 2
+            min_upgrade_cost = @game.discounted_upgrade?(entity) ? 1 : 2
             return nil if color == :blue
             return nil if color == :white && metropolis && points_available < 2
             return nil if color == :white && points_available < 1
