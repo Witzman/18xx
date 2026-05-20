@@ -59,6 +59,10 @@ module Engine
             'Consolidation Round',
             'Consolidation round follows at end of current OR set; minors and regionals must merge or be abandoned',
           ],
+          'd_token_phase_change' => [
+            'Green Junction Bonus Upgraded',
+            'Green Junction Mercantile +£20 marker removed; +£40 marker now available to place',
+          ],
           'remainder_cash_added' => [
             'Remainder Cash Added',
             '£100,000 remainder cash injected into bank; game ends after one more full OR set',
