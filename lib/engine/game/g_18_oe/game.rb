@@ -501,9 +501,7 @@ module Engine
               'color' => 'yellow',
               'code' => 'city=revenue:30;city=revenue:30;path=a:0,b:_0;path=a:5,b:_1;label=S',
             },
-          # 'OE9' => 3, green, double town
-          # 'OE10' => 3, green, double town
-          # 'OE11' => 3, green, double town
+          # TODO: OE9–OE11 — 3× green double-town tile each; DSL not yet written [alpha]
           'OE12' =>
             {
               'count' => 3,
@@ -549,9 +547,7 @@ module Engine
               'color' => 'green',
               'code' => 'city=revenue:50;city=revenue:50,slots:2;path=a:0,b:_0;path=a:_0,b:2;path=a:5,b:_1;path=a:_1,b:3;label=S',
             },
-          # 'OE20' => 3, brown, two towns
-          # 'OE21' => 2, brown, two towns
-          # 'OE22' => 6, brown, two towns
+          # TODO: OE20–OE22 — brown two-town tiles (counts: 3/2/6); DSL not yet written [alpha]
           'OE23' =>
             {
               'count' => 12,
