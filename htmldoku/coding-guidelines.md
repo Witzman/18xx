@@ -243,6 +243,8 @@ This locks the step to the concrete class; variant subclasses that override the 
 
 Also applies to constants referenced from `game.rb` itself — use `self.class::CONSTANT` so subclass overrides take effect.
 
+**Do not wrap individual constants in game methods.** `@game.class::CONSTANT` is the dominant engine-wide pattern — present in `g_1860`, `g_18_usa`, `g_18_texas`, `g_18_mt`, and many others. Wrapping one constant in a method while leaving others as `@game.class::` makes a file *less* uniform. If you prefer the method style for a game, wrap all constants consistently — or use the engine convention and wrap none.
+
 ---
 
 ## 8. Hex keys — `coordinates` for data, `name` for display
@@ -1497,6 +1499,82 @@ end
 
 ---
 
+## 55. Thread entity parameters explicitly — don't rely on `current_entity` state
+
+When a method receives `entity` as a parameter, pass it through to every helper it calls. Do not let helpers silently fall back to `current_entity` step state.
+
+**Bad:**
+```ruby
+def actions(entity)
+  return [] unless entity == current_entity
+  regional_convertible? ? CONVERT_ACTIONS : []
+end
+
+def regional_convertible?
+  pending_corps(current_entity).any? { |corp| can_convert?(corp) }
+end
+```
+
+**Good:**
+```ruby
+def actions(entity)
+  return [] if pending_corps(entity).empty?
+  regional_convertible?(entity) ? CONVERT_ACTIONS : []
+end
+
+def regional_convertible?(entity)
+  pending_corps(entity).any? { |corp| can_convert?(corp) }
+end
+```
+
+`current_entity` is a convenience alias for the active round entity. Using it inside helpers creates implicit state coupling — the helper's behaviour depends on round state, not on the data you passed it. Threading explicit parameters makes the data flow visible and the helpers independently testable.
+
+**Corollary — removing a guard:** once entity is threaded correctly, guards like `return [] unless entity == current_entity` become redundant. When removing a guard, audit downstream methods for any remaining `current_entity` references that were doing the same job implicitly. Remove the redundant checks at the source rather than leaving logic that is accidentally correct.
+
+---
+
+## 56. Frozen action constants — use specific names in step subclasses
+
+Freeze the actions array as a module constant to avoid allocating a new array on every `actions()` call.
+
+```ruby
+CONVERT_ACTIONS = ['convert'].freeze
+
+def actions(entity)
+  regional_convertible?(entity) ? CONVERT_ACTIONS : []
+end
+```
+
+**Name the constant specifically** — not `ACTIONS`. `Step::Base` already defines `ACTIONS = [].freeze`. A subclass that also defines `ACTIONS` shadows the parent silently; a reviewer reading the inheritance chain cannot tell which `ACTIONS` is active. A name like `CONVERT_ACTIONS` or `BUY_TRAIN_ACTIONS` is unambiguous.
+
+---
+
+## 57. Variable reassignment when semantics change — introduce a new variable
+
+When a computation produces a value whose meaning differs from an existing variable, assign it to a new name. Do not reuse the original variable.
+
+**Bad:**
+```ruby
+def buy_company(player, company, price)
+  super
+  price = @game.class::MINOR_MAX_TREASURY if price > @game.class::MINOR_MAX_TREASURY
+  @game.bank.spend(price, ...)  # is this what the player paid, or what the minor gets?
+end
+```
+
+**Good:**
+```ruby
+def buy_company(player, company, price)
+  super
+  treasury_amount = [price, @game.class::MINOR_MAX_TREASURY].min
+  @game.bank.spend(treasury_amount, ...)
+end
+```
+
+`price` (what the player paid) and `treasury_amount` (what lands in the minor) are different values. Reassigning `price` hides that distinction and makes it unclear whether `super` used the capped or uncapped value. Use `Array#min` instead of a conditional reassignment — it expresses the intent in one expression.
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -1504,4 +1582,4 @@ end
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-20 — §54 added: `choice_available?` contract for steps using `'choose'` action.*
+*Version: 2026-05-20 — §55–57 added: entity parameter threading, frozen action constant naming, variable reassignment semantics. §7 extended: `@game.class::CONSTANT` engine convention.*

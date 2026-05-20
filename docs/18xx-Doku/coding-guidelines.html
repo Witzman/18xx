@@ -227,6 +227,7 @@ entity.trains.any? { |t| t.distance &gt; 2 }  # predicate with block — fine</c
 <p><strong>Good:</strong></p>
 <pre><code class="language-ruby">@game.class::CITY_NATIONAL_ZONE[hex.coordinates]</code></pre>
 <p>Also applies to constants referenced from <code>game.rb</code> itself — use <code>self.class::CONSTANT</code> so subclass overrides take effect.</p>
+<p><strong>Do not wrap individual constants in game methods.</strong> <code>@game.class::CONSTANT</code> is the dominant engine-wide pattern — present in <code>g_1860</code>, <code>g_18_usa</code>, <code>g_18_texas</code>, <code>g_18_mt</code>, and many others. Wrapping one constant in a method while leaving others as <code>@game.class::</code> makes a file <em>less</em> uniform. If you prefer the method style for a game, wrap all constants consistently — or use the engine convention and wrap none.</p>
 <hr>
 <h2 id="8-hex-keys--coordinates-for-data-name-for-display">8. Hex keys — <code>coordinates</code> for data, <code>name</code> for display</h2>
 <pre><code class="language-ruby"># Data lookups:
@@ -978,10 +979,58 @@ def choice_available?(_entity)
   true
 end</code></pre>
 <hr>
+<h2 id="55-thread-entity-parameters-explicitly--dont-rely-on-current_entity-state">55. Thread entity parameters explicitly — don't rely on <code>current_entity</code> state</h2>
+<p>When a method receives <code>entity</code> as a parameter, pass it through to every helper it calls. Do not let helpers silently fall back to <code>current_entity</code> step state.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">def actions(entity)
+  return [] unless entity == current_entity
+  regional_convertible? ? CONVERT_ACTIONS : []
+end
+
+def regional_convertible?
+  pending_corps(current_entity).any? { |corp| can_convert?(corp) }
+end</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby">def actions(entity)
+  return [] if pending_corps(entity).empty?
+  regional_convertible?(entity) ? CONVERT_ACTIONS : []
+end
+
+def regional_convertible?(entity)
+  pending_corps(entity).any? { |corp| can_convert?(corp) }
+end</code></pre>
+<p><code>current_entity</code> is a convenience alias for the active round entity. Using it inside helpers creates implicit state coupling — the helper's behaviour depends on round state, not on the data you passed it. Threading explicit parameters makes the data flow visible and the helpers independently testable.</p>
+<p><strong>Corollary — removing a guard:</strong> once entity is threaded correctly, guards like <code>return [] unless entity == current_entity</code> become redundant. When removing a guard, audit downstream methods for any remaining <code>current_entity</code> references that were doing the same job implicitly. Remove the redundant checks at the source rather than leaving logic that is accidentally correct.</p>
+<hr>
+<h2 id="56-frozen-action-constants--use-specific-names-in-step-subclasses">56. Frozen action constants — use specific names in step subclasses</h2>
+<p>Freeze the actions array as a module constant to avoid allocating a new array on every <code>actions()</code> call.</p>
+<pre><code class="language-ruby">CONVERT_ACTIONS = ['convert'].freeze
+
+def actions(entity)
+  regional_convertible?(entity) ? CONVERT_ACTIONS : []
+end</code></pre>
+<p><strong>Name the constant specifically</strong> — not <code>ACTIONS</code>. <code>Step::Base</code> already defines <code>ACTIONS = [].freeze</code>. A subclass that also defines <code>ACTIONS</code> shadows the parent silently; a reviewer reading the inheritance chain cannot tell which <code>ACTIONS</code> is active. A name like <code>CONVERT_ACTIONS</code> or <code>BUY_TRAIN_ACTIONS</code> is unambiguous.</p>
+<hr>
+<h2 id="57-variable-reassignment-when-semantics-change--introduce-a-new-variable">57. Variable reassignment when semantics change — introduce a new variable</h2>
+<p>When a computation produces a value whose meaning differs from an existing variable, assign it to a new name. Do not reuse the original variable.</p>
+<p><strong>Bad:</strong></p>
+<pre><code class="language-ruby">def buy_company(player, company, price)
+  super
+  price = @game.class::MINOR_MAX_TREASURY if price &gt; @game.class::MINOR_MAX_TREASURY
+  @game.bank.spend(price, ...)  # is this what the player paid, or what the minor gets?
+end</code></pre>
+<p><strong>Good:</strong></p>
+<pre><code class="language-ruby">def buy_company(player, company, price)
+  super
+  treasury_amount = [price, @game.class::MINOR_MAX_TREASURY].min
+  @game.bank.spend(treasury_amount, ...)
+end</code></pre>
+<p><code>price</code> (what the player paid) and <code>treasury_amount</code> (what lands in the minor) are different values. Reassigning <code>price</code> hides that distinction and makes it unclear whether <code>super</code> used the capped or uncapped value. Use <code>Array#min</code> instead of a conditional reassignment — it expresses the intent in one expression.</p>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-20 — §54 added: <code>choice_available?</code> contract for steps using <code>'choose'</code> action.</em></p>
+<p><em>Version: 2026-05-20 — §55–57 added: entity parameter threading, frozen action constant naming, variable reassignment semantics. §7 extended: <code>@game.class::CONSTANT</code> engine convention.</em></p>
 </article>
 </main>
 </div>
