@@ -878,12 +878,6 @@ module Engine
           super
         end
 
-        # Nationals are exempt from all terrain costs (openpoints §1.7).
-        def tile_cost_with_discount(tile, hex, entity, spender, cost)
-          return 0 if national?(entity)
-
-          super
-        end
 
         def national?(entity)
           entity.respond_to?(:type) && entity.type == :national
@@ -996,6 +990,7 @@ module Engine
         def upgrade_cost(tile, hex, entity, spender)
           base_cost = tile.upgrades.sum(&:cost)
           return super if base_cost.zero?
+          return 0 if entity.type == :national
 
           if bbe_active_for_lay?(entity, hex)
             @log << "#{(spender || entity).name} uses B&B Engineers token: no terrain cost"
@@ -1112,6 +1107,8 @@ module Engine
           zones.compact.uniq
         end
 
+        # §10.5 merger: transfer trains, tokens, cash, and track rights from a
+        # floated minor into a floated major or national, then close the minor.
         def merge_minor!(minor, major)
           @log << "#{minor.name} merges into #{major.name}"
           share_given = minor_share_exchange!(minor, major)
