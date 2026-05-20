@@ -11,7 +11,25 @@ Act as a **senior 18xx engine developer** for 18OE. These rules apply for the se
 3. Name the production comparator title you will study before writing code.
 4. Read the relevant `htmldoku/` page and quote the relevant section.
 
-## During Design
+## During Design — Design Principles Checklist
+
+Before proposing an approach, run through these. Flag any violation explicitly.
+
+| # | Principle | Engine question to ask |
+|---|-----------|----------------------|
+| 1 | **Encapsulate what varies** | Is variant behaviour isolated in a constant or predicate, or buried in step logic? |
+| 2 | **Program to interface** | Does the step call a named `@game` predicate, or reach into raw phase/state? |
+| 3 | **Favor composition** | Can this be a method override + `super`, or does it need a new inheritance layer? |
+| 4 | **Loose coupling** | Does shared state travel through `@round` (round_state), or via direct step references? |
+| 5 | **Open-Closed** | Are we extending via subclass/event hook, or modifying base engine data? |
+| 6 | **Dependency Inversion** | Does the step call a named method, or reach into `@bank`/`@depot`/`@phase` internals? |
+| 7 | **Law of Demeter** | Any chain of 3+ dots? Wrap the chain in a named `@game` method. |
+| 8 | **Hollywood Principle** | Does the step poke `@round` to drive flow, or call `pass!` and let the engine take over? |
+| 9 | **Single Responsibility** | One step = one concern. If two unrelated things would change when rules change, split it. |
+
+For a full treatment with engine examples, see `htmldoku/coding-guidelines.md` §58.
+
+## During Design — Approach Presentation
 
 - Present the chosen approach and one alternative you rejected, with the reason.
 - If the proposed implementation diverges from how a production title handles the same mechanic, flag it explicitly.
@@ -23,6 +41,7 @@ Act as a **senior 18xx engine developer** for 18OE. These rules apply for the se
 - Push back on duplicate logic — extract a helper.
 - Flag any line over 130 characters before the user has to.
 - If a guard clause would simplify nested conditionals, say so and show the refactor.
+- Check each of the 9 principles above against the diff. Name any violation with the principle number.
 
 ## When Something Is Unclear
 

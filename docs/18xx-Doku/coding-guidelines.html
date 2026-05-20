@@ -1027,10 +1027,127 @@ end</code></pre>
 end</code></pre>
 <p><code>price</code> (what the player paid) and <code>treasury_amount</code> (what lands in the minor) are different values. Reassigning <code>price</code> hides that distinction and makes it unclear whether <code>super</code> used the capped or uncapped value. Use <code>Array#min</code> instead of a conditional reassignment — it expresses the intent in one expression.</p>
 <hr>
+<h2 id="58-head-first-design-principles--mapped-to-the-18xx-engine">58. Head First Design Principles — mapped to the 18xx engine</h2>
+<p>Nine principles from <em>Head First Design Patterns</em>, translated to concrete engine terms. Apply these during the <strong>sign-off card</strong> phase (step 4) before writing code.</p>
+<hr>
+<h3 id="1--encapsulate-what-varies">1 — Encapsulate what varies</h3>
+<p>Isolate variation in constants (L1) or named predicates (L2). Don't bake variant behaviour into step logic.</p>
+<pre><code class="language-ruby"># Bad — variation buried in step:
+def can_lay_tile?(entity)
+  return false if entity.type == :minor &amp;&amp; @game.phase.name.to_i &lt; 3
+  return false if entity.type == :major &amp;&amp; @game.phase.name.to_i &lt; 5
+  true
+end
+
+# Good — variation lives in a constant, step stays uniform:
+# game.rb: TILE_UNLOCK_PHASE = { minor: 3, major: 5 }.freeze
+def can_lay_tile?(entity)
+  @game.class::TILE_UNLOCK_PHASE[entity.type] &lt;= @game.phase.name.to_i
+end</code></pre>
+<p>Related: §1, §36, §2.</p>
+<hr>
+<h3 id="2--program-to-an-interface-not-an-implementation">2 — Program to an interface, not an implementation</h3>
+<p>Steps call named <code>@game</code> predicates, not raw state chains. The predicate is the interface; the implementation detail stays in <code>game.rb</code>.</p>
+<pre><code class="language-ruby"># Bad — step reaches into phase internals:
+return false if @game.phase.name.to_i &lt; 4
+
+# Good — step calls a named predicate:
+return false unless @game.major_phase?</code></pre>
+<p>If a predicate doesn't exist yet, add it to <code>game.rb</code> before writing the step. Related: §17, §5.</p>
+<hr>
+<h3 id="3--favor-composition-over-inheritance">3 — Favor composition over inheritance</h3>
+<p>Prefer assembling behaviour via <code>round_steps:</code> over deep step inheritance chains. Override only what actually differs; call <code>super</code> for everything else.</p>
+<pre><code class="language-ruby"># Bad — deep chain that duplicates base behaviour:
+class ConsolidateStep &lt; BuySellParShares
+  def process_buy_shares(action)
+    # 25 lines that are 90% identical to the parent
+  end
+end
+
+# Good — inherit and compose:
+class ConsolidateStep &lt; BuySellParShares
+  def process_buy_shares(action)
+    super
+    post_consolidation_check!(action.entity)
+  end
+end</code></pre>
+<p>Before adding an inheritance layer, ask: can this behaviour be a method override on an existing step? Related: §11, §33.</p>
+<hr>
+<h3 id="4--loosely-coupled-designs">4 — Loosely coupled designs</h3>
+<p>Steps know only <code>@game</code>'s public methods. <code>@game</code> knows nothing about step internals. Cross-step state travels through <code>@round</code> (declared in <code>round_state</code>), never via direct step references.</p>
+<pre><code class="language-ruby"># Bad — step reaches into another step's internals:
+consolidate_step = @round.steps.find { |s| s.is_a?(Step::Consolidate) }
+return false if consolidate_step.instance_variable_get(:@converted)
+
+# Good — shared state lives in @round:
+return false if @round.consolidation_complete</code></pre>
+<p>Related: §17, §7, §36.</p>
+<hr>
+<h3 id="5--open-closed-principle">5 — Open-Closed Principle</h3>
+<p>Engine classes are closed to modification; extend them by subclassing, adding constants, or wiring event hooks — not by patching base data.</p>
+<pre><code class="language-ruby"># Bad — modifies base engine data:
+Engine::Step::BuyTrain::ACTIONS &lt;&lt; 'special_buy'
+
+# Good — extend in the subclass:
+class G18OE::Step::BuyTrain &lt; Engine::Step::BuyTrain
+  def actions(entity)
+    super + (special_buy_available?(entity) ? ['special_buy'] : [])
+  end
+end</code></pre>
+<p>The event system (<code>event_foo!</code> in game.rb) is the primary open-extension point for one-shot state changes. Related: §13, §25.</p>
+<hr>
+<h3 id="6--dependency-inversion-principle">6 — Dependency Inversion Principle</h3>
+<p>High-level game logic should not depend on low-level engine objects. Wrap engine internals in named methods; let steps call those names.</p>
+<pre><code class="language-ruby"># Bad — step reaches into engine object directly:
+@game.bank.instance_variable_set(:@cash, @game.bank.cash + amount)
+
+# Good — game exposes a named method:
+@game.inject_remainder_cash!(amount)  # wraps bank.receive internally</code></pre>
+<p><code>@game.class::CONSTANT</code> is acceptable for data (constants are the interface). It is _not_ acceptable to reach into <code>@bank</code>, <code>@depot</code>, <code>@phase</code> internals — those violate DIP. Related: §50, §7.</p>
+<hr>
+<h3 id="7--law-of-demeter-least-knowledge">7 — Law of Demeter (Least Knowledge)</h3>
+<p>Talk only to your immediate collaborators. A chain of three dots (<code>a.b.c</code>) is a warning sign — wrap it in a named <code>@game</code> method.</p>
+<pre><code class="language-ruby"># Bad — step chains through objects it doesn't own:
+entity.owner.shares.map(&amp;:corporation).any? { |c| c.president?(entity.owner) }
+
+# Good — game encapsulates the chain:
+@game.president_of_any_corp?(entity.owner)</code></pre>
+<p>Each dot after the first is a coupling to a class you didn't intend to depend on. If removing one dot requires changing this file, the coupling is too tight. Related: §17, §29.</p>
+<hr>
+<h3 id="8--hollywood-principle-dont-call-us-well-call-you">8 — Hollywood Principle (Don't Call Us, We'll Call You)</h3>
+<p>The engine calls your step methods (<code>process_*</code>, <code>skip!</code>, <code>blocks?</code>, <code>actions</code>). Your step should not reach into round or engine to trigger callbacks manually.</p>
+<pre><code class="language-ruby"># Bad — step drives the round:
+def process_convert(action)
+  super
+  @game.round.next_entity!   # don't poke the round
+end
+
+# Good — step declares what changed; round drives itself:
+def process_convert(action)
+  super
+  pass!   # signal completion; round decides what happens next
+end</code></pre>
+<p>If you find yourself calling <code>@round.next_entity!</code>, <code>@game.next_round!</code>, or similar from inside a step, stop — redesign so the engine drives the flow. Related: §20, §14.</p>
+<hr>
+<h3 id="9--single-responsibility-principle">9 — Single Responsibility Principle</h3>
+<p>One step file = one concern. One method = one rule clause. A class has one reason to change.</p>
+<p>Ask: <em>what would need to change in this step if the rules changed?</em> If the answer is "multiple unrelated things", the step is carrying too much. Split it.</p>
+<pre><code class="language-ruby"># Warning sign — one step handles two separate game phases:
+class BuyOrConvertStep
+  def actions(entity)
+    return buying_actions(entity) if @game.buying_phase?
+    converting_actions(entity)
+  end
+end
+
+# Good — two steps, each with one job:
+# round_steps: [BuyStep, ConvertStep]</code></pre>
+<p>Cohesion test: every method in the file should reference mostly the same state variables. If half the methods never touch <code>@converting</code> and the other half never touch <code>@buying_power</code>, the step has two responsibilities. Related: §14 (one concern per step file), §1.</p>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-20 — §55–57 added: entity parameter threading, frozen action constant naming, variable reassignment semantics. §7 extended: <code>@game.class::CONSTANT</code> engine convention.</em></p>
+<p><em>Version: 2026-05-20 — §55–57: entity threading, frozen constant naming, variable reassignment. §58: Head First Design Principles mapped to engine. §7 extended: <code>@game.class::CONSTANT</code> convention.</em></p>
 </article>
 </main>
 </div>

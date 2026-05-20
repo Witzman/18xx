@@ -438,8 +438,27 @@ The full protocol lives in `MD/sparring.md` and is read at the start of any sess
 - **Present one rejected alternative.** For every proposed approach, describe the alternative considered and why it was ruled out.
 - **Cite the rules before coding.** If a mechanic is ambiguous, find the rule reference (`rules/18OE_Rulebook_v_1.0.txt`) before implementing.
 - **Push back on style.** Magic numbers, duplicate expressions, lines over 130 characters — flag before the user has to.
+- **Apply the design principles checklist.** Before finalising any approach, run through all 9 Head First Design Principles (see below) and flag any violation by number.
 
 This turns Claude from a code generator into a second reviewer who challenges assumptions at the design stage rather than after the code is written.
+
+### Design Principles as a Second Opinion
+
+The sparring protocol embeds the nine *Head First Design Patterns* design principles as a mandatory design-time checklist. Each principle is translated into a concrete engine question:
+
+| # | Principle | Engine question |
+|---|-----------|----------------|
+| 1 | Encapsulate what varies | Is variant behaviour in a constant or predicate, or buried in step logic? |
+| 2 | Program to interface | Does the step call a named `@game` predicate, or reach into raw state? |
+| 3 | Favor composition | Can this be a `super` override, or does it need a new inheritance layer? |
+| 4 | Loose coupling | Does shared state travel through `round_state`, or via direct step references? |
+| 5 | Open-Closed | Are we extending via subclass/event hook, or modifying base engine data? |
+| 6 | Dependency Inversion | Does the step call a named method, or reach into `@bank`/`@depot` internals? |
+| 7 | Law of Demeter | Any chain of 3+ dots? Wrap it in a named `@game` method. |
+| 8 | Hollywood Principle | Does the step poke `@round` to drive flow, or call `pass!` and let the engine lead? |
+| 9 | Single Responsibility | One step = one concern. Two unrelated change reasons → split the step. |
+
+Claude names the principle number when pushing back. "This violates principle 7 — wrap the chain in a game method" is faster to discuss than re-deriving the reason from scratch. For engine-specific examples of each principle, see [Coding Guidelines §58](coding-guidelines.html#58-head-first-design-principles-mapped-to-the-18xx-engine).
 
 ---
 
@@ -475,4 +494,4 @@ The biggest risk in a long-running project is context drift — Claude accumulat
 - Title readiness stages: [Title Checklist](title-checklist.html)
 
 ---
-*Version: 2026-05-08 — branch tags on inwork items; [t] testing state; IRB-first test pipeline; item lifecycle pipeline.*
+*Version: 2026-05-20 — design principles checklist added to sparring protocol; §58 cross-reference in codevelop; principle-number pushback convention.*
