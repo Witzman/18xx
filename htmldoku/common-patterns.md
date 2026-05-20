@@ -382,6 +382,33 @@ end
 
 ---
 
+### Minors/regionals in float sequence order, then majors by share price (18OE §10.1)
+
+When your title tracks a separate float-sequence list (e.g. `@minor_regional_order`) you need two things:
+
+1. `operating_order` returns the combined list. **Always include a `floated?` guard on the major/national segment.** The base `Round::Operating#recalculate_order` calls `game.operating_order` directly mid-round (when a train purchase triggers a phase change that re-sorts the entity list). If `operating_order` returns unfloated corps, they will enter the OR entity list during `recalculate_order` even though they were never returned by `select_entities`.
+
+2. Do **not** override `select_entities` in the Round subclass. The base class delegates to `operating_order`, and the override would be silently bypassed by `recalculate_order` anyway.
+
+```ruby
+# game.rb — correct: floated? guard prevents unfloated majors entering mid-round
+def operating_order
+  @minor_regional_order +
+    @corporations.select { |c| %i[major national].include?(c.type) && c.floated? }.sort
+end
+
+# round/operating.rb — wrong: select_entities override is bypassed by recalculate_order
+# class Operating < Engine::Round::Operating
+#   def select_entities
+#     @game.minor_regional_order + (@game.corporations.select(&:floated?) - @game.minor_regional_order).sort
+#   end
+# end
+```
+
+Reference: `lib/engine/game/g_18_oe/game.rb` · `lib/engine/game/g_18_oe/round/operating.rb`
+
+---
+
 ## Finding More Examples
 
 The fastest way to find a production example of any pattern:

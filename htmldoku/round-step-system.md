@@ -137,6 +137,8 @@ end
 
 **Do not pre-filter in `select_entities`** based on state that can change mid-round (e.g. share ownership after a merge). The initial entity list is fixed; only `blocks?` is evaluated on every turn.
 
+**Do not override `select_entities` in a Round subclass to implement custom operating order.** The base `Round::Operating#recalculate_order` calls `@game.operating_order` directly — it never calls `select_entities`. A `select_entities` override in the Round would control the *initial* entity list but would be silently bypassed when `recalculate_order` fires mid-round (e.g. after a train purchase triggers a phase change). Override `game.operating_order` instead and let the base class delegate.
+
 ```ruby
 # Broad selection — include all non-bankrupt players:
 def select_entities

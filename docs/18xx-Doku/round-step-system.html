@@ -167,6 +167,7 @@ end</code></pre>
 <h2 id="select_entities-vs-blocks"><code>select_entities</code> vs <code>blocks?</code></h2>
 <p><code>select_entities</code> determines who <em>participates</em> in the round — include all eligible entities broadly. <code>blocks?</code> determines whether a specific entity's turn is <em>active right now</em> — return <code>false</code> to auto-skip.</p>
 <p><strong>Do not pre-filter in <code>select_entities</code></strong> based on state that can change mid-round (e.g. share ownership after a merge). The initial entity list is fixed; only <code>blocks?</code> is evaluated on every turn.</p>
+<p><strong>Do not override <code>select_entities</code> in a Round subclass to implement custom operating order.</strong> The base <code>Round::Operating#recalculate_order</code> calls <code>@game.operating_order</code> directly — it never calls <code>select_entities</code>. A <code>select_entities</code> override in the Round would control the <em>initial</em> entity list but would be silently bypassed when <code>recalculate_order</code> fires mid-round (e.g. after a train purchase triggers a phase change). Override <code>game.operating_order</code> instead and let the base class delegate.</p>
 <pre><code class="language-ruby"># Broad selection — include all non-bankrupt players:
 def select_entities
   @game.players

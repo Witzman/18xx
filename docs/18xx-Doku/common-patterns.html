@@ -327,6 +327,24 @@ end</code></pre>
   (floated_majors + floated_minors).sort_by { |c| [c.share_price.price, c.share_price.corporations.index(c)] }.reverse
 end</code></pre>
 <hr>
+<h3 id="minorsregionals-in-float-sequence-order-then-majors-by-share-price-18oe-101">Minors/regionals in float sequence order, then majors by share price (18OE §10.1)</h3>
+<p>When your title tracks a separate float-sequence list (e.g. <code>@minor_regional_order</code>) you need two things:</p>
+<ol><li><code>operating_order</code> returns the combined list. <strong>Always include a <code>floated?</code> guard on the major/national segment.</strong> The base <code>Round::Operating#recalculate_order</code> calls <code>game.operating_order</code> directly mid-round (when a train purchase triggers a phase change that re-sorts the entity list). If <code>operating_order</code> returns unfloated corps, they will enter the OR entity list during <code>recalculate_order</code> even though they were never returned by <code>select_entities</code>.</li></ol>
+<ol><li>Do <strong>not</strong> override <code>select_entities</code> in the Round subclass. The base class delegates to <code>operating_order</code>, and the override would be silently bypassed by <code>recalculate_order</code> anyway.</li></ol>
+<pre><code class="language-ruby"># game.rb — correct: floated? guard prevents unfloated majors entering mid-round
+def operating_order
+  @minor_regional_order +
+    @corporations.select { |c| %i[major national].include?(c.type) &amp;&amp; c.floated? }.sort
+end
+
+# round/operating.rb — wrong: select_entities override is bypassed by recalculate_order
+# class Operating &lt; Engine::Round::Operating
+#   def select_entities
+#     @game.minor_regional_order + (@game.corporations.select(&amp;:floated?) - @game.minor_regional_order).sort
+#   end
+# end</code></pre>
+<p>Reference: <code>lib/engine/game/g_18_oe/game.rb</code> · <code>lib/engine/game/g_18_oe/round/operating.rb</code></p>
+<hr>
 <h2 id="finding-more-examples">Finding More Examples</h2>
 <p>The fastest way to find a production example of any pattern:</p>
 <pre><code class="language-bash"># Find titles that override revenue_for:
