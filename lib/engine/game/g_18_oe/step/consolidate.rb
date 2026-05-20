@@ -29,23 +29,19 @@ module Engine
           end
 
           def regional_convertible?
-            pending_corps(current_entity).any? { |corp| regional_consolidatable?(corp) }
+            pending_corps(current_entity).any? { |corp| can_convert?(corp) }
           end
 
           def regional_convertible?(entity)
-            pending_corps(entity).any? { |corp| regional_consolidatable?(corp) }
+            pending_corps(entity).any? { |corp| can_convert?(corp) }
           end
 
-          def regional_consolidatable?(entity)
+          def can_convert?(entity)
             return false unless entity.type == :regional
             return false if @converted
             return false unless entity.president?(current_entity)
 
             true
-          end
-
-          def can_convert?(entity)
-            entity.type == :regional && !@converted
           end
 
           def process_convert(action)
