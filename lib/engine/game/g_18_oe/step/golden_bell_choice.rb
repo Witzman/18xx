@@ -42,6 +42,10 @@ module Engine
             'Golden Bell Operating Order'
           end
 
+          def choice_available?(_entity)
+            true
+          end
+
           def choice_name
             'Choose operating position this OR'
           end
