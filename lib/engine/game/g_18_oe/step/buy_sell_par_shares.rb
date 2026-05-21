@@ -41,9 +41,10 @@ module Engine
           end
 
           def corporation_actions(corporation)
-            return [] unless can_convert?(corporation, current_entity)
+            return %w[convert pass] if can_convert?(corporation, current_entity)
+            return ['merge'] if corporation == mergeable_entity
 
-            %w[convert pass]
+            []
           end
 
           def can_buy_any_from_ipo?(entity)
@@ -236,6 +237,10 @@ module Engine
 
           def mergeable_type
             :corporation
+          end
+
+          def merge_action
+            'Merge Minor'
           end
 
           def merge_name(_entity = nil)
