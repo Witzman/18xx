@@ -8,7 +8,7 @@ module Engine
     module G18OE
       module Step
         class BuySellParShares < Engine::Step::BuySellParShares
-          def self.round_state
+          def round_state
             super.merge(minors_merged_into: [])
           end
 
