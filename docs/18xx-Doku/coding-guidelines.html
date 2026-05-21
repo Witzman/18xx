@@ -89,7 +89,7 @@
 <p>These guidelines implement the nine Head First Design Principles in engine-specific terms. For the full principle mapping see <a href="#58-head-first-design-principles-mapped-to-the-18xx-engine">§58</a>. Patterns distilled from pull-request feedback on the 18xx engine.</p>
 <hr>
 <h2 id="quick-reference--when-to-apply-which-guidelines">Quick Reference — When to Apply Which Guidelines</h2>
-<table><thead><tr><th>Coding moment</th><th>Key sections</th></tr></thead><tbody><tr><td>Design check (before any code)</td><td>§58, sparring.md principles checklist</td></tr><tr><td>Starting a new step file</td><td>§1, §11, §14, §19, §20, §24, §33, §36, §55</td></tr><tr><td>Writing <code>actions()</code></td><td>§1, §4, §14, §20, §45, §46, §56</td></tr><tr><td>Defining constants</td><td>§2, §7, §25, §29, §56, §57</td></tr><tr><td>Writing game/step boundary</td><td>§3, §17, §50, §51, §55, §66</td></tr><tr><td>Writing <code>next_round!</code></td><td>§12</td></tr><tr><td>Revenue, routing, bonuses</td><td>§5, §13, §37, §38</td></tr><tr><td>Event hooks</td><td>§13, §48</td></tr><tr><td>Market / variant game</td><td>§60, §61, §62</td></tr><tr><td>Entities, abilities</td><td>§43, §44, §49</td></tr><tr><td>New game skeleton</td><td>§25, §27, §59, §60, §61, §62, §63, §64</td></tr><tr><td>Round subclass</td><td>§11, §12, §36, §65</td></tr><tr><td>Code review pass</td><td>§6, §15, §16, §26, §28, §31, §32, §41, §42</td></tr></tbody></table>
+<table><thead><tr><th>Coding moment</th><th>Key sections</th></tr></thead><tbody><tr><td>Design check (before any code)</td><td>§58, §68, sparring.md principles checklist</td></tr><tr><td>Starting a new step file</td><td>§1, §11, §14, §19, §20, §24, §33, §36, §55</td></tr><tr><td>Writing <code>actions()</code></td><td>§1, §4, §14, §20, §45, §46, §56</td></tr><tr><td>Defining constants</td><td>§2, §7, §25, §29, §56, §57</td></tr><tr><td>Writing game/step boundary</td><td>§3, §17, §50, §51, §55, §66</td></tr><tr><td>Writing <code>next_round!</code></td><td>§12</td></tr><tr><td>Revenue, routing, bonuses</td><td>§5, §13, §37, §38</td></tr><tr><td>Event hooks</td><td>§13, §48</td></tr><tr><td>Market / variant game</td><td>§60, §61, §62</td></tr><tr><td>Entities, abilities</td><td>§43, §44, §49</td></tr><tr><td>New game skeleton</td><td>§25, §27, §59, §60, §61, §62, §63, §64</td></tr><tr><td>Round subclass</td><td>§11, §12, §36, §65</td></tr><tr><td>Code review pass</td><td>§6, §15, §16, §26, §28, §31, §32, §41, §42</td></tr><tr><td>Before opening a PR</td><td>§67 (test in server mode), §68 (search existing methods)</td></tr></tbody></table>
 <hr>
 <hr>
 <h2 id="reference-games--study-before-implementing-a-mechanic">Reference Games — Study Before Implementing a Mechanic</h2>
@@ -1271,10 +1271,32 @@ end</code></pre>
 <p><strong>Engine comparators:</strong> <code>train_limit(entity)</code>, <code>tile_lays(entity)</code>, <code>cert_limit(player)</code> all follow this pattern for entity-typed dispatch. Scalar constants (<code>MINOR_MAX_TREASURY</code>, <code>BANK_CASH</code>) do not need wrapping — the distinction is whether the access involves indexing by entity state.</p>
 <p>Related: §2 (program to interface), §6 (dependency inversion), §7 (Law of Demeter).</p>
 <hr>
+<h2 id="67-hot-seat-vs-server-mode--opaljs-compatibility">67. Hot seat vs server mode — Opal/JS compatibility</h2>
+<p>Hot seat games run entirely in Opal (Ruby compiled to JavaScript). Server mode runs Ruby on the server and renders via the browser. Testing only in hot seat can mask real bugs because the two runtimes diverge in two ways.</p>
+<p><strong>1 — Symbols become strings in JavaScript.</strong> Opal converts Ruby symbols to strings: <code>:minor</code> → <code>"minor"</code>. Code that compares <code>entity.type == :minor</code> in Ruby will behave differently in Opal unless the originating value was also produced by Opal (where it is also a string). Always verify symbol-dependent comparisons in server mode, not just hot seat. Do not switch to string comparisons (<code>== 'minor'</code>) to fix a hot seat test failure — fix the root cause and verify in server mode.</p>
+<p>The <code>to_sym</code> casts in <code>partition.rb</code> (§44) exist for exactly this reason: Opal does not make string/symbol comparison transparent in all contexts, regardless of what the documentation implies. Always verify in the browser before removing normalization casts.</p>
+<p><strong>2 — Float division rounds differently.</strong> Ruby and JavaScript can round floating-point results in opposite directions. For any monetary calculation involving division (per-share dividends, terrain cost splits), add an explicit <code>.floor</code> or <code>.ceil</code> call — do not rely on default truncation behavior.</p>
+<pre><code class="language-ruby"># Bad — rounding behavior differs between Ruby and JS:
+per_share = revenue / total_shares
+
+# Good — explicit, consistent across runtimes:
+per_share = (revenue / total_shares).floor</code></pre>
+<p>Reference: <code>g_1837/step/dividend.rb:26</code>.</p>
+<p><strong>Test in server mode before opening a PR.</strong> Hot seat is convenient for iteration, but a passing hot seat test does not guarantee server-mode correctness. Run at least one server-mode game through the feature path before submitting.</p>
+<hr>
+<h2 id="68-search-for-existing-engine-methods-before-implementing--amount-of-code-is-a-signal">68. Search for existing engine methods before implementing — amount of code is a signal</h2>
+<p>Before writing any new method, grep the engine for the concept you need. When the right engine method already exists, the implementation often shrinks by more than half. A large implementation is frequently a sign that the existing API was not found.</p>
+<p><strong>Practical steps:</strong></p>
+<ol><li>Name the concept in plain terms ("president overcap", "per-share payout", "token cost bypass").</li><li>Grep <code>lib/engine/</code> for the concept: method names, step files, game comparators.</li><li>Read the base step method in full before overriding. Check whether the base already returns the correct value for your game (see §19).</li></ol>
+<pre><code class="language-bash">grep -rn "president.*overcap\|overcap.*president" lib/engine/
+grep -rn "modify_purchase_price" lib/engine/step/</code></pre>
+<p>If you find a match: read it, understand it, call <code>super</code> and add only the delta. If no match: implement from scratch and note the absence in the sign-off card so reviewers know you checked.</p>
+<p>Related: §19, §33 (call <code>super</code> instead of duplicating), Reference Games table.</p>
+<hr>
 <h2 id="whats-next">What's next</h2>
 <ul><li>Implementation layer taxonomy: <a href="game-engine.html">Game Engine</a></li><li>Round and Step patterns: <a href="round-step-system.html">Round/Step System</a></li><li>Ability implementation: <a href="abilities.html">Ability Types Reference</a></li></ul>
 <hr>
-<p><em>Version: 2026-05-21 — §66 added: entity-typed hash dispatch belongs in a game method.</em></p>
+<p><em>Version: 2026-05-21 — §67 added: hot seat vs server mode (Opal/JS symbol and float divergence); §68 added: search for existing engine methods before implementing.</em></p>
 </article>
 </main>
 </div>

@@ -8,7 +8,7 @@ These guidelines implement the nine Head First Design Principles in engine-speci
 
 | Coding moment | Key sections |
 |---------------|-------------|
-| Design check (before any code) | §58, sparring.md principles checklist |
+| Design check (before any code) | §58, §68, sparring.md principles checklist |
 | Starting a new step file | §1, §11, §14, §19, §20, §24, §33, §36, §55 |
 | Writing `actions()` | §1, §4, §14, §20, §45, §46, §56 |
 | Defining constants | §2, §7, §25, §29, §56, §57 |
@@ -21,6 +21,7 @@ These guidelines implement the nine Head First Design Principles in engine-speci
 | New game skeleton | §25, §27, §59, §60, §61, §62, §63, §64 |
 | Round subclass | §11, §12, §36, §65 |
 | Code review pass | §6, §15, §16, §26, §28, §31, §32, §41, §42 |
+| Before opening a PR | §67 (test in server mode), §68 (search existing methods) |
 
 ---
 
@@ -1995,6 +1996,51 @@ Related: §2 (program to interface), §6 (dependency inversion), §7 (Law of Dem
 
 ---
 
+## 67. Hot seat vs server mode — Opal/JS compatibility
+
+Hot seat games run entirely in Opal (Ruby compiled to JavaScript). Server mode runs Ruby on the server and renders via the browser. Testing only in hot seat can mask real bugs because the two runtimes diverge in two ways.
+
+**1 — Symbols become strings in JavaScript.** Opal converts Ruby symbols to strings: `:minor` → `"minor"`. Code that compares `entity.type == :minor` in Ruby will behave differently in Opal unless the originating value was also produced by Opal (where it is also a string). Always verify symbol-dependent comparisons in server mode, not just hot seat. Do not switch to string comparisons (`== 'minor'`) to fix a hot seat test failure — fix the root cause and verify in server mode.
+
+The `to_sym` casts in `partition.rb` (§44) exist for exactly this reason: Opal does not make string/symbol comparison transparent in all contexts, regardless of what the documentation implies. Always verify in the browser before removing normalization casts.
+
+**2 — Float division rounds differently.** Ruby and JavaScript can round floating-point results in opposite directions. For any monetary calculation involving division (per-share dividends, terrain cost splits), add an explicit `.floor` or `.ceil` call — do not rely on default truncation behavior.
+
+```ruby
+# Bad — rounding behavior differs between Ruby and JS:
+per_share = revenue / total_shares
+
+# Good — explicit, consistent across runtimes:
+per_share = (revenue / total_shares).floor
+```
+
+Reference: `g_1837/step/dividend.rb:26`.
+
+**Test in server mode before opening a PR.** Hot seat is convenient for iteration, but a passing hot seat test does not guarantee server-mode correctness. Run at least one server-mode game through the feature path before submitting.
+
+---
+
+## 68. Search for existing engine methods before implementing — amount of code is a signal
+
+Before writing any new method, grep the engine for the concept you need. When the right engine method already exists, the implementation often shrinks by more than half. A large implementation is frequently a sign that the existing API was not found.
+
+**Practical steps:**
+
+1. Name the concept in plain terms ("president overcap", "per-share payout", "token cost bypass").
+2. Grep `lib/engine/` for the concept: method names, step files, game comparators.
+3. Read the base step method in full before overriding. Check whether the base already returns the correct value for your game (see §19).
+
+```bash
+grep -rn "president.*overcap\|overcap.*president" lib/engine/
+grep -rn "modify_purchase_price" lib/engine/step/
+```
+
+If you find a match: read it, understand it, call `super` and add only the delta. If no match: implement from scratch and note the absence in the sign-off card so reviewers know you checked.
+
+Related: §19, §33 (call `super` instead of duplicating), Reference Games table.
+
+---
+
 ## What's next
 
 - Implementation layer taxonomy: [Game Engine](game-engine.html)
@@ -2002,4 +2048,4 @@ Related: §2 (program to interface), §6 (dependency inversion), §7 (Law of Dem
 - Ability implementation: [Ability Types Reference](abilities.html)
 
 ---
-*Version: 2026-05-21 — §66 added: entity-typed hash dispatch belongs in a game method.*
+*Version: 2026-05-21 — §67 added: hot seat vs server mode (Opal/JS symbol and float divergence); §68 added: search for existing engine methods before implementing.*
