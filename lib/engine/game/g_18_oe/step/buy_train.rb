@@ -71,8 +71,17 @@ module Engine
 
           private
 
+          # Rusted trains have owner==nil (set by base.rb#rust). Two ways to
+          # keep the buy_trains view from crashing on nil-owner trains:
+          #   A) Engine fix — available.delete(nil) in buy_trains.rb groups
+          #      nil-owner trains into depot_trains before sort_by runs.
+          #      See: https://github.com/tobymao/18xx/pull/12660
+          #   B) Game fix — override rust in game.rb to set train.owner=@depot;
+          #      change filter below to t.owner == @game.depot.
+          #      Removes the nil entirely, no engine change needed.
+          # Currently uses approach A (owner.nil? filter, engine PR pending).
           def unclaimed_rusted_trains
-            @game.depot.trains.select { |t| t.rusted && t.owner == @game.depot }
+            @game.depot.trains.select { |t| t.rusted && t.owner.nil? }
           end
 
           def can_claim_rusted_train?(entity)
