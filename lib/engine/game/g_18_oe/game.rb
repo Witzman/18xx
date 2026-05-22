@@ -934,6 +934,8 @@ module Engine
         end
 
         def hex_within_national_region?(entity, hex)
+          return true if entity.type == :major # §11.1.4: majors unrestricted to any zone
+
           region = self.class::CORPORATIONS_TRACK_RIGHTS[entity.id] || @minor_floated_regions[entity.id]
           hexes = self.class::NATIONAL_REGION_HEXES[region]
           hexes&.include?(hex.coordinates) || false
