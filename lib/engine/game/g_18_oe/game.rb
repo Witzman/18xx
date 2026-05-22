@@ -785,8 +785,7 @@ module Engine
           corporation.tokens.each do |token|
             next unless token.city
 
-            token.city.remove_token!(token)
-            token.city = nil
+            token.remove!
           end
 
           # 4. Flip to national type
@@ -854,7 +853,7 @@ module Engine
           revenue += town_capacity * 10 if town_capacity.positive?
 
           # Inherent Pullman bonus: +£10 × level of highest non-rusted train (§1.5)
-          highest_level = entity.trains.reject(&:obsolete?).map { |t| train_level(t) }.max || 0
+          highest_level = entity.trains.reject(&:obsolete).map { |t| train_level(t) }.max || 0
           revenue += highest_level * 10
 
           revenue
