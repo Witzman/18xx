@@ -813,6 +813,10 @@ module Engine
             @depot.reclaim_train(train)
           end
 
+          # 6. Clear merged-minor track rights — §10.5: chits stay on abandoned minor's charter,
+          #    not transferred to national. Prevents stale zones giving zone discounts post-conversion.
+          @minor_track_rights.delete(corporation.id)
+
           # TODO: §1.3c — abandon merged minors not yet implemented (openpoints §1.3c)
           # TODO: §1.3d — remove track rights / OE / private markers not yet implemented (openpoints §1.3d)
         end
