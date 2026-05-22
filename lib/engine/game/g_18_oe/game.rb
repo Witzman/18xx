@@ -423,11 +423,11 @@ module Engine
         TILES = {
           '3' => 14,
           '4' => 25,
-          '5' => 25,
-          '6' => 15,
+          '5' => 15,
+          '6' => 25,
           '7' => 14,
-          '8' => 99,
-          '9' => 99,
+          '8' => 88,
+          '9' => 90,
           '12' => 10,
           '13' => 8,
           '57' => 19,
@@ -502,10 +502,17 @@ module Engine
               'color' => 'yellow',
               'code' => 'city=revenue:30;city=revenue:30;path=a:0,b:_0;path=a:5,b:_1;label=S',
             },
-          # TODO: OE9–OE11 — 3× green double-town tile each; DSL not yet written [alpha]
-          'OE12' =>
+          'OE9' =>
             {
               'count' => 3,
+              'color' => 'green',
+              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:3,b:_0;path=a:_0,b:_1;path=a:2,b:_1;path=a:5,b:_1',
+            },
+          # 'OE10' => 3, green, double town
+          # 'OE11' => 3, green, double town
+          'OE12' =>
+            {
+              'count' => 1,
               'color' => 'green',
               'code' => 'city=revenue:50;city=revenue:50;city=revenue:50;path=a:0,b:_0;path=a:_0,b:3;'\
                         'path=a:2,b:_1;path=a:_1,b:5;path=a:4,b:_2;path=a:_2,b:1;label=A',
@@ -569,7 +576,7 @@ module Engine
             },
           'OE26' =>
             {
-              'count' => 5,
+              'count' => 1,
               'color' => 'brown',
               'code' => 'city=revenue:80,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;'\
                         'path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;label=ACS',
@@ -639,7 +646,7 @@ module Engine
             },
           'OE37' =>
             {
-              'count' => 5,
+              'count' => 3,
               'color' => 'gray',
               'code' => 'city=revenue:100,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;'\
                         'path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;label=APS',
