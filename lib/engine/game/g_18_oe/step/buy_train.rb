@@ -72,7 +72,7 @@ module Engine
           private
 
           def unclaimed_rusted_trains
-            @game.depot.trains.select { |t| t.rusted && t.owner.nil? }
+            @game.depot.trains.select { |t| t.rusted && t.owner == @game.depot }
           end
 
           def can_claim_rusted_train?(entity)
