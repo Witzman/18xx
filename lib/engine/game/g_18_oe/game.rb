@@ -418,8 +418,19 @@ module Engine
         MAX_FLOATED_REGIONALS = 18
         CONVERSION_NEW_SHARES = 6
 
+        METROPOLIS_UPGRADE_CHAINS = {
+          'K26'  => %w[OE4 OE12 OE26 OE37].freeze, # Birmingham
+          'M28'  => %w[OE6 OE15 OE28 OE40].freeze, # London
+          'Q30'  => %w[OE4 OE17 OE30 OE37].freeze, # Paris
+          'Y14'  => %w[OE4 OE12 OE26 OE37].freeze, # Madrid
+          'M50'  => %w[OE4 OE13 OE27 OE38].freeze, # Berlin
+          'R55'  => %w[OE4 OE12 OE26 OE37].freeze, # Wien
+          'AB51' => %w[OE7 OE16 OE29 OE41].freeze, # Napoli
+          'AA82' => %w[OE5 OE14 OE26 OE39].freeze, # Constantinople
+          'C74'  => %w[OE8 OE18 OE26 OE37].freeze, # Sankt-Peterburg
+        }.freeze
 
-        # still need green+ OE specific track tiles
+
         TILES = {
           '3' => 14,
           '4' => 25,
@@ -1268,23 +1279,10 @@ module Engine
         end
 
         def upgrades_to_correct_label?(from, to)
-          return true if from.label == to.label
-          return false if from.label && !to.label
+          chain = self.class::METROPOLIS_UPGRADE_CHAINS[from.hex&.name]
+          return (chain[chain.index(from.name) + 1] == to.name) if chain&.include?(from.name)
 
-          case from.hex.coordinates
-          when 'K26', 'Y14', 'R55'
-            to.label.to_s.include?('A')
-          when 'M50'
-            to.label.to_s.include?('B')
-          when 'AA82'
-            to.label.to_s.include?('C')
-          when 'AB51'
-            to.label.to_s.include?('N')
-          when 'Q30'
-            to.label.to_s.include?('P')
-          when 'C74'
-            to.label.to_s.include?('S')
-          end
+          super
         end
 
         def company_becomes_minor?(company)
