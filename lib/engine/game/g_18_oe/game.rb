@@ -506,7 +506,7 @@ module Engine
             {
               'count' => 3,
               'color' => 'green',
-              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:3,b:_0;path=a:_0,b:_1;path=a:2,b:_1;path=a:5,b:_1',
+              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:3,b:_0;path=a:_0,b:_1;path=a:1,b:_1;path=a:5,b:_1',
             },
           # 'OE10' => 3, green, double town
           # 'OE11' => 3, green, double town
