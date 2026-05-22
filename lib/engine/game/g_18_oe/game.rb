@@ -502,12 +502,7 @@ module Engine
               'color' => 'yellow',
               'code' => 'city=revenue:30;city=revenue:30;path=a:0,b:_0;path=a:5,b:_1;label=S',
             },
-          'OE9' =>
-            {
-              'count' => 3,
-              'color' => 'green',
-              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:3,b:_0;path=a:_0,b:_1;path=a:1,b:_1;path=a:5,b:_1',
-            },
+          # 'OE9' => 3, green, double town
           # 'OE10' => 3, green, double town
           # 'OE11' => 3, green, double town
           'OE12' =>
