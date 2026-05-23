@@ -54,7 +54,9 @@ module Engine
           private
 
           def pending_corps(entity)
-            entity.shares.map(&:corporation)
+            return [] unless entity
+
+            entity.shares.filter_map(&:corporation)
                   .select { |c| %i[minor regional].include?(c.type) }
                   .uniq
           end
