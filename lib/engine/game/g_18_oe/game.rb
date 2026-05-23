@@ -254,8 +254,8 @@ module Engine
         ASTERISKED_ZONES_CAP = 4
 
         ZONE_DISCOUNT_ZONES         = %w[SP IT SC RU].freeze
-        ZONE_DISCOUNT_RATE          = Rational(1, 5).freeze # 20% §11.1.5
-        ZONE_TERRAIN_DISCOUNT_RATE  = Rational(1, 2).freeze # 50% §11.1.5; E/F augment zone discount
+        ZONE_DISCOUNT_RATE          = 0.2 # 20% §11.1.5
+        ZONE_TERRAIN_DISCOUNT_RATE  = 0.5 # 50% §11.1.5; E/F augment zone discount
         TILE_POINT_BUDGET = { minor: 3, regional: 3, major: 6, national: 9 }.freeze
         MINOR_MAX_TREASURY = 180
         EF_TERRAIN_AUGMENT          = { 'E' => :water, 'F' => :mountain }.freeze
@@ -1083,7 +1083,7 @@ module Engine
           return unless (bonus = d_corp_hex_bonus)
 
           bonus.hexes.clear
-          bonus.amount = 40
+          bonus.amount = self.class::D_TOKEN_PHASE5_BONUS
           @log << "-- Event: Green Junction Mercantile +£20 marker removed; +£40 marker now available --"
         end
 
