@@ -912,6 +912,11 @@ module Engine
           !phase.status.include?('train_obligation') || @fulfilled_train_obligation.include?(entity.id)
         end
 
+        def rust(train)
+          super
+          train.owner = @depot
+        end
+
         def fulfill_train_obligation!(entity)
           @fulfilled_train_obligation.add(entity.id)
         end
@@ -1431,7 +1436,7 @@ module Engine
           return false unless sml&.owner == player
           return false if sml_claimable_corps(player).empty?
 
-          @depot.trains.any? { |t| t.rusted && t.owner.nil? && t.name == self.class::SML_TRAIN_NAME }
+          @depot.trains.any? { |t| t.rusted && t.owner == @depot && t.name == self.class::SML_TRAIN_NAME }
         end
 
         def sml_claimable_corps(player)
@@ -1443,7 +1448,7 @@ module Engine
         end
 
         def claim_sml_train!(corp)
-          train = @depot.trains.find { |t| t.rusted && t.owner.nil? && t.name == self.class::SML_TRAIN_NAME }
+          train = @depot.trains.find { |t| t.rusted && t.owner == @depot && t.name == self.class::SML_TRAIN_NAME }
           return unless train
 
           corp.trains << train
