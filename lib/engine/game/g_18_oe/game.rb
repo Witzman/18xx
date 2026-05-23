@@ -1348,7 +1348,7 @@ module Engine
         end
 
         def stock_round
-          G18OE::Round::Stock.new(self, [
+          Engine::Round::Stock.new(self, [
             Engine::Step::DiscardTrain,
             G18OE::Step::HomeToken,
             G18OE::Step::BuySellParShares,
