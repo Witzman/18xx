@@ -16,14 +16,14 @@ Coordinate system: rows A–Z then AA–AH (34 rows); columns 2–88.
 | National region hex lists | ✓ All 8 (UK, SC, FR, PHS, AH, IT, SP, RU) — `NATIONAL_REGION_HEXES_COMPLETE = true` |
 | Location names | ✓ All 255 |
 | Sea zones | ✓ 19 named zones with hex lists; borders encoded as `type:province`; port stubs on 37 sea tiles |
-| Custom tile codes | ✓ OE1–OE8, OE12–OE18, OE23–OE44 |
+| Custom tile codes | ✓ OE1–OE22, OE23–OE44 (OE19 unknown) |
 | Standard tile quantities | ✓ Complete |
 | Terrain costs | ✓ UK, FR, SP, SC, Alps, IT, Adriatic, Carpathians, Balkans, Caucasus, river crossings |
 | Station revenues | ✓ All 255 named locations have correct starting revenue |
 | Pre-printed yellows | ✓ Liverpool J25, Manchester J27, Athinai AE72 |
 | Pre-printed whites (path edges) | ~ Several cities missing path edges — see §3 |
 | Ferry paths / distances | ? Outstanding |
-| Double-town tile orientations | ? OE9–11, OE20–22 outstanding |
+| Double-town tiles OE9–11, OE20–22 | ✓ Implemented (PR #12667) |
 
 ---
 
@@ -180,21 +180,22 @@ All 8 zones defined. `NATIONAL_REGION_HEXES_COMPLETE = true`.
 
 ## Custom Tile Codes
 
-✓ Implemented: OE1–OE8, OE12–OE18, OE23–OE44
+✓ Implemented: OE1–OE22, OE23–OE44
 
-? **Outstanding — orientations unknown (double-town tiles, commented out):**
+**Double-town tiles OE9–OE22 (PR #12667):** single `town=revenue:10,size:2` node; all paths connect to `_0`; `TownDot` renders oval + two dots; `visited_stops` expands to 2 scoring slots. Exits:
 
-| Code | Colour | Qty | Missing |
-|------|--------|-----|---------|
-| OE9 | green | 3 | edge pair |
-| OE10 | green | 3 | edge pair |
-| OE11 | green | 3 | edge pair |
-| OE20 | brown | 3 | edge pair |
-| OE21 | brown | 2 | edge pair |
-| OE22 | brown | 6 | edge pair |
-| OE19 | ? | ? | tile type (gap between OE18 green and OE20 brown) |
+| Code | Colour | Qty | Exits |
+|------|--------|-----|-------|
+| OE9  | green  | 3   | 0 2 3 5 |
+| OE10 | green  | 3   | 1 2 3 5 |
+| OE11 | green  | 3   | 0 2 3 4 |
+| OE20 | brown  | 3   | 0 1 2 5 |
+| OE21 | brown  | 2   | 0 1 2 3 5 |
+| OE22 | brown  | 6   | 0 1 2 3 4 5 |
 
-? Do OE9–11 upgrade directly to OE20–22?
+? **Outstanding:**
+- OE19 — tile type unknown (gap between OE18 green and OE20 brown)
+- Do OE9–11 upgrade directly to OE20–22? (upgrade path not yet wired)
 
 ---
 

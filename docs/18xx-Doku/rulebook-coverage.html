@@ -87,35 +87,35 @@
 <article>
 <h1>18OE — Rulebook Coverage</h1>
 <p class="page-crosslink">For current sprint state → <a href="status.html">Implementation Tracker</a> · Alpha gaps → <a href="alpha-gaps.html">Open for Alpha</a></p>
-<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">227 mechanics tracked across 29 rulebook chapters.</p>
+<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">229 mechanics tracked across 29 rulebook chapters.</p>
 <p class="bar-note">Bar widths weighted by section effort (L3 systems = 3× · L2 overrides = 2× · L1 data = 1×).</p>
 <div class="bar-rows">
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:42.2%"></div>
-<div class="pb-pr"      style="width:4.2%"></div>
+<div class="pb-done"    style="width:43.2%"></div>
+<div class="pb-pr"      style="width:4.1%"></div>
 <div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:51.0%"></div>
+<div class="pb-todo"    style="width:50.1%"></div>
 </div>
-<span class="bar-label-right"><strong>46%</strong> implemented or in review</span>
+<span class="bar-label-right"><strong>47%</strong> implemented or in review</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:68.9%"></div>
+<div class="pb-done"    style="width:69.9%"></div>
 <div class="pb-pr"      style="width:2.3%"></div>
-<div class="pb-partial" style="width:3.0%"></div>
-<div class="pb-todo"    style="width:25.8%"></div>
+<div class="pb-partial" style="width:2.9%"></div>
+<div class="pb-todo"    style="width:24.8%"></div>
 </div>
-<span class="bar-label-right"><strong>71%</strong> alpha scope done</span>
+<span class="bar-label-right"><strong>72%</strong> alpha scope done</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
-<div class="stat-chip stat-done">Done &amp; merged <span>106</span></div>
+<div class="stat-chip stat-done">Done &amp; merged <span>110</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>7</span></div>
 <div class="stat-chip stat-partial">Partial <span>10</span></div>
-<div class="stat-chip stat-todo">To do <span>95</span></div>
+<div class="stat-chip stat-todo">To do <span>93</span></div>
 <div class="stat-chip stat-todo">Deferred <span>9</span></div>
 </div>
 <div class="status-filters" style="margin-bottom:1rem">
@@ -181,7 +181,7 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title cov-toggle" id="map--components"><span class="cov-ch-name">Map &amp; Components</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:45.8%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">11/24</span></div>
+<div class="cov-chapter-title cov-toggle" id="map--components"><span class="cov-ch-name">Map &amp; Components</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:50.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">11/22</span></div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="651-hex grid">651-hex grid</div>
 <div class="cov-item cov-done" data-scope="alpha" title="19 red off-board hexes">19 red off-board hexes</div>
@@ -196,8 +196,6 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Province borders + partition engine">Province borders + partition engine</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 — green double-town path edge orientations needed">OE9–OE11 — green double-town path edge orientations needed</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 — brown double-town path edge orientations needed">OE20–OE22 — brown double-town path edge orientations needed</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="OE19 — tile type unknown; must be identified and defined">OE19 — tile type unknown; must be identified and defined</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Verify standard tile quantities against physical tile manifest">Verify standard tile quantities against physical tile manifest</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Audit OE-specific tile upgrade paths against physical manifest">Audit OE-specific tile upgrade paths against physical manifest</div>
@@ -209,7 +207,7 @@
 <div class="cov-item cov-todo" data-scope="beta" title="**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work">**G30 inland port** `[BETA]` — G30 currently has `junction;path=a:4,b:_0` (missing `terminal:1`); inland ports differ from coastal port stubs in routing rules — define and document the distinction before implementing; add `terminal:1` as part of this work</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-done">11 done</span> · <span class="cov-dr-todo">13 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">11 done</span> · <span class="cov-dr-todo">11 todo</span></div>
 <table class="cov-detail-table"><tbody>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">651-hex grid</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">19 red off-board hexes</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
@@ -224,8 +222,6 @@
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Province borders + partition engine</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">OE9–OE11 — green double-town path edge orientations needed</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">OE20–OE22 — brown double-town path edge orientations needed</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">OE19 — tile type unknown; must be identified and defined</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Verify standard tile quantities against physical tile manifest</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Audit OE-specific tile upgrade paths against physical manifest</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
@@ -375,13 +371,17 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title cov-toggle" id="track-laying"><span class="cov-ch-name">Track Laying</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:90.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">9/10</span></div>
+<div class="cov-chapter-title cov-toggle" id="track-laying"><span class="cov-ch-name">Track Laying</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:92.9%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">13/14</span></div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="OE1–OE3 yellow double-town">OE1–OE3 yellow double-town</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE4–OE8 yellow city">OE4–OE8 yellow city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="OE9–OE11 green double-town (size:2 rendering + routing)">OE9–OE11 green double-town (size:2 rendering + routing)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE12–OE18 green city">OE12–OE18 green city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="OE20–OE22 brown double-town (size:2 rendering + routing)">OE20–OE22 brown double-town (size:2 rendering + routing)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE23–OE33 brown city">OE23–OE33 brown city</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE34–OE44 gray city">OE34–OE44 gray city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="TownDot double-dot SVG rendering (ellipse + dual circles)">TownDot double-dot SVG rendering (ellipse + dual circles)</div>
+<div class="cov-item cov-done" data-scope="alpha" title="`visited_stops` expansion for double-town revenue counting">`visited_stops` expansion for double-town revenue counting</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point budgets">Tile point budgets</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point costs">Tile point costs</div>
 <div class="cov-item cov-done" data-scope="alpha" title="TILE_UPGRADES_MUST_USE_MAX_EXITS">TILE_UPGRADES_MUST_USE_MAX_EXITS</div>
@@ -389,13 +389,17 @@
 <div class="cov-item cov-todo" data-scope="alpha" title="First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately">First-OR green tile exception (§11.1.9) — Phase 2 only, first OR after float: if RR cannot connect home token to any town/city via land or ferry without a sea crossing, it may lay one non-city green tile at cost of all remaining tile points; requires ≥1 tile point; cannot be exploited deliberately</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-done">9 done</span> · <span class="cov-dr-todo">1 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">13 done</span> · <span class="cov-dr-todo">1 todo</span></div>
 <table class="cov-detail-table"><tbody>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE1–OE3 yellow double-town</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE4–OE8 yellow city</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE9–OE11 green double-town (size:2 rendering + routing)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE12–OE18 green city</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE20–OE22 brown double-town (size:2 rendering + routing)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE23–OE33 brown city</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">OE34–OE44 gray city</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">TownDot double-dot SVG rendering (ellipse + dual circles)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">`visited_stops` expansion for double-town revenue counting</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Tile point budgets</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Tile point costs</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">TILE_UPGRADES_MUST_USE_MAX_EXITS</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>

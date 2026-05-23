@@ -73,6 +73,7 @@ A smaller revenue center that cannot hold station tokens.
 |----------|------|---------|---------|
 | `revenue` | integer or phase spec | required | Revenue value |
 | `style` | `rect` / `dot` / `hidden` | auto | `rect` when 1–2 paths connect; `dot` when 0 or 3+; `hidden` for special offboards |
+| `size` | integer | `1` | Number of scoring slots. `size:2` renders as an oval with two dots and counts as two stops for revenue (used by 18OE double-town tiles OE9–OE22). |
 | `groups` | `\|`-separated strings | — | Same-group route restriction |
 | `hide` | `1` | — | Do not render the revenue value |
 

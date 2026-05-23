@@ -17,14 +17,40 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 3   Open (beta): 7   Fixed: 27   Won't fix: 2   Total: 39
-Bugs closed  ██████████████████████  29 / 39  (74%)
+Open (alpha): 3   Open (beta): 7   Fixed: 29   Won't fix: 2   Total: 41
+Bugs closed  ██████████████████████  31 / 41  (76%)
 Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
 ```
 
 ---
 
 ## Open
+
+### BUG-044 — Majors incorrectly zone-restricted for track laying and token placement
+
+- **Status:** FIXED 2026-05-22 `fb2a420d3` (18oe_testing: FIXED; **upstream/master: unfixed — TODO: open dedicated PR**)
+- **Severity:** HIGH (alpha scope — majors cannot lay track or place tokens outside their inherited zone)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `hex_within_national_region?`
+- **Rule:** §11.1.4 — "Minors, regionals, and nationals may only lay or upgrade track in hexes entirely or partly within their track rights zones." Majors not listed → unrestricted.
+
+**Symptom.** `hex_within_national_region?` returned `false` for any major targeting a hex outside their inherited zone. Called by `Step::Track#tracker_available_hex` and `Step::Token#available_hex` / `#check_connected`, causing majors to behave identically to restricted entities.
+
+**Fix.** Added `return true if entity.type == :major` guard at top of `hex_within_national_region?`.
+
+---
+
+### BUG-045 — `convert_to_national` retains merged-minor track rights, giving stale zone discounts
+
+- **Status:** FIXED 2026-05-22 (18oe_testing)
+- **Severity:** MEDIUM (beta scope — national would receive 20% zone discount in zones acquired from merged minors, which revert to abandoned minor charters on national formation)
+- **File:** `lib/engine/game/g_18_oe/game.rb` — `convert_to_national`
+- **Rule:** §10.5 developer note — "If the major is later converted to a national, this track rights chit stays on the abandoned minor's charter!" Nationals hold only their original regional zone.
+
+**Symptom.** `@minor_track_rights[corp.id]` accumulated during minor merges was never cleared on national formation. `tile_cost_with_discount` calls `track_rights_for` which reads `@minor_track_rights` — national would get zone discount in all formerly-merged minor zones post-conversion.
+
+**Fix.** Added `@minor_track_rights.delete(corporation.id)` in step 6 of `convert_to_national`.
+
+---
 
 ### BUG-038 — `available_on: '7+7'` on 8+8 train crashes buy-train render — upstream fix needed
 

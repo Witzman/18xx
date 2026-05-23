@@ -84,9 +84,13 @@ Format: `- [x] Short label **[alpha|beta]** **[L1|L2|L3]**`
 ## Track Laying
 - [x] OE1–OE3 yellow double-town **[alpha]** **[L1]**
 - [x] OE4–OE8 yellow city **[alpha]** **[L1]**
+- [x] OE9–OE11 green double-town (size:2 rendering + routing) **[alpha]** **[L1/L2]**
 - [x] OE12–OE18 green city **[alpha]** **[L1]**
+- [x] OE20–OE22 brown double-town (size:2 rendering + routing) **[alpha]** **[L1/L2]**
 - [x] OE23–OE33 brown city **[alpha]** **[L1]**
 - [x] OE34–OE44 gray city **[alpha]** **[L1]**
+- [x] TownDot double-dot SVG rendering (ellipse + dual circles) **[alpha]** **[L2]**
+- [x] `visited_stops` expansion for double-town revenue counting **[alpha]** **[L2]**
 - [x] Tile point budgets **[alpha]** **[L1]**
 - [x] Tile point costs **[alpha]** **[L1]**
 - [x] TILE_UPGRADES_MUST_USE_MAX_EXITS **[alpha]** **[L1]**

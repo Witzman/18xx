@@ -92,19 +92,19 @@
 <div class="bar-row">
 <span class="bar-label-left">Map & Components</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:45.8%"></div>
+<div class="pb-done"    style="width:50.0%"></div>
 <div class="pb-pr"      style="width:0.0%"></div>
 <div class="pb-partial" style="width:0.0%"></div>
-<div class="pb-todo"    style="width:54.2%"></div>
+<div class="pb-todo"    style="width:50.0%"></div>
 </div>
-<span class="bar-label-right"><strong>46%</strong> · 23 / 37 items across map sections</span>
+<span class="bar-label-right"><strong>50%</strong> · 27 / 39 items across map sections</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
-<div class="stat-chip stat-done">Done <span>23</span></div>
+<div class="stat-chip stat-done">Done <span>27</span></div>
 <div class="stat-chip stat-pr">Needs PR <span>0</span></div>
 <div class="stat-chip stat-partial">Partial <span>0</span></div>
-<div class="stat-chip stat-todo">To do <span>14</span></div>
+<div class="stat-chip stat-todo">To do <span>12</span></div>
 </div>
 <h2 id="overall-status">Overall Status</h2>
 <table class="map-status-table">
@@ -143,8 +143,6 @@
 <div class="cov-item cov-done" data-scope="alpha" title="Province borders + partition engine">Province borders + partition engine</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE9–OE11 — green double-town path edge orientations needed">OE9–OE11 — green double-town path edge orientations needed</div>
-<div class="cov-item cov-todo" data-scope="alpha" title="OE20–OE22 — brown double-town path edge orientations needed">OE20–OE22 — brown double-town path edge orientations needed</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="OE19 — tile type unknown; must be identified and defined">OE19 — tile type unknown; must be identified and defined</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Verify standard tile quantities against physical tile manifest">Verify standard tile quantities against physical tile manifest</div>
 <div class="cov-item cov-todo" data-scope="alpha" title="Audit OE-specific tile upgrade paths against physical manifest">Audit OE-specific tile upgrade paths against physical manifest</div>
@@ -160,9 +158,13 @@
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="OE1–OE3 yellow double-town">OE1–OE3 yellow double-town</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE4–OE8 yellow city">OE4–OE8 yellow city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="OE9–OE11 green double-town (size:2 rendering + routing)">OE9–OE11 green double-town (size:2 rendering + routing)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE12–OE18 green city">OE12–OE18 green city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="OE20–OE22 brown double-town (size:2 rendering + routing)">OE20–OE22 brown double-town (size:2 rendering + routing)</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE23–OE33 brown city">OE23–OE33 brown city</div>
 <div class="cov-item cov-done" data-scope="alpha" title="OE34–OE44 gray city">OE34–OE44 gray city</div>
+<div class="cov-item cov-done" data-scope="alpha" title="TownDot double-dot SVG rendering (ellipse + dual circles)">TownDot double-dot SVG rendering (ellipse + dual circles)</div>
+<div class="cov-item cov-done" data-scope="alpha" title="`visited_stops` expansion for double-town revenue counting">`visited_stops` expansion for double-town revenue counting</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point budgets">Tile point budgets</div>
 <div class="cov-item cov-done" data-scope="alpha" title="Tile point costs">Tile point costs</div>
 <div class="cov-item cov-done" data-scope="alpha" title="TILE_UPGRADES_MUST_USE_MAX_EXITS">TILE_UPGRADES_MUST_USE_MAX_EXITS</div>
@@ -185,8 +187,6 @@
 <tr class="gap-section-row"><td colspan="3" class="gap-section-label">Map &amp; Components</td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify M28 London / AA82 Constantinople / I20 Dublin / O28 Le Havre / X33 Marseille are in `yellow:` section in map.rb (edges added in 18oe_testing; section move not yet confirmed)</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">N31 Lille second token slot for White Cliffs Ferry — pre-printed Lille tile needs a secondary station slot; confirm against physical map</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE9–OE11 — green double-town path edge orientations needed</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
-<tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE20–OE22 — brown double-town path edge orientations needed</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">OE19 — tile type unknown; must be identified and defined</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Verify standard tile quantities against physical tile manifest</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="gap-row-feat"><td class="gap-area"></td><td class="gap-feat">Audit OE-specific tile upgrade paths against physical manifest</td><td class="gap-id"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
@@ -268,10 +268,11 @@ AG:40 AG:88  Tunis, Alexandria &amp; Suez</code></pre>
 <p>? <strong>Verify against physical map:</strong> Caucasus at AA86/AD81–AE84; river routing accuracy; combined terrain hexes (mountain + water).</p>
 <hr>
 <h2 id="custom-tile-codes">Custom Tile Codes</h2>
-<p>✓ Implemented: OE1–OE8, OE12–OE18, OE23–OE44</p>
-<p>? <strong>Outstanding — orientations unknown (double-town tiles, commented out):</strong></p>
-<table><thead><tr><th>Code</th><th>Colour</th><th>Qty</th><th>Missing</th></tr></thead><tbody><tr><td>OE9</td><td>green</td><td>3</td><td>edge pair</td></tr><tr><td>OE10</td><td>green</td><td>3</td><td>edge pair</td></tr><tr><td>OE11</td><td>green</td><td>3</td><td>edge pair</td></tr><tr><td>OE20</td><td>brown</td><td>3</td><td>edge pair</td></tr><tr><td>OE21</td><td>brown</td><td>2</td><td>edge pair</td></tr><tr><td>OE22</td><td>brown</td><td>6</td><td>edge pair</td></tr><tr><td>OE19</td><td>?</td><td>?</td><td>tile type (gap between OE18 green and OE20 brown)</td></tr></tbody></table>
-<p>? Do OE9–11 upgrade directly to OE20–22?</p>
+<p>✓ Implemented: OE1–OE22, OE23–OE44</p>
+<p><strong>Double-town tiles OE9–OE22 (PR #12667):</strong> single <code>town=revenue:10,size:2</code> node; all paths connect to <code>_0</code>; <code>TownDot</code> renders oval + two dots; <code>visited_stops</code> expands to 2 scoring slots. Exits:</p>
+<table><thead><tr><th>Code</th><th>Colour</th><th>Qty</th><th>Exits</th></tr></thead><tbody><tr><td>OE9</td><td>green</td><td>3</td><td>0 2 3 5</td></tr><tr><td>OE10</td><td>green</td><td>3</td><td>1 2 3 5</td></tr><tr><td>OE11</td><td>green</td><td>3</td><td>0 2 3 4</td></tr><tr><td>OE20</td><td>brown</td><td>3</td><td>0 1 2 5</td></tr><tr><td>OE21</td><td>brown</td><td>2</td><td>0 1 2 3 5</td></tr><tr><td>OE22</td><td>brown</td><td>6</td><td>0 1 2 3 4 5</td></tr></tbody></table>
+<p>? <strong>Outstanding:</strong></p>
+<ul><li>OE19 — tile type unknown (gap between OE18 green and OE20 brown)</li><li>Do OE9–11 upgrade directly to OE20–22? (upgrade path not yet wired)</li></ul>
 <hr>
 <h2 id="ports-and-ferry-routes">Ports and Ferry Routes</h2>
 <table><thead><tr><th>Item</th><th>Status</th></tr></thead><tbody><tr><td>Port city hexes (public light-blue / private red anchor)</td><td>✓ 33 <code>icon=image:port,sticky:1</code> instances in map.rb</td></tr><tr><td>Ferry path stubs (14+ <code>junction;path=...,terminal:1</code> hexes)</td><td>✓ Stubs present</td></tr><tr><td>Ferry route paths (start hex+edge → end hex+edge, distance)</td><td>? Numbers not yet defined</td></tr><tr><td>Sea zone distance numbers for cost calculation</td><td>? Outstanding</td></tr><tr><td>North Sea port authority positions (8)</td><td>?</td></tr><tr><td>Mediterranean port authority positions (8)</td><td>?</td></tr><tr><td>White Cliffs Ferry token slot near Lille N31</td><td>?</td></tr><tr><td>Patronage tiles — fixed city list or game logic only?</td><td>?</td></tr></tbody></table>

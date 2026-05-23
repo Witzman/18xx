@@ -244,6 +244,22 @@ revisit and align (this ADR or rubocop config).
 
 ---
 
+## ADR-012 — Double-town tiles use a single Town node with `size:2` + `visited_stops` expansion
+
+- **Date:** 2026-05-24
+- **Status:** ACCEPTED
+
+**Context.** OE9–OE22 are "centered double-town" tiles — physically two town dots side by side (like tile #619 with towns instead of city slots). Two design options were considered:
+
+1. **Two Town nodes** (`town=revenue:10;town=revenue:10;path=a:X,b:_0;path=a:Y,b:_0;path=a:X,b:_1;...`) — logically correct but requires doubling all paths and creates complex routing topology.
+2. **Single Town node with `size:2`** — one `_0` reference for all paths; routing engine sees one stop; a `visited_stops` override expands it to two entries for `compute_stops`.
+
+**Decision.** Option 2 — single node, `size:2` parameter. All paths connect to `_0`; `visited_stops` in `game.rb` flat-maps any `town.size > 1` stop into `stop.size` copies.
+
+**Consequences.** Routing engine correctly auto-maximizes revenue (picks best 1 or 2 slots). D-trains / express trains pass through without scoring, same as a normal town. Local trains score £10 (1 slot) or £20 (2 slots) depending on city count. `TownDot` renders an oval with two dots. The `size:` parameter is a generic extension to `Part::Town` — backwards-compatible (defaults to 1); other games are unaffected. OE19 is still unknown and does not follow this pattern.
+
+---
+
 ## How to add a new ADR
 
 1. Pick the next available ID (e.g. `ADR-010`).
