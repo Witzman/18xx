@@ -289,11 +289,18 @@ end
 # ---------------------------------------------------------------------------
 # Dividend
 # ---------------------------------------------------------------------------
-def handle_dividend(game, entity, step, raw_actions, action_id, entity_or_count)
+def handle_dividend(game, entity, step, raw_actions, action_id)
   revenue = step.respond_to?(:total_revenue) ? (step.total_revenue rescue 0) : 0
   types   = step.respond_to?(:dividend_types) ? (step.dividend_types rescue %i[withhold payout]) : %i[withhold payout]
 
-  kind = if entity_or_count[entity.id] == 0
+  # Withhold when treasury can't cover cheapest available train — save up to buy trains.
+  # This prevents corps from paying out revenue they need for phase-advancing train purchases.
+  min_train  = game.depot.min_depot_train
+  should_save = min_train && entity.cash < min_train.price
+
+  kind = if revenue.zero?
+           'withhold'
+         elsif should_save
            'withhold'
          elsif revenue.positive? && types.include?(:payout)
            'payout'
@@ -302,8 +309,6 @@ def handle_dividend(game, entity, step, raw_actions, action_id, entity_or_count)
          else
            'withhold'
          end
-
-  entity_or_count[entity.id] += 1
 
   begin
     do_action(game, Engine::Action::Dividend.new(entity, kind: kind), raw_actions, action_id)
@@ -619,6 +624,14 @@ end
 # ConvertToNational — player in nationals_formation_queue picks a major to convert
 # ---------------------------------------------------------------------------
 def handle_convert_to_national(game, entity, step, raw_actions, action_id)
+  # Pass until phase 8 — majors must remain to buy L5–L8 trains and advance phases.
+  # Nationals cannot buy depot trains; premature conversion stalls phase progression.
+  # Phase 8 also has nationals_can_form; convert there to exercise national mechanics.
+  phase_num = game.phase.name.to_i rescue 0
+  if phase_num < 8
+    return do_action(game, Engine::Action::Pass.new(entity), raw_actions, action_id)
+  end
+
   player = entity
   eligible = game.corporations.select { |c| c.type == :major && c.president?(player) }
 
@@ -630,7 +643,6 @@ def handle_convert_to_national(game, entity, step, raw_actions, action_id)
     end
   end
 
-  # No eligible major or all failed — pass (advances queue)
   do_action(game, Engine::Action::Pass.new(entity), raw_actions, action_id)
 end
 
@@ -644,7 +656,6 @@ acted_this_round        = Hash.new(0)
 last_entity             = nil
 last_step_class         = nil
 stuck_count             = 0
-entity_or_count         = Hash.new(0)
 cert_bought_pre_convert = {}
 GOOD_CORPS_PER_PLAYER   = 2
 good_corps              = metro_region_corps(game)
@@ -717,7 +728,7 @@ until game.finished || bank_broken || step_count >= MAX_STEPS
       routes = find_routes(game, entity)
       do_action(game, Engine::Action::RunRoutes.new(entity, routes: routes), raw_actions, action_id)
     elsif available.include?('dividend')
-      handle_dividend(game, entity, step, raw_actions, action_id, entity_or_count)
+      handle_dividend(game, entity, step, raw_actions, action_id)
     elsif available.include?('buy_train')
       handle_buy_train(game, entity, step, raw_actions, action_id)
     elsif available.include?('discard_train')
