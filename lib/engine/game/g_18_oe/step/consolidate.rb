@@ -103,6 +103,7 @@ module Engine
 
           def abandonable_minors(entity)
             return [] if eligible_merge_targets.any?
+            return [] if regional_convertible?(entity)
 
             pending_corps(entity).select { |c| c.type == :minor }
           end
