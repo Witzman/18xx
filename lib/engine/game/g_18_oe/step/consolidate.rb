@@ -7,13 +7,14 @@ module Engine
     module G18OE
       module Step
         class Consolidate < G18OE::Step::BuySellParShares
-          CONVERT_ACTIONS = ['convert'].freeze
-
           def actions(entity)
             return [] unless entity == current_entity
             return [] if pending_corps(entity).empty?
 
-            regional_convertible?(entity) ? CONVERT_ACTIONS : []
+            acts = []
+            acts << 'convert' if regional_convertible?(entity)
+            acts << 'merge'   if can_merge_any?(entity)
+            acts
           end
 
           def description
@@ -45,9 +46,23 @@ module Engine
             pass!
           end
 
+          # BuySellParShares#process_merge calls pass! ending the player's turn.
+          # Consolidation allows multiple merges per turn, so skip auto-pass.
+          def process_merge(action)
+            minor = action.entity
+            major = action.corporation
+
+            raise GameError, "#{minor.name} does not belong to #{current_entity.name}" unless
+              minor.president?(current_entity)
+            raise GameError, "#{major.name} already received a minor this SR" if
+              @round.minors_merged_into.include?(major)
+
+            @game.merge_minor!(minor, major)
+            @round.minors_merged_into << major
+            track_action(action, major)
+          end
+
           def process_pass(_action)
-            corps = pending_corps(current_entity).map(&:name).join(', ')
-            @log << "#{current_entity.name} passes consolidation — pending: #{corps} (merge/abandon TBD)"
             pass!
           end
 
