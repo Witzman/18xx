@@ -14,6 +14,7 @@ module Engine
             acts = []
             acts << 'convert' if regional_convertible?(entity)
             acts << 'merge'   if can_merge_any?(entity)
+            acts << 'choose'  if can_abandon_any?(entity)
             acts
           end
 
@@ -29,6 +30,18 @@ module Engine
             !actions(current_entity).empty?
           end
 
+          def choice_available?(_entity)
+            true
+          end
+
+          def choice_name
+            'Abandon minor'
+          end
+
+          def choices
+            abandonable_minors(current_entity).to_h { |c| [c.id, c.name] }
+          end
+
           def regional_convertible?(entity)
             pending_corps(entity).any? { |corp| can_convert?(corp) }
           end
@@ -39,6 +52,10 @@ module Engine
             return false unless entity.president?(current_entity)
 
             true
+          end
+
+          def can_abandon_any?(entity)
+            !abandonable_minors(entity).empty?
           end
 
           def process_convert(action)
@@ -62,6 +79,14 @@ module Engine
             track_action(action, major)
           end
 
+          def process_choose(action)
+            minor = @game.corporation_by_id(action.choice)
+            raise GameError, "#{action.choice} is not an abandonable minor" unless
+              abandonable_minors(current_entity).include?(minor)
+
+            @game.abandon_minor!(minor)
+          end
+
           def process_pass(_action)
             pass!
           end
@@ -74,6 +99,12 @@ module Engine
             entity.shares.filter_map(&:corporation)
                   .select { |c| %i[minor regional].include?(c.type) }
                   .uniq
+          end
+
+          def abandonable_minors(entity)
+            return [] if eligible_merge_targets.any?
+
+            pending_corps(entity).select { |c| c.type == :minor }
           end
         end
       end

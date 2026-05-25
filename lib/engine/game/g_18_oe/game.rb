@@ -1281,6 +1281,14 @@ module Engine
           @log << "#{minor.name} closed"
         end
 
+        def abandon_minor!(minor)
+          minor.trains.dup.each { |train| @depot.reclaim_train(train) }
+          @minor_regional_order.delete(minor)
+          @minor_floated_regions.delete(minor.id)
+          close_corporation(minor, quiet: true)
+          @log << "#{minor.name} abandoned"
+        end
+
         # UP movement at end of SR: only for majors and nationals that are fully player-held
         def sold_out_increase?(corporation)
           %i[major national].include?(corporation.type)
