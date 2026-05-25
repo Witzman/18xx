@@ -21,7 +21,7 @@ module Engine
           end
 
           def pass_description
-            'Pass (Consolidation TBD)'
+            'Pass'
           end
 
           def blocks?

@@ -15,7 +15,7 @@ module Engine
 
             if entity == player
               # Player can pass once they've had their chance
-              return ['pass'] unless eligible_majors(player).empty?
+              return ['pass'] unless @game.eligible_majors_for(player).empty?
             elsif entity.corporation? && entity.type == :major && entity.president?(player)
               return ['convert']
             end
@@ -46,7 +46,7 @@ module Engine
 
           def process_convert(action)
             @game.convert_to_national(action.entity)
-            advance_queue! if eligible_majors(current_entity).empty?
+            advance_queue! if @game.eligible_majors_for(current_entity).empty?
           end
 
           def process_pass(_action)
@@ -69,10 +69,6 @@ module Engine
           def advance_queue!
             @game.nationals_formation_queue.shift
             pass! if @game.nationals_formation_queue.empty?
-          end
-
-          def eligible_majors(player)
-            @game.corporations.select { |c| c.type == :major && c.president?(player) }
           end
         end
       end

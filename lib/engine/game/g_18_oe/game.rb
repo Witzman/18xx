@@ -801,11 +801,13 @@ module Engine
         # Called from Step::BuyTrain when phase 4, 6, or 8 begins.
         # Builds the formation queue starting with buyer_player, then all other
         # players in seat order who own at least one major.
+        def eligible_majors_for(player)
+          corporations.select { |c| c.type == :major && c.president?(player) }
+        end
+
         def trigger_nationals_formation!(buyer_player)
           buyer_idx = @players.index(buyer_player) || 0
-          eligible = @players.rotate(buyer_idx).select do |p|
-            corporations.any? { |c| c.type == :major && c.president?(p) }
-          end
+          eligible = @players.rotate(buyer_idx).select { |p| eligible_majors_for(p).any? }
           return if eligible.empty?
 
           @nationals_formation_queue = eligible
