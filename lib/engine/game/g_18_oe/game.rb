@@ -393,6 +393,42 @@ module Engine
           'O52' => 'PHS', # Dresden — PHS/AH border hex
         }.freeze
 
+        # §1.3.1 dev-note: all nationals within a zone share one national railroad name.
+        NATIONAL_NAMES = {
+          # United Kingdom
+          'LNWR' => 'British Railways',
+          'GWR'  => 'British Railways',
+          'GSWR' => 'British Railways',
+          # France / Belgium
+          'PLM'  => 'Societe nationale des chemins de fer francais',
+          'MIDI' => 'Societe nationale des chemins de fer francais',
+          'OU'   => 'Societe nationale des chemins de fer francais',
+          'BEL'  => 'Societe nationale des chemins de fer francais',
+          # Prussia / Holland / Switzerland
+          'BHB'  => 'Deutsche Bahn',
+          'POB'  => 'Deutsche Bahn',
+          'KSS'  => 'Deutsche Bahn',
+          'KBS'  => 'Deutsche Bahn',
+          # Austria-Hungary
+          'SB'   => 'Österreichische Bundesbahnen',
+          'MAV'  => 'Österreichische Bundesbahnen',
+          # Italy
+          'SFAI' => 'Ferrovie dello Stato',
+          'SFR'  => 'Ferrovie dello Stato',
+          # Spain / Portugal
+          'CHN'  => 'Red Nacional de los Ferrocarriles Espanoles',
+          'MZA'  => 'Red Nacional de los Ferrocarriles Espanoles',
+          'RCP'  => 'Red Nacional de los Ferrocarriles Espanoles',
+          # Russia
+          'MSP'  => 'Rossiyskiye Zheleznye Dorogi',
+          'MKV'  => 'Rossiyskiye Zheleznye Dorogi',
+          'LRZD' => 'Rossiyskiye Zheleznye Dorogi',
+          'WW'   => 'Rossiyskiye Zheleznye Dorogi',
+          # Scandinavia
+          'DSJ'  => 'Statens Järnvägar',
+          'BJV'  => 'Statens Järnvägar',
+        }.freeze
+
         # Cities excluded from minor home-token placement regardless of zone membership.
         # These are Balkan / Ottoman / south-east European cities outside the concession
         # railroad system. Most are already outside all zone hex lists; S76 (Jassy) is the
@@ -800,8 +836,13 @@ module Engine
             token.remove!
           end
 
-          # 4. Flip to national type
+          # 4. Flip to national type and apply national name (§1.3.1)
+          national_name = NATIONAL_NAMES[corporation.id]
           corporation.type = :national
+          if national_name
+            corporation.full_name = national_name
+            @log << "  #{corporation.name} operates as #{national_name}"
+          end
           @log << "  #{corporation.name} is now a National Railroad"
 
           # 5. Enforce train limit — discard cheapest excess trains
@@ -816,8 +857,8 @@ module Engine
           #    not transferred to national. Prevents stale zones giving zone discounts post-conversion.
           @minor_track_rights.delete(corporation.id)
 
-          # TODO: §1.3c — abandon merged minors not yet implemented (openpoints §1.3c)
-          # TODO: §1.3d — remove track rights / OE / private markers not yet implemented (openpoints §1.3d)
+          # 7. Remove BBE hex markers owned by this corporation (§9.4 §1.3d)
+          @bbe_hexes.delete_if { |_, corp| corp == corporation }
         end
 
         # ── Nationals: revenue ──────────────────────────────────────────────────
