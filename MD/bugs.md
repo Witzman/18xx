@@ -17,14 +17,29 @@ to the **Resolved** section. Do not delete entries — the history is the value.
 ## Summary
 
 ```
-Open (alpha): 3   Open (beta): 7   Fixed: 29   Won't fix: 2   Total: 41
-Bugs closed  ██████████████████████  31 / 41  (76%)
-Alpha bugs   ██████░░░░░░░░░░░░░░  3 open alpha bugs
+Open (alpha): 4   Open (beta): 7   Fixed: 29   Won't fix: 2   Total: 42
+Bugs closed  ██████████████████████  31 / 42  (74%)
+Alpha bugs   ████████░░░░░░░░░░░░  4 open alpha bugs
 ```
 
 ---
 
 ## Open
+
+### BUG-046 — Player with two regionals can only convert one per Consolidation turn; second regional stuck
+
+- **Status:** OPEN
+- **Severity:** MEDIUM (alpha scope — rare but rule-incorrect; second regional never cleared)
+- **File:** `lib/engine/game/g_18_oe/step/consolidate.rb`
+- **Rule:** §10.6 — all regionals must consolidate during Consolidation RR Phase
+
+**Symptom.** After converting one regional, `@converted` is set. `can_convert?` returns false for all remaining regionals. If player owns no minors, `actions` returns `[]`, `blocks?` = false, and the round auto-advances. The Consolidation round is one-pass (`next_entity!` does not loop), so the second regional is never converted.
+
+**Root cause.** `@converted` guard in `can_convert?` (inherited from `BuySellParShares`) is correct for normal SRs (one conversion per turn) but prevents a second conversion when the player has been through their only turn in the Consolidation round.
+
+**Fix.** Either (a) clear `@converted` after the conversion completes and the step re-evaluates for the same player, or (b) make the Consolidation round re-queue players who still have pending corps. Needs design decision.
+
+---
 
 ### BUG-044 — Majors incorrectly zone-restricted for track laying and token placement
 

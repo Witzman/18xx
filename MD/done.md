@@ -134,9 +134,27 @@ Format: `- [x] Short label **[alpha|beta]** **[L1|L2|L3]**`
 ## Nationals
 - [x] National type in train limits **[alpha]** **[L1]**
 - [x] National region hexes **[alpha]** **[L1]**
+- [x] National formation trigger (Phase 4/6/8 train purchase) **[alpha]** **[L2]**
+- [x] `convert_to_national`: cash→bank, certs→OM, tokens removed, type flip, train limit, zone rights cleared **[alpha]** **[L2]**
+- [x] `NATIONAL_NAMES` constant + name applied on conversion §1.3.1 **[alpha]** **[L1+L2]**
+- [x] BBE hex markers cleared on national conversion §9.4 **[alpha]** **[L2]**
+- [x] `eligible_majors_for(player)` extracted to game.rb; shared by ConvertToNational + trigger **[alpha]** **[L2]**
+- [x] Queue-based ConvertToNational step (buyer-first order) **[alpha]** **[L3]**
+- [x] National revenue formula (virtual-token, zone-based) — WA-1 linked/unlinked deferred **[alpha]** **[L2]**
+- [x] Nationals skip Route step; pay-or-withhold dividend only **[alpha]** **[L2]**
+- [x] Nationals get 9 tile-points per OR **[alpha]** **[L2]**
+- [x] Rusted-train claiming for nationals **[beta]** **[L2/L3]**
+
+## Minor Mergers
+- [x] Minor SR merge action (BuySellParShares) **[beta]** **[L2/L3]**
+- [x] `merge_minor!`: share exchange, cash transfer, token transfer, train transfer, track rights, close_minor! **[beta]** **[L2/L3]**
 
 ## Consolidation Phase
-- [x] L5 trigger scaffold **[alpha]** **[L3]**
+- [x] L5 trigger scaffold — Consolidation round wired, event fires **[alpha]** **[L3]**
+- [x] Consolidate step: merge action — `process_merge` without auto-pass; multi-merge per turn §10.5 **[alpha]** **[L3]**
+- [x] Consolidate step: abandon action — `choose` dropdown; `abandon_minor!` (trains→depot discarded, tokens removed, cash→bank) §9.5 **[alpha]** **[L2/L3]**
+- [x] Consolidate step: block abandon when convertible regional present §10.6/§3126 **[alpha]** **[L2]**
+- [x] Force-abandon surviving minors at Consolidation round end (`force_abandon_surviving_minors!`) §10.6 **[alpha]** **[L2]**
 
 ## End Game
 - [x] Win condition (scoring) **[alpha]** **[L2]**

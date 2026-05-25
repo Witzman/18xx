@@ -140,6 +140,14 @@ Target: sea zones · ports and ferry runs · Orient Express · minor→major mer
 
 ---
 
+## Consolidation Phase (Beta)
+
+- [ ] OR purchase of abandoned minors §11.7 — major pays £60 to bank; receives minor charter + assets as if merged (no share to former owner); requires `@abandoned_minors` store + close-but-don't-delete in `abandon_minor!` + OR Buy/Sell Shares step override; see ADR-015 **[L2/L3]**
+- [ ] BUG-046 fix — player with two regionals can only convert one per Consolidation turn; needs either `@converted` cleared between conversions or Consolidation round re-queue logic **[L2/L3]**
+- [ ] WA-1 national revenue linked/unlinked split — `Graph.new(home_as_token: true, no_blocking: true)` per national; split zone hexes into linked/unlinked; unlinked count as £0 but consume capacity **[L2]**
+
+---
+
 ## Map & Components
 
 - [ ] Ferry distance numbers — per-zone crossing distances needed for cross-water cost calculations (§8d); sea zone borders themselves are complete **[L1]**

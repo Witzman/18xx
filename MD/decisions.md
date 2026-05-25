@@ -260,6 +260,71 @@ revisit and align (this ADR or rubocop config).
 
 ---
 
+## ADR-013 — Consolidate#process_merge does not call pass! (multi-merge per turn)
+
+- **Date:** 2026-05-25
+- **Status:** ACCEPTED
+
+**Context.** `BuySellParShares#process_merge` calls `pass!` at the end, ending the player's SR turn after one merge. During Consolidation, a player may need to merge multiple minors (one per different major) in a single turn.
+
+**Decision.** Override `process_merge` in `Consolidate` without calling `pass!`. Player stays active until `pending_corps` is empty (no more pending minors/regionals). Explicit pass blocked by engine while actions exist.
+
+**Consequences.** Player can merge Minor A → Major X, then Minor B → Major Y in one turn. Round state `@round.minors_merged_into` still enforces one-minor-per-major-per-SR.
+
+---
+
+## ADR-014 — `abandon_minor!` reclaims trains to depot discarded pile; differs from `close_minor!`
+
+- **Date:** 2026-05-25
+- **Status:** ACCEPTED
+
+**Context.** `close_minor!` calls `close_corporation` which with `CLOSED_CORP_TRAINS_REMOVED = true` marks trains as non-buyable. §9.5 requires abandoned minor trains to go to the Open Market (purchasable by other companies).
+
+**Decision.** New `abandon_minor!` method: calls `@depot.reclaim_train(train)` per train before closing. With `DISCARDED_TRAINS = :discard` (18OE default), trains land in `@depot.discarded` — the open market pool, purchasable at half price. Replicates `close_minor!` internals with correct log ("abandoned" not "closed").
+
+**Consequences.** `close_minor!` unchanged — used for merges where trains are transferred first. `abandon_minor!` used for consolidation abandonment and national conversion side-effects.
+
+---
+
+## ADR-015 — OR purchase of abandoned minors (§11.7) deferred; minor closed fully on abandonment
+
+- **Date:** 2026-05-25
+- **Status:** ACCEPTED
+
+**Context.** §11.7 allows majors to purchase one abandoned minor from the Open Market during their OR Buy/Sell step for £60. This requires abandoned minors to persist in an accessible `@abandoned_minors` store after abandonment. `close_corporation` deletes the minor from `@minors` — gone.
+
+**Decision.** Defer §11.7 OR purchase. `abandon_minor!` calls `close_corporation`, removing the minor from `@minors`. Abandoned minors are not purchasable in OR. Accepted limitation for alpha scope.
+
+**Consequences.** Need `@abandoned_minors` array + OR step override when §11.7 is implemented (beta). Track as todo item.
+
+---
+
+## ADR-016 — force_abandon_surviving_minors! hooked in next_round! not per-entity
+
+- **Date:** 2026-05-25
+- **Status:** ACCEPTED
+
+**Context.** Surviving minors at Consolidation round end need to be force-abandoned §10.6. Hook options: per-entity in `Consolidation#next_entity!`, or once at round transition in `game.rb#next_round!`.
+
+**Decision.** Hook in `next_round!` when leaving `Round::G18OE::Consolidation`. Single sweep across all players; simpler than per-entity logic; catches BUG-046 survivors and any other edge-case orphans. Surviving regionals logged but not force-closed (no abandon mechanic for regionals; BUG-046 tracks).
+
+**Consequences.** Clean teardown at round boundary. Regionals stuck due to BUG-046 are silently carried forward — addressed separately.
+
+---
+
+## ADR-017 — abandon suppressed when player has a convertible regional
+
+- **Date:** 2026-05-25
+- **Status:** ACCEPTED
+
+**Context.** §10.6 line 3169 + §3126 designer's note: if a player owns an unconverted regional AND a minor with no current merge target, they must convert the regional first (creating an eligible major) before they may abandon the minor.
+
+**Decision.** In `Consolidate#abandonable_minors`: `return [] if regional_convertible?(entity)`. When player has a convertible regional, the abandon dropdown is suppressed regardless of merge-target availability. Player must convert → new major becomes eligible target → merge path opens (or abandon if the new major also can't absorb).
+
+**Consequences.** Strictly correct per §3126. Edge case: if the new major's slot is full (`minors_merged_into`), abandon becomes available after the conversion. BUG-046 (second regional stuck after first conversion) interacts here — accepted, tracked separately.
+
+---
+
 ## How to add a new ADR
 
 1. Pick the next available ID (e.g. `ADR-010`).

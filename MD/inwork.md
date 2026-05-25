@@ -32,11 +32,20 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ## Nationals
 - [>] Rusted train claim **[beta]** **[L2/L3]** `18oe_mergers`
+- [>] National name on conversion — `NATIONAL_NAMES` constant; `convert_to_national` sets `corporation.full_name`; §1.3.1 **[alpha]** **[L1+L2]** `18oe_testing`
+- [>] BBE markers cleared on conversion — `@bbe_hexes.delete_if` in `convert_to_national`; §9.4/§1.3d **[alpha]** **[L2]** `18oe_testing`
+- [>] `eligible_majors_for(player)` extracted to `game.rb`; `ConvertToNational` + `trigger_nationals_formation!` updated **[alpha]** **[L2]** `18oe_testing`
 
 ## Minor Mergers
 - [>] Minor SR merge action **[beta]** **[L2/L3]** `18oe_mergers`
 - [>] Plumbing / can_merge **[beta]** **[L2/L3]** `18oe_mergers`
 - [>] merge_minor! **[beta]** **[L2/L3]** `18oe_mergers`
+
+## Consolidation Phase
+- [>] Merge action in Consolidate step — `process_merge` without auto-pass; multi-merge per turn; §10.5/§10.6 **[alpha]** **[L3]** `18oe_testing`
+- [>] Abandon action + `abandon_minor!` — `choose` dropdown for stranded minors; trains → depot discarded; §9.5 **[alpha]** **[L2/L3]** `18oe_testing`
+- [>] Force-abandon surviving minors at Consolidation round end — `force_abandon_surviving_minors!` called from `next_round!`; §10.6 **[alpha]** **[L2]** `18oe_testing`
+- [>] Block abandon when convertible regional present — `abandonable_minors` guard; §10.6/§3126 **[alpha]** **[L2]** `18oe_testing`
 
 ---
 
@@ -57,7 +66,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 
 ---
 
-## Branch Status *(updated 2026-05-20)*
+## Branch Status *(updated 2026-05-25)*
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
@@ -65,7 +74,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 | `18oe_abilities` | upstream/master | deleted — merged into 18oe_testing | Minor C/D/J/L + private abilities wiring |
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
-| `18oe_testing` | upstream/master | rebased ✓ | Integration: gamefixes + abilities + mergers |
+| `18oe_testing` | upstream/master | active ✓ | Integration: gamefixes + abilities + mergers + nationals + consolidation |
 | `18oe_tiles` | upstream/master | PR #12667 open | Double-town tiles OE9–OE22 + size:2 engine support |
 | `18oe_fix_par_prices` | upstream/master | deleted — merged ✓ tobymao#12601 | par price fix |
 | `18oe_fix_share_price_movement` | upstream/master | deleted — merged ✓ tobymao#12602 | BUG-013/014 |
