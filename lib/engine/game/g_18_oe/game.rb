@@ -1289,6 +1289,25 @@ module Engine
           @log << "#{minor.name} abandoned"
         end
 
+        def force_abandon_surviving_minors!
+          @players.each do |player|
+            minors = player.shares.filter_map(&:corporation)
+                           .select { |c| c.type == :minor }
+                           .uniq
+            minors.each do |minor|
+              @log << "#{player.name}: #{minor.name} not consolidated — force abandoned"
+              abandon_minor!(minor)
+            end
+
+            regionals = player.shares.filter_map(&:corporation)
+                              .select { |c| c.type == :regional }
+                              .uniq
+            regionals.each do |reg|
+              @log << "#{player.name}: #{reg.name} not converted — see BUG-046"
+            end
+          end
+        end
+
         # UP movement at end of SR: only for majors and nationals that are fully player-held
         def sold_out_increase?(corporation)
           %i[major national].include?(corporation.type)
@@ -1329,6 +1348,7 @@ module Engine
                 new_stock_round
               end
             when Round::G18OE::Consolidation
+              force_abandon_surviving_minors!
               @consolidation_complete = true
               @turn += 1
               new_stock_round
