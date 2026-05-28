@@ -22,7 +22,7 @@ module Engine
         end
 
         def next_entity!
-          return if @entity_index == @entities.size - 1
+          return if @entities.empty? || @entity_index >= @entities.size - 1
 
           next_entity_index!
         end
