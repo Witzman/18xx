@@ -465,10 +465,17 @@ module Engine
           'C74'  => %w[OE8 OE18 OE26 OE37].freeze, # Sankt-Peterburg
         }.freeze
 
-
         TILES = {
-          '3' => 14,
-          '4' => 25,
+          '3' => {
+            'count' => 14,
+            'color' => 'yellow',
+            'code' => 'town=revenue:10,style:dot,loc:center;path=a:0,b:_0;path=a:_0,b:1',
+          },
+          '4' => {
+            'count' => 25,
+            'color' => 'yellow',
+            'code' => 'town=revenue:10,style:dot,loc:center;path=a:0,b:_0;path=a:_0,b:3',
+          },
           '5' => 15,
           '6' => 25,
           '7' => 14,
@@ -477,7 +484,11 @@ module Engine
           '12' => 10,
           '13' => 8,
           '57' => 19,
-          '58' => 25,
+          '58' => {
+            'count' => 25,
+            'color' => 'yellow',
+            'code' => 'town=revenue:10,style:dot,loc:center;path=a:0,b:_0;path=a:_0,b:2',
+          },
           '80' => 5,
           '81' => 5,
           '82' => 20,
@@ -504,19 +515,19 @@ module Engine
             {
               'count' => 4,
               'color' => 'yellow',
-              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:_0,b:_1;path=a:_1,b:3',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:3,b:_0',
             },
           'OE2' =>
             {
               'count' => 6,
               'color' => 'yellow',
-              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:_0,b:_1;path=a:_1,b:2',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:2,b:_0',
             },
           'OE3' =>
             {
               'count' => 2,
               'color' => 'yellow',
-              'code' => 'town=revenue:10;town=revenue:10;path=a:0,b:_0;path=a:_0,b:_1;path=a:_1,b:1',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:1,b:_0',
             },
           'OE4' =>
             {
@@ -548,9 +559,24 @@ module Engine
               'color' => 'yellow',
               'code' => 'city=revenue:30;city=revenue:30;path=a:0,b:_0;path=a:5,b:_1;label=S',
             },
-          # 'OE9' => 3, green, double town
-          # 'OE10' => 3, green, double town
-          # 'OE11' => 3, green, double town
+          'OE9' =>
+            {
+              'count' => 1,
+              'color' => 'green',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:2,b:_0;path=a:3,b:_0;path=a:5,b:_0',
+            },
+          'OE10' =>
+            {
+              'count' => 3,
+              'color' => 'green',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:5,b:_0',
+            },
+          'OE11' =>
+            {
+              'count' => 3,
+              'color' => 'green',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:2,b:_0;path=a:3,b:_0;path=a:4,b:_0',
+            },
           'OE12' =>
             {
               'count' => 1,
@@ -596,7 +622,25 @@ module Engine
               'color' => 'green',
               'code' => 'city=revenue:50;city=revenue:50,slots:2;path=a:0,b:_0;path=a:_0,b:2;path=a:5,b:_1;path=a:_1,b:3;label=S',
             },
-          # TODO: OE20–OE22 — brown two-town tiles (counts: 3/2/6); DSL not yet written [alpha]
+          'OE20' =>
+            {
+              'count' => 3,
+              'color' => 'brown',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:5,b:_0',
+            },
+          'OE21' =>
+            {
+              'count' => 2,
+              'color' => 'brown',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0;path=a:5,b:_0',
+            },
+          'OE22' =>
+            {
+              'count' => 6,
+              'color' => 'brown',
+              'code' => 'town=revenue:10,size:2;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;' \
+                        'path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0',
+            },
           'OE23' =>
             {
               'count' => 12,
@@ -1081,6 +1125,10 @@ module Engine
           cost
         end
 
+        def revenue_stops(route)
+          super.flat_map { |stop| stop.town? && stop.size > 1 ? Array.new(stop.size, stop) : [stop] }
+        end
+
         def level8_train_available?
           return false if phase.name.to_i < 7
           return true if phase.name.to_i == 8
@@ -1364,7 +1412,7 @@ module Engine
         end
 
         def upgrades_to_correct_label?(from, to)
-          chain = self.class::METROPOLIS_UPGRADE_CHAINS[from.hex&.name]
+          chain = self.class::METROPOLIS_UPGRADE_CHAINS[from.hex&.coordinates]
           return (chain[chain.index(from.name) + 1] == to.name) if chain&.include?(from.name)
 
           super
