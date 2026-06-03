@@ -1,0 +1,231 @@
+# Sea Travel Brainstorm Session
+# Branch: 18oe_seatravel (based on origin/18oe_testing)
+# Started: 2026-05-29
+# Status: BRAINSTORM COMPLETE — BLOCKED on ferry distances; resume tomorrow
+
+---
+
+## Scope: What We Are Building
+
+Six topics identified. Priority order for alpha:
+
+1. Ferry distance numbers (L1) — BLOCKED on values from physical map
+2. Sea hex path mesh (L1) — design ready, needs implementation
+3. Port-to-port sea crossing routing (L2) — architecture decided
+4. Cross-water tile laying costs (L2) — BETA SCOPE, defer
+5. G30 / Edinburgh offshore port (L1/L2) — DEFERRED
+6. Port authorities, Minor H, Star Harbor/WCF routing (L2/L3) — BETA SCOPE
+
+---
+
+## Rules Summary (§11.3.4–11.3.7, §11.1.6)
+
+### Ferries (§11.3.7)
+- Pre-printed blue track through sea hexes. Any train can ride.
+- Each ferry has a distance number (oval). Counts against city limit. No revenue.
+- If RR has token adjacent to ferry → same city-limit reduction benefit as port token.
+- Ferry distance counts toward cross-water tile cost (£5 × distance, §11.1.6).
+- Some ferries have towns on them (Danzig, §AE6). Town included in route,
+  but full ferry distance still counts.
+- If ferry end has port symbol → same hex side is a port arrow into adjacent sea zone.
+- Ferries exempt from rule requiring land hex between sea crossings.
+
+### Sea Crossings / Port-to-Port (§11.3.4)
+- Sea crossing: route from one port to another via adjoining sea zones.
+- Each sea zone traversed counts 1 against city limit. No revenue.
+- Train enters/leaves sea zone via track section or offshore port connecting to
+  blue "port arrow" in the adjacent sea zone.
+- Between sea crossings, train must cross at least one land hex side
+  (exception: ferries are exempt from this rule).
+- Multiple sea crossings allowed per train run.
+- Multiple trains from same RR may use same sea zone / ferry / port arrows.
+
+### Port Types (§11.3.6)
+- Public port: anchor in light-blue circle. Any train may use.
+- Private port: anchor in red circle. Only RR with token in adjacent city may use.
+- Offshore port: city has port access one or more hexes distant (river/fjord).
+  Train connects directly to city — does NOT travel through intervening hexes.
+  Does NOT use a track section from the city. City track has no effect.
+- Edinburgh: private offshore port in North Sea (Firth of Forth hex blocks normal access).
+- London: offshore port (multiple stations until brown tile; all connected to offshore port).
+- Both stations on London tile connected to offshore port (§11.3.6 example).
+
+### Port Authorities (§11.3.5)
+- Majors only, one per major, £125, purchased during OR before Buy Trains.
+- North Sea PA: all light-blue zones (N Atlantic, Silver Coast, Celtic, Biscay, Channel,
+  North Sea, German Bight, Skagerrak, Baltic, Gulf of Finland).
+- Mediterranean PA: all sea-green zones (Gibraltar, Balearic, Sardinia, Tyrrhenian,
+  Adriatic, Aegean, Levantine, Black Sea, Karkinitsky Bay).
+- Benefit: reduces sea zone count against city limit by 2 (per RR, not per train;
+  can split between 2 trains).
+- Also reduces cross-water tile/token costs by 2 sea zones.
+- Port token: reduces zone count by 1 (Ph2–6) or 2 (Ph7–8) — per train individually.
+- H Minor (GWS): reduces zone count by 1 (Ph2–6) or 2 (Ph7–8) — per RR.
+- Star Harbor token: same benefit as port token.
+- All reductions stack to minimum 0; cannot reduce ferry distance to negative.
+
+### Cross-Water Tile Laying (§11.1.6)
+- RR can lay tile on far shore if hypothetical train can reach via sea crossing.
+- Fee: £5 × ferry distance (for ferry crossing) + £10 per sea zone crossed.
+- Port authority reduces total sea zones + ferry distance counted by 2.
+- Port tokens and H Minor do NOT reduce this cost.
+- Nationals exempt from all tile placement costs.
+
+---
+
+## Current Map State
+
+### Ferry Hexes (pre-printed blue track — routing already works)
+All in `blue:` section of map.rb. Routes work; distances not yet counted.
+
+| Hex(es) | DSL paths | Location / ferry name | Distance |
+|---------|-----------|----------------------|----------|
+| AE6 | town=revenue:20;path=a:0,b:3 | Danzig (Baltic) | 1 (confirmed playbook p.815) |
+| N29 | path=a:4,b:2 | English Channel (White Cliffs Ferry) | UNKNOWN |
+| G22 | path=a:0,b:4;border=edge:2,type:province | North Sea | UNKNOWN |
+| I22 | path=a:1,b:5;path=a:1,b:4 | Skagerrak | UNKNOWN |
+| I24 | path=a:1,b:5;path=a:1,b:4 | Skagerrak | UNKNOWN |
+| N25 | path=a:0,b:3 | English Channel | UNKNOWN |
+| AB21 | path=a:2,b:4 | Sardinia–Roma ferry | UNKNOWN |
+| AB23 | path=a:1,b:4 | Sardinia–Roma ferry | UNKNOWN |
+| AB25 | path=a:1,b:4;border=edge:5,type:province | Sardinia–Roma ferry | UNKNOWN |
+| Y38 | path=a:4,b:2 | Sea of Sardinia | UNKNOWN |
+| AA44 | path=a:1,b:4 | Tyrrhenian | UNKNOWN |
+| AA46 | path=a:1,b:3 | Tyrrhenian | UNKNOWN |
+| AE12 | path=a:3,b:5;border=edge:1,type:province | Balearic/Mediterranean | UNKNOWN |
+| AF13 | path=a:2,b:1 | Mediterranean | UNKNOWN |
+| AE54 | path=a:3,b:0 | Adriatic | UNKNOWN |
+| AG42 | path=a:4,b:1 | Adriatic chain | UNKNOWN |
+| AG44 | path=a:4,b:1 | Adriatic chain | UNKNOWN |
+| AG46 | path=a:4,b:1 | Adriatic chain | UNKNOWN |
+| AG48 | path=a:4,b:1;path=a:3,b:1 | Adriatic chain (junction) | UNKNOWN |
+| AB49 | junction;path=a:4,b:_0,terminal:1 | Ferry + port dual-access | UNKNOWN |
+
+Additional pre-printed sea paths (not necessarily ferries — may be connectivity):
+  G30: junction;path=a:4,b:_0  (no terminal — NE England, DEFERRED)
+  G32: path=a:1,b:4
+  G34: path=a:1,b:3
+  B39: path=a:0,b:4
+  J59/I58/H57: path chains (Baltic area)
+  A58/A60/A62/C62: path chains (Gulf of Finland area)
+
+### Port Stubs (sea-side connectors for port-to-port routes)
+`junction;path=a:X,b:_0,terminal:1` — ~35 hexes already in map.rb.
+These are the entry/exit points for sea crossings. Currently dead ends (no sea mesh).
+
+Key stubs (sample):
+  AE50, AF47, V49, AA60, AH69, AF71, AC70, AB81, Z83, T83,
+  J61, K52, J51, G48, B59, C68, F67, J21, I30, K16, U4, U14,
+  U16, R21, O20, O26, F43, E40, AC4, AE8, AD19, AC28, AD41, L35, O18, P17
+
+### Sea Zone Province Borders
+Fully populated in map.rb — separate all 18 named sea zones.
+Province borders between zones = zone boundary markers for distance counting.
+
+### SEA_ZONES Constant (already in map.rb)
+Maps zone name → array of hex IDs. 18 zones total:
+  Celtic Sea, North Atlantic Ocean, North Atlantic (Silver Coast), Bay of Biscay,
+  English Channel, North Sea, Skagerrak, German Bight, Baltic Sea, Gulf of Finland,
+  Strait of Gibraltar, Balearic Sea, Sea of Sardinia, Tyrrhenian Sea, Adriatic Sea,
+  Aegean Sea, Levantine Sea, Black Sea, Karkinitsky Bay
+
+---
+
+## Architecture Decisions
+
+### Routing Model — Option B (chosen 2026-05-29)
+
+**Problem**: Port stubs are terminal dead ends. Engine routes by following physical
+path connections. UI cannot draw a sea crossing route without physical paths.
+
+**Solution**: Two-layer approach:
+
+**Layer 1 — Sea hex path mesh (L1, map data)**
+Add `path=a:0,b:3;path=a:1,b:4;path=a:2,b:5` (all-edges connected) to interior
+sea zone hexes to create traversable mesh between stubs within each zone.
+Province border hexes get same treatment but mark zone transition points.
+This allows the UI to draw routes from any stub to any other stub in the zone.
+
+Sea hexes that are NOT interior to any zone (border hexes with impassable edges)
+get partial paths only on their open edges.
+
+**Layer 2 — check_distance override (L2, game.rb)**
+Override `check_distance` in game.rb to:
+  1. Detect sea zone stubs in route path (hexes present in SEA_ZONE_FOR_HEX lookup)
+  2. Count distinct sea zones traversed (each = 1 against city limit)
+  3. Add ferry distances for ferry hexes traversed (FERRY_DISTANCES constant)
+  4. Sum with normal check_distance for land stops
+
+Build inverse lookup at setup:
+  SEA_ZONE_FOR_HEX = SEA_ZONES.each_with_object({}) { |(zone, hexes), h|
+    hexes.each { |hex| h[hex] = zone } }.freeze
+
+**check_connected override (L2, game.rb)**
+Override `check_connected` to allow stub-to-stub routing across zone boundaries
+using zone adjacency graph derived from province borders.
+(May be implicit once physical mesh is in place — evaluate after mesh.)
+
+### Ferry Distance Counting
+FERRY_DISTANCES = { 'AE6' => 1, ... }.freeze in game.rb.
+check_distance sums FERRY_DISTANCES[hex.id] for each ferry hex in route.
+Ferry distance counted separately from sea zone count (both apply to city limit).
+
+### Cross-Water Tile Laying Costs — BETA SCOPE
+upgrade_cost override for §11.1.6 sea/ferry costs. Deferred — design after
+port authority markers are designed (PA affects the cost calculation).
+
+---
+
+## G30 / Edinburgh Offshore Port — DEFERRED
+
+G30 (Firth of Forth hex): `junction;path=a:4,b:_0` (missing terminal:1).
+Needs virtual connection to G26 (North Sea access for Edinburgh).
+Decision: skip until main ferry/port-to-port routing is working.
+todo.md already has this tagged BETA with explanation.
+
+---
+
+## TODOs for Next Session
+
+### BLOCKED (need user input first)
+[ ] USER ACTION: provide ferry distance values from physical map for all UNKNOWN entries above
+
+### Ready to implement once distances confirmed
+[ ] Add FERRY_DISTANCES constant to game.rb (L1)
+[ ] Design and add sea hex path mesh to map.rb (L1) — which hexes, which edges
+[ ] Build SEA_ZONE_FOR_HEX inverse lookup in setup or as computed constant (L1)
+[ ] Override check_distance in game.rb to count sea zones + ferry distances (L2)
+[ ] Evaluate whether check_connected override is needed after mesh is in place (L2)
+[ ] Test ferry routing end-to-end in browser (route drawing, distance counting)
+[ ] Test port-to-port crossing (at least one zone, then two-zone crossing)
+
+### Design questions still open
+[ ] Which sea hexes are interior (all-edges) vs border (partial edges) for mesh?
+    → Map through all 18 sea zones and identify inner hexes vs coast hexes.
+[ ] Do province border hexes need special handling in the mesh (e.g., separate nodes)?
+[ ] Ferry hexes that are already paths: do they participate in the mesh or bypass it?
+[ ] Public vs private port enforcement: where does token check live in routing?
+    → check_route_token override? Or check_connected?
+[ ] Multiple trains sharing same sea zone / port arrow — already exempt per §11.3.8;
+    confirm check_overlap handles this correctly.
+
+### BETA deferred
+[ ] Cross-water tile laying costs (L2) — after port authority design
+[ ] Port authority markers (L2/L3)
+[ ] Minor H (Great Western Steamship) sea zone reduction (L2)
+[ ] G30 Edinburgh offshore port (L1/L2)
+[ ] Offshore port list (Edinburgh, London, Roma, Königsberg area — full list needed)
+
+---
+
+## Session Log
+
+2026-05-29 Session 1:
+  - Rules read: §11.3.4–11.3.7, §11.1.6, §11.3.5, playbook ferry examples
+  - map.rb examined: all ferry hexes, port stubs, SEA_ZONES constant inventoried
+  - game.rb: no sea crossing logic exists (only revenue_for, check_route_token)
+  - todo.md/bugs.md: confirmed no open bugs on sea travel; todo has ferry items as beta
+  - Architecture decision: Option B + physical path mesh in sea hexes
+  - G30 Edinburgh offshore: deferred
+  - Ferry distances: BLOCKED — only Danzig (AE6=1) confirmed from playbook
+  - Session ended: waiting for ferry distance values from physical map
