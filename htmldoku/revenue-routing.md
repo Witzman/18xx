@@ -127,6 +127,21 @@ def route_distance(route)
 end
 ```
 
+### `visited_stops(route)` — multi-stop Parts
+
+The base implementation collects stops from `route.connection_data` and expands any Part that responds to `sub_stops`:
+
+```ruby
+def visited_stops(route)
+  route.connection_data.flat_map { |c| [c[:left], c[:right]] }.uniq.compact
+       .flat_map { |s| s.respond_to?(:sub_stops) ? s.sub_stops : [s] }
+end
+```
+
+`sub_stops` is the hook for Parts that physically represent more than one revenue stop. `Part::DoubleTown` (used by 18OE tiles OE9–OE22) defines `sub_stops` to return its two internal `Town` objects, so a train passing through a double-town naturally consumes 2 town slots and scores 2×revenue without any game-level override.
+
+To add a new multi-stop Part, define `sub_stops` on it — no game code required.
+
 ---
 
 ## Route Validation Hooks

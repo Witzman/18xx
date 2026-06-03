@@ -164,6 +164,14 @@ end</code></pre>
     stop.tokened_by?(route.corporation) ? 1 : stop.visit_cost
   end
 end</code></pre>
+<h3 id="visited_stopsroute--multi-stop-parts"><code>visited_stops(route)</code> — multi-stop Parts</h3>
+<p>The base implementation collects stops from <code>route.connection_data</code> and expands any Part that responds to <code>sub_stops</code>:</p>
+<pre><code class="language-ruby">def visited_stops(route)
+  route.connection_data.flat_map { |c| [c[:left], c[:right]] }.uniq.compact
+       .flat_map { |s| s.respond_to?(:sub_stops) ? s.sub_stops : [s] }
+end</code></pre>
+<p><code>sub_stops</code> is the hook for Parts that physically represent more than one revenue stop. <code>Part::DoubleTown</code> (used by 18OE tiles OE9–OE22) defines <code>sub_stops</code> to return its two internal <code>Town</code> objects, so a train passing through a double-town naturally consumes 2 town slots and scores 2×revenue without any game-level override.</p>
+<p>To add a new multi-stop Part, define <code>sub_stops</code> on it — no game code required.</p>
 <hr>
 <h2 id="route-validation-hooks">Route Validation Hooks</h2>
 <h3 id="check_otherroute"><code>check_other(route)</code></h3>
