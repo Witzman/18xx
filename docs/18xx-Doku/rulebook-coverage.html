@@ -87,35 +87,35 @@
 <article>
 <h1>18OE — Rulebook Coverage</h1>
 <p class="page-crosslink">For current sprint state → <a href="status.html">Implementation Tracker</a> · Alpha gaps → <a href="alpha-gaps.html">Open for Alpha</a></p>
-<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">229 mechanics tracked across 29 rulebook chapters.</p>
+<p style="color:#5a4a38;font-size:0.9rem;margin-bottom:0.5rem">255 mechanics tracked across 30 rulebook chapters.</p>
 <p class="bar-note">Bar widths weighted by section effort (L3 systems = 3× · L2 overrides = 2× · L1 data = 1×).</p>
 <div class="bar-rows">
 <div class="bar-row">
 <span class="bar-label-left">Overall</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:43.2%"></div>
-<div class="pb-pr"      style="width:4.1%"></div>
-<div class="pb-partial" style="width:2.6%"></div>
-<div class="pb-todo"    style="width:50.1%"></div>
+<div class="pb-done"    style="width:46.6%"></div>
+<div class="pb-pr"      style="width:7.7%"></div>
+<div class="pb-partial" style="width:2.2%"></div>
+<div class="pb-todo"    style="width:43.5%"></div>
 </div>
-<span class="bar-label-right"><strong>47%</strong> implemented or in review</span>
+<span class="bar-label-right"><strong>54%</strong> implemented or in review</span>
 </div>
 <div class="bar-row">
 <span class="bar-label-left">Alpha</span>
 <div class="progress-track">
-<div class="pb-done"    style="width:69.9%"></div>
-<div class="pb-pr"      style="width:2.3%"></div>
-<div class="pb-partial" style="width:2.9%"></div>
-<div class="pb-todo"    style="width:24.8%"></div>
+<div class="pb-done"    style="width:69.2%"></div>
+<div class="pb-pr"      style="width:8.3%"></div>
+<div class="pb-partial" style="width:2.4%"></div>
+<div class="pb-todo"    style="width:20.1%"></div>
 </div>
-<span class="bar-label-right"><strong>72%</strong> alpha scope done</span>
+<span class="bar-label-right"><strong>77%</strong> alpha scope done</span>
 </div>
 </div>
 <div class="status-summary" style="margin:0.5rem 0 1.2rem">
-<div class="stat-chip stat-done">Done &amp; merged <span>110</span></div>
-<div class="stat-chip stat-pr">Needs PR <span>7</span></div>
+<div class="stat-chip stat-done">Done &amp; merged <span>126</span></div>
+<div class="stat-chip stat-pr">Needs PR <span>14</span></div>
 <div class="stat-chip stat-partial">Partial <span>10</span></div>
-<div class="stat-chip stat-todo">To do <span>93</span></div>
+<div class="stat-chip stat-todo">To do <span>96</span></div>
 <div class="stat-chip stat-todo">Deferred <span>9</span></div>
 </div>
 <div class="status-filters" style="margin-bottom:1rem">
@@ -608,11 +608,24 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title cov-toggle" id="nationals"><span class="cov-ch-name"><a class="cov-rules-link" href="rules-summary.html#national-revenue-unique" title="View in rules reference">Nationals</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:16.7%"></div><div class="csb-seg csb-pr"      style="width:8.3%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">3/12</span></div>
+<div class="cov-chapter-title cov-toggle" id="nationals"><span class="cov-ch-name"><a class="cov-rules-link" href="rules-summary.html#national-revenue-unique" title="View in rules reference">Nationals</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:48.0%"></div><div class="csb-seg csb-pr"      style="width:16.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">16/25</span></div>
 <div class="cov-items">
 <div class="cov-item cov-done" data-scope="alpha" title="National type in train limits">National type in train limits</div>
 <div class="cov-item cov-done" data-scope="alpha" title="National region hexes">National region hexes</div>
+<div class="cov-item cov-done" data-scope="alpha" title="National formation trigger (Phase 4/6/8 train purchase)">National formation trigger (Phase 4/6/8 train purchase)</div>
+<div class="cov-item cov-done" data-scope="alpha" title="`convert_to_national`: cash→bank, certs→OM, tokens removed, type flip, train limit, zone rights cleared">`convert_to_national`: cash→bank, certs→OM, tokens removed, type flip, train limit, zone rights cleared</div>
+<div class="cov-item cov-done" data-scope="alpha" title="`NATIONAL_NAMES` constant + name applied on conversion §1.3.1">`NATIONAL_NAMES` constant + name applied on conversion §1.3.1</div>
+<div class="cov-item cov-done" data-scope="alpha" title="BBE hex markers cleared on national conversion §9.4">BBE hex markers cleared on national conversion §9.4</div>
+<div class="cov-item cov-done" data-scope="alpha" title="`eligible_majors_for(player)` extracted to game.rb; shared by ConvertToNational + trigger">`eligible_majors_for(player)` extracted to game.rb; shared by ConvertToNational + trigger</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Queue-based ConvertToNational step (buyer-first order)">Queue-based ConvertToNational step (buyer-first order)</div>
+<div class="cov-item cov-done" data-scope="alpha" title="National revenue formula (virtual-token, zone-based) — WA-1 linked/unlinked deferred">National revenue formula (virtual-token, zone-based) — WA-1 linked/unlinked deferred</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Nationals skip Route step; pay-or-withhold dividend only">Nationals skip Route step; pay-or-withhold dividend only</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Nationals get 9 tile-points per OR">Nationals get 9 tile-points per OR</div>
+<div class="cov-item cov-done" data-scope="beta" title="Rusted-train claiming for nationals">Rusted-train claiming for nationals</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="Rusted train claim">Rusted train claim</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="National name on conversion — `NATIONAL_NAMES` constant; `convert_to_national` sets `corporation.full_name`; §1.3.1">National name on conversion — `NATIONAL_NAMES` constant; `convert_to_national` sets `corporation.full_name`; §1.3.1</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="BBE markers cleared on conversion — `@bbe_hexes.delete_if` in `convert_to_national`; §9.4/§1.3d">BBE markers cleared on conversion — `@bbe_hexes.delete_if` in `convert_to_national`; §9.4/§1.3d</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="`eligible_majors_for(player)` extracted to `game.rb`; `ConvertToNational` + `trigger_nationals_formation!` updated">`eligible_majors_for(player)` extracted to `game.rb`; `ConvertToNational` + `trigger_nationals_formation!` updated</div>
 <div class="cov-item cov-todo" data-scope="beta" title="`national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only">`national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only</div>
 <div class="cov-item cov-todo" data-scope="beta" title="Inherent Pullman: `+£10 × highest non-rusted train level`">Inherent Pullman: `+£10 × highest non-rusted train level`</div>
 <div class="cov-item cov-todo" data-scope="beta" title="No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done">No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done</div>
@@ -624,11 +637,24 @@
 <div class="cov-item cov-todo" data-scope="beta" title="Upgrade rusted → non-rusted by purchasing from same-owner major">Upgrade rusted → non-rusted by purchasing from same-owner major</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-done">2 done</span> · <span class="cov-dr-pr">1 needs-PR</span> · <span class="cov-dr-todo">9 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">12 done</span> · <span class="cov-dr-pr">4 needs-PR</span> · <span class="cov-dr-todo">9 todo</span></div>
 <table class="cov-detail-table"><tbody>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">National type in train limits</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">National region hexes</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">National formation trigger (Phase 4/6/8 train purchase)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">`convert_to_national`: cash→bank, certs→OM, tokens removed, type flip, train limit, zone rights cleared</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">`NATIONAL_NAMES` constant + name applied on conversion §1.3.1</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">BBE hex markers cleared on national conversion §9.4</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">`eligible_majors_for(player)` extracted to game.rb; shared by ConvertToNational + trigger</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Queue-based ConvertToNational step (buyer-first order)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">National revenue formula (virtual-token, zone-based) — WA-1 linked/unlinked deferred</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Nationals skip Route step; pay-or-withhold dividend only</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Nationals get 9 tile-points per OR</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Rusted-train claiming for nationals</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Rusted train claim</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">National name on conversion — `NATIONAL_NAMES` constant; `convert_to_national` sets `corporation.full_name`; §1.3.1</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">BBE markers cleared on conversion — `@bbe_hexes.delete_if` in `convert_to_national`; §9.4/§1.3d</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">`eligible_majors_for(player)` extracted to `game.rb`; `ConvertToNational` + `trigger_nationals_formation!` updated</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">`national_revenue`: linked/unlinked split, best-first, D-train double, flat-rate fill; `[:payout]` only</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Inherent Pullman: `+£10 × highest non-rusted train level`</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">No tokens / no terrain costs — `return 0 if entity.type == :national` in `upgrade_cost` (BUG-011); skip token step already done</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
@@ -641,15 +667,31 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="mixed">
-<div class="cov-chapter-title cov-toggle" id="consolidation-phase"><span class="cov-ch-name"><a class="cov-rules-link" href="18oe-or-guide.html#consolidation-phase" title="View in rules reference">Consolidation Phase</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:50.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">1/2</span></div>
+<div class="cov-chapter-title cov-toggle" id="consolidation-phase"><span class="cov-ch-name"><a class="cov-rules-link" href="18oe-or-guide.html#consolidation-phase" title="View in rules reference">Consolidation Phase</a></span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:50.0%"></div><div class="csb-seg csb-pr"      style="width:40.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">9/10</span></div>
 <div class="cov-items">
-<div class="cov-item cov-done" data-scope="alpha" title="L5 trigger scaffold">L5 trigger scaffold</div>
+<div class="cov-item cov-done" data-scope="alpha" title="L5 trigger scaffold — Consolidation round wired, event fires">L5 trigger scaffold — Consolidation round wired, event fires</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Consolidate step: merge action — `process_merge` without auto-pass; multi-merge per turn §10.5">Consolidate step: merge action — `process_merge` without auto-pass; multi-merge per turn §10.5</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Consolidate step: abandon action — `choose` dropdown; `abandon_minor!` (trains→depot discarded, tokens removed, cash→bank) §9.5">Consolidate step: abandon action — `choose` dropdown; `abandon_minor!` (trains→depot discarded, tokens removed, cash→bank) §9.5</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Consolidate step: block abandon when convertible regional present §10.6/§3126">Consolidate step: block abandon when convertible regional present §10.6/§3126</div>
+<div class="cov-item cov-done" data-scope="alpha" title="Force-abandon surviving minors at Consolidation round end (`force_abandon_surviving_minors!`) §10.6">Force-abandon surviving minors at Consolidation round end (`force_abandon_surviving_minors!`) §10.6</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="Merge action in Consolidate step — `process_merge` without auto-pass; multi-merge per turn; §10.5/§10.6">Merge action in Consolidate step — `process_merge` without auto-pass; multi-merge per turn; §10.5/§10.6</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="Abandon action + `abandon_minor!` — `choose` dropdown for stranded minors; trains → depot discarded; §9.5">Abandon action + `abandon_minor!` — `choose` dropdown for stranded minors; trains → depot discarded; §9.5</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="Force-abandon surviving minors at Consolidation round end — `force_abandon_surviving_minors!` called from `next_round!`; §10.6">Force-abandon surviving minors at Consolidation round end — `force_abandon_surviving_minors!` called from `next_round!`; §10.6</div>
+<div class="cov-item cov-needs-pr" data-scope="alpha" title="Block abandon when convertible regional present — `abandonable_minors` guard; §10.6/§3126">Block abandon when convertible regional present — `abandonable_minors` guard; §10.6/§3126</div>
 <div class="cov-item cov-todo" data-scope="beta" title="Conditional merger: major/national may offer; if no offer, company is abandoned">Conditional merger: major/national may offer; if no offer, company is abandoned</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-done">1 done</span> · <span class="cov-dr-todo">1 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">5 done</span> · <span class="cov-dr-pr">4 needs-PR</span> · <span class="cov-dr-todo">1 todo</span></div>
 <table class="cov-detail-table"><tbody>
-<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">L5 trigger scaffold</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">L5 trigger scaffold — Consolidation round wired, event fires</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Consolidate step: merge action — `process_merge` without auto-pass; multi-merge per turn §10.5</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Consolidate step: abandon action — `choose` dropdown; `abandon_minor!` (trains→depot discarded, tokens removed, cash→bank) §9.5</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Consolidate step: block abandon when convertible regional present §10.6/§3126</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Force-abandon surviving minors at Consolidation round end (`force_abandon_surviving_minors!`) §10.6</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Merge action in Consolidate step — `process_merge` without auto-pass; multi-merge per turn; §10.5/§10.6</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Abandon action + `abandon_minor!` — `choose` dropdown for stranded minors; trains → depot discarded; §9.5</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Force-abandon surviving minors at Consolidation round end — `force_abandon_surviving_minors!` called from `next_round!`; §10.6</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+<tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Block abandon when convertible regional present — `abandonable_minors` guard; §10.6/§3126</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
 <tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">Conditional merger: major/national may offer; if no offer, company is abandoned</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 </tbody></table></div>
 </div>
@@ -669,8 +711,10 @@
 </tbody></table></div>
 </div>
 <div class="cov-chapter" data-chapter-scope="beta">
-<div class="cov-chapter-title cov-toggle" id="minor-mergers"><span class="cov-ch-name">Minor Mergers</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:0.0%"></div><div class="csb-seg csb-pr"      style="width:27.3%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">3/11</span></div>
+<div class="cov-chapter-title cov-toggle" id="minor-mergers"><span class="cov-ch-name">Minor Mergers</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:15.4%"></div><div class="csb-seg csb-pr"      style="width:23.1%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">5/13</span></div>
 <div class="cov-items">
+<div class="cov-item cov-done" data-scope="beta" title="Minor SR merge action (BuySellParShares)">Minor SR merge action (BuySellParShares)</div>
+<div class="cov-item cov-done" data-scope="beta" title="`merge_minor!`: share exchange, cash transfer, token transfer, train transfer, track rights, close_minor!">`merge_minor!`: share exchange, cash transfer, token transfer, train transfer, track rights, close_minor!</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="Minor SR merge action">Minor SR merge action</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="Plumbing / can_merge">Plumbing / can_merge</div>
 <div class="cov-item cov-needs-pr" data-scope="beta" title="merge_minor!">merge_minor!</div>
@@ -684,8 +728,10 @@
 <div class="cov-item cov-todo" data-scope="beta" title="Consolidation Round forced mergers (§10.6) — hook into `Step::Consolidate`">Consolidation Round forced mergers (§10.6) — hook into `Step::Consolidate`</div>
 </div>
 <div class="cov-detail">
-<div class="cov-detail-summary"><span class="cov-dr-pr">3 needs-PR</span> · <span class="cov-dr-todo">8 todo</span></div>
+<div class="cov-detail-summary"><span class="cov-dr-done">2 done</span> · <span class="cov-dr-pr">3 needs-PR</span> · <span class="cov-dr-todo">8 todo</span></div>
 <table class="cov-detail-table"><tbody>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">Minor SR merge action (BuySellParShares)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="cov-dr cov-dr-done"><td class="cov-dr-icon">✓</td><td class="cov-dr-label">`merge_minor!`: share exchange, cash transfer, token transfer, train transfer, track rights, close_minor!</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Minor SR merge action</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">Plumbing / can_merge</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">merge_minor!</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
@@ -851,6 +897,21 @@
 <div class="cov-detail-summary"><span class="cov-dr-pr">1 needs-PR</span></div>
 <table class="cov-detail-table"><tbody>
 <tr class="cov-dr cov-dr-pr"><td class="cov-dr-icon">→</td><td class="cov-dr-label">D-train city revenue doubling — 4D/5D trains double city value; then suppress doubling for Krasnaya Strela extra city (§15.7)</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-alpha">alpha</span></td></tr>
+</tbody></table></div>
+</div>
+<div class="cov-chapter" data-chapter-scope="beta">
+<div class="cov-chapter-title cov-toggle" id="consolidation-phase-beta"><span class="cov-ch-name">Consolidation Phase (Beta)</span><div class="cov-sec-bar-wrap"><div class="cov-sec-bar"><div class="csb-seg csb-done"    style="width:0.0%"></div><div class="csb-seg csb-pr"      style="width:0.0%"></div><div class="csb-seg csb-partial" style="width:0.0%"></div></div></div><span class="cov-sec-count">0/3</span></div>
+<div class="cov-items">
+<div class="cov-item cov-todo" data-scope="beta" title="OR purchase of abandoned minors §11.7 — major pays £60 to bank; receives minor charter + assets as if merged (no share to former owner); requires `@abandoned_minors` store + close-but-don&#x27;t-delete in `abandon_minor!` + OR Buy/Sell Shares step override; see ADR-015">OR purchase of abandoned minors §11.7 — major pays £60 to bank; receives minor charter + assets as if merged (no share to former owner); requires `@abandoned_minors` store + close-but-don&#x27;t-delete in `abandon_minor!` + OR Buy/Sell Shares step override; see ADR-015</div>
+<div class="cov-item cov-todo" data-scope="beta" title="BUG-046 fix — player with two regionals can only convert one per Consolidation turn; needs either `@converted` cleared between conversions or Consolidation round re-queue logic">BUG-046 fix — player with two regionals can only convert one per Consolidation turn; needs either `@converted` cleared between conversions or Consolidation round re-queue logic</div>
+<div class="cov-item cov-todo" data-scope="beta" title="WA-1 national revenue linked/unlinked split — `Graph.new(home_as_token: true, no_blocking: true)` per national; split zone hexes into linked/unlinked; unlinked count as £0 but consume capacity">WA-1 national revenue linked/unlinked split — `Graph.new(home_as_token: true, no_blocking: true)` per national; split zone hexes into linked/unlinked; unlinked count as £0 but consume capacity</div>
+</div>
+<div class="cov-detail">
+<div class="cov-detail-summary"><span class="cov-dr-todo">3 todo</span></div>
+<table class="cov-detail-table"><tbody>
+<tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">OR purchase of abandoned minors §11.7 — major pays £60 to bank; receives minor charter + assets as if merged (no share to former owner); requires `@abandoned_minors` store + close-but-don&#x27;t-delete in `abandon_minor!` + OR Buy/Sell Shares step override; see ADR-015</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">BUG-046 fix — player with two regionals can only convert one per Consolidation turn; needs either `@converted` cleared between conversions or Consolidation round re-queue logic</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
+<tr class="cov-dr cov-dr-todo"><td class="cov-dr-icon">✗</td><td class="cov-dr-label">WA-1 national revenue linked/unlinked split — `Graph.new(home_as_token: true, no_blocking: true)` per national; split zone hexes into linked/unlinked; unlinked count as £0 but consume capacity</td><td class="cov-dr-scope"><span class="scope-pill scope-pill-beta">beta</span></td></tr>
 </tbody></table></div>
 </div>
 </div>

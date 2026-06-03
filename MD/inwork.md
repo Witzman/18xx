@@ -62,11 +62,12 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 | Bug / Feature | Fix commit | Branch | Notes |
 |---------------|-----------|--------|-------|
 | BUG-044 majors unrestricted track/token | `fb2a420d3` (18oe_testing) | needs new branch off upstream/master | 2-line change, 18OE-specific |
-| Double-town tiles OE9–OE22 + size:2 routing | `9403c8a35` (18oe_tiles) | **PR #12667 open** | Engine: town.rb, tile.rb, town_dot.rb; 18OE: OE9–22 tiles + visited_stops |
+| Double-town tiles OE9–OE22 + DoubleTownPart routing | `77e1a2a9a`–`9ce4cbc62` (18oe_tiles) | **PR #12667 open — reworked** | Replaced size:2+game-override with `Part::DoubleTown < Town`; walk marks both sub-stops; `base.rb#visited_stops` expands via `sub_stops`; G18OE overrides deleted; OE10=£20 IRB verified; tile gallery rendering confirmed; awaiting crericha re-review |
+| OE10/OE20 exit fix + full upgrade chain browser test | `1d70e5f2c` + `404232f4d` (18oe_tiles, merged 18oe_testing) | **TODO: browser test only** | exits fixed; IRB confirmed OE10→OE20 ✓ OE9→OE20 ✗; need browser: upgrade preprinted double-town (e.g. J29) yellow→green (OE9/10/11)→brown (OE20/21/22) |
 
 ---
 
-## Branch Status *(updated 2026-05-25)*
+## Branch Status *(updated 2026-06-04)*
 
 | Branch | Base | Status | Contents |
 |--------|------|--------|----------|
@@ -75,7 +76,7 @@ Items without a milestone tag = **alpha**. `[BETA]` = deferred to beta milestone
 | `18oe_gamefixes` | upstream/master | closed (split) | superseded by PRs #47–51 |
 | `18oe_mergers` | upstream/master | rebased ✓ | Minor SR merger · national formation · SR fixes |
 | `18oe_testing` | upstream/master | active ✓ | Integration: gamefixes + abilities + mergers + nationals + consolidation |
-| `18oe_tiles` | upstream/master | PR #12667 open | Double-town tiles OE9–OE22 + size:2 engine support |
+| `18oe_tiles` | upstream/master | PR #12667 open — reworked 2026-06-04 | `Part::DoubleTown` replaces size:2+game-override; 14 IRB tests pass; tile gallery ✓; £20 revenue IRB ✓; awaiting crericha re-review |
 | `18oe_fix_par_prices` | upstream/master | deleted — merged ✓ tobymao#12601 | par price fix |
 | `18oe_fix_share_price_movement` | upstream/master | deleted — merged ✓ tobymao#12602 | BUG-013/014 |
 | `18oe_fix_president_overcap` | upstream/master | deleted — merged ✓ tobymao#12603 | BUG-021 |
