@@ -1,6 +1,19 @@
 # 18OE — Claude Context
 
+## Read First
+
 Read this file then `MD/inwork.md`. Do not proceed until both are read.
+
+---
+
+## Working Rules
+
+1. Resolve ambiguity from code, docs, and git history first; ask only when the answer changes what you build and you can't derive it. Unattended: pick the most reasonable interpretation, proceed, log the assumption.
+2. Match solution weight to problem weight — no abstraction or flexibility for a need that doesn't exist yet (YAGNI). Justify any indirection in one sentence or drop it.
+3. Don't touch unrelated code. Surface design smells and out-of-scope bugs separately (note, don't fix inline) so we triage them as their own issue.
+4. Flag uncertainty explicitly — confidence without certainty does more damage than admitting a gap. When a question is testable, run a small low-risk experiment and bring hypothesis + result instead of guessing.
+5. Propose structurally better paths — especially lasting over tactical — before implementing the obvious patch. Brief: what, why better, the cost.
+6. Verify before claiming done. Run it, show the output. Evidence before assertions.
 
 ---
 
@@ -59,7 +72,7 @@ git push
 
 ---
 
-## Documentation Lookup
+## Reference Index
 
 **Before writing any code**, read the relevant page first.
 
@@ -153,7 +166,7 @@ After creating, add the branch tag to the item in `MD/inwork.md`.
 
 ### 3 — Discover
 
-Read the relevant rules section from the rulebook. Read the matching `htmldoku/` page from the Documentation Lookup table. Grep the engine for existing implementations of the same mechanic.
+Read the relevant rules section from the rulebook. Read the matching `htmldoku/` page from the Reference Index table. Grep the engine for existing implementations of the same mechanic.
 
 ### 4 — Consult until clear
 
