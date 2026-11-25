@@ -179,9 +179,7 @@ module Engine
 
           covered = (0..needy.size).flat_map { |size| needy.combination(size).to_a }
             .select { |subset| sea_pool_coverable?(subset.map { |route| needs[route] }, pool) }
-          # A covered set inside a larger covered set never earns more (revenues are not negative) and loses a tie, so
-          # the revenues (every stop combination of a train) are asked only to choose between several largest sets.
-          largest = covered.reject { |subset| covered.any? { |other| other.size > subset.size && (subset - other).empty? } }
+          largest = maximal_sets(covered)
           best = largest.first
           if largest.size > 1
             values = largest.flatten.uniq.to_h { |route| [route, covered_sea_pool_revenue(route, needs[route])] }
@@ -291,6 +289,10 @@ module Engine
         end
 
         private
+
+        def maximal_sets(sets)
+          sets.reject { |set| sets.any? { |other| other.size > set.size && (set - other).empty? } }
+        end
 
         def covered_sea_pool_revenue(route, need)
           previous = @sea_pool_covered
