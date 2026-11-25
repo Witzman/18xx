@@ -25,6 +25,7 @@ require_relative 'step/merge_offer'
 require_relative 'step/merge_token'
 require_relative 'step/concession'
 require_relative 'step/choose_operating_position'
+require_relative 'step/home_position'
 require_relative 'step/reserve_share'
 require_relative 'step/orient_express_bonus'
 require_relative 'step/transfer_tokens'
@@ -91,6 +92,7 @@ module Engine
         FIRST_ROUND_INSOLVENCY_CHOICE = 'first_round_insolvency'
         MUST_SELL_IN_BLOCKS = false
         HOME_TOKEN_TIMING = :float
+        TOKEN_PLACEMENT_ON_TILE_LAY_ENTITY = :owner
         TILE_RESERVATION_BLOCKS_OTHERS = :always
         REVISITABLE_NODES = %w[town double_town].freeze
         # bank-break ends current OR; first level-8 purchase ends after one more full OR set
@@ -927,6 +929,19 @@ module Engine
 
         def non_starter_trains_available?
           major_phase? && @first_or_complete
+        end
+
+        def right_of_way_home_position_needed?(corporation, city)
+          return false if @players.size <= 2 || @phase.tiles.include?(:green)
+
+          track = G18OE::Step::Track.new(self, @round)
+          !track.home_connectable?(corporation, track.get_tile_lay(corporation), {}, city, corporation.cash)
+        end
+
+        def home_position_cities(corporation, hex)
+          open = hex.tile.cities.select { |city| city.tokenable?(corporation, free: true) }
+          fine = open.reject { |city| right_of_way_home_position_needed?(corporation, city) }
+          fine.empty? ? open : fine
         end
 
         def operating_order
@@ -1855,7 +1870,7 @@ module Engine
             Engine::Step::Exchange,
             G18OE::Step::FormNational,
             Engine::Step::DiscardTrain,
-            Engine::Step::HomeToken,
+            G18OE::Step::Operating::HomeToken,
             G18OE::Step::Assign,
             G18OE::Step::SpecialTrack,
             G18OE::Step::Track,

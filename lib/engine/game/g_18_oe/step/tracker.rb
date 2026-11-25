@@ -64,28 +64,45 @@ module Engine
           home_connectable?(Array(entity_or_entities).first, 0, hex => tile)
         end
 
-        def home_connectable?(entity, points, laid = {})
-          return false unless (home = entity.tokens.first&.city)
+        def home_connectable?(entity, points, laid = {}, home = nil, cash = nil)
+          home ||= entity.tokens.first&.city
+          return false unless home
 
           cheapest = {}
-          queue = home.exits.map { |exit| [home.hex, exit, 0] } + yellow_lay_ends(entity, home.hex, home.tile, 0, points)
+          queue = home.exits.map { |exit| [home.hex, exit, 0, 0] } +
+                  affordable_lay_ends(entity, yellow_lay_ends(entity, home.hex, home.tile, 0, points), 0, cash)
           until queue.empty?
-            hex, exit, cost = queue.shift
-            next if cheapest[[hex.id, exit]] && cheapest[[hex.id, exit]] <= cost
+            hex, exit, cost, money = queue.shift
+            next if cheapest[[hex.id, exit]]&.all? { |c, m| c <= cost && m <= money }
 
-            cheapest[[hex.id, exit]] = cost
+            (cheapest[[hex.id, exit]] ||= []) << [cost, money]
             crossings(hex, exit).each do |neighbor, edge|
               tile = laid[neighbor] || neighbor.tile
               paths = tile.paths.select { |path| path.exits.include?(edge) }.flat_map { |path| path.junction&.paths || [path] }
               return true if paths.any? { |path| path.nodes.any? { |node| node != home } }
 
-              lay_ends = yellow_lay_ends(entity, neighbor, tile, cost, points)
+              lay_ends = affordable_lay_ends(entity, yellow_lay_ends(entity, neighbor, tile, cost, points), money, cash)
               return true if !lay_ends.empty? && !tile.city_towns.empty?
 
-              queue.concat(paths.flat_map(&:exits).map { |track_exit| [neighbor, track_exit, cost] }, lay_ends)
+              queue.concat(paths.flat_map(&:exits).map { |track_exit| [neighbor, track_exit, cost, money] }, lay_ends)
             end
           end
           false
+        end
+
+        def affordable_lay_ends(entity, lay_ends, money, cash)
+          lay_ends.filter_map do |hex, exit, cost|
+            total = money + (cash ? hex.tile.upgrades.sum(&:cost) : 0)
+            next if cash && (total > cash || !reserved_train_covered?(entity, total))
+
+            [hex, exit, cost, total]
+          end
+        end
+
+        def reserved_train_covered?(entity, cost)
+          return true if !cost.positive? || !@game.reserved_train_due?(entity)
+
+          entity.cash + entity.owner.cash - cost >= @game.reserved_train_price.to_i
         end
 
         def get_tile_lay(entity)
