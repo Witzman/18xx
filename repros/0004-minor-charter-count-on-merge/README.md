@@ -14,5 +14,5 @@ Rule: RB §10.5 and §4.1.
 ## Origin and limits
 
 - Rule-based bots, steered: no majors before Phase 3, 3 trains and mergers preferred. Played locally.
-- Checked by replaying the files in the engine (MRI) on base and PR branch.
-- Not checked: the import in a browser, and whether the other moves are rule-conform.
+- Checked by replaying the files in the engine on base and PR branch (MRI, and compiled with Opal).
+- Not checked: the import in a real browser, and whether the other moves are rule-conform.
