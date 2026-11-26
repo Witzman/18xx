@@ -971,7 +971,7 @@ module Engine
           self.class::TRACK_RIGHTS_COST[region] || 0
         end
 
-        # RB 9.1: the home token of a minor is paid from its treasury and, what that lacks, by its owner (#369). When no
+        # RB 9.1: the home token of a minor is paid from its treasury and, what that lacks, by its owner. When no
         # zone is affordable with both, the token costs what both hold.
         def home_token_cost(minor, region)
           cost = track_rights_cost(region)

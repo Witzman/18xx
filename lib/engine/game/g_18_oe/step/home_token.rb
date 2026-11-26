@@ -29,7 +29,7 @@ module Engine
 
           private
 
-          # RB 9.1 (#369): the owning player pays what the minor's treasury lacks for its home token.
+          # RB 9.1: the owning player pays what the minor's treasury lacks for its home token.
           def top_up_home_token!(minor, price)
             missing = price - minor.cash
             return unless missing.positive?
