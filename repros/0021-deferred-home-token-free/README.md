@@ -1,6 +1,6 @@
 # Before / after: deferred home token charged twice (fork PR 65)
 
-Hotseat games. Load one with **New Game → Import hotseat game** and paste the file's content. Base `78249dcf6`, PR branch `0c3575e10`.
+Hotseat games. Load one with **New Game → Import hotseat game** and paste the file's content. Base `78249dcf6`, PR branch `af65d1d24`.
 
 | File | Load on | What you see at the end |
 |---|---|---|
@@ -14,5 +14,5 @@ Rule: RB §9.2 step 4 and §11.1.9.
 ## Origin and limits
 
 - Rule-based bots. Played locally.
-- Checked by replaying the files in the engine (MRI) on base and PR branch.
-- Not checked: the import in a browser, and whether the other moves are rule-conform.
+- Checked by replaying the files in the engine on base and PR branch (MRI, and compiled with Opal).
+- Not checked: the import in a real browser, and whether the other moves are rule-conform.
