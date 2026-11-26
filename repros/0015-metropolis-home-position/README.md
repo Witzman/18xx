@@ -15,5 +15,5 @@ Rule: RB §11.1.9, last paragraph.
 ## Origin and limits
 
 - Rule-based bots, steered: SB and MSP were not allowed to convert. Tile, rotation and position of the last two actions were chosen by hand. That position 1 needs the green tile is this branch's judgement, not checked against the map separately. Played locally.
-- Checked by replaying the files in the engine (MRI) on base and PR branch.
-- Not checked: the import in a browser, and whether the other moves are rule-conform.
+- Checked by replaying the files in the engine on base and PR branch (MRI, and compiled with Opal).
+- Not checked: the import in a real browser, and whether the other moves are rule-conform.
