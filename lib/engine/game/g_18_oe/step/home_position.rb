@@ -14,6 +14,15 @@ module Engine
             @game.home_position_cities(corporation, city.hex).include?(city)
           end
 
+          def process_place_token(action)
+            home = token
+            price = home.price
+            home.price = 0 unless home.corporation.type == :minor
+            super
+          ensure
+            home.price = price if home
+          end
+
           def check_home_position!(action)
             return if pass_city_ok?(action.entity, action.city)
 
