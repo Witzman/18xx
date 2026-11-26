@@ -14,5 +14,5 @@ Rule: RB §9.1 step 2 and §7; the top-up itself is the proposal of this PR, the
 ## Origin and limits
 
 - Passes up to the purchase, then rule-based bots. Played locally.
-- Checked by replaying the files in the engine (MRI) on base and PR branch.
-- Not checked: the import in a browser, and whether the other moves are rule-conform.
+- Checked by replaying the files in the engine on base and PR branch (MRI, and compiled with Opal).
+- Not checked: the import in a real browser, and whether the other moves are rule-conform.
