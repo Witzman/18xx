@@ -98,6 +98,28 @@ describe 'G18OE metropolis home position (§11.1.9)' do
     expect(round.current_entity).to eq(lnwr)
   end
 
+  it 'places the deferred home token of a regional with an empty treasury at no further cost' do
+    hex = metropolis!('C74')
+    round = stock_round!(game)
+    msp = start_regional!(game, 'MSP', player)
+    msp.spend(msp.cash, game.bank)
+
+    expect(allowed(round, msp, hex)).not_to be_empty
+    choose(round, msp, hex, 0)
+
+    expect(hex.tile.cities[0].tokened_by?(msp)).to be(true)
+    expect(msp.cash).to eq(0)
+  end
+
+  it 'does not charge the deferred home token a second time' do
+    hex = metropolis!('C74')
+    round = stock_round!(game)
+    msp = start_regional!(game, 'MSP', player)
+    thin_treasury!(msp)
+
+    expect { choose(round, msp, hex, 0) }.not_to(change { msp.cash })
+  end
+
   it 'leaves every position open when yellow track reaches a stop from each of them' do
     hex = metropolis!('R55')
     round = stock_round!(game)
