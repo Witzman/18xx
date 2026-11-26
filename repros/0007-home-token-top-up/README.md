@@ -1,6 +1,6 @@
 # Before / after: owner tops up a minor's home token (fork PR 64)
 
-Hotseat games. Load one with **New Game → Import hotseat game** and paste the file's content. Base `267887b74`, PR branch `61a7d137a`.
+Hotseat games. Load one with **New Game → Import hotseat game** and paste the file's content. Base `267887b74`, PR branch `c4ac889e3`.
 
 | File | Load on | What you see at the end |
 |---|---|---|
