@@ -34,7 +34,7 @@ reserved.
 ## Origin and limits
 
 - Played by rule-based bots (3 seats, seed 1), run locally. The engine was not modified for `before.json`.
-- Checked by replaying the files in the engine (MRI): `before.json` on both commits, `after.json` on both
-  (fails on the base as stated above).
-- Not checked: the import in a browser, whether each bot move is rule-conform, and the sea zone count behind
+- Checked by replaying the files in the engine (MRI, and compiled with Opal): `before.json` on both commits,
+  `after.json` on both (fails on the base as stated above).
+- Not checked: the import in a real browser, whether each bot move is rule-conform, and the sea zone count behind
   the three track fees.
