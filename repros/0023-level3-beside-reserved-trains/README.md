@@ -13,7 +13,7 @@ file's content.
 
 ## How the position arises
 
-- Action 375: MIDI forms a national before it has bought its reserved 2+2.
+- Action 375: MIDI is forced to convert to a national (§11.6.4) before it has bought its reserved 2+2.
 - One 2+2 stays in the depot. A national buys nothing there, and all other railroads have met their
   train obligation, so on the base no level 3 train is ever offered.
 - Action 443 is the first Buy Trains decision where base and PR branch offer different trains.
