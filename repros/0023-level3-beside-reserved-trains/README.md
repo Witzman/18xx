@@ -23,10 +23,18 @@ file's content.
 Rule: RB §8.3 and §11.6, level 3 trains may be bought "even if there are remaining level 2 trains reserved
 for purchase by newly floated minors and regionals" (after the first OR, once the Major RR Phase has begun).
 
+## MIDI's conversion
+
+MIDI's conversion matches §11.6.4: a trainless major with £80, its president £9, the only train on offer the
+£100 2+2. It follows £80 of track spending in its first OR as a major (it expanded from a regional with
+£160 before that OR; actions 369 to 372). The §11.6.5 spending guard is read as covering minors and regionals
+only, as the engine does. The fix does not depend on this: the §8.3 / §11.6 exception holds for any 2+2 still
+reserved.
+
 ## Origin and limits
 
 - Played by rule-based bots (3 seats, seed 1), run locally. The engine was not modified for `before.json`.
 - Checked by replaying the files in the engine (MRI): `before.json` on both commits, `after.json` on both
   (fails on the base as stated above).
-- Not checked: the import in a browser, whether each bot move is rule-conform, and whether MIDI's
-  conversion at action 375 was itself allowed.
+- Not checked: the import in a browser, whether each bot move is rule-conform, and the sea zone count behind
+  the three track fees.
