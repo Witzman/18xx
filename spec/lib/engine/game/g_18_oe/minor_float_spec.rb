@@ -188,4 +188,56 @@ describe 'G18OE floating minors (§9.1)' do
     expect(minor.share_price).to be_nil
     expect(minor.presidents_share.price).to eq(120)
   end
+
+  describe 'home token of a minor with too little cash (§9.1)' do
+    let!(:player) { round.current_entity }
+
+    def float_poor!(zone, treasury)
+      minor = unused_minor
+      give_company!(player, game.company_by_id(minor.id))
+      fund!(game, minor, treasury) if treasury.positive?
+      price = round.active_step.get_par_prices(player, minor).first
+      act!(round, Engine::Action::Par.new(player, corporation: minor, share_price: price))
+      city = game.home_token_locations(minor).find { |h| game.region_for_hex(h) == zone }.tile.cities.first
+      city.hex.tile.patronage = nil
+      [minor, city]
+    end
+
+    it 'lets the player pay the whole £40 of a UK zone when the treasury is empty' do
+      minor, city = float_poor!('UK', 0)
+      cash = player.cash
+      home!(minor, city)
+
+      expect(minor.cash).to eq(0)
+      expect(player.cash).to eq(cash - 40)
+      expect(game.minor_floated_regions[minor.id]).to eq('UK')
+    end
+
+    it 'lets the player pay only the missing part when the treasury covers some of it' do
+      minor, city = float_poor!('UK', 25)
+      cash = player.cash
+      home!(minor, city)
+
+      expect(minor.cash).to eq(0)
+      expect(player.cash).to eq(cash - 15)
+    end
+
+    it 'charges nothing to the player when the treasury covers the cost' do
+      minor, city = float_poor!('IT', 25)
+      cash = player.cash
+      home!(minor, city)
+
+      expect(minor.cash).to eq(15)
+      expect(player.cash).to eq(cash)
+    end
+
+    it 'falls back to what minor and player together hold when that is below the cost' do
+      minor, city = float_poor!('IT', 5)
+      player.set_cash(3, game.bank)
+      home!(minor, city)
+
+      expect(minor.cash).to eq(0)
+      expect(player.cash).to eq(0)
+    end
+  end
 end
