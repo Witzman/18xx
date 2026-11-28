@@ -8,7 +8,8 @@ module Engine
       class StockMarket < Engine::StockMarket
         def up(corporation, coordinates)
           r, c = coordinates
-          return super unless r.zero?
+          # where no field lies above (the top row and the stepped left edge of the printed board) the marker moves right
+          return super if r.positive? && share_price([r - 1, c])
 
           share_price([r, c + 1]) ? [r, c + 1] : coordinates
         end
