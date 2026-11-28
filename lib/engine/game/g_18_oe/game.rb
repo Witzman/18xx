@@ -1169,6 +1169,7 @@ module Engine
           @log << "#{minor.name} is abandoned"
           minor.trains.reject { |train| pullman?(train) }.each { |train| @depot.reclaim_train(train) }
           minor.placed_tokens.each(&:remove!)
+          remove_corporation_pass_through_tokens!(minor)
           return_minor_d_token!(minor)
           minor.spend(minor.cash, @bank) if minor.cash.positive?
           @share_pool.transfer_shares(minor.presidents_share.to_bundle, minor.ipo_owner, allow_president_change: false)

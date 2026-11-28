@@ -38,6 +38,23 @@ describe 'G18OE abandoning a minor (§9.5)' do
       expect(minor.placed_tokens).to be_empty
     end
 
+    it 'removes the private token it placed from the Map' do
+      cctc = give_company!(player, game.company_by_id('CCTC'))
+      target = game.hexes.find { |hex| hex != city.hex && game.pass_through_hex?(cctc, hex) }.tile.cities.first
+      game.minor_regional_order.delete(minor)
+      game.minor_regional_order.unshift(minor)
+      round = enter_round!(game, game.operating_round(1))
+      round.setup
+      round_step(round, Engine::Step::Track).pass!
+      act!(round, Engine::Action::PlaceToken.new(cctc, city: target, tokener: minor))
+      expect(target.extra_tokens.map(&:corporation)).to eq([minor])
+
+      game.abandon_minor!(minor)
+
+      expect(target.extra_tokens).to be_empty
+      expect(game.pass_through_token_lines(minor)).to be_empty
+    end
+
     it 'sends its cash to the bank' do
       expect { game.abandon_minor!(minor) }.to change { game.bank.cash }.by(minor.cash)
       expect(minor.cash).to eq(0)
